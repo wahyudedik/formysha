@@ -78,6 +78,9 @@
                         <div class="text-center py-6">
                             <div class="text-3xl mb-2">📸</div>
                             <p class="text-sm text-gray-500">{{ __('Belum ada timeline.') }}</p>
+                            @if ($children->isNotEmpty())
+                                <p class="text-xs text-gray-400 mt-1">{{ __('Mulai dokumentasikan momen pertama buah hati.') }}</p>
+                            @endif
                         </div>
                     @else
                         <div class="space-y-3">
@@ -109,6 +112,9 @@
                         <div class="text-center py-6">
                             <div class="text-3xl mb-2">📅</div>
                             <p class="text-sm text-gray-500">{{ __('Tidak ada acara mendatang.') }}</p>
+                            @if ($children->isNotEmpty())
+                                <p class="text-xs text-gray-400 mt-1">{{ __('Tambahkan jadwal imunisasi atau ulang tahun.') }}</p>
+                            @endif
                         </div>
                     @else
                         <div class="space-y-3">
@@ -140,6 +146,9 @@
                         <div class="text-center py-6">
                             <div class="text-3xl mb-2">📔</div>
                             <p class="text-sm text-gray-500">{{ __('Belum ada diary.') }}</p>
+                            @if ($children->isNotEmpty())
+                                <p class="text-xs text-gray-400 mt-1">{{ __('Tulis cerita harian tentang si kecil.') }}</p>
+                            @endif
                         </div>
                     @else
                         <div class="space-y-3">
@@ -174,11 +183,14 @@
                         <div class="text-center py-6">
                             <div class="text-3xl mb-2">📏</div>
                             <p class="text-sm text-gray-500">{{ __('Belum ada data pertumbuhan.') }}</p>
+                            @if ($children->isNotEmpty())
+                                <p class="text-xs text-gray-400 mt-1">{{ __('Pantau tinggi dan berat badan buah hati.') }}</p>
+                            @endif
                         </div>
                     @else
                         <div class="space-y-3">
                             @foreach ($recentGrowths as $growth)
-                                <div class="p-3 rounded-xl hover:bg-mintGreen-50 transition">
+                                <a href="{{ route('growth.index', $growth->child_id) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 transition">
                                     <div class="flex items-start gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-mintGreen-400 to-skyBlue-400 flex items-center justify-center text-white text-xs flex-shrink-0">
                                             📏
@@ -192,7 +204,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             @endforeach
                         </div>
                     @endif
@@ -209,6 +221,9 @@
                         <div class="text-center py-6">
                             <div class="text-3xl mb-2">🏥</div>
                             <p class="text-sm text-gray-500">{{ __('Belum ada catatan kesehatan.') }}</p>
+                            @if ($children->isNotEmpty())
+                                <p class="text-xs text-gray-400 mt-1">{{ __('Catat riwayat imunisasi dan kesehatan.') }}</p>
+                            @endif
                         </div>
                     @else
                         <div class="space-y-3">

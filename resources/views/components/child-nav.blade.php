@@ -12,6 +12,10 @@
         ['route' => 'calendar.index', 'label' => 'Kalender', 'icon' => '📅', 'param' => 'child'],
         ['route' => 'family.index', 'label' => 'Keluarga', 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
     ];
+
+    $visibleModules = array_slice($modules, 0, 4);
+    $overflowModules = array_slice($modules, 4);
+    $hasOverflowActive = collect($overflowModules)->contains(fn ($m) => request()->routeIs($m['route']));
 @endphp
 
 <!-- Desktop Sidebar Navigation -->
@@ -34,9 +38,10 @@
 </aside>
 
 <!-- Mobile Bottom Navigation -->
-<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 z-50 safe-bottom">
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 z-50 safe-bottom"
+     x-data="{ moreOpen: false }" @click.outside="moreOpen = false">
     <div class="flex items-center justify-around py-2 px-1">
-        @foreach (array_slice($modules, 0, 5) as $module)
+        @foreach ($visibleModules as $module)
             @php
                 $isActive = request()->routeIs($module['route']);
             @endphp
@@ -49,5 +54,40 @@
                 <span class="font-medium leading-tight">{{ $module['label'] }}</span>
             </a>
         @endforeach
+
+        <!-- More / Overflow Button -->
+        <button @click="moreOpen = !moreOpen"
+                class="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl text-xs transition-all duration-200
+                       {{ $hasOverflowActive ? 'text-softPink-600' : 'text-gray-400' }}">
+            <span class="text-lg leading-none">⋯</span>
+            <span class="font-medium leading-tight">Lainnya</span>
+        </button>
+    </div>
+
+    <!-- Overflow Dropdown -->
+    <div x-show="moreOpen" x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
+         class="absolute bottom-full left-0 right-0 bg-white border-t border-gray-100 shadow-lg p-2 pb-3">
+        <div class="grid grid-cols-3 gap-1">
+            @foreach ($overflowModules as $module)
+                @php
+                    $isActive = request()->routeIs($module['route']);
+                @endphp
+                <a href="{{ route($module['route'], $child) }}"
+                   @click="moreOpen = false"
+                   class="flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all duration-200
+                          {{ $isActive
+                              ? 'bg-softPink-50 text-softPink-600'
+                              : 'text-gray-500 hover:bg-gray-50' }}">
+                    <span class="text-lg leading-none">{{ $module['icon'] }}</span>
+                    <span class="font-medium leading-tight">{{ $module['label'] }}</span>
+                </a>
+            @endforeach
+        </div>
     </div>
 </nav>
+
+<!-- Spacer to prevent content overlap on mobile -->
+<div class="h-20 lg:hidden"></div>

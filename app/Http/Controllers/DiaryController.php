@@ -32,8 +32,11 @@ class DiaryController extends Controller
      */
     public function create(Request $request, Child $child): View
     {
+        $children = $request->user()->children()->get();
+
         return view('diaries.create', [
             'child' => $child,
+            'children' => $children,
         ]);
     }
 

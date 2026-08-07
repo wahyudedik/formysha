@@ -18,18 +18,18 @@ class UpdateEventRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>, string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:5000'],
+            'description' => ['nullable', 'string', 'max:2000'],
             'event_date' => ['required', 'date'],
             'event_time' => ['nullable', 'date_format:H:i'],
-            'event_type' => ['required', 'string', 'in:birthday,immunization,appointment,school,other'],
+            'event_type' => ['nullable', 'in:birthday,immunization,checkup,school,vaccination,holiday,other'],
             'is_recurring' => ['boolean'],
-            'recurrence_pattern' => ['nullable', 'string', 'in:weekly,monthly,yearly'],
+            'recurrence_pattern' => ['nullable', 'string', 'max:100'],
             'reminder_at' => ['nullable', 'date'],
         ];
     }
@@ -43,12 +43,13 @@ class UpdateEventRequest extends FormRequest
     {
         return [
             'title.required' => 'Judul acara wajib diisi.',
+            'title.max' => 'Judul acara maksimal 255 karakter.',
+            'description.max' => 'Deskripsi maksimal 2000 karakter.',
             'event_date.required' => 'Tanggal acara wajib diisi.',
             'event_date.date' => 'Format tanggal tidak valid.',
-            'event_type.required' => 'Jenis acara wajib dipilih.',
+            'event_time.date_format' => 'Format waktu tidak valid (HH:MM).',
             'event_type.in' => 'Jenis acara tidak valid.',
-            'event_time.date_format' => 'Format waktu tidak valid (HH:mm).',
-            'recurrence_pattern.in' => 'Pola pengulangan tidak valid.',
+            'recurrence_pattern.max' => 'Pola pengulangan maksimal 100 karakter.',
         ];
     }
 }

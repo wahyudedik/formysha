@@ -24,7 +24,7 @@ class UpdateFamilyMemberRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'relationship' => ['required', 'in:father,mother,guardian,grandfather,grandmother,sibling,other'],
+            'relationship' => ['required', 'in:father,mother,guardian,grandfather,grandmother,uncle,aunt,sibling,other'],
             'phone' => ['nullable', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:255'],
             'photo' => ['nullable', 'image', 'max:2048'],
@@ -44,7 +44,9 @@ class UpdateFamilyMemberRequest extends FormRequest
             'name.max' => 'Nama maksimal 255 karakter.',
             'relationship.required' => 'Hubungan keluarga wajib dipilih.',
             'relationship.in' => 'Hubungan keluarga tidak valid.',
+            'phone.max' => 'Nomor telepon maksimal 20 karakter.',
             'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 255 karakter.',
             'photo.image' => 'File harus berupa gambar.',
             'photo.max' => 'Ukuran gambar maksimal 2MB.',
         ];

@@ -33,6 +33,7 @@
                             'diary' => ['label' => 'Diary', 'icon' => '📔'],
                             'document' => ['label' => 'Dokumen', 'icon' => '📄'],
                             'health' => ['label' => 'Kesehatan', 'icon' => '🏥'],
+                            'growth' => ['label' => 'Pertumbuhan', 'icon' => '📏'],
                         ];
                     @endphp
                     @foreach ($modules as $moduleKey => $moduleInfo)

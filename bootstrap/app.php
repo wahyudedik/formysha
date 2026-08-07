@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Middleware\EnsureActiveSubscription;
 use App\Http\Middleware\EnsureChildOwnership;
+use App\Http\Middleware\EnsureFeatureLimit;
+use App\Http\Middleware\EnsureRole;
+use App\Http\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,6 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'child.ownership' => EnsureChildOwnership::class,
+            'role' => EnsureRole::class,
+            'tenant.active' => EnsureActiveSubscription::class,
+            'feature.limit' => EnsureFeatureLimit::class,
+            'tenant' => ResolveTenant::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

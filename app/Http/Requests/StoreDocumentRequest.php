@@ -18,13 +18,13 @@ class StoreDocumentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>, string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'in:birth_certificate,family_card,kia,bpjs,passport,certificate,report_card,other'],
+            'type' => ['required', 'in:birth_certificate,family_card,kia,bpjs,passport,certificate,school_report,other'],
             'description' => ['nullable', 'string', 'max:2000'],
             'file' => ['required', 'file', 'max:10240'],
             'issued_date' => ['nullable', 'date'],
@@ -42,12 +42,13 @@ class StoreDocumentRequest extends FormRequest
     {
         return [
             'name.required' => 'Nama dokumen wajib diisi.',
+            'name.max' => 'Nama dokumen maksimal 255 karakter.',
             'type.required' => 'Jenis dokumen wajib dipilih.',
             'type.in' => 'Jenis dokumen tidak valid.',
             'file.required' => 'File dokumen wajib diunggah.',
-            'file.file' => 'File harus berupa file yang valid.',
+            'file.file' => 'Format file tidak valid.',
             'file.max' => 'Ukuran file maksimal 10MB.',
-            'expiry_date.after_or_equal' => 'Tanggal kedaluwarsa harus setelah atau sama dengan tanggal diterbitkan.',
+            'expiry_date.after_or_equal' => 'Tanggal kedaluwarsa tidak boleh sebelum tanggal diterbitkan.',
         ];
     }
 }

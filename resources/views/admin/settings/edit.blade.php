@@ -1,0 +1,111 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                ⚙️ {{ __('Pengaturan') }}
+            </h2>
+        </div>
+    </x-slot>
+
+    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-6">
+            {{-- Sidebar --}}
+            @include('admin.partials.sidebar')
+
+            {{-- Main Content --}}
+            <div class="flex-1 min-w-0">
+                <x-breadcrumb :items="[
+                    ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+                    ['label' => 'Pengaturan'],
+                ]" />
+
+                <form method="POST" action="{{ route('admin.settings.update') }}">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="max-w-2xl space-y-6">
+                        {{-- Organization Name --}}
+                        <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <h3 class="font-semibold text-gray-800 mb-4">🏢 {{ __('Informasi Organisasi') }}</h3>
+                            <div>
+                                <label for="organization_name" class="block text-sm font-medium text-gray-700 mb-1">Nama Organisasi</label>
+                                <input
+                                    type="text"
+                                    id="organization_name"
+                                    name="organization_name"
+                                    value="{{ old('organization_name', $settings['organization_name'] ?? $tenant->name) }}"
+                                    class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                    placeholder="Nama organisasi Anda"
+                                >
+                                @error('organization_name')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Timezone & Language --}}
+                        <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <h3 class="font-semibold text-gray-800 mb-4">🌍 {{ __('Lokalisasi') }}</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="timezone" class="block text-sm font-medium text-gray-700 mb-1">Zona Waktu</label>
+                                    <select
+                                        id="timezone"
+                                        name="timezone"
+                                        class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                    >
+                                        @php
+                                            $timezones = [
+                                                'Asia/Jakarta' => 'WIB (Jakarta)',
+                                                'Asia/Makassar' => 'WITA (Makassar)',
+                                                'Asia/Jayapura' => 'WIT (Jayapura)',
+                                                'Asia/Pontianak' => 'WIB (Pontianak)',
+                                            ];
+                                            $currentTz = $settings['timezone'] ?? 'Asia/Jakarta';
+                                        @endphp
+                                        @foreach ($timezones as $tz => $label)
+                                            <option value="{{ $tz }}" {{ $currentTz === $tz ? 'selected' : '' }}>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('timezone')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="language" class="block text-sm font-medium text-gray-700 mb-1">Bahasa</label>
+                                    <select
+                                        id="language"
+                                        name="language"
+                                        class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                    >
+                                        @php
+                                            $languages = [
+                                                'id' => 'Bahasa Indonesia',
+                                                'en' => 'English',
+                                            ];
+                                            $currentLang = $settings['language'] ?? 'id';
+                                        @endphp
+                                        @foreach ($languages as $code => $name)
+                                            <option value="{{ $code }}" {{ $currentLang === $code ? 'selected' : '' }}>{{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('language')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Submit --}}
+                        <div class="flex justify-end">
+                            <button type="submit" class="btn-primary">
+                                💾 {{ __('Simpan Pengaturan') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

@@ -22,8 +22,12 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-12 has-bottom-nav">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="flex gap-8">
+                <x-child-nav :child="$child" />
+
+                <div class="flex-1 space-y-6">
             @if (session('status'))
                 <div class="p-4 bg-mintGreen-50 border border-mintGreen-200 text-mintGreen-700 rounded-xl" x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)">
                     {{ session('status') }}
@@ -132,6 +136,38 @@
                 </div>
             @endif
 
+            <!-- Export Section -->
+            <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl p-6">
+                <h4 class="text-lg font-bold text-gray-800 mb-3">📄 {{ __('Export Data') }}</h4>
+                <p class="text-sm text-gray-500 mb-4">{{ __('Unduh data profil dan riwayat dalam format PDF atau ZIP.') }}</p>
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ route('export.profile', $child) }}" class="inline-flex items-center px-4 py-2 bg-softPink-100 hover:bg-softPink-200 text-softPink-700 font-medium rounded-xl text-sm transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        {{ __('Profil Anak') }}
+                    </a>
+                    <a href="{{ route('export.health', $child) }}" class="inline-flex items-center px-4 py-2 bg-mintGreen-100 hover:bg-mintGreen-200 text-mintGreen-700 font-medium rounded-xl text-sm transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        {{ __('Riwayat Kesehatan') }}
+                    </a>
+                    <a href="{{ route('export.growth', $child) }}" class="inline-flex items-center px-4 py-2 bg-skyBlue-100 hover:bg-skyBlue-200 text-skyBlue-700 font-medium rounded-xl text-sm transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        {{ __('Riwayat Pertumbuhan') }}
+                    </a>
+                    <a href="{{ route('export.zip', $child) }}" class="inline-flex items-center px-4 py-2 bg-warmYellow-100 hover:bg-warmYellow-200 text-warmYellow-700 font-medium rounded-xl text-sm transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                        {{ __('Semua Data (ZIP)') }}
+                    </a>
+                </div>
+            </div>
+
             <!-- Danger Zone -->
             <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl p-6">
                 <h4 class="text-lg font-bold text-red-600 mb-3">⚠️ Zona Berbahaya</h4>
@@ -146,6 +182,8 @@
                         {{ __('Hapus Profil') }}
                     </button>
                 </form>
+            </div>
+                </div>
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Diary;
 use App\Models\Document;
+use App\Models\Growth;
 use App\Models\HealthRecord;
 use App\Models\Timeline;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class SearchController extends Controller
             'diary' => 0,
             'document' => 0,
             'health' => 0,
+            'growth' => 0,
         ];
 
         if (strlen($query) >= 2) {
@@ -154,7 +156,36 @@ class SearchController extends Controller
                 }
             }
 
-            $counts['all'] = $counts['timeline'] + $counts['diary'] + $counts['document'] + $counts['health'];
+            // Search growth records
+            if (in_array($module, ['all', 'growth'])) {
+                $growths = Growth::whereIn('child_id', $childIds)
+                    ->where(function ($q) use ($searchTerm) {
+                        $q->whereRaw('LOWER(notes) LIKE ?', [$searchTerm]);
+                    })
+                    ->with('child')
+                    ->latest()
+                    ->limit(20)
+                    ->get();
+
+                $counts['growth'] = $growths->count();
+
+                if ($module === 'growth') {
+                    $results = $growths;
+                } else {
+                    $results = $results->merge($growths->map(fn ($item) => [
+                        'type' => 'growth',
+                        'icon' => '📏',
+                        'title' => 'Pertumbuhan — '.$item->child->name,
+                        'description' => trim(($item->weight_label ? 'Berat: '.$item->weight_label : '').' '.($item->height_label ? 'Tinggi: '.$item->height_label : '').' '.($item->head_circumference_label ? 'Lingkar Kepala: '.$item->head_circumference_label : '')),
+                        'date' => $item->date?->format('d M Y'),
+                        'child' => $item->child->name,
+                        'url' => route('growth.index', $item->child),
+                        'color' => 'bg-mintGreen-100 text-mintGreen-700',
+                    ]));
+                }
+            }
+
+            $counts['all'] = $counts['timeline'] + $counts['diary'] + $counts['document'] + $counts['health'] + $counts['growth'];
 
             if ($module === 'all') {
                 $results = $results->sortByDesc('date')->values();

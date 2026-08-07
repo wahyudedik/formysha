@@ -23,6 +23,21 @@
                 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
                 body { font-family: 'Nunito', sans-serif; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #fdf2f8 0%, #FFFDF7 50%, #faf5ff 100%); color: #374151; min-height: 100vh; }
                 a { text-decoration: none; }
+
+                /* Custom component fallbacks */
+                .btn-primary { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; background: #f9a8d4; color: #fff; font-weight: 600; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s; border: none; cursor: pointer; }
+                .btn-primary:hover { background: #f472b6; }
+                .btn-secondary { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; background: #fff; color: #374151; font-weight: 600; border-radius: 0.75rem; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s; cursor: pointer; }
+                .btn-secondary:hover { background: #f9fafb; }
+                .card-hover { background: #fff; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s; }
+                .card-hover:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
+                .text-gradient-brand { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to right, #f472b6, #c084fc, #7dd3fc); }
+                .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+                .animate-slide-up { animation: slideUp 0.5s ease-out; }
+                .shadow-soft { box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+                .shadow-soft-md { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
             </style>
         @endif
     </head>
@@ -34,6 +49,10 @@
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'ForMysha') }}" class="h-10 w-auto" />
                     <span class="font-extrabold text-xl text-gray-800">ForMysha</span>
+                </div>
+
+                <div class="hidden sm:flex items-center gap-6 text-sm text-gray-500">
+                    <a href="{{ route('pages.about') }}" class="hover:text-gray-700 transition-colors">Tentang</a>
                 </div>
 
                 <div class="flex items-center gap-3">

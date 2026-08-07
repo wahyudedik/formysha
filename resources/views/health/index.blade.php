@@ -42,7 +42,7 @@
                     ];
                 @endphp
                 @foreach ($types as $typeKey => $typeInfo)
-                    <a href="{{ route('health.index', array_merge(['child' => $child->slug], $activeType === $typeKey ? [] : ['type' => $typeKey])) }}"
+                    <a href="{{ route('health.index', array_merge(['child' => $child], $activeType === $typeKey ? [] : ['type' => $typeKey])) }}"
                        class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $activeType === $typeKey ? 'bg-skyBlue-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200' }}">
                         {{ $typeInfo['icon'] }} {{ $typeInfo['label'] }}
                         @if (isset($typeCounts[$typeKey]))

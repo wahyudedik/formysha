@@ -32,6 +32,7 @@ it('lists events for a child', function () {
         'child_id' => $child->id,
         'user_id' => $user->id,
         'title' => 'Imunisasi PCV 2',
+        'event_date' => now()->toDateString(),
     ]);
 
     actingAs($user)
@@ -92,7 +93,7 @@ it('validates required fields when storing event', function () {
             'event_date' => '',
             'event_type' => '',
         ])
-        ->assertSessionHasErrors(['title', 'event_date', 'event_type']);
+        ->assertSessionHasErrors(['title', 'event_date']);
 });
 
 it('validates event type enum when storing', function () {

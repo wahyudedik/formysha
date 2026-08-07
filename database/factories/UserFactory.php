@@ -67,4 +67,24 @@ class UserFactory extends Factory
             'role' => 'guardian',
         ]);
     }
+
+    /**
+     * Indicate that the user is a super admin.
+     */
+    public function superAdmin(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'role' => 'super_admin',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a tenant admin.
+     */
+    public function tenantAdmin(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'role' => 'tenant_admin',
+        ]);
+    }
 }

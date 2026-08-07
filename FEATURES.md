@@ -606,7 +606,7 @@ public/favicon.ico   → Favicon legacy
 
 ---
 
-## Backup ⏳ (Phase 3)
+## Backup ✅ (Phase 3)
 
 * Backup otomatis
 * Restore
@@ -627,14 +627,14 @@ public/favicon.ico   → Favicon legacy
 
 ## Search ✅ (Phase 2)
 
-* Pencarian lintas modul (Timeline, Diary, Dokumen, Kesehatan)
+* Pencarian lintas modul (Timeline, Diary, Dokumen, Kesehatan, Pertumbuhan)
 * Filter berdasarkan modul
 * Case insensitive search
 * Hasil pencarian dengan badge warna per modul
 
 ---
 
-## Custom API Integration ⏳ (Phase 4)
+## Custom API Integration ✅ (Phase 4)
 
 * REST API
 * API Key
@@ -642,6 +642,60 @@ public/favicon.ico   → Favicon legacy
 * Webhook
 * Request Log
 * Response Log
+
+---
+
+## Export PDF & ZIP ✅ (Phase 3)
+
+* Export profil anak sebagai PDF
+* Export riwayat kesehatan sebagai PDF
+* Export riwayat pertumbuhan sebagai PDF
+* Export semua data sebagai ZIP archive (profil + kesehatan + pertumbuhan + timeline + diary + dokumen JSON)
+* Rate limiting: 5 request/menit untuk PDF, 3 request/menit untuk ZIP
+
+---
+
+## Loading Skeleton ✅ (Phase 3)
+
+* Komponen `x-loading-skeleton` dengan 4 tipe: card, list-item, table-row, text
+* Animasi pulse halus untuk UX loading state
+* Dapat digunakan di dashboard dan halaman index
+
+---
+
+## Calendar Grid View ✅ (Phase 3)
+
+* Komponen `x-calendar-grid` dengan toggle Grid/List view
+* Navigasi bulan sebelumnya/selanjutnya
+* Highlight hari ini dengan ring softPink
+* Event dots pada hari yang memiliki acara
+* Responsive layout (7 kolom grid)
+
+---
+
+## Child Photo Upload ✅ (Phase 3)
+
+* Upload foto profil saat membuat/edit profil anak
+* Preview langsung menggunakan Alpine.js
+* Validasi: image, max 2MB
+* Penyimpanan di disk `public` (directory `children/`)
+* Auto-delete foto lama saat update/destroy
+
+---
+
+## Dashboard Caching ✅ (Phase 3)
+
+* Cache 5 menit menggunakan `Cache::remember()`
+* Auto-expire tanpa perlu manual cache invalidation
+* Data children, timelines, events, diaries, growths, health records di-cache
+
+---
+
+## Mobile Bottom Nav Improvement ✅ (Phase 3)
+
+* 4 modul utama visible + overflow "Lainnya" dropdown
+* Alpine.js dropdown untuk 5 modul tersembunyi
+* Bottom padding agar konten tidak tertutup bottom nav
 
 ---
 
@@ -680,23 +734,58 @@ public/favicon.ico   → Favicon legacy
 
 ---
 
-## SaaS Management ⏳ (Phase 3)
+## SaaS Management ✅ (Phase 4)
+
+Manajemen SaaS memungkinkan ForMysha beroperasi sebagai platform multi-tenant dengan sistem langganan, pembayaran manual, dan monitoring komprehensif.
 
 ### Super Admin
 
-* Tenant Management
-* Subscription
-* Billing
-* Monitoring
-* Backup
-* Broadcast
-* Audit Log
+* **Tenant Management** — CRUD tenant dengan UUID, soft delete, toggle status aktif/nonaktif
+* **Plan Management** — CRUD paket langganan (Gratis, Basic, Premium, Enterprise) dengan batasan fitur per paket
+* **Subscription Management** — Approval/rejection langganan tenant, melihat status dan riwayat
+* **Payment Management** — Verifikasi pembayaran transfer bank (BRI, JAGO, BTN, BSI), approve/reject dengan catatan
+* **Analytics Dashboard** — Pendapatan bulanan/tahun-an, pertumbuhan tenant, distribusi langganan
+* **Monitoring** — Health check database, cache/Redis, storage usage, login activity
+* **Audit Log** — Pelacakan aktivitas penting di seluruh tenant
 
 ### Tenant Admin
 
-* Pengguna
-* Branding
-* Storage
-* Domain
-* API Integration
-* Activity Log
+* **Dashboard** — Ringkasan aktivitas tenant, pengguna, langganan
+* **Branding** — Kustomisasi logo, warna, dan identitas visual tenant
+* **Settings** — Pengaturan domain, notifikasi, dan konfigurasi tenant
+* **Usage Monitoring** — Pantau penggunaan anak, foto, video, dan storage
+
+### Integrasi SaaS
+
+* **Custom API Integration** — REST API dengan API key, OAuth, webhook, dan request/response log
+* **Feature Limit Middleware** — Pembatasan otomatis berdasarkan paket langganan
+* **Subscription Enforcement** — Middleware `EnsureActiveSubscription` untuk melindungi fitur premium
+* **Column-based Tenancy** — Arsitektur multi-tenant dengan `tenant_id` di setiap tabel utama
+
+### Testing Suite (Phase 4.5)
+
+* **Feature Tests** — TenantTest (7), PlanTest (7), SubscriptionTest (5), PaymentTest (7), TenantAdminTest (5), AnalyticsTest (3), FeatureLimitTest (3)
+* **Unit Tests** — TenantServiceTest (3), SubscriptionServiceTest (4), AuditServiceTest (2)
+* **Total** — 46 test SaaS, 345 test keseluruhan (738 assertions)
+
+---
+
+## UX Improvements ✅
+
+* Welcome page: link "Tentang Kami" di navigasi
+* Dashboard: empty states dengan guidance text untuk setiap section
+* Navigation: link "Paket Langganan" dan "Langganan Saya" untuk role parent
+* Footer minimalis di semua halaman terautentikasi (About, Privacy, Terms, Copyright)
+* Responsive design di semua halaman
+
+---
+
+## Quality Assurance ✅
+
+* 345 tests, 738 assertions — all passing
+* Pest PHP dengan `describe/it` blocks
+* Laravel Pint formatting applied
+* Feature tests untuk semua modul (Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export)
+* Feature tests untuk SaaS (Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit)
+* Unit tests untuk Services (DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService)
+* Unit tests untuk Models (Album, Child, Diary)

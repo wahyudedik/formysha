@@ -20,7 +20,7 @@
                     <p class="mt-1 text-sm text-gray-500">{{ __('Isi informasi dasar buah hati Anda.') }}</p>
                 </div>
 
-                <form method="POST" action="{{ route('children.store') }}" class="space-y-6">
+                <form method="POST" action="{{ route('children.store') }}" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
                     <!-- Name -->
@@ -80,6 +80,29 @@
                         <x-input-label for="bio" :value="__('Cerita Singkat')" />
                         <textarea id="bio" name="bio" rows="3" class="mt-1 block w-full border-gray-300 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition" placeholder="Ceritakan sedikit tentang buah hati Anda...">{{ old('bio') }}</textarea>
                         <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+                    </div>
+
+                    <!-- Photo -->
+                    <div>
+                        <x-input-label for="photo" :value="__('Foto Profil')" />
+                        <div class="mt-1 flex items-center gap-4">
+                            <div x-data="{ preview: null }" class="flex items-center gap-4">
+                                <div class="w-20 h-20 rounded-full bg-softPink-100 flex items-center justify-center overflow-hidden">
+                                    <img x-show="preview" :src="preview" class="w-20 h-20 object-cover" alt="Preview" />
+                                    <svg x-show="!preview" class="w-8 h-8 text-softPink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <input type="file" id="photo" name="photo" accept="image/*" class="hidden" x-ref="photoInput" @change="preview = URL.createObjectURL($refs.photoInput.files[0])" />
+                                    <button type="button" @click="$refs.photoInput.click()" class="text-sm text-softPink-500 hover:text-softPink-600 font-medium transition">
+                                        {{ __('Pilih Foto') }}
+                                    </button>
+                                    <p class="text-xs text-gray-400 mt-1">{{ __('JPG/PNG, maks 2MB') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <x-input-error class="mt-2" :messages="$errors->get('photo')" />
                     </div>
 
                     <!-- Submit -->

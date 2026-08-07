@@ -33,8 +33,11 @@ class DocumentController extends Controller
      */
     public function create(Request $request, Child $child): View
     {
+        $children = $request->user()->children()->get();
+
         return view('documents.create', [
             'child' => $child,
+            'children' => $children,
         ]);
     }
 

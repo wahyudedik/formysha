@@ -15,6 +15,8 @@
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl p-6 sm:p-8">
+                <x-child-selector :children="$children" :child="$child" :route-name="'family.create'" />
+
                 <div class="mb-6">
                     <p class="text-sm text-gray-500">
                         {{ __('Menambahkan anggota keluarga untuk') }} <span class="font-semibold text-gray-800">{{ $child->nickname ?? $child->name }}</span>

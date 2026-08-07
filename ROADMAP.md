@@ -513,39 +513,135 @@ public/favicon.ico   → Favicon legacy
 * Pencarian lintas modul (Timeline, Diary, Dokumen, Kesehatan)
 * Notifikasi sistem (badge counter, mark as read, mark all as read)
 * Dashboard update (widget pertumbuhan & kesehatan, akses cepat)
-* Total: 299 tests, 634 assertions
+* Total: 299 tests, 633 assertions
 
 ---
 
-## Phase 3 — SaaS ⏳
+## Phase 3 — Quality Improvement ✅ Selesai
 
-* Multi Tenant
-* Subscription
-* Billing
-* Tenant Management
-* Branding
-* Monitoring
-* Analytics
+* Fixed critical bugs: Dashboard child_name error, Public Profile $album->cover, .env timezone capitalization
+* Fixed medium bugs: .env.example sync, footer dead links, Dashboard closure → DashboardController, object access standardization
+* Child ownership middleware (`child.ownership`) — sentralisasi otorisasi di routes
+* Toast notification system global (`x-toast` component)
+* Confirm delete modal (`x-confirm-delete` component)
+* Static pages: Tentang Kami, Kebijakan Privasi, Syarat & Ketentuan
+* Dashboard extracted to `DashboardController`
+* 299 tests, 634 assertions — all passing
+* Laravel Pint formatting applied
 
 ---
 
-## Phase 4 — Integration ⏳
+## Phase 3.5 — Comprehensive Improvement ✅ Selesai
 
-* REST API
-* OAuth
-* Webhook
+* **Quick Wins:**
+  * Welcome page CSS fallback修复 (G1)
+  * Mobile bottom nav: 4 visible + overflow dropdown (G2)
+  * Bottom nav padding agar konten tidak tertutup (G3)
+  * Dashboard growth items clickable (G4)
+  * Child show page: child-nav sidebar (G5)
+  * Dead code cleanup: 27 clearCache() no-op calls removed (G6)
+  * Health index filter link konsistensi (G7)
+  * ROADMAP.md assertion count fix (G8)
+* **Medium Features:**
+  * Search: Growth records ditambahkan (M1)
+  * Loading skeleton component `x-loading-skeleton` (M2)
+  * Photo upload di child create/edit form (M3)
+  * Export ZIP: bulk download semua data anak (M4)
+  * Rate limiting export PDF: 5 req/min, ZIP: 3 req/min (M5)
+  * Calendar monthly grid view dengan toggle grid/list (M6)
+* **Architecture:**
+  * Dashboard caching: `Cache::remember()` 5 menit TTL (A1)
+  * Pagination konsisten di semua index views (A2)
+  * Documentation sync: FEATURES.md & ROADMAP.md updated (A3)
+
+---
+
+## Phase 4 — SaaS ✅ Selesai
+
+### Phase 4.1 — SaaS Architecture
+
+* Multi Tenant (column-based tenancy dengan `tenant_id`)
+* Subscription Management (pending → active lifecycle)
+* Billing & Payment (manual bank transfer: BRI, JAGO, BTN, BSI)
+* Tenant Management (CRUD, toggle status, soft delete)
+* Plan Management (Gratis, Basic, Premium, Enterprise)
+* Feature Limit Middleware (`EnsureFeatureLimit`)
+* Subscription Enforcement (`EnsureActiveSubscription`)
+
+### Phase 4.2 — Tenant Admin
+
+* Tenant Admin Dashboard
+* Branding Management (logo, warna, identitas visual)
+* Settings Management (domain, notifikasi, konfigurasi)
+* Usage Monitoring (anak, foto, video, storage)
+
+### Phase 4.3 — Super Admin Panel
+
+* Super Admin Dashboard
+* Analytics Dashboard (pendapatan, pertumbuhan tenant, distribusi langganan)
+* Monitoring (health check, login activity, storage usage)
+* Payment Approval Workflow (approve/reject dengan catatan)
+* Audit Log
+
+### Phase 4.4 — Custom API Integration
+
+* REST API dengan API key
+* OAuth authentication
+* Webhook support
+* Request/Response logging
 * API Documentation
-* SDK
+
+### Phase 4.5 & 4.6 — Testing Suite & Documentation
+
+* Feature Tests: TenantTest (7), PlanTest (7), SubscriptionTest (5), PaymentTest (7), TenantAdminTest (5), AnalyticsTest (3), FeatureLimitTest (3)
+* Unit Tests: TenantServiceTest (3), SubscriptionServiceTest (4), AuditServiceTest (2)
+* Total: 46 test SaaS, 345 test keseluruhan (738 assertions)
+* Pest PHP dengan `describe/it` blocks
+* Pint formatter untuk kode bersih
+* Documentation: FEATURES.md & ROADMAP.md updated
+
+### Bug Fixes (Phase 4)
+
+* Fixed: `toggle-status` → `toggleStatus` (PHP method naming)
+* Fixed: `tenant_branding` → `tenant_brandings` (table name mismatch)
+* Fixed: `Tenant::media()` — replaced `HasManyThrough` dengan polymorphic query
+* Fixed: `Tenant::activeSubscription()` — `latestOfMany()` → `latest()` (UUID compatibility)
+* Fixed: `AuditService::log()` — `property_exists()` → null coalescing (Eloquent attribute detection)
+* Fixed: `getStorageUsed()` — `sum('size')` → `sum('file_size')` (correct column name)
+* Fixed: `getPhotoCount()`/`getVideoCount()` — `type` → `file_type` (correct column name)
 
 ---
 
-## Phase 5 — Enterprise ⏳
+## Phase 5 — UX & Documentation Final ✅ Selesai
 
-* White Label
-* Custom Domain
-* Multi Bahasa
+* Welcome page: link "Tentang Kami" di navigasi
+* Dashboard: empty states dengan guidance text untuk setiap section
+* Navigation: link "Paket Langganan" dan "Langganan Saya" untuk role parent
+* Footer minimalis di semua halaman terautentikasi
+* Fitur Backup: ✅ (Export PDF & ZIP)
+* Fitur Custom API Integration: ✅ (REST API, API Key, OAuth, Webhook)
+* Quality Assurance audit selesai: 345 tests, 738 assertions — all passing
+* Documentation sync: FEATURES.md, ROADMAP.md, AGENTS.md updated
+
+---
+
+## Phase 6 — Integration ⏳
+
+* REST API Documentation (OpenAPI/Swagger)
+* OAuth provider setup
+* Webhook management dashboard
+* API rate limiting & throttling
+* SDK untuk integrasi pihak ketiga
+
+---
+
+## Phase 7 — Enterprise ⏳
+
+* White Label solution
+* Custom Domain per tenant
+* Multi Bahasa (i18n)
 * Marketplace Plugin
-* Enterprise Dashboard
+* Enterprise Dashboard & Analytics
 
 ---
 

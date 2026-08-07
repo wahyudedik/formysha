@@ -16,6 +16,8 @@
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
                 <div class="p-6 sm:p-8">
+                    <x-child-selector :children="$children" :child="$child" :route-name="'growth.create'" />
+
                     <!-- Child Info -->
                     <div class="flex items-center gap-3 mb-6 p-4 bg-gradient-to-r from-mintGreen-50 to-skyBlue-50 rounded-2xl">
                         <div class="w-10 h-10 rounded-xl {{ $child->gender === 'female' ? 'bg-softPink-100' : 'bg-skyBlue-100' }} flex items-center justify-center text-lg">

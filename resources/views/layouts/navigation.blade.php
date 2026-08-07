@@ -13,12 +13,22 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    @if (auth()->user()->role === 'super_admin')
+                        <x-nav-link :href="route('super-admin.dashboard')" :active="request()->routeIs('super-admin.*')">
+                            {{ __('Super Admin') }}
+                        </x-nav-link>
+                    @endif
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('children.index')" :active="request()->routeIs('children.*')">
                         {{ __('Anak Saya') }}
                     </x-nav-link>
+                    @if (auth()->user()->role === 'parent')
+                        <x-nav-link :href="route('subscription.plans')" :active="request()->routeIs('subscription.*')">
+                            {{ __('Paket Langganan') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -105,12 +115,22 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            @if (auth()->user()->role === 'super_admin')
+                <x-responsive-nav-link :href="route('super-admin.dashboard')" :active="request()->routeIs('super-admin.*')">
+                    {{ __('🛡️ Super Admin') }}
+                </x-responsive-nav-link>
+            @endif
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('🏠 Dashboard') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('children.index')" :active="request()->routeIs('children.*')">
                 {{ __('👶 Anak Saya') }}
             </x-responsive-nav-link>
+            @if (auth()->user()->role === 'parent')
+                <x-responsive-nav-link :href="route('subscription.plans')" :active="request()->routeIs('subscription.*')">
+                    {{ __('💳 Paket Langganan') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
@@ -121,6 +141,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('subscription.current')" :active="request()->routeIs('subscription.current')">
+                    {{ __('📦 Langganan Saya') }}
+                </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('search.index')" :active="request()->routeIs('search.*')">
                     {{ __('🔍 Pencarian') }}
                 </x-responsive-nav-link>

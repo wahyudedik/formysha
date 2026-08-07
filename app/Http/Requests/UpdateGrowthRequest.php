@@ -18,16 +18,16 @@ class UpdateGrowthRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>, string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'measured_at' => ['required', 'date', 'before_or_equal:today'],
-            'weight_kg' => ['nullable', 'numeric', 'min:0.1', 'max:200'],
-            'height_cm' => ['nullable', 'numeric', 'min:1', 'max:250'],
-            'head_circumference_cm' => ['nullable', 'numeric', 'min:1', 'max:100'],
-            'notes' => ['nullable', 'string', 'max:2000'],
+            'weight_kg' => ['required', 'numeric', 'min:0.1', 'max:100'],
+            'height_cm' => ['required', 'numeric', 'min:1', 'max:200'],
+            'head_circumference_cm' => ['nullable', 'numeric', 'min:20', 'max:70'],
+            'notes' => ['nullable', 'string', 'max:1000'],
         ];
     }
 
@@ -42,15 +42,18 @@ class UpdateGrowthRequest extends FormRequest
             'measured_at.required' => 'Tanggal pengukuran wajib diisi.',
             'measured_at.date' => 'Format tanggal tidak valid.',
             'measured_at.before_or_equal' => 'Tanggal pengukuran tidak boleh di masa depan.',
+            'weight_kg.required' => 'Berat badan wajib diisi.',
             'weight_kg.numeric' => 'Berat badan harus berupa angka.',
             'weight_kg.min' => 'Berat badan minimal 0.1 kg.',
-            'weight_kg.max' => 'Berat badan maksimal 200 kg.',
+            'weight_kg.max' => 'Berat badan maksimal 100 kg.',
+            'height_cm.required' => 'Tinggi badan wajib diisi.',
             'height_cm.numeric' => 'Tinggi badan harus berupa angka.',
             'height_cm.min' => 'Tinggi badan minimal 1 cm.',
-            'height_cm.max' => 'Tinggi badan maksimal 250 cm.',
+            'height_cm.max' => 'Tinggi badan maksimal 200 cm.',
             'head_circumference_cm.numeric' => 'Lingkar kepala harus berupa angka.',
-            'head_circumference_cm.min' => 'Lingkar kepala minimal 1 cm.',
-            'head_circumference_cm.max' => 'Lingkar kepala maksimal 100 cm.',
+            'head_circumference_cm.min' => 'Lingkar kepala minimal 20 cm.',
+            'head_circumference_cm.max' => 'Lingkar kepala maksimal 70 cm.',
+            'notes.max' => 'Catatan maksimal 1000 karakter.',
         ];
     }
 }

@@ -30,6 +30,14 @@
 
             <!-- Latest Growth Summary -->
             @if ($latestGrowth)
+                @php
+                    $statusColors = [
+                        'normal' => ['bg' => 'bg-mintGreen-50', 'border' => 'border-mintGreen-200', 'text' => 'text-mintGreen-700', 'label' => 'Normal'],
+                        'below_normal' => ['bg' => 'bg-warmYellow-50', 'border' => 'border-warmYellow-200', 'text' => 'text-warmYellow-700', 'label' => 'Di Bawah Normal'],
+                        'above_normal' => ['bg' => 'bg-softOrange-50', 'border' => 'border-softOrange-200', 'text' => 'text-softOrange-700', 'label' => 'Di Atas Normal'],
+                        'unknown' => ['bg' => 'bg-gray-50', 'border' => 'border-gray-200', 'text' => 'text-gray-500', 'label' => 'Tidak Diketahui'],
+                    ];
+                @endphp
                 <div class="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white overflow-hidden shadow-soft sm:rounded-2xl p-5">
                         <div class="flex items-center gap-3">
@@ -39,6 +47,12 @@
                             <div>
                                 <p class="text-xs text-gray-500">{{ __('Berat Badan') }}</p>
                                 <p class="text-xl font-bold text-gray-800">{{ $latestGrowth->weight_label ?? '—' }}</p>
+                                @if ($assessment && isset($assessment['weightStatus']))
+                                    @php $sc = $statusColors[$assessment['weightStatus']] ?? $statusColors['unknown']; @endphp
+                                    <span class="inline-block mt-1 px-2 py-0.5 text-[10px] font-medium rounded-full {{ $sc['bg'] }} {{ $sc['border'] }} {{ $sc['text'] }} border">
+                                        {{ $sc['label'] }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -50,6 +64,12 @@
                             <div>
                                 <p class="text-xs text-gray-500">{{ __('Tinggi Badan') }}</p>
                                 <p class="text-xl font-bold text-gray-800">{{ $latestGrowth->height_label ?? '—' }}</p>
+                                @if ($assessment && isset($assessment['heightStatus']))
+                                    @php $sc = $statusColors[$assessment['heightStatus']] ?? $statusColors['unknown']; @endphp
+                                    <span class="inline-block mt-1 px-2 py-0.5 text-[10px] font-medium rounded-full {{ $sc['bg'] }} {{ $sc['border'] }} {{ $sc['text'] }} border">
+                                        {{ $sc['label'] }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -61,6 +81,12 @@
                             <div>
                                 <p class="text-xs text-gray-500">{{ __('Lingkar Kepala') }}</p>
                                 <p class="text-xl font-bold text-gray-800">{{ $latestGrowth->head_circumference_label ?? '—' }}</p>
+                                @if ($assessment && isset($assessment['headStatus']))
+                                    @php $sc = $statusColors[$assessment['headStatus']] ?? $statusColors['unknown']; @endphp
+                                    <span class="inline-block mt-1 px-2 py-0.5 text-[10px] font-medium rounded-full {{ $sc['bg'] }} {{ $sc['border'] }} {{ $sc['text'] }} border">
+                                        {{ $sc['label'] }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -72,7 +98,13 @@
                 <div class="mb-8 bg-white overflow-hidden shadow-soft sm:rounded-3xl">
                     <div class="p-6">
                         <h3 class="font-semibold text-gray-800 mb-4">📈 {{ __('Grafik Pertumbuhan') }}</h3>
-                        <x-growth-chart :growths="$growthHistory" />
+                        <p class="text-xs text-gray-400 mb-3">{{ __('Garis putus-putus menunjukkan standar pertumbuhan WHO') }}</p>
+                        <x-growth-chart
+                            :growths="$growthHistory"
+                            :who-weight="$whoWeight"
+                            :who-height="$whoHeight"
+                            :child-gender="$child->gender"
+                        />
                     </div>
                 </div>
             @endif

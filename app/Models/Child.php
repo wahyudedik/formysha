@@ -92,6 +92,14 @@ class Child extends Model
     }
 
     /**
+     * Get the tenant that owns this child.
+     */
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
+    /**
      * Get the family members for the child.
      */
     public function familyMembers(): HasMany

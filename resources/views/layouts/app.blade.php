@@ -32,9 +32,31 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="pb-20">
                 {{ $slot }}
             </main>
+
+            <!-- Footer -->
+            <footer class="bg-white/80 backdrop-blur-sm border-t border-gray-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-2">
+                            <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'ForMysha') }}" class="h-7 w-auto" />
+                            <span class="font-bold text-sm text-gray-600">ForMysha</span>
+                        </div>
+
+                        <div class="flex items-center gap-5 text-xs text-gray-400">
+                            <a href="{{ route('pages.about') }}" class="hover:text-gray-600 transition-colors">Tentang Kami</a>
+                            <a href="{{ route('pages.privacy') }}" class="hover:text-gray-600 transition-colors">Kebijakan Privasi</a>
+                            <a href="{{ route('pages.terms') }}" class="hover:text-gray-600 transition-colors">Syarat & Ketentuan</a>
+                        </div>
+
+                        <p class="text-xs text-gray-400">
+                            &copy; 2026 {{ config('app.name', 'ForMysha') }}
+                        </p>
+                    </div>
+                </div>
+            </footer>
         </div>
 
         <!-- Toast Notifications -->

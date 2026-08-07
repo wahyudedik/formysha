@@ -736,7 +736,7 @@ public/favicon.ico   → Favicon legacy
 
 ### Roadmap
 
-#### Phase 1 — MVP
+#### Phase 1 — MVP ✅
 
 * Authentication
 * Dashboard
@@ -748,7 +748,7 @@ public/favicon.ico   → Favicon legacy
 * Kalender
 * Family Sharing
 
-#### Phase 2 — Parenting
+#### Phase 2 — Parenting ✅
 
 * Pertumbuhan
 * Grafik
@@ -757,7 +757,7 @@ public/favicon.ico   → Favicon legacy
 * Notifikasi
 * Pencarian
 
-#### Phase 3 — SaaS
+#### Phase 3 — Quality & SaaS ✅
 
 * Multi Tenant
 * Subscription
@@ -766,16 +766,33 @@ public/favicon.ico   → Favicon legacy
 * Branding
 * Monitoring
 * Analytics
+* Quality Improvement & Bug Fixes
 
-#### Phase 4 — Integration
+#### Phase 4 — SaaS Management ✅
 
-* REST API
-* OAuth
-* Webhook
-* API Documentation
+* Super Admin Panel
+* Tenant Admin Panel
+* Payment Management
+* Analytics Dashboard
+* Audit Log
+* Custom API Integration
+* Feature Limit Middleware
+
+#### Phase 5 — UX & Documentation ✅
+
+* UX Improvements (Navigation, Dashboard, Footer)
+* Documentation Final (FEATURES.md, ROADMAP.md, AGENTS.md)
+* Quality Assurance Audit: 345 tests, 738 assertions — all passing
+
+#### Phase 6 — Integration ⏳
+
+* REST API Documentation
+* OAuth Provider
+* Webhook Dashboard
+* API Rate Limiting
 * SDK
 
-#### Phase 5 — Enterprise
+#### Phase 7 — Enterprise ⏳
 
 * White Label
 * Custom Domain
@@ -811,27 +828,32 @@ ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya 
 
 ### Nested Resource Routing
 
-- Child-related resources use nested routing: `Route::resource('children/{child}/timelines', ...)`.
-- Always use `{child}` route model binding with authorization check: `$child->user_id === auth()->id()`.
+- Child-related resources use nested routing with `child.ownership` middleware: all `/children/{child}/*` routes are wrapped in `Route::middleware('child.ownership')->group(...)`.
+- The middleware handles ownership verification — controllers do NOT need inline `abort_if($child->user_id !== ...)` checks.
+- Controllers still verify resource-child relationship: `abort_unless($resource->child_id === $child->id, 403)`.
 
 ### Child Authorization
 
-- Every controller that accesses a Child MUST verify ownership: `abort_unless($child->user_id === auth()->id(), 403)`.
+- Ownership is enforced via `EnsureChildOwnership` middleware (registered as `child.ownership` in `bootstrap/app.php`).
+- The middleware checks `$child->user_id !== $request->user()->id` and aborts 403.
 - Exception: `PublicProfileController` uses `where('is_public', true)` instead of auth check.
 
 ### UI Conventions
 
 - All UI text must be in **Bahasa Indonesia** (Indonesian).
-- Use existing Blade components before creating new ones: `x-empty-state`, `x-page-header`, `x-breadcrumb`, `x-loading`, `x-child-nav`, `x-modal`, `x-dropdown`.
-- Authenticated pages use `x-app-layout`. Public pages (like `/public/profile`) use standalone layout with Tailwind CDN.
+- Use existing Blade components before creating new ones: `x-empty-state`, `x-page-header`, `x-breadcrumb`, `x-loading`, `x-child-nav`, `x-modal`, `x-dropdown`, `x-toast`, `x-confirm-delete`, `x-pages-layout`.
+- Authenticated pages use `x-app-layout`. Public pages (like `/public/profile`) use standalone layout with Tailwind CDN. Static pages (about, privacy, terms) use `x-pages-layout`.
 - Color system: Use Tailwind custom colors — `skyBlue`, `mintGreen`, `softPink`, `lavender`, `warmYellow`, `peach`, `softOrange`, `cream`.
 
 ### Testing Conventions
 
 - Tests use **Pest PHP** with `describe/it` blocks and global `uses()` from `tests/Pest.php`.
 - Feature tests for each module: `tests/Feature/{Module}Test.php`.
+- Unit tests for services: `tests/Unit/Services/{Service}Test.php`.
 - Unit tests for controllers: `tests/Unit/{Controller}Test.php`.
 - Use factory states (e.g., `Child::factory()->public()`, `Document::factory()->ofType('birth_certificate')`).
+- SaaS-related tests use factories: `Tenant::factory()->create()`, `Plan::factory()->create()`, `Subscription::factory()->create()`.
+- Use `Tenant::factory()->create()` to create tenants, `Tenant::factory()->withOwner()` to create tenants with owner user.
 - Run full suite: `php artisan test --compact`.
 - Run Pint after changes: `.\vendor\bin\pint --dirty --format agent`.
 
@@ -840,7 +862,86 @@ ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya 
 - Slugs are generated automatically via `Child::booted()` using `Str::slug()`.
 - `public_profile_data` is a JSON array storing which sections to show on public profile: `['timeline', 'gallery', 'awards']`.
 - All dates use `date_of_birth` (not `birth_date`). All timestamps use `created_at`/`updated_at`.
-- Soft deletes are NOT used in Phase 1. Use hard delete with confirmation modal.
+- Soft deletes are used for Tenant, Plan, Subscription, and Payment models. Use `assertSoftDeleted()` in tests.
+- `Tenant::factory()->create()` creates a tenant with `status: active`. Use `Tenant::factory()->suspended()` for suspended tenants.
+- `Plan::factory()->create()` creates a plan with `is_active: true`. Use `Plan::factory()->inactive()` for inactive plans.
+- `Subscription::factory()->create()` creates a subscription with `status: active`. Use `Subscription::factory()->pending()` for pending subscriptions.
+- `Payment::factory()->create()` creates a payment with `status: pending`. Use states like `approved()`, `rejected()` for other statuses.
+
+### SaaS Architecture
+
+- **Multi-tenancy**: Column-based tenancy using `tenant_id` on all user data tables. Tenant isolation is enforced via middleware.
+- **Role-based access**: Three roles — `super_admin`, `tenant_admin`, `parent`. Use `EnsureRole` middleware to protect routes.
+- **Subscription lifecycle**: `pending` → `active` → `inactive`/`cancelled`/`expired`. Managed via `SubscriptionService`.
+- **Payment flow**: User uploads proof of bank transfer → Super Admin reviews → Approve/Reject. Manual verification, no payment gateway.
+- **Feature limits**: Enforced via `EnsureFeatureLimit` middleware and `TenantService::checkFeatureLimit()`. Limits: `max_children`, `max_photos`, `max_videos`, `max_storage_mb`.
+- **Audit logging**: Use `AuditService::log()` to record important actions. Logs are tied to tenant and user.
+- **Tenant creation**: `TenantService::createTenant()` creates tenant + owner user + free subscription (pending + active).
+- **Free plan**: `Plan::free()` scope finds the free plan. `SubscriptionService::activateFreePlan()` creates an active subscription on the free plan.
+
+### SaaS Route & Middleware Rules
+
+- SaaS routes are in `routes/saas.php` (Super Admin) and `routes/tenant-admin.php` (Tenant Admin).
+- Subscription routes are in `routes/subscription.php`.
+- Super Admin routes require `role:super_admin` middleware.
+- Tenant Admin routes require `role:tenant_admin` middleware.
+- Feature-limited routes use `feature.limit:{feature}` middleware (e.g., `feature.limit:children`, `feature.limit:photos`).
+- Subscription-protected routes use `active.subscription` middleware.
+- `EnsureActiveSubscription` middleware checks if tenant has an active subscription; redirects to plans page if not.
+
+### SaaS Model Conventions
+
+- **Tenant**: UUID primary key, `activeSubscription()` uses `latest()` (not `latestOfMany()` for UUID compatibility), `media()` is a custom method (not HasManyThrough) because media uses polymorphic relationships.
+- **Plan**: UUID primary key, `is_active` boolean, `is_free` boolean. Use `Plan::factory()->free()` for free plan.
+- **Subscription**: UUID primary key, `status` enum (`pending`, `active`, `inactive`, `cancelled`, `expired`). Use `Subscription::factory()->pending()` or `->active()`.
+- **Payment**: UUID primary key, `status` enum (`pending`, `approved`, `rejected`), `amount` in cents (integer). Use `Payment::factory()->approved()` etc.
+- **AuditLog**: UUID primary key, `event` string, `description` text, `properties` JSON, `auditable` polymorphic.
+- **Media**: Uses polymorphic `mediable_type`/`mediable_id` (NOT `child_id` foreign key). Columns: `file_type` (NOT `type`), `file_size` (NOT `size`).
+- **TenantBranding**: Table is `tenant_brandings` (plural). Uses `HasOne` relationship from Tenant.
+
+### SaaS Eloquent Gotchas
+
+- `property_exists()` does NOT work on Eloquent models because attributes are accessed via `__get` magic method. Use `$model->tenant_id ?? false` instead.
+- `HasManyThrough` does NOT work with polymorphic relationships. For media through tenants, use a custom method querying `Media::where('mediable_type', ...)->whereIn('mediable_id', $childIds)`.
+- Eloquent caches relationship results within the same model instance. Call `$model->refresh()` after database changes if you need fresh relationship data.
+- `latestOfMany()` may have issues with UUID primary keys. Use `latest()` with `hasOne` instead for the `activeSubscription()` relationship.
+- When querying subscriptions, always filter by `status` explicitly (e.g., `->where('status', Subscription::STATUS_ACTIVE)`) because `createTenant()` creates both PENDING and ACTIVE subscriptions.
+
+### SaaS Factory Conventions
+
+- `Tenant::factory()->create()` — Creates a tenant with `status: active`, `slug: auto-generated`.
+- `Tenant::factory()->withOwner()` — Creates a tenant with an owner user (role: `parent`).
+- `Tenant::factory()->suspended()` — Creates a suspended tenant.
+- `Plan::factory()->create()` — Creates an active plan with realistic data.
+- `Plan::factory()->free()` — Creates a free plan (`is_free: true`, `price_monthly: 0`).
+- `Plan::factory()->inactive()` — Creates an inactive plan.
+- `Subscription::factory()->create()` — Creates an active subscription linked to a tenant and plan.
+- `Subscription::factory()->pending()` — Creates a pending subscription.
+- `Payment::factory()->create()` — Creates a pending payment with bank transfer data.
+- `Payment::factory()->approved()` — Creates an approved payment with verifier.
+- `Payment::factory()->rejected()` — Creates a rejected payment.
+
+### SaaS File Locations
+
+- **Models**: `app/Models/{Tenant,Plan,Subscription,Payment,AuditLog,TenantSetting,TenantBranding}.php`
+- **Services**: `app/Services/{TenantService,SubscriptionService,AuditService}.php`
+- **Middleware**: `app/Http/Middleware/{EnsureRole,EnsureActiveSubscription,EnsureFeatureLimit}.php`
+- **Controllers**: `app/Http/Controllers/SuperAdmin/{TenantController,PlanController,PaymentController,AnalyticsController,MonitoringController}.php`, `app/Http/Controllers/TenantAdmin/{TenantAdminController,SettingsController,BrandingController,UsageController}.php`, `app/Http/Controllers/Subscription/{SubscriptionController,PaymentController}.php`
+- **Routes**: `routes/saas.php`, `routes/tenant-admin.php`, `routes/subscription.php`
+- **Migrations**: `database/migrations/2026_08_07_23322{1,2,3,4,5,6,7,8}_*.php`
+- **Config**: `config/saas.php`
+- **Tests**: `tests/Feature/{Tenant,Plan,Subscription,Payment,TenantAdmin,Analytics,FeatureLimit}Test.php`, `tests/Unit/Services/{TenantService,SubscriptionService,AuditService}Test.php`
+
+---
+
+### Quality Assurance
+
+* **Total Tests**: 345 tests, 738 assertions — all passing
+* **Framework**: Pest PHP dengan `describe/it` blocks
+* **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
+* **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit
+* **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, Album, Child, Diary
+* **QA Audit**: Phase 1-4 selesai, semua tests passing, Pint formatting applied
 
 ---
 
@@ -956,6 +1057,13 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 - The application is served by Laravel Herd at `https?://[kebab-case-project-dir].test`. Use the `get-absolute-url` tool to generate valid URLs. Never run commands to serve the site. It is always available.
 - Use the `herd` CLI to manage services, PHP versions, and sites (e.g. `herd sites`, `herd services:start <service>`, `herd php:list`). Run `herd list` to discover all available commands.
+
+=== tests rules ===
+
+# Test Enforcement
+
+- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
+- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
 
 === laravel/core rules ===
 

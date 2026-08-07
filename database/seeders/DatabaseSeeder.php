@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            PlanSeeder::class,
+        ]);
+
         // Create a test user with children
         $user = User::factory()->create([
             'name' => 'Budi Santoso',
@@ -61,7 +65,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'rina@for-mysha.my.id',
         ]);
 
-        FamilyMember::factory()->grandmother()->create([
+        FamilyMember::factory()->state([
+            'relationship' => 'grandmother',
+        ])->create([
             'child_id' => $mysha->id,
             'name' => 'Siti Aminah',
         ]);

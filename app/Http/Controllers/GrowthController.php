@@ -6,12 +6,17 @@ use App\Http\Requests\StoreGrowthRequest;
 use App\Http\Requests\UpdateGrowthRequest;
 use App\Models\Child;
 use App\Models\Growth;
+use App\Services\GrowthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class GrowthController extends Controller
 {
+    public function __construct(
+        private GrowthService $growthService,
+    ) {}
+
     /**
      * Display a listing of growth records for a child.
      */
@@ -29,11 +34,24 @@ class GrowthController extends Controller
             ->orderBy('measured_at', 'asc')
             ->get();
 
+        $chartData = $this->growthService->getGrowthChartData($child);
+        $whoWeight = $this->growthService->getWhoWeightPercentiles($child->gender);
+        $whoHeight = $this->growthService->getWhoHeightPercentiles($child->gender);
+
+        $assessment = null;
+        if ($latestGrowth) {
+            $assessment = $this->growthService->assessGrowth($child, $latestGrowth);
+        }
+
         return view('growth.index', [
             'child' => $child,
             'growths' => $growths,
             'latestGrowth' => $latestGrowth,
             'growthHistory' => $growthHistory,
+            'chartData' => $chartData,
+            'whoWeight' => $whoWeight,
+            'whoHeight' => $whoHeight,
+            'assessment' => $assessment,
         ]);
     }
 
@@ -42,8 +60,11 @@ class GrowthController extends Controller
      */
     public function create(Request $request, Child $child): View
     {
+        $children = $request->user()->children()->get();
+
         return view('growth.create', [
             'child' => $child,
+            'children' => $children,
         ]);
     }
 

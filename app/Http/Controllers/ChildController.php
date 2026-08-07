@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateChildRequest;
 use App\Models\Child;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ChildController extends Controller
@@ -40,7 +41,13 @@ class ChildController extends Controller
      */
     public function store(StoreChildRequest $request): RedirectResponse
     {
-        $child = $request->user()->children()->create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('children', 'public');
+        }
+
+        $child = $request->user()->children()->create($data);
 
         return redirect()->route('children.show', $child)
             ->with('status', 'Profil anak berhasil dibuat!');
@@ -73,7 +80,18 @@ class ChildController extends Controller
      */
     public function update(UpdateChildRequest $request, Child $child): RedirectResponse
     {
-        $child->update($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($child->photo) {
+                Storage::disk('public')->delete($child->photo);
+            }
+
+            $data['photo'] = $request->file('photo')->store('children', 'public');
+        }
+
+        $child->update($data);
 
         return redirect()->route('children.show', $child)
             ->with('status', 'Profil anak berhasil diperbarui!');
@@ -84,6 +102,11 @@ class ChildController extends Controller
      */
     public function destroy(Request $request, Child $child): RedirectResponse
     {
+        // Delete photo if exists
+        if ($child->photo) {
+            Storage::disk('public')->delete($child->photo);
+        }
+
         $child->delete();
 
         return redirect()->route('children.index')

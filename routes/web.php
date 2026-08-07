@@ -6,6 +6,7 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiaryController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\HealthController;
@@ -115,6 +116,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/children/{child}/health/{healthRecord}', [HealthController::class, 'update'])->name('health.update');
         Route::delete('/children/{child}/health/{healthRecord}', [HealthController::class, 'destroy'])->name('health.destroy');
 
+        // Export routes (nested under children) — throttled to prevent abuse
+        Route::get('/children/{child}/export/profile', [ExportController::class, 'childProfile'])->name('export.profile')->middleware('throttle:5,1');
+        Route::get('/children/{child}/export/health', [ExportController::class, 'healthRecords'])->name('export.health')->middleware('throttle:5,1');
+        Route::get('/children/{child}/export/growth', [ExportController::class, 'growthRecords'])->name('export.growth')->middleware('throttle:5,1');
+        Route::get('/children/{child}/export/zip', [ExportController::class, 'childZip'])->name('export.zip')->middleware('throttle:3,1');
+
     });
 
     // Search routes
@@ -126,6 +133,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
+
+// SaaS & Subscription routes — must be registered before catch-all public profile route
+require __DIR__.'/saas.php';
+require __DIR__.'/subscription.php';
+
+// Tenant Admin routes — must be registered before catch-all public profile route
+require __DIR__.'/tenant-admin.php';
 
 // Auth routes must be registered before the catch-all public profile route
 require __DIR__.'/auth.php';

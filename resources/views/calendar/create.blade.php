@@ -13,6 +13,8 @@
     <div class="py-8 max-w-3xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
             <div class="p-6 sm:p-8">
+                <x-child-selector :children="$children" :child="$child" :route-name="'calendar.create'" />
+
                 <form method="POST" action="{{ route('calendar.store', $child) }}">
                     @csrf
 

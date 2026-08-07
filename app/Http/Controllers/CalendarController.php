@@ -17,14 +17,29 @@ class CalendarController extends Controller
      */
     public function index(Request $request, Child $child): View
     {
+        $month = (int) $request->query('month', now()->month);
+        $year = (int) $request->query('year', now()->year);
+
         $events = $child->events()
+            ->whereYear('event_date', $year)
+            ->whereMonth('event_date', $month)
             ->orderBy('event_date', 'asc')
             ->orderBy('event_time', 'asc')
-            ->paginate(12);
+            ->paginate(15)
+            ->withQueryString();
+
+        $allMonthEvents = $child->events()
+            ->whereYear('event_date', $year)
+            ->whereMonth('event_date', $month)
+            ->orderBy('event_date', 'asc')
+            ->get();
 
         return view('calendar.index', [
             'child' => $child,
             'events' => $events,
+            'allMonthEvents' => $allMonthEvents,
+            'currentMonth' => $month,
+            'currentYear' => $year,
         ]);
     }
 
@@ -33,8 +48,11 @@ class CalendarController extends Controller
      */
     public function create(Request $request, Child $child): View
     {
+        $children = $request->user()->children()->get();
+
         return view('calendar.create', [
             'child' => $child,
+            'children' => $children,
         ]);
     }
 

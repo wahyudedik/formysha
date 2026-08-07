@@ -19,8 +19,21 @@
     </x-slot>
 
     <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <!-- Calendar Grid View -->
+        <div class="mb-6">
+            <x-calendar-grid
+                :events="$allMonthEvents"
+                :current-month="$currentMonth"
+                :current-year="$currentYear"
+                :child="$child"
+            />
+        </div>
+
+        <!-- Event List (Paginated) -->
         <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
             <div class="p-6 sm:p-8">
+                <h3 class="font-semibold text-gray-800 mb-4">📋 {{ __('Semua Acara') }}</h3>
+
                 @if ($events->isEmpty())
                     <div class="text-center py-12">
                         <div class="text-6xl mb-4">📅</div>

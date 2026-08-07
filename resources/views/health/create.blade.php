@@ -11,6 +11,8 @@
 
     <div class="py-8">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <x-child-selector :children="$children" :child="$child" :route-name="'health.create'" />
+
             {{-- Child Info --}}
             <div class="mb-6 p-4 bg-skyBlue-50 rounded-2xl border border-skyBlue-100">
                 <div class="flex items-center gap-3">
