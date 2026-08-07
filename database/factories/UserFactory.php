@@ -30,6 +30,11 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'avatar' => null,
+            'phone' => fake()->optional(0.7)->phoneNumber(),
+            'date_of_birth' => fake()->optional(0.6)->dateTimeBetween('-40 years', '-20 years'),
+            'address' => fake()->optional(0.5)->address(),
+            'role' => 'parent',
         ];
     }
 
@@ -40,6 +45,26 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is an admin.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'role' => 'admin',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a guardian.
+     */
+    public function guardian(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'role' => 'guardian',
         ]);
     }
 }

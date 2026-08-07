@@ -1,9 +1,118 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+/* ForMysha Brand CSS Variables */
+@layer base {
+    :root {
+        --color-brand-sky-blue: #7dd3fc;
+        --color-brand-mint-green: #86efac;
+        --color-brand-soft-pink: #f9a8d4;
+        --color-brand-lavender: #d8b4fe;
+        --color-brand-warm-yellow: #fde047;
+        --color-brand-peach: #fdba74;
+        --color-brand-soft-orange: #ff8a4c;
+        --color-brand-cream: #FFFDF7;
+        --color-brand-text: #374151;
+        --color-brand-text-light: #6b7280;
+    }
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+@layer components {
+
+    /* Rounded Card Component */
+    .card {
+        @apply bg-white rounded-2xl shadow-soft p-6 transition-all duration-200;
+    }
+
+    .card-hover {
+        @apply card hover:shadow-soft-md hover:-translate-y-0.5;
+    }
+
+    /* Soft Button */
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-6 py-3 bg-softPink-300 hover:bg-softPink-400 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-softPink-300 focus:ring-offset-2;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl border border-gray-200 shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
+    }
+
+    .btn-accent {
+        @apply inline-flex items-center justify-center px-6 py-3 bg-skyBlue-300 hover:bg-skyBlue-400 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
+    }
+
+    /* Section Title */
+    .section-title {
+        @apply text-2xl font-bold text-gray-800 mb-6;
+    }
+
+    /* Gradient Backgrounds */
+    .bg-gradient-warm {
+        @apply bg-gradient-to-br from-softPink-50 via-cream-50 to-lavender-50;
+    }
+
+    .bg-gradient-sky {
+        @apply bg-gradient-to-br from-skyBlue-50 via-white to-mintGreen-50;
+    }
+
+    /* Input Focus */
+    .input-focus {
+        @apply rounded-xl border-gray-300 focus:border-softPink-300 focus:ring-softPink-200 transition-all duration-200;
+    }
+
+    /* Safe area for mobile bottom nav */
+    .safe-bottom {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* Mobile bottom nav padding */
+    .has-bottom-nav {
+        @apply pb-20 lg:pb-0;
+    }
+}
+
+@layer utilities {
+
+    /* Text Gradient */
+    .text-gradient-brand {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-softPink-400 via-lavender-400 to-skyBlue-400;
+    }
+
+    /* Animation */
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.5s ease-out;
+    }
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth page transitions */
+.page-enter {
+    animation: fadeIn 0.3s ease-out;
 }

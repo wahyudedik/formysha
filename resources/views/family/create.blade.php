@@ -1,0 +1,87 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center gap-3">
+            <a href="{{ route('family.index', $child) }}" class="text-gray-400 hover:text-gray-600 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Tambah Anggota Keluarga') }}
+            </h2>
+        </div>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl p-6 sm:p-8">
+                <div class="mb-6">
+                    <p class="text-sm text-gray-500">
+                        {{ __('Menambahkan anggota keluarga untuk') }} <span class="font-semibold text-gray-800">{{ $child->nickname ?? $child->name }}</span>
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ route('family.store', $child) }}" class="space-y-6">
+                    @csrf
+
+                    <!-- Name -->
+                    <div>
+                        <x-input-label for="name" :value="__('Nama Lengkap *')" />
+                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required autofocus placeholder="Contoh: Budi Santoso" />
+                        <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                    </div>
+
+                    <!-- Relationship -->
+                    <div>
+                        <x-input-label for="relationship" :value="__('Hubungan *')" />
+                        <select id="relationship" name="relationship" class="mt-1 block w-full border-gray-300 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition" required>
+                            <option value="">{{ __('Pilih Hubungan') }}</option>
+                            <option value="father" {{ old('relationship') === 'father' ? 'selected' : '' }}>👨 Ayah</option>
+                            <option value="mother" {{ old('relationship') === 'mother' ? 'selected' : '' }}>👩 Ibu</option>
+                            <option value="guardian" {{ old('relationship') === 'guardian' ? 'selected' : '' }}>🤝 Wali</option>
+                            <option value="grandfather" {{ old('relationship') === 'grandfather' ? 'selected' : '' }}>👴 Kakek</option>
+                            <option value="grandmother" {{ old('relationship') === 'grandmother' ? 'selected' : '' }}>👵 Nenek</option>
+                            <option value="sibling" {{ old('relationship') === 'sibling' ? 'selected' : '' }}>🧒 Saudara/i</option>
+                            <option value="other" {{ old('relationship') === 'other' ? 'selected' : '' }}>👤 Lainnya</option>
+                        </select>
+                        <x-input-error class="mt-2" :messages="$errors->get('relationship')" />
+                    </div>
+
+                    <!-- Phone -->
+                    <div>
+                        <x-input-label for="phone" :value="__('Nomor Telepon')" />
+                        <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-full" :value="old('phone')" placeholder="Contoh: 08123456789" />
+                        <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <x-input-label for="email" :value="__('Email')" />
+                        <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email')" placeholder="Contoh: budi@email.com" />
+                        <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                    </div>
+
+                    <!-- Primary Toggle -->
+                    <div class="flex items-center gap-3">
+                        <input type="hidden" name="is_primary" value="0">
+                        <input type="checkbox" id="is_primary" name="is_primary" value="1" {{ old('is_primary') ? 'checked' : '' }} class="rounded border-gray-300 text-softPink-300 focus:ring-softPink-200">
+                        <x-input-label for="is_primary" :value="__('Tandai sebagai kontak utama')" class="!mb-0" />
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="flex items-center gap-4 pt-4">
+                        <button type="submit" class="btn-primary">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            {{ __('Simpan') }}
+                        </button>
+                        <a href="{{ route('family.index', $child) }}" class="btn-secondary">
+                            {{ __('Batal') }}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
