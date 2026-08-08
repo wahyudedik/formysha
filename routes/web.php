@@ -11,6 +11,7 @@ use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
@@ -125,6 +126,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/children/{child}/export/health', [ExportController::class, 'healthRecords'])->name('export.health')->middleware('throttle:5,1');
         Route::get('/children/{child}/export/growth', [ExportController::class, 'growthRecords'])->name('export.growth')->middleware('throttle:5,1');
         Route::get('/children/{child}/export/zip', [ExportController::class, 'childZip'])->name('export.zip')->middleware('throttle:3,1');
+
+        // Media routes (nested under children)
+        Route::post('/children/{child}/timeline/{timeline}/media', [MediaController::class, 'storeForTimeline'])->name('media.store.timeline');
+        Route::post('/children/{child}/albums/{album}/media', [MediaController::class, 'storeForAlbum'])->name('media.store.album');
+        Route::post('/children/{child}/diaries/{diary}/media', [MediaController::class, 'storeForDiary'])->name('media.store.diary');
+        Route::delete('/children/{child}/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 
     });
 

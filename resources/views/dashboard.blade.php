@@ -106,7 +106,7 @@
                             @endif
                         </div>
                     @else
-                        <div class="grid grid-cols-4 sm:grid-cols-4 gap-3">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                             @foreach ($recentMedia as $media)
                                 <div class="aspect-square rounded-2xl overflow-hidden bg-softPink-50 border border-softPink-100">
                                     <img src="{{ asset('storage/' . $media->file_path) }}"
@@ -176,7 +176,7 @@
                     @else
                         <div class="space-y-3">
                             @foreach ($recentGrowths as $growth)
-                                <a href="{{ route('growth.index', $growth->child_id) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 transition">
+                                <a href="{{ route('growth.index', $growth->child) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 transition">
                                     <div class="flex items-start gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-mintGreen-400 to-skyBlue-400 flex items-center justify-center text-white text-xs flex-shrink-0">
                                             📏

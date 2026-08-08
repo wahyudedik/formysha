@@ -27,6 +27,8 @@ class StoreAlbumRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:2000'],
             'is_private' => ['boolean'],
             'sort_order' => ['integer', 'min:0'],
+            'media' => ['nullable', 'array'],
+            'media.*' => ['file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,mp4,mov,webm,mp3,wav,ogg'],
         ];
     }
 
@@ -41,6 +43,9 @@ class StoreAlbumRequest extends FormRequest
             'name.required' => 'Nama album wajib diisi.',
             'name.max' => 'Nama album maksimal 255 karakter.',
             'description.max' => 'Deskripsi maksimal 2000 karakter.',
+            'media.*.file' => 'Format file media tidak valid.',
+            'media.*.max' => 'Ukuran file media maksimal 10MB.',
+            'media.*.mimes' => 'Format file media tidak didukung.',
         ];
     }
 }

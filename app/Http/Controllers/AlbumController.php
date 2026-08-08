@@ -6,6 +6,7 @@ use App\Http\Requests\StoreAlbumRequest;
 use App\Http\Requests\UpdateAlbumRequest;
 use App\Models\Album;
 use App\Models\Child;
+use App\Services\MediaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -47,7 +48,19 @@ class AlbumController extends Controller
      */
     public function store(StoreAlbumRequest $request, Child $child): RedirectResponse
     {
-        $child->albums()->create($request->validated());
+        $data = $request->validated();
+
+        // Remove media from data before creating album
+        $mediaFiles = $request->file('media') ?? [];
+        unset($data['media']);
+
+        $album = $child->albums()->create($data);
+
+        // Handle media upload
+        if (! empty($mediaFiles)) {
+            $mediaService = new MediaService;
+            $mediaService->uploadMultiple($mediaFiles, $album);
+        }
 
         return redirect()->route('albums.index', $child)
             ->with('status', 'Album berhasil dibuat!');

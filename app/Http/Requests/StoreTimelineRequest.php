@@ -49,6 +49,8 @@ class StoreTimelineRequest extends FormRequest
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],
             'is_featured' => ['boolean'],
+            'media' => ['nullable', 'array'],
+            'media.*' => ['file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,mp4,mov,webm,mp3,wav,ogg'],
         ];
     }
 
@@ -71,6 +73,9 @@ class StoreTimelineRequest extends FormRequest
             'tags.array' => 'Tag harus berupa array.',
             'tags.*.string' => 'Setiap tag harus berupa teks.',
             'tags.*.max' => 'Setiap tag maksimal 50 karakter.',
+            'media.*.file' => 'Format file media tidak valid.',
+            'media.*.max' => 'Ukuran file media maksimal 10MB.',
+            'media.*.mimes' => 'Format file media tidak didukung.',
         ];
     }
 }

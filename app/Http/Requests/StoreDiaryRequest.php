@@ -29,6 +29,8 @@ class StoreDiaryRequest extends FormRequest
             'diary_date' => ['required', 'date'],
             'weather' => ['nullable', 'string', 'in:sunny,cloudy,rainy,windy,snowy'],
             'is_private' => ['boolean'],
+            'media' => ['nullable', 'array'],
+            'media.*' => ['file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,mp4,mov,webm,mp3,wav,ogg'],
         ];
     }
 
@@ -48,6 +50,9 @@ class StoreDiaryRequest extends FormRequest
             'diary_date.required' => 'Tanggal catatan wajib diisi.',
             'diary_date.date' => 'Format tanggal tidak valid.',
             'weather.in' => 'Cuaca tidak valid.',
+            'media.*.file' => 'Format file media tidak valid.',
+            'media.*.max' => 'Ukuran file media maksimal 10MB.',
+            'media.*.mimes' => 'Format file media tidak didukung.',
         ];
     }
 }

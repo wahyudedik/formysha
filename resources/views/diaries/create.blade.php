@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('diaries.store', $child) }}">
+                    <form method="POST" action="{{ route('diaries.store', $child) }}" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Title -->
@@ -81,6 +81,9 @@
                                 <x-input-error :messages="$errors->get('weather')" class="mt-2" />
                             </div>
                         </div>
+
+                        <!-- Media Upload -->
+                        <x-media-upload name="media[]" :multiple="true" />
 
                         <!-- Privacy -->
                         <div class="mb-6" x-data="{ checked: {{ old('is_private', 'true') === 'true' || old('is_private') === '1' ? 'true' : 'false' }} }">

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreDiaryRequest;
 use App\Http\Requests\UpdateDiaryRequest;
 use App\Models\Child;
 use App\Models\Diary;
+use App\Services\MediaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -45,10 +46,20 @@ class DiaryController extends Controller
      */
     public function store(StoreDiaryRequest $request, Child $child): RedirectResponse
     {
-        $child->diaries()->create(array_merge(
-            $request->validated(),
-            ['user_id' => $request->user()->id],
-        ));
+        $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
+
+        // Remove media from data before creating diary
+        $mediaFiles = $request->file('media') ?? [];
+        unset($data['media']);
+
+        $diary = $child->diaries()->create($data);
+
+        // Handle media upload
+        if (! empty($mediaFiles)) {
+            $mediaService = new MediaService;
+            $mediaService->uploadMultiple($mediaFiles, $diary);
+        }
 
         return redirect()->route('diaries.index', $child)
             ->with('status', 'Catatan harian berhasil dibuat!');
@@ -60,6 +71,8 @@ class DiaryController extends Controller
     public function show(Request $request, Child $child, Diary $diary): View
     {
         abort_unless($diary->child_id === $child->id, 403);
+
+        $diary->load('media');
 
         return view('diaries.show', [
             'child' => $child,

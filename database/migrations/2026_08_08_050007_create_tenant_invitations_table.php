@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('token')->unique();
             $table->timestamp('expires_at');
             $table->timestamp('accepted_at')->nullable();
-            $table->uuid('invited_by');
+            $table->unsignedBigInteger('invited_by');
             $table->timestamps();
             $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
             $table->foreign('invited_by')->references('id')->on('users')->cascadeOnDelete();

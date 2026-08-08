@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('timeline.store', $child) }}">
+                    <form method="POST" action="{{ route('timeline.store', $child) }}" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Title -->
@@ -89,6 +89,9 @@
                             <p class="mt-1 text-xs text-gray-400">{{ __('Pisahkan setiap tag dengan koma') }}</p>
                             <x-input-error :messages="$errors->get('tags')" class="mt-2" />
                         </div>
+
+                        <!-- Media Upload -->
+                        <x-media-upload name="media[]" :multiple="true" />
 
                         <!-- Featured -->
                         <div class="mb-6" x-data="{ checked: {{ old('is_featured') ? 'true' : 'false' }} }">

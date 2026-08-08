@@ -111,6 +111,8 @@ class User extends Authenticatable
             'parent' => 'Orang Tua',
             'guardian' => 'Wali',
             'admin' => 'Admin',
+            'super_admin' => 'Super Admin',
+            'tenant_admin' => 'Tenant Admin',
             default => $this->role,
         };
     }
@@ -140,6 +142,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if the user is a parent.
+     */
+    public function isParent(): bool
+    {
+        return $this->role === 'parent';
+    }
+
+    /**
      * Check if the user is a super admin.
      */
     public function isSuperAdmin(): bool
@@ -152,6 +162,6 @@ class User extends Authenticatable
      */
     public function isTenantAdmin(): bool
     {
-        return in_array($this->role, ['super_admin', 'tenant_admin']);
+        return $this->role === 'tenant_admin';
     }
 }

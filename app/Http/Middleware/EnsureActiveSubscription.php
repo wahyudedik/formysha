@@ -15,14 +15,14 @@ class EnsureActiveSubscription
 
     /**
      * Check if the tenant has an active subscription.
-     * Skip for super_admin.
+     * Skip for super_admin and tenant_admin.
      */
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
 
-        // Skip for super admin
-        if ($user && $user->role === 'super_admin') {
+        // Skip for super admin and tenant admin
+        if ($user && in_array($user->role, ['super_admin', 'tenant_admin'])) {
             return $next($request);
         }
 

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTimelineRequest;
 use App\Http\Requests\UpdateTimelineRequest;
 use App\Models\Child;
 use App\Models\Timeline;
+use App\Services\MediaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -50,7 +51,17 @@ class TimelineController extends Controller
         $data = $request->validated();
         $data['user_id'] = $request->user()->id;
 
-        $child->timelines()->create($data);
+        // Remove media from data before creating timeline
+        $mediaFiles = $request->file('media') ?? [];
+        unset($data['media']);
+
+        $timeline = $child->timelines()->create($data);
+
+        // Handle media upload
+        if (! empty($mediaFiles)) {
+            $mediaService = new MediaService;
+            $mediaService->uploadMultiple($mediaFiles, $timeline);
+        }
 
         return redirect()->route('timeline.index', $child)
             ->with('status', 'Kenangan berhasil ditambahkan!');

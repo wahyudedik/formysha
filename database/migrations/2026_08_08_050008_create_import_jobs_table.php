@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('import_jobs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('tenant_id');
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('type');
             $table->string('status')->default('pending');
             $table->integer('total_items')->default(0);

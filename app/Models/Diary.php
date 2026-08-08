@@ -7,6 +7,7 @@ use Database\Factories\DiaryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -67,6 +68,15 @@ class Diary extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the media associated with the diary.
+     */
+    public function media(): HasMany
+    {
+        return $this->hasMany(Media::class, 'mediable_id')
+            ->where('mediable_type', static::class);
     }
 
     /**

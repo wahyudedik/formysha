@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('albums.store', $child) }}">
+                    <form method="POST" action="{{ route('albums.store', $child) }}" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Name -->
@@ -67,6 +67,9 @@
                             </div>
                             <x-input-error :messages="$errors->get('is_private')" class="mt-2" />
                         </div>
+
+                        <!-- Media Upload -->
+                        <x-media-upload name="media[]" :multiple="true" />
 
                         <!-- Sort Order -->
                         <div class="mb-6">
