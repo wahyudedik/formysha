@@ -402,9 +402,9 @@ if [[ "${MODE}" == "full" ]]; then
         php artisan db:seed --force
     fi
 
-    # Permissions
-    chown -R "${APP_USER}:${APP_USER}" "${APP_DIR}/storage"
-    chown -R "${APP_USER}:${APP_USER}" "${APP_DIR}/bootstrap/cache"
+    # Permissions (skip .user.ini yang dikunci aaPanel)
+    find "${APP_DIR}/storage" -not -name ".user.ini" -exec chown -R "${APP_USER}:${APP_USER}" {} + 2>/dev/null || true
+    find "${APP_DIR}/bootstrap/cache" -not -name ".user.ini" -exec chown -R "${APP_USER}:${APP_USER}" {} + 2>/dev/null || true
 
     # Cache
     clear_all_caches
@@ -414,7 +414,7 @@ if [[ "${MODE}" == "full" ]]; then
 
     # Storage link
     php artisan storage:link --force 2>/dev/null || true
-    chown -R "${APP_USER}:${APP_USER}" "${APP_DIR}/public/storage"
+    find "${APP_DIR}/public/storage" -not -name ".user.ini" -exec chown -R "${APP_USER}:${APP_USER}" {} + 2>/dev/null || true
 
     # Disable maintenance
     disable_maintenance
