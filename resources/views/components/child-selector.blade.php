@@ -2,8 +2,8 @@
 
 @if($children->count() > 1)
     <div class="mb-6 p-4 bg-gradient-to-r from-skyBlue-50 to-lavender-50 rounded-2xl border border-skyBlue-100"
-         x-data="{ selectedChildId: {{ $child->id }} }"
-         x-init="$watch('selectedChildId', (val) => { if (val != {{ $child->id }}) window.location.href = '{{ route($routeName, ':id') }}'.replace(':id', val); })">
+         x-data="{ selectedChildSlug: '{{ $child->slug }}' }"
+         x-init="$watch('selectedChildSlug', (val) => { if (val !== '{{ $child->slug }}') window.location.href = '{{ route($routeName, ':slug') }}'.replace(':slug', val); })">
         <div class="flex items-center gap-3">
             <div class="flex-shrink-0">
                 <svg class="w-5 h-5 text-skyBlue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,10 +13,10 @@
             <div class="flex-1">
                 <label for="child-selector" class="text-sm text-gray-500 block">{{ __('Pindah ke anak lain:') }}</label>
                 <select id="child-selector"
-                        x-model="selectedChildId"
+                        x-model="selectedChildSlug"
                         class="mt-1 block w-full border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500 rounded-xl shadow-soft text-sm">
                     @foreach($children as $c)
-                        <option value="{{ $c->id }}" {{ $c->id === $child->id ? 'selected' : '' }}>
+                        <option value="{{ $c->slug }}" {{ $c->slug === $child->slug ? 'selected' : '' }}>
                             {{ $c->gender === 'female' ? '👧' : '👦' }} {{ $c->nickname ?? $c->name }}
                         </option>
                     @endforeach

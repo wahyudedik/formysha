@@ -22,6 +22,14 @@ class TenantController extends Controller
     }
 
     /**
+     * Show the form for creating a new tenant.
+     */
+    public function create(): View
+    {
+        return view('super-admin.tenants.create');
+    }
+
+    /**
      * Store a newly created tenant.
      */
     public function store(Request $request): RedirectResponse
@@ -45,6 +53,14 @@ class TenantController extends Controller
         $tenant->loadCount('users', 'children', 'subscriptions');
 
         return view('super-admin.tenants.show', compact('tenant'));
+    }
+
+    /**
+     * Show the form for editing the specified tenant.
+     */
+    public function edit(Tenant $tenant): View
+    {
+        return view('super-admin.tenants.edit', compact('tenant'));
     }
 
     /**

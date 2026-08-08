@@ -66,7 +66,7 @@ describe('Child API', function () {
         $child = Child::factory()->create(['user_id' => $user->id, 'name' => 'Mysha']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id);
+            ->getJson('/api/children/'.$child->slug);
 
         $response->assertOk()
             ->assertJsonPath('data.name', 'Mysha');
@@ -79,7 +79,7 @@ describe('Child API', function () {
         $child = Child::factory()->create(['user_id' => $user->id, 'name' => 'Old Name']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/children/'.$child->id, [
+            ->putJson('/api/children/'.$child->slug, [
                 'name' => 'New Name',
             ]);
 
@@ -99,7 +99,7 @@ describe('Child API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->deleteJson('/api/children/'.$child->id);
+            ->deleteJson('/api/children/'.$child->slug);
 
         $response->assertOk();
 
@@ -116,7 +116,7 @@ describe('Child API', function () {
         $child = Child::factory()->create(['user_id' => $otherUser->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id);
+            ->getJson('/api/children/'.$child->slug);
 
         $response->assertForbidden();
     });

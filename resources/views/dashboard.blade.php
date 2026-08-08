@@ -136,7 +136,7 @@
                     @else
                         <div class="space-y-3">
                             @foreach ($upcomingEvents as $event)
-                                <a href="{{ route('calendar.show', [$event->child_id, $event->id]) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 transition group">
+                                <a href="{{ route('calendar.show', [$event->child->slug, $event]) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 transition group">
                                     <div class="flex items-start gap-3">
                                         <div class="w-10 h-10 rounded-xl {{ $event->event_type === 'immunization' ? 'bg-mintGreen-100' : ($event->event_type === 'birthday' ? 'bg-warmYellow-100' : 'bg-skyBlue-100') }} flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">
                                             {{ $event->event_type === 'immunization' ? '💉' : ($event->event_type === 'birthday' ? '🎂' : '📅') }}
@@ -214,7 +214,7 @@
                     @else
                         <div class="space-y-3">
                             @foreach ($recentHealthRecords as $record)
-                                <a href="{{ route('health.show', [$record->child_id, $record]) }}" class="block p-3 rounded-xl hover:bg-skyBlue-50 transition">
+                                <a href="{{ route('health.show', [$record->child->slug, $record]) }}" class="block p-3 rounded-xl hover:bg-skyBlue-50 transition">
                                     <div class="flex items-start gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-skyBlue-400 to-lavender-400 flex items-center justify-center text-white text-xs flex-shrink-0">
                                             {{ $record->type_icon }}

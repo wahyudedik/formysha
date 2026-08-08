@@ -13,7 +13,7 @@ describe('Growth API', function () {
         Growth::factory()->create(['child_id' => $child->id, 'user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/growths');
+            ->getJson('/api/children/'.$child->slug.'/growths');
 
         $response->assertOk()
             ->assertJsonCount(1, 'data');
@@ -26,7 +26,7 @@ describe('Growth API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->id.'/growths', [
+            ->postJson('/api/children/'.$child->slug.'/growths', [
                 'weight_kg' => 8.5,
                 'height_cm' => 70.0,
                 'measured_at' => '2025-06-15',
@@ -45,7 +45,7 @@ describe('Growth API', function () {
         Growth::factory()->create(['child_id' => $child->id, 'user_id' => $user->id, 'weight_kg' => 5.0, 'height_cm' => 55.0]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/growths/chart');
+            ->getJson('/api/children/'.$child->slug.'/growths/chart');
 
         $response->assertOk()
             ->assertJsonStructure([

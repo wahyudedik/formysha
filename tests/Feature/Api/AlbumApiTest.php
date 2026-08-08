@@ -13,7 +13,7 @@ describe('Album API', function () {
         Album::factory()->create(['child_id' => $child->id, 'name' => 'My Album']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/albums');
+            ->getJson('/api/children/'.$child->slug.'/albums');
 
         $response->assertOk()
             ->assertJsonFragment(['name' => 'My Album']);
@@ -26,7 +26,7 @@ describe('Album API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->id.'/albums', [
+            ->postJson('/api/children/'.$child->slug.'/albums', [
                 'name' => 'Album Keluarga',
             ]);
 
@@ -42,7 +42,7 @@ describe('Album API', function () {
         $album = Album::factory()->create(['child_id' => $child->id, 'name' => 'Test Album']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/albums/'.$album->id);
+            ->getJson('/api/children/'.$child->slug.'/albums/'.$album->id);
 
         $response->assertOk()
             ->assertJsonPath('data.name', 'Test Album');
@@ -56,7 +56,7 @@ describe('Album API', function () {
         $album = Album::factory()->create(['child_id' => $child->id, 'name' => 'Old Album']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/children/'.$child->id.'/albums/'.$album->id, [
+            ->putJson('/api/children/'.$child->slug.'/albums/'.$album->id, [
                 'name' => 'Updated Album',
             ]);
 
@@ -72,7 +72,7 @@ describe('Album API', function () {
         $album = Album::factory()->create(['child_id' => $child->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->deleteJson('/api/children/'.$child->id.'/albums/'.$album->id);
+            ->deleteJson('/api/children/'.$child->slug.'/albums/'.$album->id);
 
         $response->assertOk();
 

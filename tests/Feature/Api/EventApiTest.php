@@ -13,7 +13,7 @@ describe('Event API', function () {
         Event::factory()->create(['child_id' => $child->id, 'user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/events');
+            ->getJson('/api/children/'.$child->slug.'/events');
 
         $response->assertOk()
             ->assertJsonCount(1, 'data');
@@ -26,7 +26,7 @@ describe('Event API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->id.'/events', [
+            ->postJson('/api/children/'.$child->slug.'/events', [
                 'title' => 'Imunisasi DPT',
                 'event_date' => '2025-08-15',
                 'event_type' => 'immunization',

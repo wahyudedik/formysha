@@ -84,6 +84,16 @@ class Child extends Model
     }
 
     /**
+     * Get the route key for model binding.
+     *
+     * Uses slug instead of numeric ID for SEO-friendly URLs.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    /**
      * Get the user (parent/guardian) that owns the child.
      */
     public function user(): BelongsTo

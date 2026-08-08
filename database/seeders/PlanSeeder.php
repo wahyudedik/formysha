@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Plan;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class PlanSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class PlanSeeder extends Seeder
         Plan::firstOrCreate(
             ['slug' => 'free'],
             [
+                'id' => (string) Str::uuid(),
                 'name' => 'Gratis',
                 'description' => 'Coba ForMysha secara gratis',
                 'price_monthly' => 0,
@@ -36,6 +38,7 @@ class PlanSeeder extends Seeder
         Plan::firstOrCreate(
             ['slug' => 'basic'],
             [
+                'id' => (string) Str::uuid(),
                 'name' => 'Basic',
                 'description' => 'Paket dasar untuk keluarga kecil',
                 'price_monthly' => 29000,
@@ -56,6 +59,7 @@ class PlanSeeder extends Seeder
         Plan::firstOrCreate(
             ['slug' => 'premium'],
             [
+                'id' => (string) Str::uuid(),
                 'name' => 'Premium',
                 'description' => 'Paket premium untuk keluarga besar',
                 'price_monthly' => 59000,
@@ -76,6 +80,7 @@ class PlanSeeder extends Seeder
         Plan::firstOrCreate(
             ['slug' => 'enterprise'],
             [
+                'id' => (string) Str::uuid(),
                 'name' => 'Enterprise',
                 'description' => 'Paket enterprise untuk organisasi',
                 'price_monthly' => 199000,

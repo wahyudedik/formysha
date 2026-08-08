@@ -13,7 +13,7 @@ describe('Timeline API', function () {
         Timeline::factory()->create(['child_id' => $child->id, 'user_id' => $user->id, 'title' => 'First Steps']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/timelines');
+            ->getJson('/api/children/'.$child->slug.'/timelines');
 
         $response->assertOk()
             ->assertJsonFragment(['title' => 'First Steps']);
@@ -26,7 +26,7 @@ describe('Timeline API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->id.'/timelines', [
+            ->postJson('/api/children/'.$child->slug.'/timelines', [
                 'title' => 'First Smile',
                 'description' => 'Anak tersenyum pertama kali',
                 'event_date' => '2025-03-15',
@@ -45,7 +45,7 @@ describe('Timeline API', function () {
         $timeline = Timeline::factory()->create(['child_id' => $child->id, 'user_id' => $user->id, 'title' => 'Test Timeline']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/timelines/'.$timeline->id);
+            ->getJson('/api/children/'.$child->slug.'/timelines/'.$timeline->id);
 
         $response->assertOk()
             ->assertJsonPath('data.title', 'Test Timeline');
@@ -59,7 +59,7 @@ describe('Timeline API', function () {
         $timeline = Timeline::factory()->create(['child_id' => $child->id, 'user_id' => $user->id, 'title' => 'Old Title']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/children/'.$child->id.'/timelines/'.$timeline->id, [
+            ->putJson('/api/children/'.$child->slug.'/timelines/'.$timeline->id, [
                 'title' => 'New Title',
             ]);
 
@@ -75,7 +75,7 @@ describe('Timeline API', function () {
         $timeline = Timeline::factory()->create(['child_id' => $child->id, 'user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->deleteJson('/api/children/'.$child->id.'/timelines/'.$timeline->id);
+            ->deleteJson('/api/children/'.$child->slug.'/timelines/'.$timeline->id);
 
         $response->assertOk();
 

@@ -13,7 +13,7 @@ describe('Family API', function () {
         FamilyMember::factory()->create(['child_id' => $child->id, 'name' => 'Ayah']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->id.'/family-members');
+            ->getJson('/api/children/'.$child->slug.'/family-members');
 
         $response->assertOk()
             ->assertJsonFragment(['name' => 'Ayah']);
@@ -26,7 +26,7 @@ describe('Family API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->id.'/family-members', [
+            ->postJson('/api/children/'.$child->slug.'/family-members', [
                 'name' => 'Budi',
                 'relationship' => 'father',
                 'phone' => '08123456789',
