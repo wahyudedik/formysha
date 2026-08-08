@@ -23,6 +23,14 @@
                     @csrf
                     @method('PUT')
 
+                    {{-- Toggle Advanced Settings --}}
+                    <div class="mb-6">
+                        <button type="button" @click="showAdvanced = !showAdvanced"
+                                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                            <span x-text="showAdvanced ? '◀️ Sembunyikan Pengaturan Lanjutan' : '▶️ Pengaturan Lanjutan'"></span>
+                        </button>
+                    </div>
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {{-- Form Section --}}
                         <div class="space-y-6">
@@ -167,13 +175,14 @@
 
                             {{-- Custom CSS --}}
                             <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
-                                <h3 class="font-semibold text-gray-800 mb-4">💻 {{ __('Custom CSS') }}</h3>
+                                <h3 class="font-semibold text-gray-800 mb-4">💻 {{ __('app.branding.custom_css') }}</h3>
                                 <textarea
                                     name="custom_css"
                                     rows="6"
                                     class="w-full rounded-xl border-gray-300 font-mono text-sm focus:border-skyBlue-500 focus:ring-skyBlue-500"
                                     placeholder="/* Custom CSS untuk organisasi Anda */"
                                 >{{ old('custom_css', $branding->custom_css) }}</textarea>
+                                <p class="mt-1 text-xs text-gray-400">{{ __('app.branding.css_hint') }}</p>
                                 @error('custom_css')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -182,7 +191,120 @@
                             {{-- Submit --}}
                             <div class="flex justify-end">
                                 <button type="submit" class="btn-primary">
-                                    💾 {{ __('Simpan Perubahan') }}
+                                    💾 {{ __('app.actions.save') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Advanced Settings Section --}}
+                        <div class="space-y-6" x-show="showAdvanced" x-transition>
+                            {{-- Login Customization --}}
+                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                                <h3 class="font-semibold text-gray-800 mb-4">🔐 {{ __('app.branding.login_customization') }}</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="login_heading" class="block text-sm font-medium text-gray-700 mb-1">Heading Login</label>
+                                        <input
+                                            type="text"
+                                            id="login_heading"
+                                            name="login_heading"
+                                            value="{{ old('login_heading', $branding->login_heading) }}"
+                                            class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                            placeholder="Selamat Datang di ForMysha"
+                                        >
+                                        @error('login_heading')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div>
+                                        <label for="login_subheading" class="block text-sm font-medium text-gray-700 mb-1">Subheading Login</label>
+                                        <input
+                                            type="text"
+                                            id="login_subheading"
+                                            name="login_subheading"
+                                            value="{{ old('login_subheading', $branding->login_subheading) }}"
+                                            class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                            placeholder="Digital Life Book untuk keluarga Anda"
+                                        >
+                                        @error('login_subheading')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Email Sender --}}
+                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                                <h3 class="font-semibold text-gray-800 mb-4">📧 {{ __('app.branding.email_sender') }}</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="email_sender_name" class="block text-sm font-medium text-gray-700 mb-1">{{ __('app.branding.email_sender_name') }}</label>
+                                        <input
+                                            type="text"
+                                            id="email_sender_name"
+                                            name="email_sender_name"
+                                            value="{{ old('email_sender_name', $branding->email_sender_name) }}"
+                                            class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                            placeholder="Nama Pengirim"
+                                        >
+                                        @error('email_sender_name')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div>
+                                        <label for="email_sender_email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('app.branding.email_sender_email') }}</label>
+                                        <input
+                                            type="email"
+                                            id="email_sender_email"
+                                            name="email_sender_email"
+                                            value="{{ old('email_sender_email', $branding->email_sender_email) }}"
+                                            class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                            placeholder="noreply@example.com"
+                                        >
+                                        @error('email_sender_email')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Footer Text --}}
+                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                                <h3 class="font-semibold text-gray-800 mb-4">📝 {{ __('app.branding.footer_text') }}</h3>
+                                <textarea
+                                    name="footer_text"
+                                    rows="3"
+                                    class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                    placeholder="Teks footer kustom untuk aplikasi Anda"
+                                >{{ old('footer_text', $branding->footer_text) }}</textarea>
+                                @error('footer_text')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- White Label Toggle --}}
+                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                                <h3 class="font-semibold text-gray-800 mb-4">🏷️ {{ __('app.saas.white_label') }}</h3>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="hidden" name="is_white_label_enabled" value="0">
+                                        <input
+                                            type="checkbox"
+                                            name="is_white_label_enabled"
+                                            value="1"
+                                            class="sr-only peer"
+                                            {{ old('is_white_label_enabled', $branding->is_white_label_enabled) ? 'checked' : '' }}
+                                        >
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-skyBlue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-skyBlue-600"></div>
+                                    </label>
+                                    <span class="text-sm text-gray-600">Aktifkan White Label</span>
+                                </div>
+                            </div>
+
+                            {{-- Submit Advanced --}}
+                            <div class="flex justify-end">
+                                <button type="submit" class="btn-primary">
+                                    💾 {{ __('app.actions.save') }} {{ __('app.branding.advanced_settings') }}
                                 </button>
                             </div>
                         </div>
@@ -229,6 +351,7 @@
     <script>
         function brandingForm() {
             return {
+                showAdvanced: false,
                 primaryColor: '{{ $branding->primary_color ?? "#7DD3FC" }}',
                 secondaryColor: '{{ $branding->secondary_color ?? "#6EE7B7" }}',
                 accentColor: '{{ $branding->accent_color ?? "#FCD34D" }}',

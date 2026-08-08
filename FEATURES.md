@@ -782,10 +782,221 @@ Manajemen SaaS memungkinkan ForMysha beroperasi sebagai platform multi-tenant de
 
 ## Quality Assurance ✅
 
-* 345 tests, 738 assertions — all passing
+* 408 tests, 907 assertions — all passing
 * Pest PHP dengan `describe/it` blocks
 * Laravel Pint formatting applied
 * Feature tests untuk semua modul (Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export)
 * Feature tests untuk SaaS (Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit)
 * Unit tests untuk Services (DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService)
 * Unit tests untuk Models (Album, Child, Diary)
+
+---
+
+## REST API ✅ (Phase 6)
+
+ForMysha menyediakan REST API berbasis Laravel Sanctum untuk integrasi dengan aplikasi pihak ketiga, mobile apps, dan automasi.
+
+### Autentikasi API
+
+* **Token-based authentication** menggunakan Laravel Sanctum
+* Endpoints publik: `POST /api/auth/login`, `POST /api/auth/register`, `GET /api/plans`
+* Endpoints terproteksi: `Authorization: Bearer {token}`
+* Rate limiting: 60 req/menit (umum), 5 req/menit (auth)
+
+### API Endpoints
+
+#### Authentication (`/api/auth`)
+
+* `POST /api/auth/login` — Login dengan email & password
+* `POST /api/auth/register` — Registrasi akun baru + tenant
+* `POST /api/auth/logout` — Logout & revoke token
+* `GET /api/auth/me` — Dapatkan profil pengguna
+* `PUT /api/auth/profile` — Update profil
+* `PUT /api/auth/password` — Update password
+* `DELETE /api/auth/account` — Hapus akun
+
+#### Children (`/api/children`)
+
+* `GET /api/children` — List semua anak
+* `POST /api/children` — Tambah anak baru
+* `GET /api/children/{child}` — Detail anak
+* `PUT /api/children/{child}` — Update anak
+* `DELETE /api/children/{child}` — Hapus anak
+
+#### Timeline (`/api/children/{child}/timelines`)
+
+* `GET /api/children/{child}/timelines` — List timeline
+* `POST /api/children/{child}/timelines` — Tambah timeline
+* `GET /api/children/{child}/timelines/{timeline}` — Detail timeline
+* `PUT /api/children/{child}/timelines/{timeline}` — Update timeline
+* `DELETE /api/children/{child}/timelines/{timeline}` — Hapus timeline
+
+#### Albums (`/api/children/{child}/albums`)
+
+* `GET /api/children/{child}/albums` — List album
+* `POST /api/children/{child}/albums` — Tambah album
+* `GET /api/children/{child}/albums/{album}` — Detail album
+* `PUT /api/children/{child}/albums/{album}` — Update album
+* `DELETE /api/children/{child}/albums/{album}` — Hapus album
+
+#### Diaries (`/api/children/{child}/diaries`)
+
+* `GET /api/children/{child}/diaries` — List diary
+* `POST /api/children/{child}/diaries` — Tambah diary
+* `GET /api/children/{child}/diaries/{diary}` — Detail diary
+* `PUT /api/children/{child}/diaries/{diary}` — Update diary
+* `DELETE /api/children/{child}/diaries/{diary}` — Hapus diary
+
+#### Growth (`/api/children/{child}/growths`)
+
+* `GET /api/children/{child}/growths` — List data pertumbuhan
+* `POST /api/children/{child}/growths` — Tambah data pertumbuhan
+* `GET /api/children/{child}/growths/chart` — Data grafik pertumbuhan
+
+#### Health Records (`/api/children/{child}/health-records`)
+
+* `GET /api/children/{child}/health-records` — List catatan kesehatan
+* `POST /api/children/{child}/health-records` — Tambah catatan kesehatan
+
+#### Events (`/api/children/{child}/events`)
+
+* `GET /api/children/{child}/events` — List event/kalender
+* `POST /api/children/{child}/events` — Tambah event
+
+#### Family Members (`/api/children/{child}/family-members`)
+
+* `GET /api/children/{child}/family-members` — List anggota keluarga
+* `POST /api/children/{child}/family-members` — Tambah anggota keluarga
+
+#### Notifications (`/api/notifications`)
+
+* `GET /api/notifications` — List notifikasi
+* `POST /api/notifications/{notification}/read` — Tandai sudah dibaca
+* `POST /api/notifications/read-all` — Tandai semua sudah dibaca
+* `GET /api/notifications/unread-count` — Jumlah belum dibaca
+
+#### Search (`/api/search`)
+
+* `GET /api/search?q={query}` — Pencarian lintas modul
+
+#### Plans (`/api/plans`) — Publik
+
+* `GET /api/plans` — List paket langganan
+* `GET /api/plans/{plan}` — Detail paket
+
+#### Dashboard (`/api/dashboard`)
+
+* `GET /api/dashboard` — Data dashboard pengguna
+
+#### Super Admin (`/api/admin`)
+
+* `GET /api/admin/tenants` — List tenant (search & filter)
+* `PUT /api/admin/tenants/{tenant}/toggle-status` — Toggle status tenant
+* `GET /api/admin/payments` — List pembayaran
+* `POST /api/admin/payments/{payment}/approve` — Approve pembayaran
+* `POST /api/admin/payments/{payment}/reject` — Reject pembayaran
+* `GET /api/admin/plans` — List paket
+* `GET /api/admin/analytics` — Data analytics
+* `GET /api/admin/monitoring` — Data monitoring
+
+#### Webhooks (`/api/webhooks`)
+
+* `GET /api/webhooks` — List webhook
+* `POST /api/webhooks` — Register webhook baru
+* `GET /api/webhooks/{webhook}` — Detail webhook
+* `PUT /api/webhooks/{webhook}` — Update webhook
+* `DELETE /api/webhooks/{webhook}` — Hapus webhook
+* `POST /api/webhooks/{webhook}/test` — Test webhook
+* `GET /api/webhooks/{webhook}/logs` — Lihat log webhook
+
+### Response Format
+
+```json
+{
+    "success": true,
+    "message": "Success",
+    "data": { ... }
+}
+```
+
+### Paginated Response
+
+```json
+{
+    "success": true,
+    "message": "Success",
+    "data": [ ... ],
+    "meta": {
+        "current_page": 1,
+        "last_page": 5,
+        "per_page": 15,
+        "total": 75
+    }
+}
+```
+
+### API Resources
+
+Semua response menggunakan Eloquent API Resources untuk transformasi data yang konsisten:
+
+* `UserResource` — Profil pengguna
+* `ChildResource` — Data anak
+* `TimelineResource` — Timeline kehidupan
+* `AlbumResource` — Album foto/video
+* `DiaryResource` — Catatan harian
+* `GrowthResource` — Data pertumbuhan
+* `HealthRecordResource` — Catatan kesehatan
+* `EventResource` — Event/kalender
+* `FamilyMemberResource` — Anggota keluarga
+* `NotificationResource` — Notifikasi
+* `PlanResource` — Paket langganan
+* `TenantResource` — Data tenant
+* `WebhookResource` — Webhook
+* `WebhookLogResource` — Log webhook
+
+### Enterprise Features ✅ (Phase 7)
+
+#### Multi Bahasa
+
+* Indonesian (default) & English
+* Language switcher per user
+* Custom validation messages per locale
+
+#### White Label
+
+* Custom logo & favicon
+* Custom color scheme
+* Custom CSS injection
+* Custom login page branding
+* Custom footer text
+* Email sender configuration
+
+#### Custom Domain
+
+* Tenant custom domain support
+* DNS verification
+* Domain conflict detection
+
+#### Marketplace Plugin
+
+* Plugin registration & management
+* Per-tenant plugin installation
+* Plugin hook system (16 hooks)
+* Plugin settings per tenant
+* Activity logging
+
+#### Enterprise Dashboard
+
+* Advanced analytics (active users, API calls, storage)
+* User invitations & role management
+* Bulk import/export
+* Import job tracking
+
+### Testing Suite API
+
+* **20 test files** di `tests/Feature/Api/` menggunakan Pest PHP
+* **90+ API tests** mencakup semua endpoints
+* Autentikasi token-based dalam setiap test
+* Validasi request & response format
+* Otorisasi & akses silang pengguna lain
+* Total keseluruhan: **440+ tests, 950+ assertions** — all passing

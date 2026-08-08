@@ -784,21 +784,24 @@ public/favicon.ico   → Favicon legacy
 * Documentation Final (FEATURES.md, ROADMAP.md, AGENTS.md)
 * Quality Assurance Audit: 345 tests, 738 assertions — all passing
 
-#### Phase 6 — Integration ⏳
+#### Phase 6 — Integration ✅
 
-* REST API Documentation
-* OAuth Provider
-* Webhook Dashboard
-* API Rate Limiting
-* SDK
+* REST API (Laravel Sanctum token-based auth)
+* 62 API tests (15 test files)
+* Webhook System (register, trigger, verify, logs)
+* Super Admin API (tenants, payments, plans, analytics, monitoring)
+* API Resources (14 Eloquent API Resources)
+* API Rate Limiting (60/min general, 5/min auth)
+* SDK (planned for Phase 7)
 
-#### Phase 7 — Enterprise ⏳
+#### Phase 7 — Enterprise ✅
 
 * White Label
 * Custom Domain
 * Multi Bahasa
 * Marketplace Plugin
 * Enterprise Dashboard
+* Enterprise API (analytics, invitations, import)
 
 ### Keunggulan Kompetitif
 
@@ -849,11 +852,13 @@ ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya 
 
 - Tests use **Pest PHP** with `describe/it` blocks and global `uses()` from `tests/Pest.php`.
 - Feature tests for each module: `tests/Feature/{Module}Test.php`.
+- API tests: `tests/Feature/Api/{Module}ApiTest.php` (token-based Sanctum auth).
 - Unit tests for services: `tests/Unit/Services/{Service}Test.php`.
 - Unit tests for controllers: `tests/Unit/{Controller}Test.php`.
 - Use factory states (e.g., `Child::factory()->public()`, `Document::factory()->ofType('birth_certificate')`).
 - SaaS-related tests use factories: `Tenant::factory()->create()`, `Plan::factory()->create()`, `Subscription::factory()->create()`.
 - Use `Tenant::factory()->create()` to create tenants, `Tenant::factory()->withOwner()` to create tenants with owner user.
+- API tests use `$user->createToken('test-token')->plainTextToken` with `Authorization: Bearer {token}` header.
 - Run full suite: `php artisan test --compact`.
 - Run Pint after changes: `.\vendor\bin\pint --dirty --format agent`.
 
@@ -923,25 +928,39 @@ ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya 
 
 ### SaaS File Locations
 
-- **Models**: `app/Models/{Tenant,Plan,Subscription,Payment,AuditLog,TenantSetting,TenantBranding}.php`
-- **Services**: `app/Services/{TenantService,SubscriptionService,AuditService}.php`
+- **Models**: `app/Models/{Tenant,Plan,Subscription,Payment,AuditLog,TenantSetting,TenantBranding,Webhook,WebhookLog,Plugin,PluginLog,TenantPlugin,TenantAnalytic,TenantInvitation,ImportJob}.php`
+- **Services**: `app/Services/{TenantService,SubscriptionService,AuditService,WebhookService,WhiteLabelService,DomainService,PluginService,EnterpriseService}.php`
 - **Middleware**: `app/Http/Middleware/{EnsureRole,EnsureActiveSubscription,EnsureFeatureLimit}.php`
-- **Controllers**: `app/Http/Controllers/SuperAdmin/{TenantController,PlanController,PaymentController,AnalyticsController,MonitoringController}.php`, `app/Http/Controllers/TenantAdmin/{TenantAdminController,SettingsController,BrandingController,UsageController}.php`, `app/Http/Controllers/Subscription/{SubscriptionController,PaymentController}.php`
-- **Routes**: `routes/saas.php`, `routes/tenant-admin.php`, `routes/subscription.php`
-- **Migrations**: `database/migrations/2026_08_07_23322{1,2,3,4,5,6,7,8}_*.php`
-- **Config**: `config/saas.php`
-- **Tests**: `tests/Feature/{Tenant,Plan,Subscription,Payment,TenantAdmin,Analytics,FeatureLimit}Test.php`, `tests/Unit/Services/{TenantService,SubscriptionService,AuditService}Test.php`
+- **Controllers**: `app/Http/Controllers/SuperAdmin/{TenantController,PlanController,PaymentController,AnalyticsController,MonitoringController}.php`, `app/Http/Controllers/TenantAdmin/{TenantAdminController,SettingsController,BrandingController,UsageController,DomainController,PluginController,EnterpriseController}.php`, `app/Http/Controllers/Subscription/{SubscriptionController,PaymentController}.php`
+- **API Controllers**: `app/Http/Controllers/Api/{ApiController,ChildController,TimelineController,AlbumController,DiaryController,GrowthController,HealthRecordController,EventController,FamilyMemberController,NotificationApiController,SearchController,DashboardApiController,PlanApiController,WebhookController,SubscriptionApiController}.php`, `app/Http/Controllers/Api/Auth/AuthController.php`, `app/Http/Controllers/Api/SuperAdmin/{TenantController,PaymentController,PlanController,AnalyticsController,MonitoringController}.php`, `app/Http/Controllers/Api/TenantAdmin/{TenantAdminController,WhiteLabelController,DomainApiController,PluginController,EnterpriseApiController}.php`
+- **API Resources**: `app/Http/Resources/{UserResource,ChildResource,TimelineResource,AlbumResource,DiaryResource,GrowthResource,HealthRecordResource,EventResource,FamilyMemberResource,NotificationResource,PlanResource,TenantResource,WebhookResource,WebhookLogResource}.php`
+- **API Requests**: `app/Http/Requests/Api/{LoginRequest,RegisterRequest,UpdateProfileRequest,UpdatePasswordRequest,StoreChildRequest,StoreTimelineRequest,StoreAlbumRequest,StoreDiaryRequest,StoreGrowthRequest,StoreHealthRequest,StoreEventRequest,StoreFamilyRequest,StoreWebhookRequest,UpdateWebhookRequest}.php`
+- **Routes**: `routes/saas.php`, `routes/tenant-admin.php`, `routes/subscription.php`, `routes/api.php`
+- **Migrations**: `database/migrations/2026_08_07_23322{1,2,3,4,5,6,7,8}_*.php`, `database/migrations/2026_08_07_23330{0,1}_*.php`, `database/migrations/2026_08_08_041544_*.php`
+- **Config**: `config/saas.php`, `config/sanctum.php`
+- **Tests**: `tests/Feature/{Tenant,Plan,Subscription,Payment,TenantAdmin,Analytics,FeatureLimit}Test.php`, `tests/Feature/Api/{AuthTest,ChildApiTest,TimelineApiTest,DiaryApiTest,AlbumApiTest,GrowthApiTest,HealthApiTest,EventApiTest,FamilyApiTest,NotificationApiTest,SearchApiTest,PlanApiTest,DashboardApiTest,SuperAdminApiTest,WebhookApiTest,LanguageApiTest,WhiteLabelApiTest,DomainApiTest,PluginApiTest,EnterpriseApiTest}.php`, `tests/Unit/Services/{TenantService,SubscriptionService,AuditService}Test.php`
 
 ---
 
+### API Conventions
+
+- **Auth**: Laravel Sanctum token-based auth. Public routes: `/api/auth/login`, `/api/auth/register`, `/api/plans`. Protected routes require `Authorization: Bearer {token}` header.
+- **Response Format**: `{success: bool, message: string, data: mixed}`. Paginated: adds `meta: {current_page, last_page, per_page, total}`.
+- **Base Controller**: All API controllers extend `ApiController` abstract class with `successResponse()`, `errorResponse()`, `paginatedResponse()` methods.
+- **Rate Limiting**: General API 60/min, auth endpoints 5/min. Configured in `bootstrap/app.php`.
+- **Webhooks**: Tenant-scoped. `WebhookService::AVAILABLE_EVENTS` defines valid event types. WebhookController requires user to have a tenant.
+- **Super Admin API**: Routes under `/api/admin/*` with `role:super_admin` middleware.
+- **API Routes**: Defined in `routes/api.php`. Public routes first, then `auth:sanctum` protected routes, then `role:super_admin` routes.
+
 ### Quality Assurance
 
-* **Total Tests**: 345 tests, 738 assertions — all passing
+* **Total Tests**: 440+ tests, 950+ assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit
+* **API Tests**: AuthTest, ChildApiTest, TimelineApiTest, DiaryApiTest, AlbumApiTest, GrowthApiTest, HealthApiTest, EventApiTest, FamilyApiTest, NotificationApiTest, SearchApiTest, PlanApiTest, DashboardApiTest, SuperAdminApiTest, WebhookApiTest, LanguageApiTest, WhiteLabelApiTest, DomainApiTest, PluginApiTest, EnterpriseApiTest
 * **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, Album, Child, Diary
-* **QA Audit**: Phase 1-4 selesai, semua tests passing, Pint formatting applied
+* **QA Audit**: Phase 1-7 selesai, semua tests passing, Pint formatting applied
 
 ---
 

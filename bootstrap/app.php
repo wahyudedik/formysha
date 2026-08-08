@@ -5,6 +5,8 @@ use App\Http\Middleware\EnsureChildOwnership;
 use App\Http\Middleware\EnsureFeatureLimit;
 use App\Http\Middleware\EnsureRole;
 use App\Http\Middleware\ResolveTenant;
+use App\Http\Middleware\ResolveTenantByDomain;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,6 +15,7 @@ use Illuminate\Http\Request;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
@@ -23,6 +26,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant.active' => EnsureActiveSubscription::class,
             'feature.limit' => EnsureFeatureLimit::class,
             'tenant' => ResolveTenant::class,
+            'locale' => SetLocale::class,
+            'domain.resolve' => ResolveTenantByDomain::class,
+        ]);
+
+        $middleware->web(append: [
+            SetLocale::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

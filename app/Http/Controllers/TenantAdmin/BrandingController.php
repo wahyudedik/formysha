@@ -80,4 +80,33 @@ class BrandingController extends Controller
         return redirect()->route('admin.branding.edit')
             ->with('success', 'Branding berhasil diperbarui.');
     }
+
+    /**
+     * Simpan pengaturan branding lanjutan.
+     */
+    public function updateAdvanced(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $tenant = $user->tenant;
+
+        abort_unless($tenant, 404);
+
+        $validated = $request->validate([
+            'login_heading' => ['nullable', 'string', 'max:255'],
+            'login_subheading' => ['nullable', 'string', 'max:255'],
+            'footer_text' => ['nullable', 'string', 'max:500'],
+            'email_sender_name' => ['nullable', 'string', 'max:100'],
+            'email_sender_email' => ['nullable', 'email', 'max:100'],
+            'is_white_label_enabled' => ['nullable', 'boolean'],
+        ]);
+
+        $branding = TenantBranding::firstOrCreate(
+            ['tenant_id' => $tenant->id]
+        );
+
+        $branding->update($validated);
+
+        return redirect()->route('admin.branding.edit')
+            ->with('success', 'Pengaturan lanjutan branding berhasil diperbarui.');
+    }
 }

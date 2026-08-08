@@ -6,6 +6,7 @@ use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\MonitoringController;
 use App\Http\Controllers\SuperAdmin\PaymentController;
 use App\Http\Controllers\SuperAdmin\PlanController;
+use App\Http\Controllers\SuperAdmin\PluginController;
 use App\Http\Controllers\SuperAdmin\TenantController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,4 +57,7 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])
         // Monitoring
         Route::get('/monitoring', [MonitoringController::class, 'index'])
             ->name('monitoring.index');
+
+        // Plugin Management
+        Route::resource('plugins', PluginController::class)->except(['create', 'edit']);
     });

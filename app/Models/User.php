@@ -22,8 +22,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $date_of_birth
  * @property string|null $address
  * @property string $role
+ * @property string $language
+ * @property string|null $timezone
  */
-#[Fillable(['name', 'email', 'password', 'avatar', 'phone', 'date_of_birth', 'address', 'role', 'tenant_id'])]
+#[Fillable(['name', 'email', 'password', 'avatar', 'phone', 'date_of_birth', 'address', 'role', 'language', 'timezone', 'tenant_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -82,6 +84,22 @@ class User extends Authenticatable
     public function isGuardian(): bool
     {
         return $this->role === 'guardian';
+    }
+
+    /**
+     * Get the user's preferred locale.
+     */
+    public function getPreferredLocale(): string
+    {
+        return $this->language ?? config('app.locale', 'id');
+    }
+
+    /**
+     * Get the user's preferred timezone.
+     */
+    public function getPreferredTimezone(): string
+    {
+        return $this->timezone ?? config('app.timezone', 'Asia/Jakarta');
     }
 
     /**

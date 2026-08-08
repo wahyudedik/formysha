@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,7 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $role
  * @property string|null $avatar
  * @property string|null $phone
- * @property \Carbon\Carbon $created_at
+ * @property Carbon $created_at
  */
 class UserResource extends JsonResource
 {
@@ -30,6 +31,7 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'avatar' => $this->avatar,
             'phone' => $this->phone,
+            'language' => $this->language,
             'created_at' => $this->created_at,
         ];
     }

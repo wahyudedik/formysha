@@ -32,14 +32,46 @@
                 </div>
             </div>
 
-            <!-- Right Side: Search + Notification + Settings -->
+            <!-- Right Side: Search + Language + Notification + Settings -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 gap-2">
                 <!-- Search -->
-                <a href="{{ route('search.index') }}" class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors" title="Pencarian">
+                <a href="{{ route('search.index') }}" class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors" title="{{ __('app.search.title') }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </a>
+
+                <!-- Language Switcher -->
+                <div x-data="{ langOpen: false }" class="relative">
+                    <button @click="langOpen = !langOpen" class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-1 text-sm font-medium">
+                        @if(app()->getLocale() === 'id')
+                            <span>🇮🇩</span>
+                        @else
+                            <span>🇬🇧</span>
+                        @endif
+                    </button>
+                    <div x-show="langOpen" @click.away="langOpen = false"
+                         x-transition:enter="transition ease-out duration-100"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
+                         class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                        <form method="POST" action="{{ route('language.switch', 'id') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm {{ app()->getLocale() === 'id' ? 'text-skyBlue-600 bg-skyBlue-50 font-semibold' : 'text-gray-700 hover:bg-gray-50' }} flex items-center gap-2">
+                                🇮🇩 {{ __('app.language.indonesian') }}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('language.switch', 'en') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm {{ app()->getLocale() === 'en' ? 'text-skyBlue-600 bg-skyBlue-50 font-semibold' : 'text-gray-700 hover:bg-gray-50' }} flex items-center gap-2">
+                                🇬🇧 {{ __('app.language.english') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
 
                 <!-- Notification Badge -->
                 <x-notification-badge :count="auth()->user()->unread_notifications_count ?? 0" />
@@ -102,6 +134,32 @@
                         </span>
                     @endif
                 </a>
+                <!-- Language Switcher (mobile) -->
+                <div x-data="{ langOpenMobile: false }" class="relative">
+                    <button @click="langOpenMobile = !langOpenMobile" class="p-2 text-gray-400 hover:text-gray-600 rounded-xl text-sm">
+                        @if(app()->getLocale() === 'id')
+                            🇮🇩
+                        @else
+                            🇬🇧
+                        @endif
+                    </button>
+                    <div x-show="langOpenMobile" @click.away="langOpenMobile = false"
+                         x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                        <form method="POST" action="{{ route('language.switch', 'id') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm {{ app()->getLocale() === 'id' ? 'text-skyBlue-600 bg-skyBlue-50 font-semibold' : 'text-gray-700 hover:bg-gray-50' }} flex items-center gap-2">
+                                🇮🇩 {{ __('app.language.indonesian') }}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('language.switch', 'en') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm {{ app()->getLocale() === 'en' ? 'text-skyBlue-600 bg-skyBlue-50 font-semibold' : 'text-gray-700 hover:bg-gray-50' }} flex items-center gap-2">
+                                🇬🇧 {{ __('app.language.english') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-xl text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />

@@ -11,21 +11,33 @@
         ['route' => 'documents.index', 'label' => 'Dokumen', 'icon' => '📄', 'param' => 'child'],
         ['route' => 'calendar.index', 'label' => 'Kalender', 'icon' => '📅', 'param' => 'child'],
         ['route' => 'family.index', 'label' => 'Keluarga', 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
+        ['route' => 'profile.edit', 'label' => 'Pengaturan', 'icon' => '⚙️', 'param' => null],
     ];
 
-    $visibleModules = array_slice($modules, 0, 4);
-    $overflowModules = array_slice($modules, 4);
+    $visibleModules = array_slice($modules, 0, 5);
+    $overflowModules = array_slice($modules, 5);
     $hasOverflowActive = collect($overflowModules)->contains(fn ($m) => request()->routeIs($m['route']));
 @endphp
 
 <!-- Desktop Sidebar Navigation -->
 <aside class="hidden lg:block w-56 shrink-0">
     <div class="sticky top-24 space-y-1">
+        {{-- Dashboard Back Link --}}
+        <a href="{{ route('dashboard') }}"
+           class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-gray-500 hover:text-gray-700 hover:bg-gray-50 mb-2">
+            <span class="text-lg">🏠</span>
+            Dashboard
+        </a>
+
+        <div class="border-t border-gray-100 my-2"></div>
+
         @foreach ($modules as $module)
             @php
-                $isActive = request()->routeIs($module['route']);
+                $isActive = $module['param'] === null
+                    ? request()->routeIs($module['route'])
+                    : request()->routeIs($module['route']);
             @endphp
-            <a href="{{ route($module['route'], $child) }}"
+            <a href="{{ $module['param'] === null ? route($module['route']) : route($module['route'], $child) }}"
                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                       {{ $isActive
                           ? 'bg-softPink-50 text-softPink-600 shadow-soft'
@@ -75,7 +87,7 @@
                 @php
                     $isActive = request()->routeIs($module['route']);
                 @endphp
-                <a href="{{ route($module['route'], $child) }}"
+                <a href="{{ $module['param'] === null ? route($module['route']) : route($module['route'], $child) }}"
                    @click="moreOpen = false"
                    class="flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all duration-200
                           {{ $isActive

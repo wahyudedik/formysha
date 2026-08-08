@@ -15,6 +15,9 @@ use Illuminate\Support\Str;
  * @property string $slug
  * @property string|null $domain
  * @property string|null $logo
+ * @property string|null $custom_domain
+ * @property \Carbon\Carbon|null $domain_verified_at
+ * @property bool $domain_dns_verified
  * @property bool $is_active
  * @property array|null $settings
  * @property Carbon|null $created_at
@@ -51,6 +54,9 @@ class Tenant extends Model
         'slug',
         'domain',
         'logo',
+        'custom_domain',
+        'domain_verified_at',
+        'domain_dns_verified',
         'is_active',
         'settings',
     ];
@@ -64,6 +70,8 @@ class Tenant extends Model
     {
         return [
             'is_active' => 'boolean',
+            'domain_dns_verified' => 'boolean',
+            'domain_verified_at' => 'datetime',
             'settings' => 'array',
         ];
     }
@@ -152,6 +160,14 @@ class Tenant extends Model
     public function auditLogs(): HasMany
     {
         return $this->hasMany(AuditLog::class);
+    }
+
+    /**
+     * Get the installed plugins for this tenant.
+     */
+    public function tenantPlugins(): HasMany
+    {
+        return $this->hasMany(TenantPlugin::class);
     }
 
     /**

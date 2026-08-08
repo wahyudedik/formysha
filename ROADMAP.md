@@ -625,17 +625,85 @@ public/favicon.ico   → Favicon legacy
 
 ---
 
-## Phase 6 — Integration ⏳
+## Phase 6 — Integration ✅ Selesai
 
-* REST API Documentation (OpenAPI/Swagger)
-* OAuth provider setup
-* Webhook management dashboard
-* API rate limiting & throttling
-* SDK untuk integrasi pihak ketiga
+### Sub-Phase 6.1 — Foundation & Authentication ✅
+
+* Sanctum installation & configuration
+* Personal access tokens table migration
+* Auth API endpoints (login, register, logout, me, updateProfile, updatePassword)
+* API base controller (`ApiController`) with response helpers
+* Rate limiting (60/min general, 5/min auth)
+
+### Sub-Phase 6.2 — Core Resources API ✅
+
+* Children CRUD API
+* Timeline CRUD API
+* Albums CRUD API
+* Diaries CRUD API
+* Growth CRUD API (including chart data endpoint)
+* Health Records CRUD API
+* Events CRUD API
+* Family Members CRUD API
+* Eloquent API Resources for all models
+
+### Sub-Phase 6.3 — Support Features API ✅
+
+* Notification API (list, mark read, mark all, unread count)
+* Search API (cross-module search)
+* Dashboard API (user dashboard data)
+* Plan API (public, listing & detail)
+
+### Sub-Phase 6.4 — Super Admin & Tenant Admin API ✅
+
+* Super Admin: Tenant management (list, toggle status)
+* Super Admin: Payment management (list, approve, reject)
+* Super Admin: Plan management
+* Super Admin: Analytics & Monitoring endpoints
+* Role-based middleware (`role:super_admin`)
+
+### Sub-Phase 6.5 — Webhook System ✅
+
+* Webhook model & migration (UUID, events JSON, secret)
+* WebhookLog model & migration
+* WebhookService (register, unregister, trigger, verify signature)
+* WebhookController (CRUD, test, logs)
+* StoreWebhookRequest & UpdateWebhookRequest validation
+* Webhook events definition (tenant, subscription, payment, child, timeline, album, diary, document, growth, health_record, event)
+
+### Sub-Phase 6.6 — Documentation & Finalisasi ✅
+
+* API route definitions (`routes/api.php`)
+* FEATURES.md updated with REST API documentation
+* ROADMAP.md updated (Phase 6 marked complete)
+* AGENTS.md updated with API conventions
+
+### Sub-Phase 6.7 — Migration & Configuration ✅
+
+* `personal_access_tokens` table migration
+* Sanctum configuration in `config/sanctum.php`
+* CORS configuration for API access
+* API middleware group in `bootstrap/app.php`
+
+### Sub-Phase 6.8 — Testing Suite ✅
+
+* 15 API test files in `tests/Feature/Api/`
+* 62 API tests covering all endpoints
+* AuthTest (8), ChildApiTest (7), TimelineApiTest (5), DiaryApiTest (5), AlbumApiTest (5)
+* GrowthApiTest (3), HealthApiTest (3), EventApiTest (2), FamilyApiTest (2)
+* NotificationApiTest (4), SearchApiTest (2), PlanApiTest (2), DashboardApiTest (1)
+* SuperAdminApiTest (8), WebhookApiTest (5)
+* Total: 407 tests, 800+ assertions — all passing
+
+### Sub-Phase 6.9 — Documentation Update ✅
+
+* FEATURES.md: REST API section added with full endpoint documentation
+* ROADMAP.md: Phase 6 marked complete with sub-phase details
+* AGENTS.md: API conventions, routes, and test patterns documented
 
 ---
 
-## Phase 7 — Enterprise ⏳
+## Phase 7 — Enterprise ✅
 
 * White Label solution
 * Custom Domain per tenant

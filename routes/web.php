@@ -10,6 +10,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
@@ -26,6 +27,9 @@ Route::get('/', function () {
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('pages.about');
 Route::get('/kebijakan-privasi', [PageController::class, 'privacy'])->name('pages.privacy');
 Route::get('/syarat-ketentuan', [PageController::class, 'terms'])->name('pages.terms');
+
+// Language Switcher
+Route::post('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])

@@ -8,8 +8,8 @@
     <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Welcome Section -->
         <div class="mb-8 bg-gradient-to-br from-softPink-50 to-lavender-50 rounded-3xl p-6 sm:p-8 border border-softPink-100">
-            <h1 class="text-2xl font-bold text-gray-800">{{ __('Selamat datang, ') }}{{ auth()->user()->name }}! 👋</h1>
-            <p class="mt-2 text-gray-600">{{ __('Kelola perjalanan hidup buah hati Anda di ForMysha.') }}</p>
+            <h1 class="text-2xl font-bold text-gray-800">{{ __('Selamat datang kembali, ') }}{{ auth()->user()->name }} 💕</h1>
+            <p class="mt-2 text-gray-500">{{ __('Bersama setiap langkahmu') }}</p>
         </div>
 
         <!-- Children Cards -->
@@ -28,90 +28,107 @@
                 </div>
             </div>
         @else
-            <div class="mb-8">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">👶 {{ __('Anak Saya') }}</h3>
-                    <a href="{{ route('children.create') }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 transition">
-                        + {{ __('Tambah') }}
-                    </a>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach ($children as $child)
-                        <a href="{{ route('children.show', $child) }}" class="block card-hover p-5 rounded-2xl bg-white border border-gray-100 hover:shadow-medium transition-all duration-200">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-softPink-400 to-lavender-400 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
-                                    {{ strtoupper(substr($child->name, 0, 1)) }}
+            <!-- Child Profile & Stats Section -->
+            @foreach ($children as $child)
+                <div class="mb-8 bg-white overflow-hidden shadow-soft sm:rounded-3xl">
+                    <div class="bg-gradient-to-br from-softPink-50 via-cream-50 to-lavender-50 p-6 sm:p-8">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                            <!-- Child Photo -->
+                            <a href="{{ route('children.show', $child) }}" class="flex-shrink-0">
+                                @if ($child->photo)
+                                    <img src="{{ asset('storage/' . $child->photo) }}" alt="{{ $child->name }}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-soft-md" />
+                                @else
+                                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl {{ $child->gender === 'female' ? 'bg-softPink-100' : 'bg-skyBlue-100' }} flex items-center justify-center text-4xl shadow-soft-md">
+                                        {{ $child->gender === 'female' ? '👧' : '👦' }}
+                                    </div>
+                                @endif
+                            </a>
+
+                            <!-- Child Info -->
+                            <div class="flex-1 min-w-0">
+                                <a href="{{ route('children.show', $child) }}" class="block">
+                                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800">{{ $child->nickname ?? $child->name }} 💕</h3>
+                                </a>
+                                <p class="text-gray-500 text-sm mt-1">{{ $child->age ?? '—' }}</p>
+                                @if ($child->date_of_birth)
+                                    <p class="text-gray-400 text-xs mt-1">🎂 {{ $child->date_of_birth->locale('id')->isoFormat('D MMMM YYYY') }}</p>
+                                @endif
+                            </div>
+
+                            <!-- Stats Cards -->
+                            <div class="flex gap-3 sm:gap-4">
+                                <!-- Usia -->
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl px-4 py-3 text-center shadow-soft min-w-[80px]">
+                                    <div class="text-lg font-bold text-softPink-600">🎂</div>
+                                    <div class="text-sm font-bold text-gray-800">{{ $child->age ?? '—' }}</div>
+                                    <div class="text-[10px] text-gray-400 uppercase tracking-wide">Usia</div>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <h4 class="font-semibold text-gray-800 truncate">{{ $child->nickname ?? $child->name }}</h4>
-                                    <p class="text-xs text-gray-500">{{ $child->age ?? '—' }}</p>
+
+                                <!-- Momen -->
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl px-4 py-3 text-center shadow-soft min-w-[80px]">
+                                    <div class="text-lg font-bold text-mintGreen-600">📸</div>
+                                    <div class="text-sm font-bold text-gray-800">{{ $totalMediaCount }}</div>
+                                    <div class="text-[10px] text-gray-400 uppercase tracking-wide">Momen</div>
+                                </div>
+
+                                <!-- Dokumen -->
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl px-4 py-3 text-center shadow-soft min-w-[80px]">
+                                    <div class="text-lg font-bold text-skyBlue-600">📄</div>
+                                    <div class="text-sm font-bold text-gray-800">{{ $totalDocumentCount }}</div>
+                                    <div class="text-[10px] text-gray-400 uppercase tracking-wide">Dokumen</div>
                                 </div>
                             </div>
-                            <div class="mt-4 grid grid-cols-3 gap-2 text-center">
-                                <div class="p-2 rounded-xl bg-lavender-50">
-                                    <div class="text-sm font-bold text-lavender-700">{{ $child->timelines_count ?? 0 }}</div>
-                                    <div class="text-[10px] text-gray-500">Timeline</div>
-                                </div>
-                                <div class="p-2 rounded-xl bg-peach-50">
-                                    <div class="text-sm font-bold text-peach-700">{{ $child->diaries_count ?? 0 }}</div>
-                                    <div class="text-[10px] text-gray-500">Diary</div>
-                                </div>
-                                <div class="p-2 rounded-xl bg-skyBlue-50">
-                                    <div class="text-sm font-bold text-skyBlue-700">{{ $child->documents_count ?? 0 }}</div>
-                                    <div class="text-[10px] text-gray-500">Dokumen</div>
-                                </div>
-                            </div>
-                        </a>
-                    @endforeach
+                        </div>
+                    </div>
                 </div>
-            </div>
+            @endforeach
         @endif
 
+        <!-- Main Content Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Recent Timelines -->
-            <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
+            <!-- Momen Terbaru (Photo Thumbnails) -->
+            <div class="lg:col-span-2 bg-white overflow-hidden shadow-soft sm:rounded-3xl">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-semibold text-gray-800">📸 {{ __('Timeline Terbaru') }}</h3>
+                        <h3 class="font-semibold text-gray-800">📸 {{ __('Momen Terbaru') }}</h3>
+                        @if ($children->isNotEmpty())
+                            <a href="{{ route('timeline.index', $children->first()) }}" class="text-sm text-softPink-500 hover:text-softPink-600 transition font-medium">
+                                {{ __('Lihat Semua') }}
+                            </a>
+                        @endif
                     </div>
-                    @if ($recentTimelines->isEmpty())
-                        <div class="text-center py-6">
-                            <div class="text-3xl mb-2">📸</div>
-                            <p class="text-sm text-gray-500">{{ __('Belum ada timeline.') }}</p>
+                    @if ($recentMedia->isEmpty())
+                        <div class="text-center py-8">
+                            <div class="text-4xl mb-3">📷</div>
+                            <p class="text-sm text-gray-500">{{ __('Belum ada momen.') }}</p>
                             @if ($children->isNotEmpty())
                                 <p class="text-xs text-gray-400 mt-1">{{ __('Mulai dokumentasikan momen pertama buah hati.') }}</p>
                             @endif
                         </div>
                     @else
-                        <div class="space-y-3">
-                            @foreach ($recentTimelines as $timeline)
-                                <a href="{{ route('timeline.show', [$timeline->child_id, $timeline->id]) }}" class="block p-3 rounded-xl hover:bg-lavender-50 transition">
-                                    <div class="flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-lavender-400 to-softPink-400 flex items-center justify-center text-white text-xs flex-shrink-0">
-                                            📸
-                                        </div>
-                                        <div class="min-w-0">
-                                            <p class="text-sm font-medium text-gray-800 truncate">{{ $timeline->title }}</p>
-                                            <p class="text-xs text-gray-500">{{ $timeline->child->name }} · {{ \Carbon\Carbon::parse($timeline->event_date)->locale('id')->diffForHumans() }}</p>
-                                        </div>
-                                    </div>
-                                </a>
+                        <div class="grid grid-cols-4 sm:grid-cols-4 gap-3">
+                            @foreach ($recentMedia as $media)
+                                <div class="aspect-square rounded-2xl overflow-hidden bg-softPink-50 border border-softPink-100">
+                                    <img src="{{ asset('storage/' . $media->file_path) }}"
+                                         alt="{{ $media->alt_text ?? $media->file_name }}"
+                                         class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                                </div>
                             @endforeach
                         </div>
                     @endif
                 </div>
             </div>
 
-            <!-- Upcoming Events -->
+            <!-- Pengingat Section -->
             <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-semibold text-gray-800">📅 {{ __('Acara Mendatang') }}</h3>
+                        <h3 class="font-semibold text-gray-800">🔔 {{ __('Pengingat') }}</h3>
                     </div>
                     @if ($upcomingEvents->isEmpty())
-                        <div class="text-center py-6">
-                            <div class="text-3xl mb-2">📅</div>
-                            <p class="text-sm text-gray-500">{{ __('Tidak ada acara mendatang.') }}</p>
+                        <div class="text-center py-8">
+                            <div class="text-4xl mb-3">📅</div>
+                            <p class="text-sm text-gray-500">{{ __('Tidak ada pengingat.') }}</p>
                             @if ($children->isNotEmpty())
                                 <p class="text-xs text-gray-400 mt-1">{{ __('Tambahkan jadwal imunisasi atau ulang tahun.') }}</p>
                             @endif
@@ -119,48 +136,17 @@
                     @else
                         <div class="space-y-3">
                             @foreach ($upcomingEvents as $event)
-                                <a href="{{ route('calendar.show', [$event->child_id, $event->id]) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 transition">
+                                <a href="{{ route('calendar.show', [$event->child_id, $event->id]) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 transition group">
                                     <div class="flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-mintGreen-400 to-skyBlue-400 flex items-center justify-center text-white text-xs flex-shrink-0">
-                                            📅
+                                        <div class="w-10 h-10 rounded-xl {{ $event->event_type === 'immunization' ? 'bg-mintGreen-100' : ($event->event_type === 'birthday' ? 'bg-warmYellow-100' : 'bg-skyBlue-100') }} flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">
+                                            {{ $event->event_type === 'immunization' ? '💉' : ($event->event_type === 'birthday' ? '🎂' : '📅') }}
                                         </div>
-                                        <div class="min-w-0">
+                                        <div class="min-w-0 flex-1">
                                             <p class="text-sm font-medium text-gray-800 truncate">{{ $event->title }}</p>
-                                            <p class="text-xs text-gray-500">{{ $event->child->name }} · {{ \Carbon\Carbon::parse($event->event_date)->locale('id')->isoFormat('D MMM YYYY') }}</p>
+                                            <p class="text-xs text-gray-500">{{ $event->event_date->locale('id')->isoFormat('D MMM YYYY') }}</p>
                                         </div>
-                                    </div>
-                                </a>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Recent Diaries -->
-            <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-semibold text-gray-800">📔 {{ __('Diary Terbaru') }}</h3>
-                    </div>
-                    @if ($recentDiaries->isEmpty())
-                        <div class="text-center py-6">
-                            <div class="text-3xl mb-2">📔</div>
-                            <p class="text-sm text-gray-500">{{ __('Belum ada diary.') }}</p>
-                            @if ($children->isNotEmpty())
-                                <p class="text-xs text-gray-400 mt-1">{{ __('Tulis cerita harian tentang si kecil.') }}</p>
-                            @endif
-                        </div>
-                    @else
-                        <div class="space-y-3">
-                            @foreach ($recentDiaries as $diary)
-                                <a href="{{ route('diaries.show', [$diary->child_id, $diary->id]) }}" class="block p-3 rounded-xl hover:bg-peach-50 transition">
-                                    <div class="flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-peach-400 to-warmYellow-400 flex items-center justify-center text-white text-xs flex-shrink-0">
-                                            📔
-                                        </div>
-                                        <div class="min-w-0">
-                                            <p class="text-sm font-medium text-gray-800 truncate">{{ $diary->title }}</p>
-                                            <p class="text-xs text-gray-500">{{ $diary->child->name }} · {{ $diary->mood_label }} · {{ \Carbon\Carbon::parse($diary->diary_date)->locale('id')->diffForHumans() }}</p>
+                                        <div class="text-xs text-gray-400 flex-shrink-0">
+                                            {{ $event->event_date->locale('id')->diffForHumans() }}
                                         </div>
                                     </div>
                                 </a>
@@ -253,28 +239,28 @@
                     <h3 class="font-semibold text-gray-800 mb-4">⚡ {{ __('Akses Cepat') }}</h3>
                     @php $firstChild = $children->first(); @endphp
                     <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                        <a href="{{ route('children.index') }}" class="p-4 rounded-2xl bg-gradient-to-br from-softPink-50 to-lavender-50 border border-softPink-100 hover:shadow-medium transition text-center">
-                            <div class="text-2xl mb-1">👶</div>
+                        <a href="{{ route('children.index') }}" class="p-4 rounded-2xl bg-gradient-to-br from-softPink-50 to-lavender-50 border border-softPink-100 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👶</div>
                             <div class="text-xs font-medium text-gray-700">{{ __('Anak') }}</div>
                         </a>
-                        <a href="{{ route('timeline.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-lavender-50 to-softPink-50 border border-lavender-100 hover:shadow-medium transition text-center">
-                            <div class="text-2xl mb-1">📸</div>
+                        <a href="{{ route('timeline.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-lavender-50 to-softPink-50 border border-lavender-100 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📸</div>
                             <div class="text-xs font-medium text-gray-700">{{ __('Timeline') }}</div>
                         </a>
-                        <a href="{{ route('diaries.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-peach-50 to-warmYellow-50 border border-peach-100 hover:shadow-medium transition text-center">
-                            <div class="text-2xl mb-1">📔</div>
+                        <a href="{{ route('diaries.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-peach-50 to-warmYellow-50 border border-peach-100 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📔</div>
                             <div class="text-xs font-medium text-gray-700">{{ __('Diary') }}</div>
                         </a>
-                        <a href="{{ route('calendar.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-skyBlue-50 border border-mintGreen-100 hover:shadow-medium transition text-center">
-                            <div class="text-2xl mb-1">📅</div>
+                        <a href="{{ route('calendar.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-skyBlue-50 border border-mintGreen-100 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📅</div>
                             <div class="text-xs font-medium text-gray-700">{{ __('Kalender') }}</div>
                         </a>
-                        <a href="{{ route('growth.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-cream-50 border border-mintGreen-100 hover:shadow-medium transition text-center">
-                            <div class="text-2xl mb-1">📏</div>
+                        <a href="{{ route('growth.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-cream-50 border border-mintGreen-100 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📏</div>
                             <div class="text-xs font-medium text-gray-700">{{ __('Pertumbuhan') }}</div>
                         </a>
-                        <a href="{{ route('health.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-skyBlue-50 to-lavender-50 border border-skyBlue-100 hover:shadow-medium transition text-center">
-                            <div class="text-2xl mb-1">🏥</div>
+                        <a href="{{ route('health.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-skyBlue-50 to-lavender-50 border border-skyBlue-100 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🏥</div>
                             <div class="text-xs font-medium text-gray-700">{{ __('Kesehatan') }}</div>
                         </a>
                     </div>
