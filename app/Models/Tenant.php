@@ -93,6 +93,14 @@ class Tenant extends Model
     }
 
     /**
+     * Get all family members belonging to this tenant's children.
+     */
+    public function familyMembers(): HasManyThrough
+    {
+        return $this->hasManyThrough(FamilyMember::class, Child::class);
+    }
+
+    /**
      * Get all subscriptions for this tenant.
      */
     public function subscriptions(): HasMany
@@ -220,6 +228,24 @@ class Tenant extends Model
         }
 
         return $this->getPhotoCount() < $plan->max_photos;
+    }
+
+    /**
+     * Check if the tenant can add a family member.
+     */
+    public function canAddFamilyMember(): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+
+        if (! $plan) {
+            return false;
+        }
+
+        if ($plan->max_family_members === -1) {
+            return true;
+        }
+
+        return $this->familyMembers()->count() < $plan->max_family_members;
     }
 
     /**

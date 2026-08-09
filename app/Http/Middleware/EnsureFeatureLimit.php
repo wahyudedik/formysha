@@ -33,6 +33,7 @@ class EnsureFeatureLimit
                 'children', 'add_child' => 'jumlah anak',
                 'photos', 'upload_photo' => 'unggah foto',
                 'videos', 'upload_video' => 'unggah video',
+                'family_members' => 'anggota keluarga',
                 'storage' => 'penyimpanan',
                 default => $feature,
             };

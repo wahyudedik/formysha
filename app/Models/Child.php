@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 /**
  * @property int $id
  * @property int $user_id
+ * @property int|null $tenant_id
  * @property string $name
  * @property string $slug
  * @property string|null $nickname
@@ -38,6 +39,7 @@ class Child extends Model
      */
     protected $fillable = [
         'user_id',
+        'tenant_id',
         'name',
         'slug',
         'nickname',

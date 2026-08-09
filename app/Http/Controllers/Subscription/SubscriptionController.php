@@ -30,6 +30,9 @@ class SubscriptionController extends Controller
 
     /**
      * Subscribe to a plan.
+     *
+     * Free plans are activated immediately. Paid plans create a pending
+     * subscription and redirect to the payment upload page.
      */
     public function subscribe(Plan $plan): RedirectResponse
     {
@@ -40,9 +43,18 @@ class SubscriptionController extends Controller
                 ->with('error', 'Anda belum memiliki organisasi.');
         }
 
-        $this->subscriptionService->createSubscription($tenant, $plan);
+        // Free plan: activate immediately, no payment needed
+        if ($plan->price_monthly === 0) {
+            $this->subscriptionService->activateFreePlan($tenant);
 
-        return redirect()->route('subscription.current')
+            return redirect()->route('subscription.current')
+                ->with('success', 'Paket gratis berhasil diaktifkan!');
+        }
+
+        // Paid plan: create pending subscription, then redirect to payment upload
+        $subscription = $this->subscriptionService->createSubscription($tenant, $plan);
+
+        return redirect()->route('subscription.payment.upload', $subscription)
             ->with('success', 'Langganan berhasil dibuat. Silakan lakukan pembayaran.');
     }
 

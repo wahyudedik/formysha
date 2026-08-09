@@ -752,7 +752,7 @@ public/favicon.ico   → Favicon legacy
 
 ### Database
 
-* PostgreSQL
+* MySQL
 
 ### Queue & Cache
 
@@ -845,7 +845,7 @@ public/favicon.ico   → Favicon legacy
 * Arsitektur SaaS yang dapat digunakan oleh individu maupun organisasi.
 * Tidak bergantung pada vendor AI atau layanan tertentu.
 * Integrasi fleksibel melalui Custom API.
-* Teknologi modern dengan Laravel dan PostgreSQL yang mudah dikembangkan.
+* Teknologi modern dengan Laravel dan MySQL yang mudah dikembangkan.
 
 ---
 

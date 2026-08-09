@@ -81,15 +81,36 @@
                 </div>
             </div>
 
+            {{-- Pending Payment Banner --}}
+            @if ($subscription->status === 'pending')
+                <div class="bg-gradient-to-r from-warmYellow-50 to-peach-50 dark:from-warmYellow-950/30 dark:to-peach-950/30 border border-warmYellow-200 dark:border-warmYellow-800 rounded-2xl p-4 sm:p-6 mb-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">⏳</span>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">Menunggu Pembayaran</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Silakan lakukan transfer dan upload bukti pembayaran untuk mengaktifkan langganan Anda.</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('subscription.payment.upload', $subscription) }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center whitespace-nowrap">
+                            💳 Upload Bukti
+                        </a>
+                    </div>
+                </div>
+            @endif
+
             {{-- Usage Summary --}}
-            @if ($subscription->plan)
+            @if ($subscription->plan && $subscription->status === 'active')
+                @php
+                    $childrenCount = $tenant ? $tenant->children()->count() : 0;
+                @endphp
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden mb-6">
                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Ringkasan Penggunaan') }}</h3>
                     </div>
                     <div class="p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                         <div class="text-center p-3 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30">
-                            <p class="text-xl font-bold text-skyBlue-600 dark:text-skyBlue-400">{{ $tenant?->children_count ?? 0 }}</p>
+                            <p class="text-xl font-bold text-skyBlue-600 dark:text-skyBlue-400">{{ $childrenCount }}</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">Anak</p>
                             <p class="text-[10px] text-gray-400 dark:text-gray-500">/ {{ $subscription->plan->max_children === -1 ? '∞' : $subscription->plan->max_children }}</p>
                         </div>

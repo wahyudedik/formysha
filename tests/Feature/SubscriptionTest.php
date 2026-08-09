@@ -14,7 +14,7 @@ describe('Subscription Management', function () {
             ->assertOk();
     });
 
-    it('allows user to subscribe to a plan', function () {
+    it('redirects to payment upload after subscribing to paid plan', function () {
         $user = User::factory()->create();
         $tenant = Tenant::create([
             'name' => 'Keluarga Bahagia',
@@ -38,14 +38,53 @@ describe('Subscription Management', function () {
         // Set tenant in session
         $this->app['session']->put('tenant_id', $tenant->id);
 
-        $this->actingAs($user)
-            ->post(route('subscription.subscribe', $plan))
-            ->assertRedirect(route('subscription.current'));
+        $response = $this->actingAs($user)
+            ->post(route('subscription.subscribe', $plan));
+
+        // Paid plan should redirect to payment upload page
+        $subscription = Subscription::where('tenant_id', $tenant->id)->first();
+        $response->assertRedirect(route('subscription.payment.upload', $subscription));
 
         $this->assertDatabaseHas('subscriptions', [
             'tenant_id' => $tenant->id,
             'plan_id' => $plan->id,
             'status' => Subscription::STATUS_PENDING,
+        ]);
+    });
+
+    it('activates free plan immediately without payment', function () {
+        $user = User::factory()->create();
+        $tenant = Tenant::create([
+            'name' => 'Keluarga Gratis',
+            'slug' => 'keluarga-gratis',
+            'is_active' => true,
+        ]);
+        $user->update(['tenant_id' => $tenant->id]);
+
+        $freePlan = Plan::create([
+            'name' => 'Gratis',
+            'slug' => 'free',
+            'price_monthly' => 0,
+            'max_children' => 1,
+            'max_photos' => 50,
+            'max_videos' => 10,
+            'max_storage_mb' => 500,
+            'max_export_per_day' => 3,
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $this->app['session']->put('tenant_id', $tenant->id);
+
+        $this->actingAs($user)
+            ->post(route('subscription.subscribe', $freePlan))
+            ->assertRedirect(route('subscription.current'));
+
+        // Free plan should be active immediately, not pending
+        $this->assertDatabaseHas('subscriptions', [
+            'tenant_id' => $tenant->id,
+            'plan_id' => $freePlan->id,
+            'status' => Subscription::STATUS_ACTIVE,
         ]);
     });
 

@@ -103,7 +103,7 @@
                 </div>
 
                 {{-- Delete Confirmation Modals --}}
-                @foreach ($members as $member)
+                @foreach ($familyMembers as $member)
                     <x-confirm-delete
                         id="delete-family-{{ $member->id }}"
                         title="{{ __('Hapus Anggota Keluarga') }}"

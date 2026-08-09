@@ -703,7 +703,7 @@ public/favicon.ico   → Favicon legacy
 
 #### Database
 
-* PostgreSQL
+* MySQL
 
 #### Queue & Cache
 
@@ -821,7 +821,7 @@ public/favicon.ico   → Favicon legacy
 * Arsitektur SaaS yang dapat digunakan oleh individu maupun organisasi.
 * Tidak bergantung pada vendor AI atau layanan tertentu.
 * Integrasi fleksibel melalui Custom API.
-* Teknologi modern dengan Laravel dan PostgreSQL yang mudah dikembangkan.
+* Teknologi modern dengan Laravel dan MySQL yang mudah dikembangkan.
 
 ### Tujuan Jangka Panjang
 
@@ -1020,15 +1020,35 @@ All Blade views MUST follow these responsive patterns consistently:
 
 ### Quality Assurance
 
-* **Total Tests**: 490 tests, 1122 assertions — all passing
+* **Total Tests**: 504 tests, 1153 assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit
 * **API Tests**: AuthTest, ChildApiTest, TimelineApiTest, DiaryApiTest, AlbumApiTest, GrowthApiTest, HealthApiTest, EventApiTest, FamilyApiTest, NotificationApiTest, SearchApiTest, PlanApiTest, DashboardApiTest, SuperAdminApiTest, WebhookApiTest, LanguageApiTest, WhiteLabelApiTest, DomainApiTest, PluginApiTest, EnterpriseApiTest
 * **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, ImageOptimizationService, SearchService, NotificationService, Album, Child, Diary
 * **QA Audit**: Phase 1-9 selesai, semua tests passing, Pint formatting applied
+* **Loading States**: Alpine.js loading states pada semua form submit (25 form):
+  - Core: children, timeline, albums, diaries, growth, health, documents, calendar, family, auth (login, register)
+  - Admin: subscription/payment-upload, super-admin/tenants (create/edit), super-admin/plans (create/edit)
+  - Pola: `x-data="{ loading: false }"` + `@submit="loading = true"` + `:disabled="loading"` + animate-spin SVG
+* **Subscription Flow Fix**: Perbaikan bug kritis pada flow subscription/payment:
+  - `tenant_id` di-set saat pembuatan anak (ChildController::store)
+  - `feature.limit:children` middleware diterapkan ke rute children store
+  - `feature.limit:photos` middleware diterapkan ke rute media upload
+  - Redirect ke payment upload untuk paket berbayar (SubscriptionController::subscribe)
+  - Aktivasi langsung untuk paket gratis
+  - Perbaikan tampilan subscription.current (children count, pending banner)
+* **Family Sharing Fix**: Perbaikan 6 bug pada fitur family sharing:
+  - Fix variabel `$members` → `$familyMembers` di view index (delete modal)
+  - Set `tenant_id` di FamilyMemberController saat store
+  - Implementasi feature limit `family_members` (Tenant model, Service, Middleware, Routes)
+  - Handle photo upload di controller (store, update, destroy)
+  - Fix FamilyMemberResource (tambah photo, photo_url, relationship_label)
+  - Tambah `tenant_id` ke `$fillable` di FamilyMember model
+  - 25 tests baru (16 Feature + 9 API)
 
 ---
+
 
 <laravel-boost-guidelines>
 === foundation rules ===

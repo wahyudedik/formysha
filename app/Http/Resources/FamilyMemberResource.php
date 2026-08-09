@@ -28,8 +28,11 @@ class FamilyMemberResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'relationship' => $this->relationship,
+            'relationship_label' => $this->relationship_label,
             'phone' => $this->phone,
             'email' => $this->email,
+            'photo' => $this->photo,
+            'photo_url' => $this->photo ? asset('storage/'.$this->photo) : null,
             'is_primary' => $this->is_primary,
             'created_at' => $this->created_at,
         ];

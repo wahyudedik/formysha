@@ -20,10 +20,21 @@
                     ['label' => 'Import'],
                 ]" />
 
+                {{-- Coming Soon Banner --}}
+                <div class="bg-gradient-to-r from-warmYellow-50 to-peach-50 dark:from-warmYellow-950/30 dark:to-peach-950/30 border border-warmYellow-200 dark:border-warmYellow-800 rounded-2xl p-4 sm:p-6 mb-6">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">🚧</span>
+                        <div>
+                            <h3 class="font-semibold text-warmYellow-800 dark:text-warmYellow-200">Fitur Coming Soon</h3>
+                            <p class="text-sm text-warmYellow-700 dark:text-warmYellow-300 mt-1">Import data sedang dalam pengembangan. Saat ini form tersedia untuk preview, namun pemrosesan file belum aktif. Silakan gunakan REST API atau Export/Import manual sebagai alternatif.</p>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Import Form --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6 opacity-75">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Import Data Baru</h3>
-                    <form x-data="{ uploading: false, progress: 0 }" @submit.prevent="
+                    <form x-data="{ uploading: false, progress: 0, toast: { show: false, message: '', type: 'error' } }" @submit.prevent="
                         uploading = true;
                         const formData = new FormData();
                         formData.append('type', $refs.type.value);
@@ -41,14 +52,26 @@
                             if (data.success) {
                                 window.location.reload();
                             } else {
-                                alert(data.message || 'Gagal membuat import job.');
+                                toast.message = data.message || 'Gagal membuat import job.';
+                                toast.show = true;
+                                setTimeout(() => { toast.show = false }, 5000);
                             }
                         })
                         .catch(err => {
                             uploading = false;
-                            alert('Terjadi kesalahan.');
+                            toast.message = 'Terjadi kesalahan.';
+                            toast.show = true;
+                            setTimeout(() => { toast.show = false }, 5000);
                         })
                     ">
+                        {{-- Inline Toast --}}
+                        <div x-show="toast.show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="mb-4 flex items-center gap-3 p-4 rounded-2xl border bg-red-50 border-red-200 text-red-800 dark:bg-red-950/30 dark:border-red-800 dark:text-red-300">
+                            <span class="text-lg">❌</span>
+                            <p class="text-sm font-medium flex-1" x-text="toast.message"></p>
+                            <button @click="toast.show = false" type="button" class="text-current opacity-50 hover:opacity-100 transition-opacity">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipe Import</label>

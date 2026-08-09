@@ -23,7 +23,7 @@
                 {{-- Invite Form --}}
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Kirim Undangan Baru</h3>
-                    <form x-data="{ sending: false }" @submit.prevent="
+                    <form x-data="{ sending: false, toast: { show: false, message: '', type: 'error' } }" @submit.prevent="
                         sending = true;
                         fetch('{{ route('enterprise.invite') }}', {
                             method: 'POST',
@@ -43,14 +43,26 @@
                             if (data.success) {
                                 window.location.reload();
                             } else {
-                                alert(data.message || 'Gagal mengirim undangan.');
+                                toast.message = data.message || 'Gagal mengirim undangan.';
+                                toast.show = true;
+                                setTimeout(() => { toast.show = false }, 5000);
                             }
                         })
                         .catch(err => {
                             sending = false;
-                            alert('Terjadi kesalahan.');
+                            toast.message = 'Terjadi kesalahan.';
+                            toast.show = true;
+                            setTimeout(() => { toast.show = false }, 5000);
                         })
                     ">
+                        {{-- Inline Toast --}}
+                        <div x-show="toast.show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="mb-4 flex items-center gap-3 p-4 rounded-2xl border bg-red-50 border-red-200 text-red-800 dark:bg-red-950/30 dark:border-red-800 dark:text-red-300">
+                            <span class="text-lg">❌</span>
+                            <p class="text-sm font-medium flex-1" x-text="toast.message"></p>
+                            <button @click="toast.show = false" type="button" class="text-current opacity-50 hover:opacity-100 transition-opacity">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>

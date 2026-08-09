@@ -29,6 +29,7 @@ class ChildFactory extends Factory
 
         return [
             'user_id' => User::factory(),
+            'tenant_id' => null,
             'name' => $name,
             'slug' => Str::slug($name),
             'nickname' => fake()->optional(0.6)->firstName(),

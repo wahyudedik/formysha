@@ -42,7 +42,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Children routes (CRUD without {child} parameter)
-    Route::resource('children', ChildController::class)->except(['edit', 'show']);
+    // Store route has feature.limit:children middleware to enforce plan limits
+    Route::get('children', [ChildController::class, 'index'])->name('children.index');
+    Route::get('children/create', [ChildController::class, 'create'])->name('children.create');
+    Route::post('children', [ChildController::class, 'store'])->name('children.store')->middleware('feature.limit:children');
+    Route::put('children/{child}', [ChildController::class, 'update'])->name('children.update');
+    Route::delete('children/{child}', [ChildController::class, 'destroy'])->name('children.destroy');
 
     // All routes with {child} parameter — protected by child.ownership middleware
     Route::middleware('child.ownership')->group(function () {
@@ -54,7 +59,7 @@ Route::middleware('auth')->group(function () {
         // Family member routes (nested under children)
         Route::get('/children/{child}/family', [FamilyMemberController::class, 'index'])->name('family.index');
         Route::get('/children/{child}/family/create', [FamilyMemberController::class, 'create'])->name('family.create');
-        Route::post('/children/{child}/family', [FamilyMemberController::class, 'store'])->name('family.store');
+        Route::post('/children/{child}/family', [FamilyMemberController::class, 'store'])->name('family.store')->middleware('feature.limit:family_members');
         Route::get('/children/{child}/family/{familyMember}/edit', [FamilyMemberController::class, 'edit'])->name('family.edit');
         Route::put('/children/{child}/family/{familyMember}', [FamilyMemberController::class, 'update'])->name('family.update');
         Route::delete('/children/{child}/family/{familyMember}', [FamilyMemberController::class, 'destroy'])->name('family.destroy');
@@ -129,9 +134,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/children/{child}/export/zip', [ExportController::class, 'childZip'])->name('export.zip')->middleware('throttle:3,1');
 
         // Media routes (nested under children)
-        Route::post('/children/{child}/timeline/{timeline}/media', [MediaController::class, 'storeForTimeline'])->name('media.store.timeline');
-        Route::post('/children/{child}/albums/{album}/media', [MediaController::class, 'storeForAlbum'])->name('media.store.album');
-        Route::post('/children/{child}/diaries/{diary}/media', [MediaController::class, 'storeForDiary'])->name('media.store.diary');
+        // Photo/video upload routes have feature.limit middleware to enforce plan limits
+        Route::post('/children/{child}/timeline/{timeline}/media', [MediaController::class, 'storeForTimeline'])->name('media.store.timeline')->middleware('feature.limit:photos');
+        Route::post('/children/{child}/albums/{album}/media', [MediaController::class, 'storeForAlbum'])->name('media.store.album')->middleware('feature.limit:photos');
+        Route::post('/children/{child}/diaries/{diary}/media', [MediaController::class, 'storeForDiary'])->name('media.store.diary')->middleware('feature.limit:photos');
         Route::delete('/children/{child}/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 
     });

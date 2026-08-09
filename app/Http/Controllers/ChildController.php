@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\Child;
+use App\Services\TenantService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -45,6 +46,13 @@ class ChildController extends Controller
 
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('children', 'public');
+        }
+
+        // Set tenant_id from current tenant for multi-tenant mode
+        $tenantService = app(TenantService::class);
+        $tenant = $tenantService->getCurrentTenant();
+        if ($tenant) {
+            $data['tenant_id'] = $tenant->id;
         }
 
         $child = $request->user()->children()->create($data);

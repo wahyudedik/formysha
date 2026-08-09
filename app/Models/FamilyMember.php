@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $child_id
+ * @property string|null $tenant_id
  * @property int|null $user_id
  * @property string $name
  * @property string $relationship
@@ -30,6 +31,7 @@ class FamilyMember extends Model
      */
     protected $fillable = [
         'child_id',
+        'tenant_id',
         'user_id',
         'name',
         'relationship',

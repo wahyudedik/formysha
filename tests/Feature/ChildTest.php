@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\Child;
+use App\Models\Plan;
+use App\Models\Subscription;
+use App\Models\Tenant;
 use App\Models\User;
 
 describe('Child Management', function () {
@@ -168,5 +171,79 @@ describe('Child Management', function () {
             'user_id' => $user->id,
             'slug' => 'mysha-aisyah',
         ]);
+    });
+
+    it('sets tenant_id when creating child with active tenant', function () {
+        $tenant = Tenant::create([
+            'name' => 'Keluarga Test',
+            'slug' => 'keluarga-test',
+            'is_active' => true,
+        ]);
+
+        $plan = Plan::create([
+            'name' => 'Basic',
+            'slug' => 'basic',
+            'price_monthly' => 29000,
+            'max_children' => 3,
+            'max_photos' => 200,
+            'max_videos' => 50,
+            'max_storage_mb' => 2048,
+            'max_export_per_day' => 10,
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        Subscription::create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+            'status' => Subscription::STATUS_ACTIVE,
+            'starts_at' => now(),
+            'ends_at' => now()->addMonth(),
+        ]);
+
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+        ]);
+
+        $this->app['session']->put('tenant_id', $tenant->id);
+
+        $this->actingAs($user)
+            ->post(route('children.store'), [
+                'name' => 'Anak Tenant',
+                'gender' => 'male',
+                'date_of_birth' => '2024-03-15',
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('children', [
+            'user_id' => $user->id,
+            'tenant_id' => $tenant->id,
+            'name' => 'Anak Tenant',
+        ]);
+    });
+
+    it('counts children correctly via tenant relationship', function () {
+        $tenant = Tenant::create([
+            'name' => 'Keluarga Count',
+            'slug' => 'keluarga-count',
+            'is_active' => true,
+        ]);
+
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+        ]);
+
+        // Create children with tenant_id
+        Child::factory()->create([
+            'user_id' => $user->id,
+            'tenant_id' => $tenant->id,
+        ]);
+
+        Child::factory()->create([
+            'user_id' => $user->id,
+            'tenant_id' => $tenant->id,
+        ]);
+
+        expect($tenant->children()->count())->toBe(2);
     });
 });
