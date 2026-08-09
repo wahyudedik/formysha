@@ -83,23 +83,96 @@
                 0%, 100% { transform: translateY(0); }
                 50% { transform: translateY(-10px); }
             }
+
+            /* Mobile menu */
+            .mobile-menu {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                z-index: 999;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1.5rem;
+                animation: fadeIn 0.2s ease-in-out;
+            }
+            .mobile-menu.active {
+                display: flex;
+            }
+            @media (prefers-color-scheme: dark) {
+                .mobile-menu { background: rgba(17, 24, 39, 0.98); }
+            }
+            .mobile-menu-close {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                width: 2.5rem;
+                height: 2.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: rgba(0,0,0,0.05);
+                cursor: pointer;
+            }
+            @media (prefers-color-scheme: dark) {
+                .mobile-menu-close { background: rgba(255,255,255,0.1); }
+            }
         </style>
     </head>
     <body class="bg-gradient-to-br from-softPink-50 via-cream-50 to-lavender-50 dark:from-[#1a1025] dark:via-[#111827] dark:to-[#0f172a] min-h-screen overflow-x-hidden">
 
+        {{-- Mobile Menu Overlay --}}
+        <div id="mobileMenu" class="mobile-menu">
+            <button onclick="closeMobileMenu()" class="mobile-menu-close" aria-label="Tutup menu">
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'ForMysha') }}" class="w-20 h-20" />
+
+            <nav class="flex flex-col items-center gap-4 text-base">
+                <a href="{{ route('pages.about') }}" class="text-gray-600 dark:text-gray-300 hover:text-softPink-400 dark:hover:text-softPink-300 font-semibold transition-colors">Tentang</a>
+
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="btn-primary text-base px-8 py-3">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-softPink-400 dark:hover:text-softPink-300 font-semibold transition-colors">
+                            Masuk
+                        </a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="btn-primary text-base px-8 py-3 mt-2">
+                                Daftar Gratis
+                            </a>
+                        @endif
+                    @endauth
+                @endif
+            </nav>
+        </div>
+
         {{-- Navigation --}}
         <header class="w-full px-4 sm:px-6 lg:px-8 relative">
-            <nav class="max-w-6xl mx-auto flex items-center justify-between py-6">
+            <nav class="max-w-6xl mx-auto flex items-center justify-between py-4 sm:py-6">
                 <div class="flex items-center gap-2">
-                    <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'ForMysha') }}" class="h-10 w-auto" />
-                    <span class="font-extrabold text-xl text-gray-800 dark:text-gray-100">ForMysha</span>
+                    <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'ForMysha') }}" class="h-9 sm:h-10 w-auto" />
+                    <span class="font-extrabold text-lg sm:text-xl text-gray-800 dark:text-gray-100">ForMysha</span>
                 </div>
 
                 <div class="hidden sm:flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
                     <a href="{{ route('pages.about') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Tentang</a>
                 </div>
 
-                <div class="flex items-center gap-3">
+                {{-- Desktop Auth Buttons --}}
+                <div class="hidden sm:flex items-center gap-3">
                     @if (Route::has('login'))
                         @auth
                             <a href="{{ url('/dashboard') }}" class="btn-primary text-sm">
@@ -109,7 +182,6 @@
                             <a href="{{ route('login') }}" class="btn-secondary text-sm">
                                 Masuk
                             </a>
-
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="btn-primary text-sm">
                                     Daftar Gratis
@@ -118,8 +190,26 @@
                         @endauth
                     @endif
                 </div>
+
+                {{-- Mobile Hamburger Button --}}
+                <button onclick="openMobileMenu()" class="sm:hidden flex items-center justify-center w-10 h-10 rounded-xl hover:bg-white/60 dark:hover:bg-white/10 transition-colors" aria-label="Buka menu">
+                    <svg class="w-6 h-6 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
             </nav>
         </header>
+
+        <script>
+            function openMobileMenu() {
+                document.getElementById('mobileMenu').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeMobileMenu() {
+                document.getElementById('mobileMenu').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        </script>
 
         {{-- Hero Section with Decorative Elements --}}
         <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 sm:pt-16 sm:pb-24 relative">
@@ -384,14 +474,14 @@
 
         {{-- Footer --}}
         <footer class="bg-white/60 dark:bg-white/5 backdrop-blur-sm border-t border-gray-100 dark:border-gray-800">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+                <div class="flex flex-col items-center gap-6 text-center">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'ForMysha') }}" class="h-8 w-auto" />
                         <span class="font-bold text-gray-700 dark:text-gray-200">ForMysha</span>
                     </div>
 
-                    <div class="flex items-center gap-6 text-sm text-gray-400 dark:text-gray-500">
+                    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-400 dark:text-gray-500">
                         <a href="{{ route('pages.about') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Tentang Kami</a>
                         <a href="{{ route('pages.privacy') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Kebijakan Privasi</a>
                         <a href="{{ route('pages.terms') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Syarat & Ketentuan</a>
@@ -400,9 +490,7 @@
                     <p class="text-sm text-gray-400 dark:text-gray-500">
                         &copy; {{ date('Y') }} {{ config('app.name', 'ForMysha') }}. Hak cipta dilindungi.
                     </p>
-                </div>
 
-                <div class="mt-8 text-center">
                     <p class="text-xs text-gray-300 dark:text-gray-600 italic">
                         "Every Moment, Every Memory, One Lifetime." 💕
                     </p>
