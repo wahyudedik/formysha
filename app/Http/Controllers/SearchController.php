@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diary;
-use App\Models\Document;
-use App\Models\Growth;
-use App\Models\HealthRecord;
-use App\Models\Timeline;
+use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SearchController extends Controller
 {
+    public function __construct(
+        private SearchService $searchService,
+    ) {}
+
     /**
      * Display search results across modules.
      */
@@ -30,21 +30,12 @@ class SearchController extends Controller
             'growth' => 0,
         ];
 
-        if (strlen($query) >= 2) {
-            $childIds = $request->user()->children()->pluck('id');
-            $searchTerm = '%'.mb_strtolower($query).'%';
+        if (mb_strlen($query) >= SearchService::MIN_QUERY_LENGTH) {
+            $searchResults = $this->searchService->search($request->user(), $query, $module);
 
-            // Search timelines
+            // Map timelines
             if (in_array($module, ['all', 'timeline'])) {
-                $timelines = Timeline::whereIn('child_id', $childIds)
-                    ->where(function ($q) use ($searchTerm) {
-                        $q->whereRaw('LOWER(title) LIKE ?', [$searchTerm])
-                            ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
-                    })
-                    ->with('child')
-                    ->latest()
-                    ->limit(20)
-                    ->get();
+                $timelines = $searchResults['timelines'];
 
                 $counts['timeline'] = $timelines->count();
 
@@ -64,17 +55,9 @@ class SearchController extends Controller
                 }
             }
 
-            // Search diaries
+            // Map diaries
             if (in_array($module, ['all', 'diary'])) {
-                $diaries = Diary::whereIn('child_id', $childIds)
-                    ->where(function ($q) use ($searchTerm) {
-                        $q->whereRaw('LOWER(title) LIKE ?', [$searchTerm])
-                            ->orWhereRaw('LOWER(content) LIKE ?', [$searchTerm]);
-                    })
-                    ->with('child')
-                    ->latest()
-                    ->limit(20)
-                    ->get();
+                $diaries = $searchResults['diaries'];
 
                 $counts['diary'] = $diaries->count();
 
@@ -94,17 +77,9 @@ class SearchController extends Controller
                 }
             }
 
-            // Search documents
+            // Map documents
             if (in_array($module, ['all', 'document'])) {
-                $documents = Document::whereIn('child_id', $childIds)
-                    ->where(function ($q) use ($searchTerm) {
-                        $q->whereRaw('LOWER(name) LIKE ?', [$searchTerm])
-                            ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
-                    })
-                    ->with('child')
-                    ->latest()
-                    ->limit(20)
-                    ->get();
+                $documents = $searchResults['documents'];
 
                 $counts['document'] = $documents->count();
 
@@ -124,19 +99,9 @@ class SearchController extends Controller
                 }
             }
 
-            // Search health records
+            // Map health records
             if (in_array($module, ['all', 'health'])) {
-                $healthRecords = HealthRecord::whereIn('child_id', $childIds)
-                    ->where(function ($q) use ($searchTerm) {
-                        $q->whereRaw('LOWER(name) LIKE ?', [$searchTerm])
-                            ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm])
-                            ->orWhereRaw('LOWER(doctor) LIKE ?', [$searchTerm])
-                            ->orWhereRaw('LOWER(hospital) LIKE ?', [$searchTerm]);
-                    })
-                    ->with('child')
-                    ->latest()
-                    ->limit(20)
-                    ->get();
+                $healthRecords = $searchResults['health'];
 
                 $counts['health'] = $healthRecords->count();
 
@@ -156,16 +121,9 @@ class SearchController extends Controller
                 }
             }
 
-            // Search growth records
+            // Map growth records
             if (in_array($module, ['all', 'growth'])) {
-                $growths = Growth::whereIn('child_id', $childIds)
-                    ->where(function ($q) use ($searchTerm) {
-                        $q->whereRaw('LOWER(notes) LIKE ?', [$searchTerm]);
-                    })
-                    ->with('child')
-                    ->latest()
-                    ->limit(20)
-                    ->get();
+                $growths = $searchResults['growths'];
 
                 $counts['growth'] = $growths->count();
 

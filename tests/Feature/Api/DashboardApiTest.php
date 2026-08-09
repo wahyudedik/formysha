@@ -11,7 +11,7 @@ describe('Dashboard API', function () {
         Child::factory()->create(['user_id' => $user->id, 'name' => 'Mysha']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/dashboard');
+            ->getJson('/api/v1/dashboard');
 
         $response->assertOk()
             ->assertJsonPath('data.children_count', 1)

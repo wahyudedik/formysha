@@ -17,7 +17,7 @@ describe('Search API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/search?q=Pertama');
+            ->getJson('/api/v1/search?q=Pertama');
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -40,7 +40,7 @@ describe('Search API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/search?q=Timeline&type=timeline');
+            ->getJson('/api/v1/search?q=Timeline&type=timeline');
 
         $response->assertOk()
             ->assertJsonStructure([

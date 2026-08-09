@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $file_size
  * @property string|null $alt_text
  * @property int $sort_order
+ * @property string|null $thumbnail_path
+ * @property int|null $optimized_size
  */
 class Media extends Model
 {
@@ -37,6 +39,8 @@ class Media extends Model
         'file_size',
         'alt_text',
         'sort_order',
+        'thumbnail_path',
+        'optimized_size',
     ];
 
     /**
@@ -49,6 +53,7 @@ class Media extends Model
         return [
             'file_size' => 'integer',
             'sort_order' => 'integer',
+            'optimized_size' => 'integer',
         ];
     }
 

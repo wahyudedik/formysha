@@ -13,7 +13,7 @@ describe('Health API', function () {
         HealthRecord::factory()->create(['child_id' => $child->id, 'user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->slug.'/health-records');
+            ->getJson('/api/v1/children/'.$child->slug.'/health-records');
 
         $response->assertOk()
             ->assertJsonCount(1, 'data');
@@ -26,7 +26,7 @@ describe('Health API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->slug.'/health-records', [
+            ->postJson('/api/v1/children/'.$child->slug.'/health-records', [
                 'type' => 'immunization',
                 'name' => 'BCG',
                 'date' => '2025-02-01',
@@ -46,7 +46,7 @@ describe('Health API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->slug.'/health-records', [
+            ->postJson('/api/v1/children/'.$child->slug.'/health-records', [
                 'type' => 'disease',
                 'name' => 'Demam',
                 'description' => 'Demam tinggi 39°C',

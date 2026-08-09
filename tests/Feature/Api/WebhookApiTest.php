@@ -25,7 +25,7 @@ describe('Webhook API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/webhooks');
+            ->getJson('/api/v1/webhooks');
 
         $response->assertOk()
             ->assertJsonFragment(['url' => 'https://example.com/webhook']);
@@ -42,7 +42,7 @@ describe('Webhook API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/webhooks', [
+            ->postJson('/api/v1/webhooks', [
                 'url' => 'https://example.com/new-webhook',
                 'events' => ['child.created', 'timeline.created'],
                 'secret' => str_repeat('s', 32),
@@ -71,7 +71,7 @@ describe('Webhook API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/webhooks/'.$webhook->id, [
+            ->putJson('/api/v1/webhooks/'.$webhook->id, [
                 'url' => 'https://example.com/updated-webhook',
             ]);
 
@@ -98,7 +98,7 @@ describe('Webhook API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->deleteJson('/api/webhooks/'.$webhook->id);
+            ->deleteJson('/api/v1/webhooks/'.$webhook->id);
 
         $response->assertOk();
 
@@ -134,7 +134,7 @@ describe('Webhook API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/webhooks/'.$webhook->id.'/logs');
+            ->getJson('/api/v1/webhooks/'.$webhook->id.'/logs');
 
         $response->assertOk()
             ->assertJsonCount(1, 'data');

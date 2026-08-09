@@ -15,30 +15,35 @@ use Illuminate\Support\Collection;
 class DashboardService
 {
     /**
-     * Get all dashboard data for a user.
+     * Get all dashboard data for a user, optionally filtered by a specific child.
      *
      * NOTE: We intentionally avoid caching Eloquent Collection objects directly
      * in Redis/cache because PHP 8.4 throws "incomplete object" errors during
      * unserialize() when the Collection class definition hasn't been loaded yet.
      * The dashboard queries are lightweight enough to run fresh each time.
      *
-     * @return array{children: Collection, recentTimelines: Collection, upcomingEvents: Collection, recentDiaries: Collection, recentGrowths: Collection, recentHealthRecords: Collection, recentMedia: Collection, totalMediaCount: int, totalDocumentCount: int}
+     * @return array{children: Collection, selectedChild: ?Child, recentTimelines: Collection, upcomingEvents: Collection, recentDiaries: Collection, recentGrowths: Collection, recentHealthRecords: Collection, recentMedia: Collection, totalMediaCount: int, totalDocumentCount: int}
      */
-    public function getDashboardData(User $user): array
+    public function getDashboardData(User $user, ?string $childSlug = null): array
     {
-        return $this->fetchDashboardData($user);
+        return $this->fetchDashboardData($user, $childSlug);
     }
 
     /**
      * Fetch fresh dashboard data from database.
      */
-    protected function fetchDashboardData(User $user): array
+    protected function fetchDashboardData(User $user, ?string $childSlug = null): array
     {
         $children = $user->children()
             ->withCount(['timelines', 'albums', 'diaries', 'documents', 'events', 'growths', 'healthRecords'])
             ->get();
 
-        $childIds = $children->pluck('id');
+        $selectedChild = null;
+        if ($childSlug && $children->contains('slug', $childSlug)) {
+            $selectedChild = $children->firstWhere('slug', $childSlug);
+        }
+
+        $childIds = $selectedChild ? collect([$selectedChild->id]) : $children->pluck('id');
 
         $recentTimelines = $this->getRecentTimelines($childIds);
         $upcomingEvents = $this->getUpcomingEvents($childIds);
@@ -47,10 +52,14 @@ class DashboardService
         $recentHealthRecords = $this->getRecentHealthRecords($childIds);
         $recentMedia = $this->getRecentMedia($childIds);
         $totalMediaCount = $this->getTotalMediaCount($childIds);
-        $totalDocumentCount = (int) $children->sum('documents_count');
+
+        $totalDocumentCount = $selectedChild
+            ? (int) $selectedChild->documents_count
+            : (int) $children->sum('documents_count');
 
         return compact(
             'children',
+            'selectedChild',
             'recentTimelines',
             'upcomingEvents',
             'recentDiaries',

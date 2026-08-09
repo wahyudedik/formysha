@@ -17,7 +17,10 @@ class DashboardController extends Controller
      */
     public function index(Request $request): View
     {
-        $data = $this->dashboardService->getDashboardData($request->user());
+        $data = $this->dashboardService->getDashboardData(
+            $request->user(),
+            $request->query('child'),
+        );
 
         return view('dashboard', $data);
     }

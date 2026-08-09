@@ -25,7 +25,7 @@ describe('Enterprise API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/enterprise/analytics');
+            ->getJson('/api/v1/tenant-admin/enterprise/analytics');
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -63,7 +63,7 @@ describe('Enterprise API', function () {
         $token = $inviter->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/enterprise/invitations');
+            ->getJson('/api/v1/tenant-admin/enterprise/invitations');
 
         $response->assertOk()
             ->assertJsonFragment(['email' => 'newuser@example.com']);
@@ -80,7 +80,7 @@ describe('Enterprise API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/tenant-admin/enterprise/invitations', [
+            ->postJson('/api/v1/tenant-admin/enterprise/invitations', [
                 'email' => 'invitee@example.com',
                 'role' => 'parent',
             ]);
@@ -114,7 +114,7 @@ describe('Enterprise API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->deleteJson('/api/tenant-admin/enterprise/invitations/'.$invitation->id);
+            ->deleteJson('/api/v1/tenant-admin/enterprise/invitations/'.$invitation->id);
 
         $response->assertOk();
 
@@ -142,7 +142,7 @@ describe('Enterprise API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/enterprise/import-jobs');
+            ->getJson('/api/v1/tenant-admin/enterprise/import-jobs');
 
         $response->assertOk()
             ->assertJsonPath('data.0.type', 'photos')
@@ -154,13 +154,13 @@ describe('Enterprise API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/enterprise/analytics');
+            ->getJson('/api/v1/tenant-admin/enterprise/analytics');
 
         $response->assertNotFound();
     });
 
     it('requires authentication', function () {
-        $response = $this->getJson('/api/tenant-admin/enterprise/analytics');
+        $response = $this->getJson('/api/v1/tenant-admin/enterprise/analytics');
 
         $response->assertUnauthorized();
     });
@@ -170,7 +170,7 @@ describe('Enterprise API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/enterprise/analytics');
+            ->getJson('/api/v1/tenant-admin/enterprise/analytics');
 
         $response->assertForbidden();
     });

@@ -16,7 +16,7 @@ describe('Domain API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/tenant-admin/domain', [
+            ->putJson('/api/v1/tenant-admin/domain', [
                 'custom_domain' => 'anak.kliniksehat.id',
             ]);
 
@@ -43,7 +43,7 @@ describe('Domain API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/tenant-admin/domain/verify');
+            ->postJson('/api/v1/tenant-admin/domain/verify');
 
         // DNS verification will fail in test environment (no real DNS records)
         // so the endpoint correctly returns 422
@@ -61,7 +61,7 @@ describe('Domain API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/tenant-admin/domain/verify');
+            ->postJson('/api/v1/tenant-admin/domain/verify');
 
         $response->assertStatus(422)
             ->assertJsonPath('message', fn ($msg) => str_contains($msg, 'custom domain'));
@@ -88,7 +88,7 @@ describe('Domain API', function () {
         $token2 = $user2->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token2)
-            ->putJson('/api/tenant-admin/domain', [
+            ->putJson('/api/v1/tenant-admin/domain', [
                 'custom_domain' => 'shared.kliniksehat.id',
             ]);
 
@@ -112,7 +112,7 @@ describe('Domain API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->deleteJson('/api/tenant-admin/domain');
+            ->deleteJson('/api/v1/tenant-admin/domain');
 
         $response->assertOk();
 
@@ -131,13 +131,13 @@ describe('Domain API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/domain');
+            ->getJson('/api/v1/tenant-admin/domain');
 
         $response->assertOk();
     });
 
     it('requires authentication for domain operations', function () {
-        $response = $this->putJson('/api/tenant-admin/domain', [
+        $response = $this->putJson('/api/v1/tenant-admin/domain', [
             'custom_domain' => 'test.domain.com',
         ]);
 

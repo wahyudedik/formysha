@@ -24,6 +24,12 @@ class MediaService
      */
     public const MAX_FILE_SIZE = 10_485_760;
 
+    public function __construct(
+        private ?ImageOptimizationService $imageOptimizer = null,
+    ) {
+        $this->imageOptimizer = $imageOptimizer ?? new ImageOptimizationService;
+    }
+
     /**
      * Upload a file and create a Media record.
      */
@@ -32,8 +38,21 @@ class MediaService
         Model $mediable,
         ?string $altText = null,
     ): Media {
-        $filePath = $file->store('media', 'public');
         $fileType = $this->determineFileType($file);
+        $originalSize = $file->getSize();
+        $filePath = null;
+        $thumbnailPath = null;
+        $optimizedSize = null;
+
+        // Auto-optimize images if GD is available
+        if ($fileType === 'photo' && $this->imageOptimizer->isGdAvailable() && $this->imageOptimizer->isSupportedImage($file)) {
+            $result = $this->imageOptimizer->optimize($file, 'media');
+            $filePath = $result['full'];
+            $thumbnailPath = $result['thumbnail'];
+            $optimizedSize = $result['optimized_size'];
+        } else {
+            $filePath = $file->store('media', 'public');
+        }
 
         return Media::create([
             'mediable_type' => get_class($mediable),
@@ -41,7 +60,9 @@ class MediaService
             'file_path' => $filePath,
             'file_name' => $file->getClientOriginalName(),
             'file_type' => $fileType,
-            'file_size' => $file->getSize(),
+            'file_size' => $originalSize,
+            'thumbnail_path' => $thumbnailPath,
+            'optimized_size' => $optimizedSize,
             'alt_text' => $altText,
         ]);
     }

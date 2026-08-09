@@ -26,7 +26,7 @@ describe('Plugin API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/plugins');
+            ->getJson('/api/v1/tenant-admin/plugins');
 
         $response->assertOk()
             ->assertJsonFragment(['slug' => 'whatsapp-integration']);
@@ -52,7 +52,7 @@ describe('Plugin API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson("/api/tenant-admin/plugins/{$plugin->id}/install");
+            ->postJson("/api/v1/tenant-admin/plugins/{$plugin->id}/install");
 
         $response->assertCreated();
 
@@ -91,7 +91,7 @@ describe('Plugin API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson("/api/tenant-admin/plugins/{$plugin->id}/toggle");
+            ->postJson("/api/v1/tenant-admin/plugins/{$plugin->id}/toggle");
 
         $response->assertOk();
 
@@ -130,7 +130,7 @@ describe('Plugin API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson("/api/tenant-admin/plugins/{$plugin->id}/settings");
+            ->getJson("/api/v1/tenant-admin/plugins/{$plugin->id}/settings");
 
         $response->assertOk()
             ->assertJsonPath('data.api_key', 'test-key');
@@ -164,7 +164,7 @@ describe('Plugin API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson("/api/tenant-admin/plugins/{$plugin->id}/settings", [
+            ->putJson("/api/v1/tenant-admin/plugins/{$plugin->id}/settings", [
                 'settings' => ['endpoint' => 'https://new.com'],
             ]);
 

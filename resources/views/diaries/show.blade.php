@@ -141,16 +141,23 @@
                                     </div>
 
                                     <!-- Delete Button -->
-                                    <form method="POST" action="{{ route('media.destroy', [$child, $media]) }}" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition" onsubmit="return confirm('{{ __('Yakin ingin menghapus media ini?') }}')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition shadow-lg">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition shadow-lg"
+                                        x-data
+                                        x-on:click.prevent="$dispatch('delete-confirm', 'delete-media-{{ $media->id }}')">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                 </div>
+                            @endforeach
+
+                            @foreach ($diary->media as $media)
+                                <x-confirm-delete
+                                    id="delete-media-{{ $media->id }}"
+                                    title="{{ __('Hapus Media') }}"
+                                    message="{{ __('Apakah Anda yakin ingin menghapus media ini? Tindakan ini tidak dapat dibatalkan.') }}"
+                                    action="{{ route('media.destroy', [$child, $media]) }}"
+                                />
                             @endforeach
                         </div>
                     @endif

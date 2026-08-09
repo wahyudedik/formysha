@@ -61,5 +61,13 @@
 
         <!-- Toast Notifications -->
         <x-toast />
+
+        <!-- Keyboard Shortcut: Ctrl+K → Search -->
+        <div x-data x-init="document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                window.location.href = '{{ route('search.index') }}';
+            }
+        })" x-cloak></div>
     </body>
 </html>

@@ -1016,4 +1016,60 @@ Semua response menggunakan Eloquent API Resources untuk transformasi data yang k
 * Autentikasi token-based dalam setiap test
 * Validasi request & response format
 * Otorisasi & akses silang pengguna lain
-* Total keseluruhan: **461 tests, 1024 assertions** — all passing
+* Total keseluruhan: **490 tests, 1122 assertions** — all passing
+
+---
+
+## API Versioning ✅ (Phase 9)
+
+Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()`.
+
+### Endpoints (v1)
+
+* `/api/v1/auth/login`, `/api/v1/auth/register`
+* `/api/v1/children`, `/api/v1/children/{child}/...`
+* `/api/v1/notifications`, `/api/v1/search`, `/api/v1/dashboard`
+* `/api/v1/admin/*` — Super Admin API
+* `/api/v1/tenant-admin/*` — Tenant Admin API
+
+## Rate Limiting ✅ (Phase 9)
+
+* `throttle:api` — 60 requests/minute (general API)
+* `throttle:auth` — 5 requests/minute (auth endpoints)
+* `throttle:upload` — 20 requests/minute (media upload)
+
+## Email Notification System ✅ (Phase 9)
+
+* `NotificationService` — centralized notification hub (in-app + email)
+* `WelcomeMail` — async welcome email untuk user baru
+* `SubscriptionMail` — async subscription update email
+* Semua mailable implement `ShouldQueue` untuk async delivery
+
+## Automated Backup Command ✅ (Phase 9)
+
+* `php artisan backup:child-data` — backup data anak ke JSON
+* Options: `--child={slug}`, `--user={id}`, `--cleanup={hari}`
+* Stored di `storage/app/backups/`
+
+## Image Optimization Service ✅ (Phase 9)
+
+* `ImageOptimizationService` — auto-resize & compress via GD extension
+* Full-size: max 1920×1080px, JPEG quality 82%
+* Thumbnail: max 300×300px
+* Transparansi PNG/GIF preserved
+* Integrated ke `MediaService::upload()` — otomatis saat upload gambar
+* New columns: `thumbnail_path`, `optimized_size` di `media` table
+
+## Full-text Search Enhancement ✅ (Phase 9)
+
+* `SearchService` — centralized search across 8 tipe:
+  * **Children** — name, nickname, bio
+  * **Timelines** — title, description
+  * **Diaries** — title, content
+  * **Documents** — name, type, description
+  * **Events** — title, description
+  * **Health Records** — name, description, doctor, hospital
+  * **Growth Records** — notes
+  * **Family Members** — name, relationship
+* Kedua controller (web + API) menggunakan `SearchService`
+* Case-insensitive search via `LOWER()` SQL

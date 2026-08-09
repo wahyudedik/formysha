@@ -18,7 +18,7 @@ describe('Super Admin API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/admin/tenants');
+            ->getJson('/api/v1/admin/tenants');
 
         $response->assertOk()
             ->assertJsonFragment(['name' => 'Test Tenant']);
@@ -29,7 +29,7 @@ describe('Super Admin API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/admin/tenants');
+            ->getJson('/api/v1/admin/tenants');
 
         $response->assertForbidden();
     });
@@ -45,7 +45,7 @@ describe('Super Admin API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/admin/tenants/'.$tenant->id.'/toggle-status');
+            ->postJson('/api/v1/admin/tenants/'.$tenant->id.'/toggle-status');
 
         $response->assertOk();
 
@@ -58,7 +58,7 @@ describe('Super Admin API', function () {
         $token = $admin->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/admin/payments');
+            ->getJson('/api/v1/admin/payments');
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -106,7 +106,7 @@ describe('Super Admin API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/admin/payments/'.$payment->id.'/approve');
+            ->postJson('/api/v1/admin/payments/'.$payment->id.'/approve');
 
         $response->assertOk();
     });
@@ -128,7 +128,7 @@ describe('Super Admin API', function () {
         ]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/admin/plans');
+            ->getJson('/api/v1/admin/plans');
 
         $response->assertOk()
             ->assertJsonFragment(['name' => 'Admin Plan']);
@@ -139,7 +139,7 @@ describe('Super Admin API', function () {
         $token = $admin->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/admin/analytics');
+            ->getJson('/api/v1/admin/analytics');
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -158,7 +158,7 @@ describe('Super Admin API', function () {
         $token = $admin->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/admin/monitoring');
+            ->getJson('/api/v1/admin/monitoring');
 
         $response->assertOk()
             ->assertJsonStructure([

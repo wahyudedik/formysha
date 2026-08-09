@@ -8,7 +8,7 @@ describe('Auth API', function () {
             'password' => bcrypt('password123'),
         ]);
 
-        $response = $this->postJson('/api/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => $user->email,
             'password' => 'password123',
         ]);
@@ -24,7 +24,7 @@ describe('Auth API', function () {
             'password' => bcrypt('password123'),
         ]);
 
-        $response = $this->postJson('/api/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => $user->email,
             'password' => 'wrongpassword',
         ]);
@@ -34,7 +34,7 @@ describe('Auth API', function () {
     });
 
     it('can register a new user', function () {
-        $response = $this->postJson('/api/auth/register', [
+        $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password123',
@@ -52,7 +52,7 @@ describe('Auth API', function () {
     });
 
     it('cannot register with invalid data', function () {
-        $response = $this->postJson('/api/auth/register', [
+        $response = $this->postJson('/api/v1/auth/register', [
             'name' => '',
             'email' => 'not-an-email',
             'password' => 'short',
@@ -67,7 +67,7 @@ describe('Auth API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/auth/logout');
+            ->postJson('/api/v1/auth/logout');
 
         $response->assertOk()
             ->assertJsonPath('message', 'Berhasil logout');
@@ -80,7 +80,7 @@ describe('Auth API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/me');
+            ->getJson('/api/v1/me');
 
         $response->assertOk()
             ->assertJsonPath('data.user.name', 'Test User')
@@ -92,7 +92,7 @@ describe('Auth API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/me', [
+            ->putJson('/api/v1/me', [
                 'name' => 'Updated Name',
                 'phone' => '08123456789',
             ]);
@@ -113,7 +113,7 @@ describe('Auth API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/auth/password', [
+            ->putJson('/api/v1/auth/password', [
                 'current_password' => 'oldpassword',
                 'password' => 'newpassword123',
                 'password_confirmation' => 'newpassword123',

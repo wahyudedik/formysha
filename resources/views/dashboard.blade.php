@@ -7,10 +7,31 @@
 
     <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Welcome Section -->
-        <div class="mb-8 bg-gradient-to-br from-softPink-50 to-lavender-50 dark:from-softPink-950/30 dark:to-lavender-950/30 rounded-3xl p-6 sm:p-8 border border-softPink-100 dark:border-softPink-900/30">
+        <div class="mb-6 bg-gradient-to-br from-softPink-50 to-lavender-50 dark:from-softPink-950/30 dark:to-lavender-950/30 rounded-3xl p-6 sm:p-8 border border-softPink-100 dark:border-softPink-900/30">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Selamat datang kembali, ') }}{{ auth()->user()->name }} 💕</h1>
             <p class="mt-2 text-gray-500 dark:text-gray-400">{{ __('Bersama setiap langkahmu') }}</p>
         </div>
+
+        <!-- Child Selector (multi-child users) -->
+        @if ($children->count() > 1)
+            <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-100 dark:border-gray-700">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400 flex-shrink-0">👶 {{ __('Pilih Anak:') }}</span>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="{{ route('dashboard') }}"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition min-h-[36px] {{ !$selectedChild ? 'bg-softPink-100 dark:bg-softPink-950/30 text-softPink-700 dark:text-softPink-300 border border-softPink-200 dark:border-softPink-800' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
+                            {{ __('Semua Anak') }}
+                        </a>
+                        @foreach ($children as $c)
+                            <a href="{{ route('dashboard', ['child' => $c->slug]) }}"
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition min-h-[36px] {{ ($selectedChild && $selectedChild->id === $c->id) ? 'bg-softPink-100 dark:bg-softPink-950/30 text-softPink-700 dark:text-softPink-300 border border-softPink-200 dark:border-softPink-800' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
+                                {{ $c->gender === 'female' ? '👧' : '👦' }} {{ $c->nickname ?? $c->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <!-- Children Cards -->
         @if ($children->isEmpty())
@@ -29,7 +50,8 @@
             </div>
         @else
             <!-- Child Profile & Stats Section -->
-            @foreach ($children as $child)
+            @php $displayChildren = $selectedChild ? collect([$selectedChild]) : $children; @endphp
+            @foreach ($displayChildren as $child)
                 <div class="mb-8 bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
                     <div class="bg-gradient-to-br from-softPink-50 via-cream-50 to-lavender-50 dark:from-softPink-950/30 dark:via-gray-800 dark:to-lavender-950/30 p-6 sm:p-8">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
@@ -91,8 +113,8 @@
                 <div class="p-4 sm:p-6">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">📸 {{ __('Momen Terbaru') }}</h3>
-                        @if ($children->isNotEmpty())
-                            <a href="{{ route('timeline.index', $children->first()) }}" class="text-sm text-softPink-500 hover:text-softPink-600 dark:text-softPink-400 dark:hover:text-softPink-300 transition font-medium min-h-[44px] inline-flex items-center">
+                        @if ($selectedChild || $children->isNotEmpty())
+                            <a href="{{ route('timeline.index', $selectedChild ?? $children->first()) }}" class="text-sm text-softPink-500 hover:text-softPink-600 dark:text-softPink-400 dark:hover:text-softPink-300 transition font-medium min-h-[44px] inline-flex items-center">
                                 {{ __('Lihat Semua') }}
                             </a>
                         @endif
@@ -233,33 +255,33 @@
         </div>
 
         <!-- Quick Access -->
-        @if ($children->isNotEmpty())
+        @if ($selectedChild || $children->isNotEmpty())
+            @php $quickChild = $selectedChild ?? $children->first(); @endphp
             <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
                 <div class="p-4 sm:p-6">
-                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">⚡ {{ __('Akses Cepat') }}</h3>
-                    @php $firstChild = $children->first(); @endphp
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">⚡ {{ __('Akses Cepat') }}@if($selectedChild) — {{ $selectedChild->nickname ?? $selectedChild->name }}@endif</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
                         <a href="{{ route('children.index') }}" class="p-4 rounded-2xl bg-gradient-to-br from-softPink-50 to-lavender-50 dark:from-softPink-950/30 dark:to-lavender-950/30 border border-softPink-100 dark:border-softPink-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👶</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Anak') }}</div>
                         </a>
-                        <a href="{{ route('timeline.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 border border-lavender-100 dark:border-lavender-900/30 hover:shadow-medium transition text-center group">
+                        <a href="{{ route('timeline.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 border border-lavender-100 dark:border-lavender-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📸</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Timeline') }}</div>
                         </a>
-                        <a href="{{ route('diaries.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-peach-50 to-warmYellow-50 dark:from-peach-950/30 dark:to-warmYellow-950/30 border border-peach-100 dark:border-peach-900/30 hover:shadow-medium transition text-center group">
+                        <a href="{{ route('diaries.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-peach-50 to-warmYellow-50 dark:from-peach-950/30 dark:to-warmYellow-950/30 border border-peach-100 dark:border-peach-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📔</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Diary') }}</div>
                         </a>
-                        <a href="{{ route('calendar.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-skyBlue-50 dark:from-mintGreen-950/30 dark:to-skyBlue-950/30 border border-mintGreen-100 dark:border-mintGreen-900/30 hover:shadow-medium transition text-center group">
+                        <a href="{{ route('calendar.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-skyBlue-50 dark:from-mintGreen-950/30 dark:to-skyBlue-950/30 border border-mintGreen-100 dark:border-mintGreen-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📅</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Kalender') }}</div>
                         </a>
-                        <a href="{{ route('growth.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-cream-50 dark:from-mintGreen-950/30 dark:to-gray-800 border border-mintGreen-100 dark:border-mintGreen-900/30 hover:shadow-medium transition text-center group">
+                        <a href="{{ route('growth.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-cream-50 dark:from-mintGreen-950/30 dark:to-gray-800 border border-mintGreen-100 dark:border-mintGreen-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📏</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Pertumbuhan') }}</div>
                         </a>
-                        <a href="{{ route('health.index', $firstChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-skyBlue-50 to-lavender-50 dark:from-skyBlue-950/30 dark:to-lavender-950/30 border border-skyBlue-100 dark:border-skyBlue-900/30 hover:shadow-medium transition text-center group">
+                        <a href="{{ route('health.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-skyBlue-50 to-lavender-50 dark:from-skyBlue-950/30 dark:to-lavender-950/30 border border-skyBlue-100 dark:border-skyBlue-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🏥</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Kesehatan') }}</div>
                         </a>

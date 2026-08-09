@@ -526,7 +526,7 @@ public/favicon.ico   → Favicon legacy
 * Confirm delete modal (`x-confirm-delete` component)
 * Static pages: Tentang Kami, Kebijakan Privasi, Syarat & Ketentuan
 * Dashboard extracted to `DashboardController`
-* 299 tests, 634 assertions — all passing
+* 299 tests, 633 assertions — all passing
 * Laravel Pint formatting applied
 
 ---
@@ -780,6 +780,46 @@ Dropdown:         max-h-[70vh] overflow-y-auto
 Child nav:        scrollable horizontal di mobile
 Button rounded:   rounded-xl (konsisten)
 ```
+
+---
+
+## Phase 9 — Comprehensive Improvement ✅
+
+### Sub-Phase 9.1 — Bug Fix & Documentation Sync ✅
+
+* Sync `.env.example` — tambah `SAAS_MODE`, `BILLING_*`, `SUPER_ADMIN_PASSWORD`
+* Sync `AGENTS.md` — update Laravel 12 → Laravel 13
+* Sync test counts di `FEATURES.md` & `ROADMAP.md`
+* Standardisasi delete confirm di 3 views (timeline/show, diaries/show, albums/show)
+
+### Sub-Phase 9.2 — Light Features ✅
+
+* Loading state pada form submit utama (children, timeline, albums, diaries, children/edit)
+* Loading state pada auth forms (login, register) — fix Blade/Alpine conflict
+* Audit & pastikan pagination konsisten — already consistent
+
+### Sub-Phase 9.3 — UX Improvements ✅
+
+* Child selector di dashboard — pills + filter + Quick Access fix
+* Quick actions buttons di child show — Share (copy URL) + Edit
+* Keyboard shortcut Ctrl+K → Search
+* Audit toast notification — all controllers consistent
+
+### Sub-Phase 9.4 — Architecture ✅
+
+* **API Versioning**: Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()`
+* **Rate Limiting**: `throttle:upload` (20/min) untuk media upload, `throttle:auth` (5/min) untuk auth, `throttle:api` (60/min) untuk general
+* **Email Notification System**: `NotificationService` (centralized), `WelcomeMail`, `SubscriptionMail` — async via `ShouldQueue`
+* **Automated Backup Command**: `php artisan backup:child-data` — JSON export, cleanup options
+* **Image Optimization Service**: Auto-resize & compress images via GD extension, thumbnail generation, `ImageOptimizationService`
+* **Full-text Search Enhancement**: `SearchService` — centralized search across children, timelines, diaries, documents, events, health, growth, family members
+* **New Migration**: `add_optimization_fields_to_media_table` — `thumbnail_path`, `optimized_size` columns
+
+### Quality Assurance ✅
+
+* **Total Tests**: 490 tests, 1122 assertions — all passing
+* **New Test Files**: `ImageOptimizationServiceTest` (8 tests), `SearchServiceTest` (13 tests), `NotificationServiceTest` (8 tests)
+* **Pint**: Semua file PHP terformat dengan Laravel Pint
 
 ---
 

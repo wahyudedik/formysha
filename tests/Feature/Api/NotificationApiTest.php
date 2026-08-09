@@ -11,7 +11,7 @@ describe('Notification API', function () {
         Notification::factory()->create(['user_id' => $user->id, 'title' => 'Test Notification']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/notifications');
+            ->getJson('/api/v1/notifications');
 
         $response->assertOk()
             ->assertJsonFragment(['title' => 'Test Notification']);
@@ -24,7 +24,7 @@ describe('Notification API', function () {
         $notification = Notification::factory()->unread()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/notifications/'.$notification->id.'/read');
+            ->postJson('/api/v1/notifications/'.$notification->id.'/read');
 
         $response->assertOk();
 
@@ -40,7 +40,7 @@ describe('Notification API', function () {
         Notification::factory()->unread()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/notifications/read-all');
+            ->postJson('/api/v1/notifications/read-all');
 
         $response->assertOk();
 
@@ -60,7 +60,7 @@ describe('Notification API', function () {
         Notification::factory()->read()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/notifications/unread-count');
+            ->getJson('/api/v1/notifications/unread-count');
 
         $response->assertOk()
             ->assertJsonPath('data.count', 2);

@@ -8,7 +8,7 @@ describe('Language API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/me', [
+            ->putJson('/api/v1/me', [
                 'language' => 'en',
             ]);
 
@@ -24,7 +24,7 @@ describe('Language API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/me', [
+            ->putJson('/api/v1/me', [
                 'language' => 'id',
             ]);
 
@@ -37,7 +37,7 @@ describe('Language API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/me', [
+            ->putJson('/api/v1/me', [
                 'language' => 'fr',
             ]);
 
@@ -55,7 +55,7 @@ describe('Language API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/me');
+            ->getJson('/api/v1/me');
 
         $response->assertOk()
             ->assertJsonPath('data.user.language', 'en');

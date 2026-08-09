@@ -23,7 +23,7 @@ describe('White Label API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/branding');
+            ->getJson('/api/v1/tenant-admin/branding');
 
         $response->assertOk()
             ->assertJsonPath('data.organization_name', 'Klinik Sehat')
@@ -41,7 +41,7 @@ describe('White Label API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/tenant-admin/branding/advanced', [
+            ->putJson('/api/v1/tenant-admin/branding/advanced', [
                 'organization_name' => 'Klinik Baru',
                 'primary_color' => '#FF5733',
                 'login_heading' => 'Selamat Datang',
@@ -72,7 +72,7 @@ describe('White Label API', function () {
         $file = UploadedFile::fake()->image('favicon.png', 32, 32);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/tenant-admin/branding/favicon', [
+            ->postJson('/api/v1/tenant-admin/branding/favicon', [
                 'favicon' => $file,
             ]);
 
@@ -90,13 +90,13 @@ describe('White Label API', function () {
         $token = $user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/tenant-admin/branding');
+            ->getJson('/api/v1/tenant-admin/branding');
 
         $response->assertNotFound();
     });
 
     it('requires authentication', function () {
-        $response = $this->getJson('/api/tenant-admin/branding');
+        $response = $this->getJson('/api/v1/tenant-admin/branding');
 
         $response->assertUnauthorized();
     });

@@ -13,7 +13,7 @@ describe('Diary API', function () {
         Diary::factory()->create(['child_id' => $child->id, 'user_id' => $user->id, 'title' => 'My Diary']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->slug.'/diaries');
+            ->getJson('/api/v1/children/'.$child->slug.'/diaries');
 
         $response->assertOk()
             ->assertJsonFragment(['title' => 'My Diary']);
@@ -26,7 +26,7 @@ describe('Diary API', function () {
         $child = Child::factory()->create(['user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->postJson('/api/children/'.$child->slug.'/diaries', [
+            ->postJson('/api/v1/children/'.$child->slug.'/diaries', [
                 'title' => 'Hari Pertama Sekolah',
                 'content' => 'Hari ini adalah hari pertama sekolah.',
                 'mood' => 'excited',
@@ -45,7 +45,7 @@ describe('Diary API', function () {
         $diary = Diary::factory()->create(['child_id' => $child->id, 'user_id' => $user->id, 'title' => 'Test Diary']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->getJson('/api/children/'.$child->slug.'/diaries/'.$diary->id);
+            ->getJson('/api/v1/children/'.$child->slug.'/diaries/'.$diary->id);
 
         $response->assertOk()
             ->assertJsonPath('data.title', 'Test Diary');
@@ -59,7 +59,7 @@ describe('Diary API', function () {
         $diary = Diary::factory()->create(['child_id' => $child->id, 'user_id' => $user->id, 'title' => 'Old Title']);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->putJson('/api/children/'.$child->slug.'/diaries/'.$diary->id, [
+            ->putJson('/api/v1/children/'.$child->slug.'/diaries/'.$diary->id, [
                 'title' => 'Updated Title',
                 'content' => 'Updated content',
                 'diary_date' => '2025-07-01',
@@ -77,7 +77,7 @@ describe('Diary API', function () {
         $diary = Diary::factory()->create(['child_id' => $child->id, 'user_id' => $user->id]);
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
-            ->deleteJson('/api/children/'.$child->slug.'/diaries/'.$diary->id);
+            ->deleteJson('/api/v1/children/'.$child->slug.'/diaries/'.$diary->id);
 
         $response->assertOk();
 

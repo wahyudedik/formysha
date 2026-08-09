@@ -27,7 +27,7 @@ describe('Plan API', function () {
             'is_active' => true,
         ]);
 
-        $response = $this->getJson('/api/plans');
+        $response = $this->getJson('/api/v1/plans');
 
         $response->assertOk()
             ->assertJsonCount(2, 'data');
@@ -46,7 +46,7 @@ describe('Plan API', function () {
             'is_active' => true,
         ]);
 
-        $response = $this->getJson('/api/plans/'.$plan->id);
+        $response = $this->getJson('/api/v1/plans/'.$plan->id);
 
         $response->assertOk()
             ->assertJsonPath('data.name', 'Premium Plan');
