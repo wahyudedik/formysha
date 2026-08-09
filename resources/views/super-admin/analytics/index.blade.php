@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('super-admin.partials.sidebar')
@@ -81,10 +81,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     {{-- Revenue per Month --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Pendapatan Bulanan') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             <div class="space-y-3">
                                 @forelse ($revenuePerMonth as $item)
                                     <div class="flex items-center gap-4">
@@ -117,10 +117,10 @@
 
                     {{-- New Tenants per Month --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Tenant Baru per Bulan') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             <div class="space-y-3">
                                 @forelse ($newTenantsPerMonth as $item)
                                     <div class="flex items-center gap-4">
@@ -155,10 +155,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Subscription Distribution --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Distribusi Langganan') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             <div class="space-y-3">
                                 @php $totalSubs = collect($subscriptionDistribution)->sum('count'); @endphp
                                 @foreach ($subscriptionDistribution as $item)
@@ -194,10 +194,10 @@
 
                     {{-- Top Plans --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏆 {{ __('Paket Populer') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @if ($topPlans->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">📋</div>
@@ -228,11 +228,11 @@
                 {{-- Revenue by Plan --}}
                 @if ($revenueByPlan->isNotEmpty())
                     <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('Pendapatan per Paket') }}</h3>
                         </div>
-                        <div class="p-6">
-                            <div class="overflow-x-auto">
+                        <div class="p-4 sm:p-6">
+                            <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                                 <table class="w-full text-sm">
                                     <thead>
                                         <tr class="border-b border-gray-100 dark:border-gray-700">

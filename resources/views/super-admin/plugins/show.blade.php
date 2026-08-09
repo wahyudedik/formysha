@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 🧩 {{ $plugin->name }}
             </h2>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-row flex-wrap gap-2">
                 <form method="POST" action="{{ route('super-admin.plugins.destroy', $plugin) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus plugin ini?')">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
+                    <button type="submit" class="min-h-[44px] px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
                         🗑️ Hapus
                     </button>
                 </form>
@@ -16,7 +16,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -30,7 +30,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {{-- Plugin Info --}}
                     <div class="lg:col-span-2">
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                             <div class="flex items-center gap-3 mb-6">
                                 <span class="text-4xl">{{ $plugin->icon ?? '🧩' }}</span>
                                 <div>
@@ -68,7 +68,7 @@
                         </div>
 
                         {{-- Recent Logs --}}
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mt-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mt-6">
                             <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-4">📋 Log Aktivitas Terbaru</h4>
 
                             @if($recentLogs->isEmpty())
@@ -101,7 +101,7 @@
 
                     {{-- Sidebar Stats --}}
                     <div>
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                             <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-4">📊 Statistik</h4>
 
                             <div class="space-y-4">

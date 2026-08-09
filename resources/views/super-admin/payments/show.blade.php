@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 💳 {{ __('Detail Pembayaran') }}
             </h2>
             @if ($payment->status === 'pending')
-                <div class="flex items-center gap-2">
+                <div class="flex flex-row flex-wrap gap-2">
                     <button
                         type="button"
-                        class="inline-flex items-center px-4 py-2 bg-mintGreen-500 text-white text-sm font-semibold rounded-xl hover:bg-mintGreen-600 transition"
+                        class="inline-flex items-center min-h-[44px] px-4 py-2 bg-mintGreen-500 text-white text-sm font-semibold rounded-xl hover:bg-mintGreen-600 transition"
                         x-data
                         x-on:click="$dispatch('open-modal', 'approve-payment')"
                     >
@@ -16,7 +16,7 @@
                     </button>
                     <button
                         type="button"
-                        class="inline-flex items-center px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 transition"
+                        class="inline-flex items-center min-h-[44px] px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 transition"
                         x-data
                         x-on:click="$dispatch('open-modal', 'reject-payment')"
                     >
@@ -27,7 +27,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -41,10 +41,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Payment Info --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Informasi Pembayaran') }}</h3>
                         </div>
-                        <div class="p-6 space-y-4">
+                        <div class="p-4 sm:p-6 space-y-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Status</span>
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
@@ -113,10 +113,10 @@
 
                     {{-- Proof Image --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">🖼️ {{ __('Bukti Transfer') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @if ($payment->proof_path)
                                 <div class="rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700">
                                     <img
@@ -145,7 +145,7 @@
 
     {{-- Approve Modal --}}
     <x-modal name="approve-payment" :show="false" maxWidth="md">
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
             <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">✅ Setujui Pembayaran</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Konfirmasi bahwa pembayaran ini telah diterima.</p>
 
@@ -157,11 +157,11 @@
                     <textarea id="approve-notes" name="notes" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-xl focus:border-mintGreen-300 focus:ring-mintGreen-200 text-sm" placeholder="Tambahkan catatan jika diperlukan...">{{ old('notes') }}</textarea>
                 </div>
 
-                <div class="flex justify-end gap-3">
-                    <button type="button" x-on:click="$dispatch('close-modal', 'approve-payment')" class="px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <div class="flex flex-col sm:flex-row justify-end gap-3">
+                    <button type="button" x-on:click="$dispatch('close-modal', 'approve-payment')" class="min-h-[44px] px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                         Batal
                     </button>
-                    <button type="submit" class="px-4 py-2 rounded-xl bg-mintGreen-500 text-white text-sm font-semibold hover:bg-mintGreen-600 transition">
+                    <button type="submit" class="min-h-[44px] px-4 py-2 rounded-xl bg-mintGreen-500 text-white text-sm font-semibold hover:bg-mintGreen-600 transition">
                         Ya, Setujui
                     </button>
                 </div>
@@ -171,7 +171,7 @@
 
     {{-- Reject Modal --}}
     <x-modal name="reject-payment" :show="false" maxWidth="md">
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
             <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">❌ Tolak Pembayaran</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Berikan alasan penolakan pembayaran ini.</p>
 
@@ -184,11 +184,11 @@
                     <x-input-error :messages="$errors->get('notes')" class="mt-1" />
                 </div>
 
-                <div class="flex justify-end gap-3">
-                    <button type="button" x-on:click="$dispatch('close-modal', 'reject-payment')" class="px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <div class="flex flex-col sm:flex-row justify-end gap-3">
+                    <button type="button" x-on:click="$dispatch('close-modal', 'reject-payment')" class="min-h-[44px] px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                         Batal
                     </button>
-                    <button type="submit" class="px-4 py-2 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition">
+                    <button type="submit" class="min-h-[44px] px-4 py-2 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition">
                         Ya, Tolak
                     </button>
                 </div>

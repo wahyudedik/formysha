@@ -13,8 +13,8 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6 sm:p-8">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-4 sm:p-6 lg:p-8">
                 <x-child-selector :children="$children" :child="$child" :route-name="'family.create'" />
 
                 <div class="mb-6">
@@ -71,14 +71,14 @@
                     </div>
 
                     <!-- Submit -->
-                    <div class="flex items-center gap-4 pt-4">
-                        <button type="submit" class="btn-primary">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
+                        <button type="submit" class="btn-primary min-h-[44px]">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                             {{ __('Simpan') }}
                         </button>
-                        <a href="{{ route('family.index', $child) }}" class="btn-secondary">
+                        <a href="{{ route('family.index', $child) }}" class="btn-secondary min-h-[44px]">
                             {{ __('Batal') }}
                         </a>
                     </div>

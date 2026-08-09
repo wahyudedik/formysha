@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-100 leading-tight">
                 🔔 Notifikasi
             </h2>
             @if($unreadCount > 0)
                 <form method="POST" action="{{ route('notifications.markAllRead') }}">
                     @csrf
-                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-skyBlue/10 text-skyBlue-700 rounded-xl text-sm font-medium hover:bg-skyBlue/20 transition-colors">
+                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 min-h-[44px] bg-skyBlue/10 text-skyBlue-700 rounded-xl text-sm font-medium hover:bg-skyBlue/20 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
@@ -18,7 +18,7 @@
         </div>
     </x-slot>
 
-    <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <!-- Summary -->
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
             <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">

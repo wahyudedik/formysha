@@ -1,16 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 📜 {{ __('Riwayat Langganan') }}
             </h2>
-            <a href="{{ route('subscription.current') }}" class="btn-secondary text-sm">
+            <a href="{{ route('subscription.current') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center self-start">
                 ← {{ __('Kembali') }}
             </a>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-5xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-breadcrumb :items="[
             ['label' => 'Langganan', 'url' => route('subscription.current')],
             ['label' => 'Riwayat'],
@@ -18,7 +18,7 @@
 
         {{-- Desktop Table --}}
         <div class="hidden md:block bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="border-b border-gray-100 dark:border-gray-700">
@@ -112,7 +112,7 @@
                         <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $sub->starts_at->locale('id')->isoFormat('D MMM') }} — {{ $sub->ends_at->locale('id')->isoFormat('D MMM YYYY') }}</p>
                     @endif
                     @if ($sub->status === 'pending')
-                        <a href="{{ route('subscription.payment.upload', $sub) }}" class="mt-3 block text-center py-2 rounded-xl bg-warmYellow-50 text-warmYellow-600 text-xs font-medium hover:bg-warmYellow-100 dark:bg-warmYellow-950/30 dark:text-warmYellow-400 dark:hover:bg-warmYellow-950/50 transition">
+                        <a href="{{ route('subscription.payment.upload', $sub) }}" class="mt-3 block text-center py-2 rounded-xl bg-warmYellow-50 text-warmYellow-600 text-xs font-medium hover:bg-warmYellow-100 dark:bg-warmYellow-950/30 dark:text-warmYellow-400 dark:hover:bg-warmYellow-950/50 transition min-h-[44px] flex items-center justify-center">
                             💳 Bayar Sekarang
                         </a>
                     @endif

@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-3xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-breadcrumb :items="[
             ['label' => 'Langganan', 'url' => route('subscription.current')],
             ['label' => 'Upload Pembayaran'],
@@ -14,10 +14,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {{-- Subscription Info --}}
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Detail Langganan') }}</h3>
                 </div>
-                <div class="p-6 space-y-4">
+                <div class="p-4 sm:p-6 space-y-4">
                     <div class="flex justify-between items-center">
                         <span class="text-sm text-gray-500 dark:text-gray-400">Paket</span>
                         <span class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->name ?? '-' }}</span>
@@ -41,11 +41,11 @@
 
             {{-- Bank Accounts --}}
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏦 {{ __('Rekening Tujuan') }}</h3>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Transfer ke salah satu rekening berikut:</p>
                 </div>
-                <div class="p-6 space-y-4">
+                <div class="p-4 sm:p-6 space-y-4">
                     @foreach (config('saas.banks', []) as $bankName => $bankInfo)
                         <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600">
                             <div class="flex items-center justify-between mb-1">
@@ -64,11 +64,11 @@
 
         {{-- Upload Form --}}
         <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+            <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">📤 {{ __('Upload Bukti Transfer') }}</h3>
             </div>
 
-            <form method="POST" action="{{ route('subscription.payment.store') }}" enctype="multipart/form-data" class="p-6">
+            <form method="POST" action="{{ route('subscription.payment.store') }}" enctype="multipart/form-data" class="p-4 sm:p-6">
                 @csrf
 
                 <input type="hidden" name="subscription_id" value="{{ $subscription->id }}">
@@ -127,11 +127,11 @@
                     </div>
                 </div>
 
-                <div class="mt-6 flex items-center gap-3">
-                    <button type="submit" class="btn-primary text-sm">
+                <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <button type="submit" class="btn-primary text-sm min-h-[44px]">
                         📤 {{ __('Kirim Bukti Transfer') }}
                     </button>
-                    <a href="{{ route('subscription.current') }}" class="btn-secondary text-sm">
+                    <a href="{{ route('subscription.current') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center justify-center">
                         {{ __('Batal') }}
                     </a>
                 </div>

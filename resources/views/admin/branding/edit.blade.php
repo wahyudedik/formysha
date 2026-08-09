@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 🎨 {{ __('Branding') }}
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('admin.partials.sidebar')
@@ -35,7 +35,7 @@
                         {{-- Form Section --}}
                         <div class="space-y-6">
                             {{-- Organization Name --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">📋 {{ __('Informasi Organisasi') }}</h3>
                                 <div>
                                     <label for="organization_name" class="block text-sm font-medium text-gray-700 mb-1">Nama Organisasi</label>
@@ -54,7 +54,7 @@
                             </div>
 
                             {{-- Logo & Favicon --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">🖼️ {{ __('Logo & Favicon') }}</h3>
                                 <div class="space-y-4">
                                     {{-- Logo --}}
@@ -110,7 +110,7 @@
                             </div>
 
                             {{-- Colors --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">🎨 {{ __('Warna') }}</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <div>
@@ -174,7 +174,7 @@
                             </div>
 
                             {{-- Custom CSS --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">💻 {{ __('app.branding.custom_css') }}</h3>
                                 <textarea
                                     name="custom_css"
@@ -190,7 +190,7 @@
 
                             {{-- Submit --}}
                             <div class="flex justify-end">
-                                <button type="submit" class="btn-primary">
+                                <button type="submit" class="btn-primary min-h-[44px]">
                                     💾 {{ __('app.actions.save') }}
                                 </button>
                             </div>
@@ -199,7 +199,7 @@
                         {{-- Advanced Settings Section --}}
                         <div class="space-y-6" x-show="showAdvanced" x-transition>
                             {{-- Login Customization --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">🔐 {{ __('app.branding.login_customization') }}</h3>
                                 <div class="space-y-4">
                                     <div>
@@ -234,7 +234,7 @@
                             </div>
 
                             {{-- Email Sender --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">📧 {{ __('app.branding.email_sender') }}</h3>
                                 <div class="space-y-4">
                                     <div>
@@ -269,7 +269,7 @@
                             </div>
 
                             {{-- Footer Text --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">📝 {{ __('app.branding.footer_text') }}</h3>
                                 <textarea
                                     name="footer_text"
@@ -283,7 +283,7 @@
                             </div>
 
                             {{-- White Label Toggle --}}
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100">
                                 <h3 class="font-semibold text-gray-800 mb-4">🏷️ {{ __('app.saas.white_label') }}</h3>
                                 <div class="flex items-center gap-3">
                                     <label class="relative inline-flex items-center cursor-pointer">
@@ -303,7 +303,7 @@
 
                             {{-- Submit Advanced --}}
                             <div class="flex justify-end">
-                                <button type="submit" class="btn-primary">
+                                <button type="submit" class="btn-primary min-h-[44px]">
                                     💾 {{ __('app.actions.save') }} {{ __('app.branding.advanced_settings') }}
                                 </button>
                             </div>
@@ -311,7 +311,7 @@
 
                         {{-- Preview Section --}}
                         <div class="space-y-6">
-                            <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100 sticky top-24">
+                            <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 sticky top-24">
                                 <h3 class="font-semibold text-gray-800 mb-4">👁️ {{ __('Preview') }}</h3>
                                 <div class="rounded-xl border border-gray-200 overflow-hidden">
                                     {{-- Header Preview --}}

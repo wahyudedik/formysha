@@ -36,7 +36,7 @@
 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl" x-data="{ view: 'grid' }">
     <div class="p-6">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
             <div class="flex items-center gap-3">
                 <button @click="view = view === 'grid' ? 'list' : 'grid'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition {{ 'bg-skyBlue-100 text-skyBlue-700 dark:bg-skyBlue-950/30 dark:text-skyBlue-300' }}">
                     <span x-show="view === 'grid'">📋 Daftar</span>
@@ -45,14 +45,14 @@
             </div>
             <div class="flex items-center gap-2">
                 <a href="{{ route('calendar.index', ['child' => $child, 'month' => $prevMonth, 'year' => $prevYear]) }}"
-                   class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                   class="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                      <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                      </svg>
                  </a>
                  <span class="text-sm font-semibold text-gray-800 dark:text-gray-100 min-w-[160px] text-center">{{ $monthName }}</span>
                  <a href="{{ route('calendar.index', ['child' => $child, 'month' => $nextMonth, 'year' => $nextYear]) }}"
-                    class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    class="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                      <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>

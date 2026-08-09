@@ -52,13 +52,13 @@
 <!-- Mobile Bottom Navigation -->
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-t border-gray-100 dark:border-gray-700 z-50 safe-bottom"
      x-data="{ moreOpen: false }" @click.outside="moreOpen = false">
-    <div class="flex items-center justify-around py-2 px-1">
+    <div class="flex items-center justify-around py-2 px-1 safe-bottom">
         @foreach ($visibleModules as $module)
             @php
                 $isActive = request()->routeIs($module['route']);
             @endphp
             <a href="{{ route($module['route'], $child) }}"
-               class="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl text-xs transition-all duration-200
+               class="flex flex-col items-center gap-0.5 px-2 py-1 min-h-[44px] rounded-xl text-xs transition-all duration-200
                       {{ $isActive
                           ? 'text-softPink-600'
                           : 'text-gray-400' }}">
@@ -69,7 +69,7 @@
 
         <!-- More / Overflow Button -->
         <button @click="moreOpen = !moreOpen"
-                class="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl text-xs transition-all duration-200
+                class="flex flex-col items-center gap-0.5 px-2 py-1 min-h-[44px] rounded-xl text-xs transition-all duration-200
                        {{ $hasOverflowActive ? 'text-softPink-600' : 'text-gray-400' }}">
             <span class="text-lg leading-none">⋯</span>
             <span class="font-medium leading-tight">Lainnya</span>

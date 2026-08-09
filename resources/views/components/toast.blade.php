@@ -32,7 +32,7 @@
         <div class="flex items-center gap-3 p-4 rounded-2xl border shadow-lg" :class="colors[type]">
             <span class="text-lg" x-text="icons[type]"></span>
             <p class="text-sm font-medium flex-1" x-text="message"></p>
-            <button @click="show = false" class="text-current opacity-50 hover:opacity-100 transition-opacity">
+            <button @click="show = false" class="text-current opacity-50 hover:opacity-100 transition-opacity min-h-[44px] min-w-[44px] inline-flex items-center justify-center">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>

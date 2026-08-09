@@ -17,7 +17,7 @@
                     <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-lg">
                         🔍
                     </div>
-                    <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-2 bg-skyBlue-500 text-white text-sm font-medium rounded-xl hover:bg-skyBlue-600 transition">
+                    <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-2 min-h-[44px] bg-skyBlue-500 text-white text-sm font-medium rounded-xl hover:bg-skyBlue-600 transition">
                         Cari
                     </button>
                 </div>
@@ -38,7 +38,7 @@
                     @endphp
                     @foreach ($modules as $moduleKey => $moduleInfo)
                         <a href="{{ route('search.index', array_merge(['q' => $query], $module === $moduleKey ? [] : ['module' => $moduleKey])) }}"
-                           class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $module === $moduleKey ? 'bg-skyBlue-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:border-gray-600' }}">
+                           class="px-4 py-2 min-h-[44px] inline-flex items-center rounded-xl text-sm font-medium transition {{ $module === $moduleKey ? 'bg-skyBlue-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:border-gray-600' }}">
                             {{ $moduleInfo['icon'] }} {{ $moduleInfo['label'] }}
                             @if (isset($counts[$moduleKey]) && $counts[$moduleKey] > 0)
                                 <span class="ml-1 text-xs opacity-75">({{ $counts[$moduleKey] }})</span>

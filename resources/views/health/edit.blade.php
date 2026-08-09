@@ -10,7 +10,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
             {{-- Child Info --}}
             <div class="mb-6 p-4 bg-skyBlue-50 dark:bg-skyBlue-950/30 rounded-2xl border border-skyBlue-100 dark:border-skyBlue-900/30">
                 <div class="flex items-center gap-3">
@@ -114,11 +114,11 @@
                 </div>
 
                 {{-- Actions --}}
-                <div class="flex items-center justify-end gap-3">
-                    <a href="{{ route('health.index', $child) }}" class="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
+                    <a href="{{ route('health.index', $child) }}" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition min-h-[44px]">
                         Batal
                     </a>
-                    <x-primary-button type="submit">
+                    <x-primary-button type="submit" class="min-h-[44px]">
                         💾 Perbarui Catatan
                     </x-primary-button>
                 </div>

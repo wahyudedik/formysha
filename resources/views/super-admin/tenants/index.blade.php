@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 🏢 {{ __('Manajemen Tenant') }}
             </h2>
-            <a href="{{ route('super-admin.tenants.create') }}" class="btn-primary text-sm">
+            <a href="{{ route('super-admin.tenants.create') }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center self-start">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -13,7 +13,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -25,7 +25,7 @@
 
                 {{-- Desktop Table --}}
                 <div class="hidden md:block bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-100 dark:border-gray-700">
@@ -101,7 +101,7 @@
                 {{-- Mobile Cards --}}
                 <div class="md:hidden space-y-3">
                     @forelse ($tenants as $tenant)
-                        <a href="{{ route('super-admin.tenants.show', $tenant) }}" class="block bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 border border-gray-100 dark:border-gray-700">
+                        <a href="{{ route('super-admin.tenants.show', $tenant) }}" class="block bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 border border-gray-100 dark:border-gray-700 min-h-[44px]">
                             <div class="flex items-center gap-3">
                                 <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-skyBlue-400 to-lavender-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
                                     {{ strtoupper(substr($tenant->name, 0, 1)) }}

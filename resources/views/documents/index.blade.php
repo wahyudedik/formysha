@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div class="flex items-center gap-3">
                 <a href="{{ route('children.show', $child) }}" class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -11,7 +11,7 @@
                     📄 {{ __('My Documents') }} — {{ $child->nickname ?? $child->name }}
                 </h2>
             </div>
-            <a href="{{ route('documents.create', $child) }}" class="btn-primary text-sm">
+            <a href="{{ route('documents.create', $child) }}" class="btn-primary text-sm min-h-[44px]">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -21,7 +21,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if (session('status'))
                 <div class="mb-6 p-4 bg-mintGreen-50 dark:bg-mintGreen-950/30 border border-mintGreen-200 dark:border-mintGreen-800 text-mintGreen-700 dark:text-mintGreen-400 rounded-xl" x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)">
                     {{ session('status') }}
@@ -34,7 +34,7 @@
                     <div class="text-6xl mb-4">📋</div>
                     <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ __('Belum Ada Dokumen') }}</h3>
                     <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('Simpan dokumen penting ' . ($child->nickname ?? $child->name) . ' di sini.') }}</p>
-                    <a href="{{ route('documents.create', $child) }}" class="btn-primary">
+                    <a href="{{ route('documents.create', $child) }}" class="btn-primary min-h-[44px]">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>

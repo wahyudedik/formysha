@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('super-admin.partials.sidebar')
@@ -82,15 +82,15 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Recent Pending Payments --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
-                            <div class="flex items-center justify-between">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">⏳ {{ __('Pembayaran Pending') }}</h3>
-                                <a href="{{ route('super-admin.payments.index') }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 dark:text-skyBlue-400 dark:hover:text-skyBlue-300 transition">
+                                <a href="{{ route('super-admin.payments.index') }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 dark:text-skyBlue-400 dark:hover:text-skyBlue-300 transition min-h-[44px] inline-flex items-center">
                                     Lihat Semua →
                                 </a>
                             </div>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @if ($recentPayments->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">✅</div>
@@ -116,15 +116,15 @@
 
                     {{-- Recent Tenants --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
-                            <div class="flex items-center justify-between">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏢 {{ __('Tenant Terbaru') }}</h3>
-                                <a href="{{ route('super-admin.tenants.index') }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 dark:text-skyBlue-400 dark:hover:text-skyBlue-300 transition">
+                                <a href="{{ route('super-admin.tenants.index') }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 dark:text-skyBlue-400 dark:hover:text-skyBlue-300 transition min-h-[44px] inline-flex items-center">
                                     Lihat Semua →
                                 </a>
                             </div>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @if ($recentTenants->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">🏢</div>
@@ -157,22 +157,22 @@
                 </div>
 
                 {{-- Quick Actions --}}
-                <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6">
+                <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🚀 {{ __('Aksi Cepat') }}</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <a href="{{ route('super-admin.tenants.create') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition text-center">
+                        <a href="{{ route('super-admin.tenants.create') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">➕</span>
                             <span class="text-xs font-medium text-skyBlue-700 dark:text-skyBlue-400">Tambah Tenant</span>
                         </a>
-                        <a href="{{ route('super-admin.plans.create') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 hover:bg-lavender-100 dark:hover:bg-lavender-950/50 transition text-center">
+                        <a href="{{ route('super-admin.plans.create') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 hover:bg-lavender-100 dark:hover:bg-lavender-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">📋</span>
                             <span class="text-xs font-medium text-lavender-700 dark:text-lavender-400">Tambah Paket</span>
                         </a>
-                        <a href="{{ route('super-admin.payments.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-warmYellow-50 dark:bg-warmYellow-950/30 hover:bg-warmYellow-100 dark:hover:bg-warmYellow-950/50 transition text-center">
+                        <a href="{{ route('super-admin.payments.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-warmYellow-50 dark:bg-warmYellow-950/30 hover:bg-warmYellow-100 dark:hover:bg-warmYellow-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">💳</span>
                             <span class="text-xs font-medium text-warmYellow-700 dark:text-warmYellow-400">Verifikasi Bayar</span>
                         </a>
-                        <a href="{{ route('super-admin.audit-logs.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-peach-50 dark:bg-peach-950/30 hover:bg-peach-100 dark:hover:bg-peach-950/50 transition text-center">
+                        <a href="{{ route('super-admin.audit-logs.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-peach-50 dark:bg-peach-950/30 hover:bg-peach-100 dark:hover:bg-peach-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">📜</span>
                             <span class="text-xs font-medium text-peach-700 dark:text-peach-400">Audit Log</span>
                         </a>

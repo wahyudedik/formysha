@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('super-admin.partials.sidebar')
@@ -77,10 +77,10 @@
 
                 {{-- System Health --}}
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden mb-6">
-                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                    <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏥 {{ __('Kesehatan Sistem') }}</h3>
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {{-- Database --}}
                             <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
@@ -113,10 +113,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     {{-- Recent Login Activity --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">🔐 {{ __('Aktivitas Login Terbaru') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @if ($recentLogins->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">🔐</div>
@@ -142,10 +142,10 @@
 
                     {{-- Error Log Summary --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">⚠️ {{ __('Log Error Terbaru') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @if ($recentErrors->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">✅</div>
@@ -172,10 +172,10 @@
 
                 {{-- Storage Usage per Tenant --}}
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                    <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">💾 {{ __('Penggunaan Penyimpanan per Tenant') }}</h3>
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         @if ($tenantStorage->isEmpty())
                             <div class="text-center py-8">
                                 <div class="text-4xl mb-3">💾</div>

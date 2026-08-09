@@ -6,16 +6,16 @@
             ['label' => 'Kesehatan', 'url' => route('health.index', $child)],
             ['label' => $healthRecord->name],
         ]" />
-        <div class="flex items-center justify-between mt-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
             <x-page-header title="{{ $healthRecord->type_icon }} {{ $healthRecord->name }}" subtitle="{{ $healthRecord->type_label }} — {{ $healthRecord->formatted_date }}" />
             <div class="flex items-center gap-2">
-                <a href="{{ route('health.edit', [$child, $healthRecord]) }}" class="px-4 py-2 bg-skyBlue-500 text-white rounded-xl hover:bg-skyBlue-600 transition text-sm font-medium">
+                <a href="{{ route('health.edit', [$child, $healthRecord]) }}" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-skyBlue-500 text-white rounded-xl hover:bg-skyBlue-600 transition text-sm font-medium min-h-[44px]">
                     ✏️ Edit
                 </a>
                 <form method="POST" action="{{ route('health.destroy', [$child, $healthRecord]) }}" x-data>
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition text-sm font-medium" x-on:click.prevent="if(confirm('Yakin ingin menghapus catatan ini?')) $el.closest('form').submit()">
+                    <button type="submit" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-red-500 text-white rounded-xl hover:bg-red-600 transition text-sm font-medium min-h-[44px]" x-on:click.prevent="if(confirm('Yakin ingin menghapus catatan ini?')) $el.closest('form').submit()">
                         🗑️ Hapus
                     </button>
                 </form>
@@ -24,7 +24,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
             <x-child-nav :child="$child" active="health" />
 
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">

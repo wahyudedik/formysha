@@ -41,7 +41,7 @@
 <body class="gradient-bg min-h-screen">
     <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {{-- Header / Profile Card --}}
-        <div class="card p-8 mb-8 text-center fade-in">
+        <div class="card p-4 sm:p-6 lg:p-8 mb-8 text-center fade-in">
             {{-- Photo --}}
             <div class="mb-6">
                 @if($child->photo)
@@ -99,7 +99,7 @@
 
         {{-- Timeline Section --}}
         @if($showTimeline && count($child->timelines) > 0)
-            <div class="card p-6 mb-8 fade-in" style="animation-delay: 0.1s;">
+            <div class="card p-4 sm:p-6 mb-8 fade-in" style="animation-delay: 0.1s;">
                 <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                     📸 Timeline
                 </h2>
@@ -129,7 +129,7 @@
 
         {{-- Gallery Section --}}
         @if($showGallery)
-            <div class="card p-6 mb-8 fade-in" style="animation-delay: 0.2s;">
+            <div class="card p-4 sm:p-6 mb-8 fade-in" style="animation-delay: 0.2s;">
                 <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                     🖼️ Galeri
                 </h2>
@@ -156,7 +156,7 @@
 
         {{-- Awards Section --}}
         @if($showAwards)
-            <div class="card p-6 mb-8 fade-in" style="animation-delay: 0.3s;">
+            <div class="card p-4 sm:p-6 mb-8 fade-in" style="animation-delay: 0.3s;">
                 <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                     🏆 Penghargaan
                 </h2>

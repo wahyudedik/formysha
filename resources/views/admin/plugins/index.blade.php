@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 🧩 Marketplace Plugin
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('admin.partials.sidebar')
 
@@ -18,7 +18,7 @@
                 ]" />
 
                 {{-- Installed Plugins --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">📦 Plugin Terinstall</h3>
 
                     @if($installedPlugins->isEmpty())
@@ -51,7 +51,7 @@
                                     <div class="flex items-center gap-2">
                                         <form method="POST" action="{{ route('admin.plugins.toggle', $tenantPlugin->plugin) }}">
                                             @csrf
-                                            <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium {{ $tenantPlugin->is_enabled ? 'bg-warmYellow-100 dark:bg-warmYellow-950/30 text-warmYellow-700 dark:text-warmYellow-400 hover:bg-warmYellow-200 dark:hover:bg-warmYellow-950/50' : 'bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-700 dark:text-mintGreen-400 hover:bg-mintGreen-200 dark:hover:bg-mintGreen-950/50' }} transition-colors">
+                                            <button type="submit" class="min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-medium {{ $tenantPlugin->is_enabled ? 'bg-warmYellow-100 dark:bg-warmYellow-950/30 text-warmYellow-700 dark:text-warmYellow-400 hover:bg-warmYellow-200 dark:hover:bg-warmYellow-950/50' : 'bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-700 dark:text-mintGreen-400 hover:bg-mintGreen-200 dark:hover:bg-mintGreen-950/50' }} transition-colors">
                                                 {{ $tenantPlugin->is_enabled ? '⏸️ Nonaktifkan' : '▶️ Aktifkan' }}
                                             </button>
                                         </form>
@@ -59,7 +59,7 @@
                                         <form method="POST" action="{{ route('admin.plugins.uninstall', $tenantPlugin->plugin) }}" onsubmit="return confirm('Apakah Anda yakin ingin menguninstall plugin ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors">
+                                            <button type="submit" class="min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors">
                                                 🗑️ Hapus
                                             </button>
                                         </form>
@@ -71,7 +71,7 @@
                 </div>
 
                 {{-- Available Plugins --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">🏪 Tersedia di Marketplace</h3>
 
                     @if($availablePlugins->isEmpty())
@@ -112,7 +112,7 @@
                                         @else
                                             <form method="POST" action="{{ route('admin.plugins.install', $plugin) }}">
                                                 @csrf
-                                                <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400 hover:bg-skyBlue-200 dark:hover:bg-skyBlue-950/50 transition-colors">
+                                                <button type="submit" class="min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-medium bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400 hover:bg-skyBlue-200 dark:hover:bg-skyBlue-950/50 transition-colors">
                                                     📥 Install
                                                 </button>
                                             </form>

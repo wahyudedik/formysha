@@ -1,24 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 🏢 {{ $tenant->name }}
             </h2>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-row flex-wrap gap-2">
                 <form method="POST" action="{{ route('super-admin.tenants.toggle-status', $tenant) }}" class="inline">
                     @csrf
-                    <button type="submit" class="btn-secondary text-sm {{ $tenant->is_active ? 'hover:bg-warmYellow-50 hover:border-warmYellow-300 dark:hover:bg-warmYellow-950/20 dark:hover:border-warmYellow-600' : 'hover:bg-mintGreen-50 hover:border-mintGreen-300 dark:hover:bg-mintGreen-950/20 dark:hover:border-mintGreen-600' }}">
+                    <button type="submit" class="btn-secondary text-sm min-h-[44px] {{ $tenant->is_active ? 'hover:bg-warmYellow-50 hover:border-warmYellow-300 dark:hover:bg-warmYellow-950/20 dark:hover:border-warmYellow-600' : 'hover:bg-mintGreen-50 hover:border-mintGreen-300 dark:hover:bg-mintGreen-950/20 dark:hover:border-mintGreen-600' }}">
                         {{ $tenant->is_active ? '⏸️ Nonaktifkan' : '▶️ Aktifkan' }}
                     </button>
                 </form>
-                <a href="{{ route('super-admin.tenants.edit', $tenant) }}" class="btn-accent text-sm">
+                <a href="{{ route('super-admin.tenants.edit', $tenant) }}" class="btn-accent text-sm min-h-[44px] inline-flex items-center">
                     ✏️ Edit
                 </a>
             </div>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -83,10 +83,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Detail Info --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Detail Tenant') }}</h3>
                         </div>
-                        <div class="p-6 space-y-4">
+                        <div class="p-4 sm:p-6 space-y-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Nama</span>
                                 <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $tenant->name }}</span>
@@ -118,10 +118,10 @@
 
                     {{-- Subscription History --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">💳 {{ __('Riwayat Langganan') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @php
                                 $subscriptions = $tenant->subscriptions()->with('plan')->latest()->take(5)->get();
                             @endphp
@@ -159,12 +159,12 @@
                 </div>
 
                 {{-- Delete --}}
-                <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6">
+                <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6">
                     <h3 class="font-semibold text-red-600 dark:text-red-400 mb-2">⚠️ Zona Bahaya</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Menghapus tenant akan menghapus semua data terkait secara permanen.</p>
                     <button
                         type="button"
-                        class="inline-flex items-center px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 transition"
+                        class="inline-flex items-center px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 transition min-h-[44px]"
                         x-data
                         x-on:click="$dispatch('delete-confirm', 'delete-tenant')"
                     >

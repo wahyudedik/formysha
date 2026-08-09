@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 📥 {{ __('Import Data') }}
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('admin.partials.sidebar')
@@ -21,7 +21,7 @@
                 ]" />
 
                 {{-- Import Form --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Import Data Baru</h3>
                     <form x-data="{ uploading: false, progress: 0 }" @submit.prevent="
                         uploading = true;
@@ -75,7 +75,7 @@
                                 <button
                                     type="submit"
                                     :disabled="uploading"
-                                    class="w-full px-4 py-2 bg-gradient-to-r from-skyBlue-500 to-mintGreen-500 text-white rounded-xl font-medium text-sm hover:from-skyBlue-600 hover:to-mintGreen-600 transition-all disabled:opacity-50"
+                                    class="w-full min-h-[44px] px-4 py-2 bg-gradient-to-r from-skyBlue-500 to-mintGreen-500 text-white rounded-xl font-medium text-sm hover:from-skyBlue-600 hover:to-mintGreen-600 transition-all disabled:opacity-50"
                                 >
                                     <span x-show="!uploading">📥 Mulai Import</span>
                                     <span x-show="uploading">Mengupload...</span>
@@ -94,7 +94,7 @@
                 </div>
 
                 {{-- Import History --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Riwayat Import</h3>
 
                     @if ($jobs->isEmpty())
@@ -103,7 +103,7 @@
                             <p class="text-gray-500 dark:text-gray-400">Belum ada riwayat import.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b border-gray-100 dark:border-gray-700">

@@ -13,8 +13,8 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6 sm:p-8">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-4 sm:p-6 lg:p-8">
                 <div class="mb-6">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('Edit Profil Anak') }}</h3>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Perbarui informasi buah hati Anda.') }}</p>
@@ -114,14 +114,14 @@
                     </div>
 
                     <!-- Submit -->
-                    <div class="flex items-center gap-4 pt-4">
-                        <button type="submit" class="btn-primary">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4">
+                        <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-softPink-500 hover:bg-softPink-600 text-white font-medium rounded-xl text-sm shadow-soft transition-all duration-200 min-h-[44px]">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                             {{ __('Simpan Perubahan') }}
                         </button>
-                        <a href="{{ route('children.show', $child) }}" class="btn-secondary">
+                        <a href="{{ route('children.show', $child) }}" class="inline-flex items-center justify-center px-6 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition min-h-[44px]">
                             {{ __('Batal') }}
                         </a>
                     </div>

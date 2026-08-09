@@ -1,19 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 🧩 Plugin Management
             </h2>
             <button
                 @click="showCreateModal = true"
-                class="btn-primary text-sm"
+                class="btn-primary text-sm min-h-[44px] inline-flex items-center"
             >
                 ➕ Daftarkan Plugin
             </button>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -33,7 +33,7 @@
                             />
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700/50">
                                     <tr>
@@ -71,7 +71,7 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-right">
-                                                <a href="{{ route('super-admin.plugins.show', $plugin) }}" class="text-skyBlue-600 dark:text-skyBlue-400 hover:text-skyBlue-800 dark:hover:text-skyBlue-300 text-sm font-medium">
+                                                <a href="{{ route('super-admin.plugins.show', $plugin) }}" class="inline-flex items-center min-h-[44px] text-skyBlue-600 dark:text-skyBlue-400 hover:text-skyBlue-800 dark:hover:text-skyBlue-300 text-sm font-medium">
                                                     Lihat →
                                                 </a>
                                             </td>
@@ -140,11 +140,11 @@
                                     </label>
                                 </div>
 
-                                <div class="flex justify-end gap-3">
-                                    <button type="button" @click="showCreateModal = false" class="btn-secondary text-sm">
+                                <div class="flex flex-col sm:flex-row justify-end gap-3">
+                                    <button type="button" @click="showCreateModal = false" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
                                         Batal
                                     </button>
-                                    <button type="submit" class="btn-primary text-sm">
+                                    <button type="submit" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
                                         💾 Simpan
                                     </button>
                                 </div>

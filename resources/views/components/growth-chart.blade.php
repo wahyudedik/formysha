@@ -95,14 +95,14 @@
 
 <div x-data="{ tab: 'weight' }" class="w-full">
     <!-- Tab Buttons -->
-    <div class="flex gap-2 mb-6">
-        <button @click="tab = 'weight'" :class="tab === 'weight' ? 'bg-softPink-100 dark:bg-softPink-950/30 text-softPink-700 dark:text-softPink-400 border-softPink-200 dark:border-softPink-900/30' : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'" class="px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200">
+    <div class="flex flex-wrap gap-2 mb-6">
+        <button @click="tab = 'weight'" :class="tab === 'weight' ? 'bg-softPink-100 dark:bg-softPink-950/30 text-softPink-700 dark:text-softPink-400 border-softPink-200 dark:border-softPink-900/30' : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'" class="px-4 py-2 min-h-[44px] inline-flex items-center rounded-xl text-sm font-medium border transition-all duration-200">
             ⚖️ {{ __('Berat Badan') }}
         </button>
-        <button @click="tab = 'height'" :class="tab === 'height' ? 'bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400 border-skyBlue-200 dark:border-skyBlue-900/30' : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'" class="px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200">
+        <button @click="tab = 'height'" :class="tab === 'height' ? 'bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400 border-skyBlue-200 dark:border-skyBlue-900/30' : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'" class="px-4 py-2 min-h-[44px] inline-flex items-center rounded-xl text-sm font-medium border transition-all duration-200">
             📐 {{ __('Tinggi Badan') }}
         </button>
-        <button @click="tab = 'head'" :class="tab === 'head' ? 'bg-lavender-100 dark:bg-lavender-950/30 text-lavender-700 dark:text-lavender-400 border-lavender-200 dark:border-lavender-900/30' : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'" class="px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200">
+        <button @click="tab = 'head'" :class="tab === 'head' ? 'bg-lavender-100 dark:bg-lavender-950/30 text-lavender-700 dark:text-lavender-400 border-lavender-200 dark:border-lavender-900/30' : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'" class="px-4 py-2 min-h-[44px] inline-flex items-center rounded-xl text-sm font-medium border transition-all duration-200">
             🧠 {{ __('Lingkar Kepala') }}
         </button>
     </div>

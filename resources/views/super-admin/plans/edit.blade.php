@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -24,10 +24,10 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {{-- Basic Info --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Informasi Dasar') }}</h3>
                             </div>
-                            <div class="p-6 space-y-5">
+                            <div class="p-4 sm:p-6 space-y-5">
                                 <div>
                                     <x-input-label for="name" :value="__('Nama Paket')" />
                                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full input-focus" :value="old('name', $plan->name)" required />
@@ -63,10 +63,10 @@
 
                         {{-- Pricing --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('Harga') }}</h3>
                             </div>
-                            <div class="p-6 space-y-5">
+                            <div class="p-4 sm:p-6 space-y-5">
                                 <div>
                                     <x-input-label for="price_monthly" :value="__('Harga per Bulan (Rp)')" />
                                     <x-text-input id="price_monthly" name="price_monthly" type="number" class="mt-1 block w-full input-focus" :value="old('price_monthly', $plan->price_monthly)" min="0" required />
@@ -83,11 +83,11 @@
 
                         {{-- Limits --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Batasan') }}</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gunakan -1 untuk unlimited.</p>
                             </div>
-                            <div class="p-6 space-y-5">
+                            <div class="p-4 sm:p-6 space-y-5">
                                 <div>
                                     <x-input-label for="max_children" :value="__('Maks. Anak')" />
                                     <x-text-input id="max_children" name="max_children" type="number" class="mt-1 block w-full input-focus" :value="old('max_children', $plan->max_children)" min="-1" required />
@@ -122,24 +122,24 @@
 
                         {{-- Features --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">✨ {{ __('Fitur') }}</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Satu fitur per baris.</p>
                             </div>
-                            <div class="p-6">
+                            <div class="p-4 sm:p-6">
                                 <textarea name="features[]" rows="6" class="block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm" placeholder="Timeline&#10;Galeri Foto&#10;Diary&#10;Dokumen">{{ is_array(old('features')) ? implode("\n", old('features')) : (is_array($plan->features) ? implode("\n", $plan->features) : '') }}</textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6 flex items-center gap-3">
-                        <button type="submit" class="btn-primary text-sm">
+                    <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <button type="submit" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                             {{ __('Simpan Perubahan') }}
                         </button>
-                        <a href="{{ route('super-admin.plans.index') }}" class="btn-secondary text-sm">
+                        <a href="{{ route('super-admin.plans.index') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
                             {{ __('Batal') }}
                         </a>
                     </div>

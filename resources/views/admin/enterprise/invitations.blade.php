@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 ✉️ {{ __('Undangan Pengguna') }}
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('admin.partials.sidebar')
@@ -21,7 +21,7 @@
                 ]" />
 
                 {{-- Invite Form --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Kirim Undangan Baru</h3>
                     <form x-data="{ sending: false }" @submit.prevent="
                         sending = true;
@@ -76,7 +76,7 @@
                                 <button
                                     type="submit"
                                     :disabled="sending"
-                                    class="w-full px-4 py-2 bg-gradient-to-r from-skyBlue-500 to-mintGreen-500 text-white rounded-xl font-medium text-sm hover:from-skyBlue-600 hover:to-mintGreen-600 transition-all disabled:opacity-50"
+                                    class="w-full min-h-[44px] px-4 py-2 bg-gradient-to-r from-skyBlue-500 to-mintGreen-500 text-white rounded-xl font-medium text-sm hover:from-skyBlue-600 hover:to-mintGreen-600 transition-all disabled:opacity-50"
                                 >
                                     <span x-show="!sending">✉️ Kirim Undangan</span>
                                     <span x-show="sending">Mengirim...</span>
@@ -87,7 +87,7 @@
                 </div>
 
                 {{-- Invitations List --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Undangan Aktif</h3>
 
                     @if ($invitations->isEmpty())
@@ -96,7 +96,7 @@
                             <p class="text-gray-500 dark:text-gray-400">Belum ada undangan aktif.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b border-gray-100 dark:border-gray-700">
@@ -138,7 +138,7 @@
                                                         }
                                                     "
                                                     :disabled="revoking"
-                                                    class="px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors disabled:opacity-50"
+                                                    class="min-h-[44px] px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors disabled:opacity-50"
                                                 >
                                                     Batalkan
                                                 </button>

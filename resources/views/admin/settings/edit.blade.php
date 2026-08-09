@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 ⚙️ {{ __('Pengaturan') }}
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('admin.partials.sidebar')
@@ -25,7 +25,7 @@
 
                     <div class="max-w-2xl space-y-6">
                         {{-- Organization Name --}}
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🏢 {{ __('Informasi Organisasi') }}</h3>
                             <div>
                                 <label for="organization_name" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Nama Organisasi</label>
@@ -44,7 +44,7 @@
                         </div>
 
                         {{-- Timezone & Language --}}
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🌍 {{ __('Lokalisasi') }}</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -99,7 +99,7 @@
 
                         {{-- Submit --}}
                         <div class="flex justify-end">
-                            <button type="submit" class="btn-primary">
+                            <button type="submit" class="btn-primary min-h-[44px]">
                                 💾 {{ __('Simpan Pengaturan') }}
                             </button>
                         </div>

@@ -13,9 +13,9 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-6 sm:p-8">
+                <div class="p-4 sm:p-6 lg:p-8">
                     <!-- Child Info -->
                     <div class="flex items-center gap-3 mb-6 p-4 bg-gradient-to-r from-mintGreen-50 to-skyBlue-50 dark:from-mintGreen-950/30 dark:via-gray-800 dark:to-skyBlue-950/30 rounded-2xl">
                         <div class="w-10 h-10 rounded-xl {{ $child->gender === 'female' ? 'bg-softPink-100 dark:bg-softPink-950/30' : 'bg-skyBlue-100 dark:bg-skyBlue-950/30' }} flex items-center justify-center text-lg">
@@ -67,11 +67,11 @@
                         </div>
 
                         <!-- Submit -->
-                        <div class="flex items-center gap-3">
-                            <a href="{{ route('growth.index', $child) }}" class="btn-secondary">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            <a href="{{ route('growth.index', $child) }}" class="btn-secondary min-h-[44px]">
                                 {{ __('Batal') }}
                             </a>
-                            <button type="submit" class="btn-primary">
+                            <button type="submit" class="btn-primary min-h-[44px]">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>

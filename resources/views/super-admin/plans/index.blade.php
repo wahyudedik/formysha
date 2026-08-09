@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 📋 {{ __('Manajemen Paket') }}
             </h2>
-            <a href="{{ route('super-admin.plans.create') }}" class="btn-primary text-sm">
+            <a href="{{ route('super-admin.plans.create') }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -13,7 +13,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -25,7 +25,7 @@
 
                 {{-- Desktop Table --}}
                 <div class="hidden md:block bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-100 dark:border-gray-700">
@@ -90,7 +90,7 @@
                 {{-- Mobile Cards --}}
                 <div class="md:hidden space-y-3">
                     @forelse ($plans as $plan)
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 border border-gray-100 dark:border-gray-700">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 border border-gray-100 dark:border-gray-700 min-h-[44px]">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $plan->name }}</h3>
                                 <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium {{ $plan->is_active ? 'bg-mintGreen-100 text-mintGreen-600 dark:bg-mintGreen-950/30 dark:text-mintGreen-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400' }}">
@@ -104,13 +104,13 @@
                                 <span>Storage: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->getStorageFormatted() }}</strong></span>
                             </div>
                             <div class="flex gap-2">
-                                <a href="{{ route('super-admin.plans.edit', $plan) }}" class="flex-1 text-center py-2 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 text-skyBlue-600 dark:text-skyBlue-400 text-xs font-medium hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition">
+                                <a href="{{ route('super-admin.plans.edit', $plan) }}" class="flex-1 min-h-[44px] flex items-center justify-center py-2 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 text-skyBlue-600 dark:text-skyBlue-400 text-xs font-medium hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition">
                                     ✏️ Edit
                                 </a>
                                 <form method="POST" action="{{ route('super-admin.plans.destroy', $plan) }}" class="flex-1" x-data>
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-full py-2 rounded-xl bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-100 dark:hover:bg-red-950/50 transition" x-on:click="return confirm('Yakin ingin menghapus paket ini?')">
+                                    <button type="submit" class="w-full min-h-[44px] flex items-center justify-center py-2 rounded-xl bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-100 dark:hover:bg-red-950/50 transition" x-on:click="return confirm('Yakin ingin menghapus paket ini?')">
                                         🗑️ Hapus
                                     </button>
                                 </form>

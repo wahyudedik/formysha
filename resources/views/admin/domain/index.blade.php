@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 🌐 Custom Domain
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('admin.partials.sidebar')
 
@@ -18,7 +18,7 @@
                 ]" />
 
                 {{-- Status Card --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">📋 Status Domain</h3>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -52,7 +52,7 @@
                 </div>
 
                 {{-- Set Domain Form --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">🔧 Atur Custom Domain</h3>
 
                     <form method="POST" action="{{ route('admin.domain.update') }}">
@@ -77,15 +77,15 @@
                             </p>
                         </div>
 
-                        <div class="flex items-center gap-3">
-                            <button type="submit" class="btn-primary text-sm">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            <button type="submit" class="btn-primary text-sm min-h-[44px]">
                                 💾 Simpan Domain
                             </button>
 
                             @if($domainStatus['custom_domain'])
                                 <form method="POST" action="{{ route('admin.domain.verify') }}" class="inline">
                                     @csrf
-                                    <button type="submit" class="btn-accent text-sm">
+                                    <button type="submit" class="btn-accent text-sm min-h-[44px]">
                                         🔍 Verifikasi DNS
                                     </button>
                                 </form>
@@ -95,14 +95,14 @@
                 </div>
 
                 {{-- DNS Instructions --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">📖 Instruksi DNS</h3>
 
                     <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
                         Untuk mengaktifkan custom domain, tambahkan record DNS berikut di penyedia domain Anda:
                     </p>
 
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
                             <thead class="bg-gray-50 dark:bg-gray-700/50">
                                 <tr>
@@ -142,7 +142,7 @@
 
                 {{-- Remove Domain --}}
                 @if($domainStatus['custom_domain'])
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-red-100 dark:border-red-900/30">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-red-100 dark:border-red-900/30">
                         <h3 class="text-lg font-bold text-red-600 dark:text-red-400 mb-2">⚠️ Hapus Custom Domain</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
                             Menghapus custom domain akan mengembalikan akses ke URL default ForMysha.
@@ -150,7 +150,7 @@
                         <form method="POST" action="{{ route('admin.domain.remove') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus custom domain?')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
+                            <button type="submit" class="min-h-[44px] px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
                                 🗑️ Hapus Domain
                             </button>
                         </form>

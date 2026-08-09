@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Welcome Section -->
         <div class="mb-8 bg-gradient-to-br from-softPink-50 to-lavender-50 dark:from-softPink-950/30 dark:to-lavender-950/30 rounded-3xl p-6 sm:p-8 border border-softPink-100 dark:border-softPink-900/30">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Selamat datang kembali, ') }}{{ auth()->user()->name }} 💕</h1>
@@ -15,11 +15,11 @@
         <!-- Children Cards -->
         @if ($children->isEmpty())
             <div class="mb-8 bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-8 text-center">
+                <div class="p-4 sm:p-8 text-center">
                     <div class="text-5xl mb-4">👶</div>
                     <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ __('Belum Ada Anak') }}</h3>
                     <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('Mulai dokumentasikan perjalanan hidup buah hati Anda.') }}</p>
-                    <a href="{{ route('children.create') }}" class="btn-primary">
+                    <a href="{{ route('children.create') }}" class="btn-primary min-h-[44px] inline-flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
@@ -88,11 +88,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Momen Terbaru (Photo Thumbnails) -->
             <div class="lg:col-span-2 bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">📸 {{ __('Momen Terbaru') }}</h3>
                         @if ($children->isNotEmpty())
-                            <a href="{{ route('timeline.index', $children->first()) }}" class="text-sm text-softPink-500 hover:text-softPink-600 dark:text-softPink-400 dark:hover:text-softPink-300 transition font-medium">
+                            <a href="{{ route('timeline.index', $children->first()) }}" class="text-sm text-softPink-500 hover:text-softPink-600 dark:text-softPink-400 dark:hover:text-softPink-300 transition font-medium min-h-[44px] inline-flex items-center">
                                 {{ __('Lihat Semua') }}
                             </a>
                         @endif
@@ -121,8 +121,8 @@
 
             <!-- Pengingat Section -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">🔔 {{ __('Pengingat') }}</h3>
                     </div>
                     @if ($upcomingEvents->isEmpty())
@@ -136,7 +136,7 @@
                     @else
                         <div class="space-y-3">
                             @foreach ($upcomingEvents as $event)
-                                <a href="{{ route('calendar.show', [$event->child->slug, $event]) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 dark:hover:bg-mintGreen-950/20 transition group">
+                                <a href="{{ route('calendar.show', [$event->child->slug, $event]) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 dark:hover:bg-mintGreen-950/20 transition group min-h-[44px]">
                                     <div class="flex items-start gap-3">
                                         <div class="w-10 h-10 rounded-xl {{ $event->event_type === 'immunization' ? 'bg-mintGreen-100 dark:bg-mintGreen-950/30' : ($event->event_type === 'birthday' ? 'bg-warmYellow-100 dark:bg-warmYellow-950/30' : 'bg-skyBlue-100 dark:bg-skyBlue-950/30') }} flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">
                                             {{ $event->event_type === 'immunization' ? '💉' : ($event->event_type === 'birthday' ? '🎂' : '📅') }}
@@ -161,8 +161,8 @@
         <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Recent Growth -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">📏 {{ __('Pertumbuhan Terbaru') }}</h3>
                     </div>
                     @if ($recentGrowths->isEmpty())
@@ -176,7 +176,7 @@
                     @else
                         <div class="space-y-3">
                             @foreach ($recentGrowths as $growth)
-                                <a href="{{ route('growth.index', $growth->child) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 dark:hover:bg-mintGreen-950/20 transition">
+                                <a href="{{ route('growth.index', $growth->child) }}" class="block p-3 rounded-xl hover:bg-mintGreen-50 dark:hover:bg-mintGreen-950/20 transition min-h-[44px]">
                                     <div class="flex items-start gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-mintGreen-400 to-skyBlue-400 flex items-center justify-center text-white text-xs flex-shrink-0">
                                             📏
@@ -199,8 +199,8 @@
 
             <!-- Recent Health Records -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏥 {{ __('Kesehatan Terbaru') }}</h3>
                     </div>
                     @if ($recentHealthRecords->isEmpty())
@@ -214,7 +214,7 @@
                     @else
                         <div class="space-y-3">
                             @foreach ($recentHealthRecords as $record)
-                                <a href="{{ route('health.show', [$record->child->slug, $record]) }}" class="block p-3 rounded-xl hover:bg-skyBlue-50 dark:hover:bg-skyBlue-950/20 transition">
+                                <a href="{{ route('health.show', [$record->child->slug, $record]) }}" class="block p-3 rounded-xl hover:bg-skyBlue-50 dark:hover:bg-skyBlue-950/20 transition min-h-[44px]">
                                     <div class="flex items-start gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-skyBlue-400 to-lavender-400 flex items-center justify-center text-white text-xs flex-shrink-0">
                                             {{ $record->type_icon }}
@@ -235,7 +235,7 @@
         <!-- Quick Access -->
         @if ($children->isNotEmpty())
             <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                <div class="p-6">
+                <div class="p-4 sm:p-6">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">⚡ {{ __('Akses Cepat') }}</h3>
                     @php $firstChild = $children->first(); @endphp
                     <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">

@@ -32,7 +32,7 @@
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
-        class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-xl max-w-md w-full p-6"
+        class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-xl max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto"
     >
         <div class="text-center">
             <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
@@ -43,7 +43,7 @@
             <div class="flex gap-3 justify-center">
                 <button
                     x-on:click="open = false"
-                    class="px-5 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    class="px-5 py-2.5 min-h-[44px] rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                     Batal
                 </button>
@@ -52,7 +52,7 @@
                     @method($method)
                     <button
                         type="submit"
-                        class="px-5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
+                        class="px-5 py-2.5 min-h-[44px] rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
                     >
                         Ya, Hapus
                     </button>

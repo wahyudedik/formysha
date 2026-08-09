@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <a href="{{ route('children.show', $child) }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 dark:text-skyBlue-400 dark:hover:text-skyBlue-300 transition">
                     ← Kembali ke {{ $child->nickname ?? $child->name }}
@@ -9,7 +9,7 @@
                     📅 {{ __('My Calendar') }} — {{ $child->nickname ?? $child->name }}
                 </h2>
             </div>
-            <a href="{{ route('calendar.create', $child) }}" class="btn-primary">
+            <a href="{{ route('calendar.create', $child) }}" class="btn-primary min-h-[44px]">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -18,7 +18,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Calendar Grid View -->
         <div class="mb-6">
             <x-calendar-grid
@@ -31,7 +31,7 @@
 
         <!-- Event List (Paginated) -->
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-            <div class="p-6 sm:p-8">
+            <div class="p-4 sm:p-6 lg:p-8">
                 <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">📋 {{ __('Semua Acara') }}</h3>
 
                 @if ($events->isEmpty())
@@ -39,7 +39,7 @@
                         <div class="text-6xl mb-4">📅</div>
                         <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ __('Belum Ada Acara') }}</h3>
                         <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('Jadwalkan acara penting ' . ($child->nickname ?? $child->name) . ' di sini.') }}</p>
-                        <a href="{{ route('calendar.create', $child) }}" class="btn-primary">
+                        <a href="{{ route('calendar.create', $child) }}" class="btn-primary min-h-[44px]">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>

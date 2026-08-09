@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 ⚙️ Pengaturan: {{ $plugin->name }}
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('admin.partials.sidebar')
 
@@ -18,7 +18,7 @@
                     ['label' => 'Pengaturan: ' . $plugin->name],
                 ]" />
 
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="text-3xl">{{ $plugin->icon ?? '🧩' }}</span>
                         <div>
@@ -45,11 +45,11 @@
                             @enderror
                         </div>
 
-                        <div class="flex items-center gap-3">
-                            <button type="submit" class="btn-primary text-sm">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            <button type="submit" class="btn-primary text-sm min-h-[44px]">
                                 💾 Simpan Pengaturan
                             </button>
-                            <a href="{{ route('admin.plugins.index') }}" class="btn-secondary text-sm">
+                            <a href="{{ route('admin.plugins.index') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
                                 ← Kembali
                             </a>
                         </div>

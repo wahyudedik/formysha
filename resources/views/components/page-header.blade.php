@@ -2,7 +2,7 @@
 
 <div class="mb-6">
     @if ($backUrl)
-        <a href="{{ $backUrl }}" class="inline-flex items-center text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition mb-3 group">
+        <a href="{{ $backUrl }}" class="inline-flex items-center text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition mb-3 group min-h-[44px]">
             <svg class="w-4 h-4 mr-1 transform group-hover:-translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>

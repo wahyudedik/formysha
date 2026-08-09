@@ -6,16 +6,16 @@
             ['label' => 'Pertumbuhan', 'url' => route('growth.index', $child)],
             ['label' => $growth->formatted_date],
         ]" />
-        <div class="flex items-center justify-between mt-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
             <x-page-header title="📏 Detail Pengukuran" subtitle="{{ $growth->formatted_date }}" />
-            <div class="flex items-center gap-2">
-                <a href="{{ route('growth.edit', [$child, $growth]) }}" class="px-4 py-2 bg-skyBlue-500 text-white rounded-xl hover:bg-skyBlue-600 transition text-sm font-medium">
+            <div class="flex items-center gap-2 shrink-0">
+                <a href="{{ route('growth.edit', [$child, $growth]) }}" class="inline-flex items-center justify-center px-4 py-2 bg-skyBlue-500 text-white rounded-xl hover:bg-skyBlue-600 transition text-sm font-medium min-h-[44px]">
                     ✏️ Edit
                 </a>
                 <form method="POST" action="{{ route('growth.destroy', [$child, $growth]) }}" x-data>
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition text-sm font-medium" x-on:click.prevent="if(confirm('Yakin ingin menghapus data pengukuran ini?')) $el.closest('form').submit()">
+                    <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition text-sm font-medium min-h-[44px]" x-on:click.prevent="if(confirm('Yakin ingin menghapus data pengukuran ini?')) $el.closest('form').submit()">
                         🗑️ Hapus
                     </button>
                 </form>

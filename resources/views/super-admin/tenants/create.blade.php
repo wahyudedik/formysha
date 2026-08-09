@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             @include('super-admin.partials.sidebar')
 
@@ -17,12 +17,12 @@
                 ]" />
 
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                    <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">Form Tambah Tenant</h3>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Isi informasi tenant baru di bawah ini.</p>
                     </div>
 
-                    <form method="POST" action="{{ route('super-admin.tenants.store') }}" class="p-6">
+                    <form method="POST" action="{{ route('super-admin.tenants.store') }}" class="p-4 sm:p-6">
                         @csrf
 
                         <div class="max-w-lg space-y-5">
@@ -42,14 +42,14 @@
                             </div>
                         </div>
 
-                        <div class="mt-6 flex items-center gap-3">
-                            <button type="submit" class="btn-primary text-sm">
+                        <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            <button type="submit" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 {{ __('Simpan') }}
                             </button>
-                            <a href="{{ route('super-admin.tenants.index') }}" class="btn-secondary text-sm">
+                            <a href="{{ route('super-admin.tenants.index') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
                                 {{ __('Batal') }}
                             </a>
                         </div>

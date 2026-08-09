@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Header --}}
         <div class="text-center mb-10">
             <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Pilih Paket Terbaik</h1>
@@ -50,7 +50,7 @@
                         </div>
                     @endif
 
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         {{-- Plan Name --}}
                         <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">{{ $plan->name }}</h3>
                         @if ($plan->description)
@@ -115,7 +115,7 @@
                         {{-- CTA Button --}}
                         <form method="POST" action="{{ route('subscription.subscribe', $plan) }}">
                             @csrf
-                            <button type="submit" class="w-full py-3 rounded-xl text-white font-semibold text-sm {{ $buttonColor }} transition-all duration-200 shadow-soft hover:shadow-soft-md">
+                            <button type="submit" class="w-full py-3 min-h-[44px] rounded-xl text-white font-semibold text-sm {{ $buttonColor }} transition-all duration-200 shadow-soft hover:shadow-soft-md">
                                 @if ($isFree)
                                     Mulai Gratis
                                 @else
@@ -133,7 +133,7 @@
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 text-center mb-6">❓ Pertanyaan Umum</h2>
             <div class="space-y-4">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5" x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between text-left">
+                    <button @click="open = !open" class="w-full flex items-center justify-between text-left min-h-[44px]">
                         <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">Bagaimana cara membayar?</span>
                         <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -145,7 +145,7 @@
                 </div>
 
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5" x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between text-left">
+                    <button @click="open = !open" class="w-full flex items-center justify-between text-left min-h-[44px]">
                         <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">Bisa ganti paket kapan saja?</span>
                         <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -157,7 +157,7 @@
                 </div>
 
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5" x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between text-left">
+                    <button @click="open = !open" class="w-full flex items-center justify-between text-left min-h-[44px]">
                         <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">Apakah data saya aman?</span>
                         <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />

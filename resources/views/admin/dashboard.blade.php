@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
             {{-- Sidebar --}}
             @include('admin.partials.sidebar')
@@ -13,7 +13,7 @@
             {{-- Main Content --}}
             <div class="flex-1 min-w-0">
                 {{-- Welcome Message --}}
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 mb-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 mb-6 border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-skyBlue-400 to-lavender-400 flex items-center justify-center text-white text-2xl shrink-0">
                             @if ($tenant->logo)
@@ -92,10 +92,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Recent Activity --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Aktivitas Terbaru') }}</h3>
                         </div>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             @if ($recentActivity->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">📝</div>
@@ -128,24 +128,24 @@
                     </div>
 
                     {{-- Quick Actions --}}
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🚀 {{ __('Aksi Cepat') }}</h3>
                         <div class="grid grid-cols-2 gap-3">
                             @if ($totalChildren > 0)
-                                <a href="{{ route('children.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-softPink-50 dark:bg-softPink-950/30 hover:bg-softPink-100 dark:hover:bg-softPink-950/50 transition text-center">
+                                <a href="{{ route('children.index') }}" class="flex flex-col items-center gap-2 p-4 min-h-[44px] rounded-xl bg-softPink-50 dark:bg-softPink-950/30 hover:bg-softPink-100 dark:hover:bg-softPink-950/50 transition text-center">
                                     <span class="text-2xl">👶</span>
                                     <span class="text-xs font-medium text-softPink-700 dark:text-softPink-400">Lihat Anak</span>
                                 </a>
                             @endif
-                            <a href="{{ route('admin.usage.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition text-center">
+                            <a href="{{ route('admin.usage.index') }}" class="flex flex-col items-center gap-2 p-4 min-h-[44px] rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition text-center">
                                 <span class="text-2xl">📊</span>
                                 <span class="text-xs font-medium text-skyBlue-700 dark:text-skyBlue-400">Penggunaan</span>
                             </a>
-                            <a href="{{ route('admin.branding.edit') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 hover:bg-lavender-100 dark:hover:bg-lavender-950/50 transition text-center">
+                            <a href="{{ route('admin.branding.edit') }}" class="flex flex-col items-center gap-2 p-4 min-h-[44px] rounded-xl bg-lavender-50 dark:bg-lavender-950/30 hover:bg-lavender-100 dark:hover:bg-lavender-950/50 transition text-center">
                                 <span class="text-2xl">🎨</span>
                                 <span class="text-xs font-medium text-lavender-700 dark:text-lavender-400">Branding</span>
                             </a>
-                            <a href="{{ route('admin.settings.edit') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-mintGreen-50 dark:bg-mintGreen-950/30 hover:bg-mintGreen-100 dark:hover:bg-mintGreen-950/50 transition text-center">
+                            <a href="{{ route('admin.settings.edit') }}" class="flex flex-col items-center gap-2 p-4 min-h-[44px] rounded-xl bg-mintGreen-50 dark:bg-mintGreen-950/30 hover:bg-mintGreen-100 dark:hover:bg-mintGreen-950/50 transition text-center">
                                 <span class="text-2xl">⚙️</span>
                                 <span class="text-xs font-medium text-mintGreen-700 dark:text-mintGreen-400">Pengaturan</span>
                             </a>
