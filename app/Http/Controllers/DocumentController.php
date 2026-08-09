@@ -17,14 +17,42 @@ class DocumentController extends Controller
      */
     public function index(Request $request, Child $child): View
     {
-        $documents = $child->documents()
-            ->orderBy('type', 'asc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        $query = $child->documents();
+
+        // Filter by type
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Sort options
+        $sort = $request->input('sort', 'default');
+        match ($sort) {
+            'newest' => $query->orderBy('created_at', 'desc'),
+            'oldest' => $query->orderBy('created_at', 'asc'),
+            'name_asc' => $query->orderBy('name', 'asc'),
+            'name_desc' => $query->orderBy('name', 'desc'),
+            default => $query->orderBy('type', 'asc')->orderBy('created_at', 'desc'),
+        };
+
+        $documents = $query->paginate(12)->withQueryString();
+
+        $documentTypes = [
+            'birth_certificate' => '📜 Akta Lahir',
+            'family_card' => '🏠 Kartu Keluarga',
+            'kia' => '🪪 KIA',
+            'bpjs' => '🏥 BPJS',
+            'passport' => '✈️ Paspor',
+            'certificate' => '🎓 Sertifikat',
+            'report_card' => '📋 Rapor',
+            'other' => '📄 Lainnya',
+        ];
 
         return view('documents.index', [
             'child' => $child,
             'documents' => $documents,
+            'currentSort' => $sort,
+            'documentTypes' => $documentTypes,
+            'request' => $request,
         ]);
     }
 

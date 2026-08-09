@@ -28,13 +28,15 @@
                 </div>
             @endif
 
-            @if ($timelines->isEmpty())
+            @if ($timelines->isEmpty() && !$request->hasAny(['date_from', 'date_to', 'tag']))
                 <!-- Empty State -->
                 <div class="text-center py-16">
-                    <div class="text-6xl mb-4">📸</div>
+                    <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 flex items-center justify-center">
+                        <span class="text-5xl">📸</span>
+                    </div>
                     <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ __('Belum Ada Kenangan') }}</h3>
-                    <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('Mulai dokumentasikan momen-momen berharga ' . ($child->nickname ?? $child->name) . '.') }}</p>
-                    <a href="{{ route('timeline.create', $child) }}" class="btn-primary">
+                    <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">{{ __('Mulai dokumentasikan momen-momen berharga ' . ($child->nickname ?? $child->name) . '. Setiap cerita layak dikenang.') }}</p>
+                    <a href="{{ route('timeline.create', $child) }}" class="btn-primary min-h-[44px]">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
@@ -42,6 +44,59 @@
                     </a>
                 </div>
             @else
+                <!-- Filter & Sort Bar -->
+                <div class="mb-6 flex flex-col sm:flex-row gap-3" x-data="{ showFilters: false }">
+                    <div class="flex items-center gap-2">
+                        <button type="button" @click="showFilters = !showFilters" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition min-h-[44px]">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            {{ __('Filter') }}
+                        </button>
+                        <select onchange="window.location.href=this.value" class="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 min-h-[44px] focus:ring-2 focus:ring-lavender-300 dark:focus:ring-lavender-600 focus:border-lavender-400 dark:focus:border-lavender-500">
+                            <option value="{{ route('timeline.index', array_merge(['child' => $child], ['sort' => 'newest'] + request()->except(['sort', 'page']))) }}" {{ $currentSort === 'newest' ? 'selected' : '' }}>🕐 {{ __('Terbaru') }}</option>
+                            <option value="{{ route('timeline.index', array_merge(['child' => $child], ['sort' => 'oldest'] + request()->except(['sort', 'page']))) }}" {{ $currentSort === 'oldest' ? 'selected' : '' }}>🕐 {{ __('Terlama') }}</option>
+                            <option value="{{ route('timeline.index', array_merge(['child' => $child], ['sort' => 'title_asc'] + request()->except(['sort', 'page']))) }}" {{ $currentSort === 'title_asc' ? 'selected' : '' }}>🔤 {{ __('Judul A-Z') }}</option>
+                            <option value="{{ route('timeline.index', array_merge(['child' => $child], ['sort' => 'title_desc'] + request()->except(['sort', 'page']))) }}" {{ $currentSort === 'title_desc' ? 'selected' : '' }}>🔤 {{ __('Judul Z-A') }}</option>
+                        </select>
+                    </div>
+
+                    @if ($timelines->hasPages() || $timelines->total() > 0)
+                        <div class="text-sm text-gray-400 dark:text-gray-500 flex items-center">
+                            {{ $timelines->total() }} {{ __('kenangan') }}
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Filter Panel -->
+                <div x-show="showFilters" x-transition x-cloak class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-soft">
+                    <form action="{{ route('timeline.index', $child) }}" method="GET" class="flex flex-col sm:flex-row gap-3">
+                        <input type="hidden" name="sort" value="{{ $currentSort }}">
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('Dari Tanggal') }}</label>
+                            <input type="date" name="date_from" value="{{ request('date_from') }}" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:ring-2 focus:ring-lavender-300 dark:focus:ring-lavender-600 focus:border-lavender-400 dark:focus:border-lavender-500 min-h-[44px]">
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('Sampai Tanggal') }}</label>
+                            <input type="date" name="date_to" value="{{ request('date_to') }}" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:ring-2 focus:ring-lavender-300 dark:focus:ring-lavender-600 focus:border-lavender-400 dark:focus:border-lavender-500 min-h-[44px]">
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('Tag') }}</label>
+                            <input type="text" name="tag" value="{{ request('tag') }}" placeholder="{{ __('Cari tag...') }}" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:ring-2 focus:ring-lavender-300 dark:focus:ring-lavender-600 focus:border-lavender-400 dark:focus:border-lavender-500 min-h-[44px]">
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button type="submit" class="px-5 py-2.5 bg-lavender-500 hover:bg-lavender-600 text-white font-medium rounded-xl text-sm transition min-h-[44px]">
+                                {{ __('Terapkan') }}
+                            </button>
+                            @if (request()->hasAny(['date_from', 'date_to', 'tag']))
+                                <a href="{{ route('timeline.index', ['child' => $child, 'sort' => $currentSort]) }}" class="px-5 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium rounded-xl text-sm transition min-h-[44px]">
+                                    {{ __('Reset') }}
+                                </a>
+                            @endif
+                        </div>
+                    </form>
+                </div>
+
                 <!-- Timeline -->
                 <div class="relative">
                     <!-- Timeline Line -->

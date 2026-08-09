@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\CacheService;
 use App\Services\TenantService;
 use Closure;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ class EnsureActiveSubscription
 {
     public function __construct(
         private TenantService $tenantService,
+        private CacheService $cacheService,
     ) {}
 
     /**
@@ -28,7 +30,7 @@ class EnsureActiveSubscription
 
         $tenant = $this->tenantService->getCurrentTenant();
 
-        if ($tenant && ! $this->tenantService->isSubscriptionActive($tenant)) {
+        if ($tenant && ! $this->cacheService->isSubscriptionActive($tenant)) {
             return redirect()->route('subscription.plans')
                 ->with('warning', 'Anda perlu mengaktifkan paket berlangganan.');
         }

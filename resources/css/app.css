@@ -136,3 +136,104 @@
 .page-enter {
     animation: fadeIn 0.3s ease-out;
 }
+
+/* Print-Friendly Styles */
+@media print {
+
+    /* Hide navigation, footer, sidebar, buttons, and non-essential UI */
+    nav,
+    footer,
+    .has-bottom-nav>nav,
+    [x-data]>button,
+    .btn-primary,
+    .btn-secondary,
+    .btn-accent,
+    .no-print,
+    aside,
+    .sidebar {
+        display: none !important;
+    }
+
+    /* Reset body and main */
+    body,
+    .min-h-screen {
+        background: white !important;
+        color: #111 !important;
+    }
+
+    main {
+        padding-bottom: 0 !important;
+    }
+
+    /* Clean up cards for print */
+    .card,
+    .card-hover,
+    .bg-white {
+        box-shadow: none !important;
+        border: 1px solid #e5e7eb !important;
+        break-inside: avoid;
+    }
+
+    /* Ensure text is readable */
+    .text-gray-800,
+    .text-gray-700,
+    .text-gray-600,
+    .dark\:text-gray-100,
+    .dark\:text-gray-200,
+    .dark\:text-gray-300 {
+        color: #111 !important;
+    }
+
+    .text-gray-500,
+    .text-gray-400,
+    .text-gray-500,
+    .dark\:text-gray-400,
+    .dark\:text-gray-500 {
+        color: #555 !important;
+    }
+
+    /* Tables print nicely */
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    th,
+    td {
+        border: 1px solid #d1d5db !important;
+        padding: 8px !important;
+    }
+
+    /* Hide dark mode backgrounds */
+    .dark\:bg-gray-800,
+    .dark\:bg-gray-900,
+    .dark\:bg-gray-700 {
+        background: white !important;
+    }
+
+    /* Page break control */
+    h2,
+    h3 {
+        break-after: avoid;
+    }
+
+    /* Print header with child name */
+    .print-header {
+        display: block !important;
+        text-align: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    /* Hide pagination */
+    .pagination,
+    nav[role="navigation"] {
+        display: none !important;
+    }
+}
+
+/* Print header (hidden on screen) */
+.print-header {
+    display: none;
+}

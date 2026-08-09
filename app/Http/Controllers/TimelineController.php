@@ -18,15 +18,37 @@ class TimelineController extends Controller
      */
     public function index(Request $request, Child $child): View
     {
-        $timelines = $child->timelines()
-            ->with('media')
-            ->orderBy('event_date', 'desc')
-            ->orderBy('event_time', 'desc')
-            ->paginate(12);
+        $query = $child->timelines()->with('media');
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->where('event_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->where('event_date', '<=', $request->date_to);
+        }
+
+        // Filter by tag
+        if ($request->filled('tag')) {
+            $query->whereJsonContains('tags', $request->tag);
+        }
+
+        // Sort options
+        $sort = $request->input('sort', 'newest');
+        match ($sort) {
+            'oldest' => $query->orderBy('event_date', 'asc')->orderBy('event_time', 'asc'),
+            'title_asc' => $query->orderBy('title', 'asc'),
+            'title_desc' => $query->orderBy('title', 'desc'),
+            default => $query->orderBy('event_date', 'desc')->orderBy('event_time', 'desc'),
+        };
+
+        $timelines = $query->paginate(12)->withQueryString();
 
         return view('timeline.index', [
             'child' => $child,
             'timelines' => $timelines,
+            'currentSort' => $sort,
+            'request' => $request,
         ]);
     }
 

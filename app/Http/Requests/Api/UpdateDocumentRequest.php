@@ -24,7 +24,7 @@ class UpdateDocumentRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'type' => ['sometimes', 'required', 'string', 'in:birth_certificate,kk,kia,bpjs,passport,certificate,school_report,other'],
+            'type' => ['sometimes', 'required', 'string', 'in:birth_certificate,family_card,kia,bpjs,passport,certificate,report_card,other'],
             'file' => ['nullable', 'file', 'max:10240'],
             'is_private' => ['nullable', 'boolean'],
         ];

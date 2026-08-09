@@ -17,7 +17,8 @@ class ChildController extends ApiController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Child::where('user_id', $request->user()->id);
+        $query = Child::where('user_id', $request->user()->id)
+            ->withCount(['timelines', 'albums', 'diaries', 'documents', 'events', 'growths', 'healthRecords']);
 
         if ($search = $request->input('search')) {
             $query->where('name', 'like', "%{$search}%");

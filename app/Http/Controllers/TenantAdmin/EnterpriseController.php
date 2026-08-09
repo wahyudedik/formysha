@@ -128,8 +128,8 @@ class EnterpriseController extends Controller
     public function processImport(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'type' => ['required', 'string', 'in:photos,csv_data,backup_restore'],
-            'file' => ['required', 'file', 'max:10240'],
+            'type' => ['required', 'string', 'in:family_members,growth_records,backup_restore'],
+            'file' => ['required', 'file', 'mimes:csv,json,txt', 'max:10240'],
         ]);
 
         $tenant = $request->user()->tenant;
@@ -141,16 +141,31 @@ class EnterpriseController extends Controller
             ], 404);
         }
 
+        // Store the uploaded file
+        $filePath = $request->file('file')->store('imports', 'local');
+
         $job = $this->enterpriseService->createImportJob(
             $tenant,
             $request->user(),
             $validated['type'],
         );
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Import job berhasil dibuat.',
-            'data' => $job,
-        ], 201);
+        // Process the import based on type
+        try {
+            $result = $this->enterpriseService->processImportFile($job, $filePath, $validated['type']);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Import berhasil diproses. {$result['created']} data dibuat, {$result['failed']} gagal.",
+                'data' => $job->fresh(),
+            ], 201);
+        } catch (\Exception $e) {
+            $this->enterpriseService->failImport($job, $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Import gagal: '.$e->getMessage(),
+            ], 422);
+        }
     }
 }

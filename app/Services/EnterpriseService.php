@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Child;
+use App\Models\FamilyMember;
+use App\Models\Growth;
 use App\Models\ImportJob;
 use App\Models\Tenant;
 use App\Models\TenantAnalytic;
@@ -190,5 +193,270 @@ class EnterpriseService
             'status' => ImportJob::STATUS_FAILED,
             'error_message' => $error,
         ]);
+    }
+
+    /**
+     * Process an import file based on type.
+     *
+     * @return array{created: int, failed: int}
+     */
+    public function processImportFile(ImportJob $job, string $filePath, string $type): array
+    {
+        $absolutePath = storage_path('app/'.$filePath);
+
+        if (! file_exists($absolutePath)) {
+            throw new \RuntimeException('File import tidak ditemukan.');
+        }
+
+        $this->updateImportProgress($job, 0, 0);
+
+        return match ($type) {
+            'family_members' => $this->processFamilyMembersCsv($job, $absolutePath),
+            'growth_records' => $this->processGrowthRecordsCsv($job, $absolutePath),
+            'backup_restore' => $this->processBackupRestore($job, $absolutePath),
+            default => throw new \RuntimeException('Tipe import tidak didukung: '.$type),
+        };
+    }
+
+    /**
+     * Process family members CSV import.
+     *
+     * Expected CSV columns: child_name, name, relationship, phone, email
+     *
+     * @return array{created: int, failed: int}
+     */
+    private function processFamilyMembersCsv(ImportJob $job, string $filePath): array
+    {
+        $rows = $this->readCsvFile($filePath);
+        $created = 0;
+        $failed = 0;
+        $total = count($rows);
+
+        foreach ($rows as $index => $row) {
+            try {
+                if (empty($row['name']) || empty($row['relationship']) || empty($row['child_name'])) {
+                    $failed++;
+
+                    continue;
+                }
+
+                // Find child by name within tenant
+                $child = Child::where('tenant_id', $job->tenant_id)
+                    ->where('name', 'like', '%'.$row['child_name'].'%')
+                    ->first();
+
+                if (! $child) {
+                    $failed++;
+
+                    continue;
+                }
+
+                FamilyMember::create([
+                    'tenant_id' => $job->tenant_id,
+                    'user_id' => $job->user_id,
+                    'child_id' => $child->id,
+                    'name' => trim($row['name']),
+                    'relationship' => trim($row['relationship']),
+                    'phone' => $row['phone'] ?? null,
+                    'email' => $row['email'] ?? null,
+                    'is_primary' => false,
+                ]);
+
+                $created++;
+            } catch (\Exception $e) {
+                $failed++;
+            }
+
+            if (($index + 1) % 10 === 0) {
+                $this->updateImportProgress($job, $created, $failed);
+            }
+        }
+
+        $this->updateImportProgress($job, $created, $failed);
+        $this->completeImport($job);
+
+        return ['created' => $created, 'failed' => $failed];
+    }
+
+    /**
+     * Process growth records CSV import.
+     *
+     * Expected CSV columns: child_name, measured_at, weight_kg, height_cm, head_circumference_cm, notes
+     *
+     * @return array{created: int, failed: int}
+     */
+    private function processGrowthRecordsCsv(ImportJob $job, string $filePath): array
+    {
+        $rows = $this->readCsvFile($filePath);
+        $created = 0;
+        $failed = 0;
+        $total = count($rows);
+
+        foreach ($rows as $index => $row) {
+            try {
+                if (empty($row['child_name']) || empty($row['measured_at'])) {
+                    $failed++;
+
+                    continue;
+                }
+
+                // Find child by name within tenant
+                $child = Child::where('tenant_id', $job->tenant_id)
+                    ->where('name', 'like', '%'.$row['child_name'].'%')
+                    ->first();
+
+                if (! $child) {
+                    $failed++;
+
+                    continue;
+                }
+
+                Growth::create([
+                    'child_id' => $child->id,
+                    'user_id' => $job->user_id,
+                    'measured_at' => $row['measured_at'],
+                    'weight_kg' => $row['weight_kg'] ?? null,
+                    'height_cm' => $row['height_cm'] ?? null,
+                    'head_circumference_cm' => $row['head_circumference_cm'] ?? null,
+                    'notes' => $row['notes'] ?? null,
+                ]);
+
+                $created++;
+            } catch (\Exception $e) {
+                $failed++;
+            }
+
+            if (($index + 1) % 10 === 0) {
+                $this->updateImportProgress($job, $created, $failed);
+            }
+        }
+
+        $this->updateImportProgress($job, $created, $failed);
+        $this->completeImport($job);
+
+        return ['created' => $created, 'failed' => $failed];
+    }
+
+    /**
+     * Process backup restore (JSON import).
+     *
+     * @return array{created: int, failed: int}
+     */
+    private function processBackupRestore(ImportJob $job, string $filePath): array
+    {
+        $content = file_get_contents($filePath);
+        $data = json_decode($content, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException('File JSON tidak valid: '.json_last_error_msg());
+        }
+
+        $created = 0;
+        $failed = 0;
+
+        // Import family members from backup
+        if (isset($data['family_members']) && is_array($data['family_members'])) {
+            foreach ($data['family_members'] as $member) {
+                try {
+                    $child = Child::where('tenant_id', $job->tenant_id)
+                        ->where('name', 'like', '%'.($member['child_name'] ?? '').'%')
+                        ->first();
+
+                    if (! $child || empty($member['name']) || empty($member['relationship'])) {
+                        $failed++;
+
+                        continue;
+                    }
+
+                    FamilyMember::create([
+                        'tenant_id' => $job->tenant_id,
+                        'user_id' => $job->user_id,
+                        'child_id' => $child->id,
+                        'name' => $member['name'],
+                        'relationship' => $member['relationship'],
+                        'phone' => $member['phone'] ?? null,
+                        'email' => $member['email'] ?? null,
+                        'is_primary' => $member['is_primary'] ?? false,
+                    ]);
+
+                    $created++;
+                } catch (\Exception $e) {
+                    $failed++;
+                }
+            }
+        }
+
+        // Import growth records from backup
+        if (isset($data['growth_records']) && is_array($data['growth_records'])) {
+            foreach ($data['growth_records'] as $record) {
+                try {
+                    $child = Child::where('tenant_id', $job->tenant_id)
+                        ->where('name', 'like', '%'.($record['child_name'] ?? '').'%')
+                        ->first();
+
+                    if (! $child || empty($record['measured_at'])) {
+                        $failed++;
+
+                        continue;
+                    }
+
+                    Growth::create([
+                        'child_id' => $child->id,
+                        'user_id' => $job->user_id,
+                        'measured_at' => $record['measured_at'],
+                        'weight_kg' => $record['weight_kg'] ?? null,
+                        'height_cm' => $record['height_cm'] ?? null,
+                        'head_circumference_cm' => $record['head_circumference_cm'] ?? null,
+                        'notes' => $record['notes'] ?? null,
+                    ]);
+
+                    $created++;
+                } catch (\Exception $e) {
+                    $failed++;
+                }
+            }
+        }
+
+        $this->updateImportProgress($job, $created, $failed);
+        $this->completeImport($job);
+
+        return ['created' => $created, 'failed' => $failed];
+    }
+
+    /**
+     * Read a CSV file and return rows as associative arrays.
+     *
+     * @return list<array<string, string>>
+     */
+    private function readCsvFile(string $filePath): array
+    {
+        $handle = fopen($filePath, 'r');
+
+        if ($handle === false) {
+            throw new \RuntimeException('Gagal membuka file CSV.');
+        }
+
+        $headers = fgetcsv($handle);
+
+        if ($headers === false) {
+            fclose($handle);
+
+            return [];
+        }
+
+        // Normalize headers to snake_case
+        $headers = array_map(fn ($h) => strtolower(trim(str_replace(' ', '_', $h))), $headers);
+
+        $rows = [];
+
+        while (($row = fgetcsv($handle)) !== false) {
+            if (count($row) === count($headers)) {
+                $rows[] = array_combine($headers, $row);
+            }
+        }
+
+        fclose($handle);
+
+        return $rows;
     }
 }

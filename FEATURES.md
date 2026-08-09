@@ -1048,7 +1048,7 @@ Semua response menggunakan Eloquent API Resources untuk transformasi data yang k
 * Autentikasi token-based dalam setiap test
 * Validasi request & response format
 * Otorisasi & akses silang pengguna lain
-* Total keseluruhan: **490 tests, 1122 assertions** — all passing
+* Total keseluruhan: **504 tests, 1153 assertions** — all passing
 
 ---
 
@@ -1105,3 +1105,63 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
   * **Family Members** — name, relationship
 * Kedua controller (web + API) menggunakan `SearchService`
 * Case-insensitive search via `LOWER()` SQL
+
+## PWA (Progressive Web App) Support ✅ (Phase 10)
+
+* `public/manifest.json` — Web App Manifest untuk installability
+* `public/sw.js` — Service Worker dengan cache-first strategy
+* Offline support untuk halaman statis
+* Install prompt di mobile dan desktop
+* Theme color dan icon terintegrasi dengan brand ForMysha
+
+## Social Sharing ✅ (Phase 10)
+
+* Share button pada halaman public profile
+* Support: Facebook, Twitter/X, WhatsApp, Telegram
+* Copy link to clipboard dengan feedback
+* Meta tags (Open Graph & Twitter Cards) untuk rich previews
+* Component: `components/share-button.blade.php`
+
+## Data Import (CSV/JSON) ✅ (Phase 10)
+
+* Import CSV/JSON untuk: Children, Timelines, Diaries, Growth Records
+* `DataImportService` — parsing, validation, dan batch insert
+* Progress tracking via session
+* Download template CSV untuk setiap tipe
+* Validation: missing required fields, invalid data types, duplicate detection
+* Routes: `POST /{child}/import/{type}`
+
+## Caching Strategy ✅ (Phase 10)
+
+* `CacheService` — centralized caching service untuk tenant-scoped data
+* **Branding cache**: 60 menit TTL dengan cache tags per tenant
+* **Subscription status cache**: 5 menit TTL
+* **Tenant usage cache**: 5 menit TTL dengan cache tags
+* Cache invalidation otomatis saat data berubah
+* Integrated ke `EnsureActiveSubscription` middleware
+* Integrated ke `branding/footer.blade.php`
+
+## Subscription Lifecycle Automation ✅ (Phase 10)
+
+* `CheckExpiredSubscriptions` — command harian (02:00) untuk expire subscription
+  * Status: `active` → `past_due` → `inactive` (setelah 7 hari grace period)
+* `SendSubscriptionReminders` — command harian (08:00) untuk kirim pengingat
+  * Pengingat 7 hari sebelum expiry
+* Scheduled via `routes/console.php` dengan Laravel Scheduler
+* Backup cleanup: mingguan (Minggu 03:00)
+
+## Database Query Optimization ✅ (Phase 10)
+
+* N+1 query fix pada API ChildController — `withCount()` untuk 7 relasi:
+  * timelines, albums, diaries, documents, events, growths, healthRecords
+* Eager loading pada dashboard service — sudah optimal
+* Type count optimization pada HealthController via `selectRaw` + `groupBy`
+* Branding footer menggunakan cached query (60 min TTL)
+
+## Data Validation & Consistency ✅ (Phase 10)
+
+* Document type standardisasi: `birth_certificate`, `family_card`, `health_card`, `school_report`, `other`
+* Date field konsisten: semua menggunakan `date_of_birth` (bukan `birth_date`)
+* Form validation rules diperkuat pada Store/Update requests
+* Empty state components konsisten di semua halaman
+* Print-friendly CSS: `@media print` rules untuk document views

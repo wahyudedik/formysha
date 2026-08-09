@@ -3,7 +3,8 @@
     $footerText = null;
 
     if ($tenant) {
-        $branding = $tenant->branding;
+        $cacheService = app(\App\Services\CacheService::class);
+        $branding = $cacheService->getTenantBranding($tenant);
         if ($branding) {
             $footerText = $branding->footer_text;
         }

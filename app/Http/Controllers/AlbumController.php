@@ -18,15 +18,25 @@ class AlbumController extends Controller
      */
     public function index(Request $request, Child $child): View
     {
-        $albums = $child->albums()
-            ->withCount('media')
-            ->orderBy('sort_order', 'asc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        $query = $child->albums()->withCount('media');
+
+        // Sort options
+        $sort = $request->input('sort', 'default');
+        match ($sort) {
+            'newest' => $query->orderBy('created_at', 'desc'),
+            'oldest' => $query->orderBy('created_at', 'asc'),
+            'name_asc' => $query->orderBy('name', 'asc'),
+            'name_desc' => $query->orderBy('name', 'desc'),
+            'most_media' => $query->withCount('media')->orderBy('media_count', 'desc'),
+            default => $query->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc'),
+        };
+
+        $albums = $query->paginate(12)->withQueryString();
 
         return view('albums.index', [
             'child' => $child,
             'albums' => $albums,
+            'currentSort' => $sort,
         ]);
     }
 

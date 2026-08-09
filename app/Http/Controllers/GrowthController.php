@@ -22,9 +22,17 @@ class GrowthController extends Controller
      */
     public function index(Request $request, Child $child): View
     {
-        $growths = $child->growths()
-            ->orderBy('measured_at', 'desc')
-            ->paginate(12);
+        $query = $child->growths();
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->where('measured_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->where('measured_at', '<=', $request->date_to);
+        }
+
+        $growths = $query->orderBy('measured_at', 'desc')->paginate(12)->withQueryString();
 
         $latestGrowth = $child->growths()
             ->latest('measured_at')
@@ -54,6 +62,7 @@ class GrowthController extends Controller
             'whoHeight' => $whoHeight,
             'whoHead' => $whoHead,
             'assessment' => $assessment,
+            'request' => $request,
         ]);
     }
 

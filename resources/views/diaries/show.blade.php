@@ -54,36 +54,20 @@
                         </div>
 
                         <!-- Delete Button -->
-                        <div x-data="{ showDeleteConfirm: false }">
-                            <button @click="showDeleteConfirm = true" class="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-
-                            <!-- Delete Confirmation Modal -->
-                            <div x-show="showDeleteConfirm" x-cloak class="fixed inset-0 z-50 overflow-y-auto" x-transition>
-                                <div class="flex items-center justify-center min-h-screen px-4">
-                                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" @click="showDeleteConfirm = false"></div>
-                                    <div class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-soft max-w-md w-full p-6 z-10">
-                                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">{{ __('Hapus Catatan?') }}</h3>
-                                        <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('Tindakan ini tidak dapat dibatalkan.') }}</p>
-                                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 justify-end">
-                                            <button @click="showDeleteConfirm = false" class="btn-secondary min-h-[44px]">
-                                                {{ __('Batal') }}
-                                            </button>
-                                            <form method="POST" action="{{ route('diaries.destroy', [$child, $diary]) }}" x-on:submit="showDeleteConfirm = false">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-red-500 text-white font-semibold text-sm rounded-xl hover:bg-red-600 transition min-h-[44px]">
-                                                    {{ __('Hapus') }}
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <button
+                            x-data
+                            x-on:click.prevent="$dispatch('delete-confirm', 'delete-diary-{{ $diary->id }}')"
+                            class="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30 min-h-[44px] min-w-[44px] inline-flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                        <x-confirm-delete
+                            id="delete-diary-{{ $diary->id }}"
+                            title="{{ __('Hapus Catatan?') }}"
+                            message="{{ __('Tindakan ini tidak dapat dibatalkan.') }}"
+                            action="{{ route('diaries.destroy', [$child, $diary]) }}"
+                        />
                     </div>
                 </div>
 

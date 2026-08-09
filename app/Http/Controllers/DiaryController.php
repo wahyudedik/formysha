@@ -18,13 +18,37 @@ class DiaryController extends Controller
      */
     public function index(Request $request, Child $child): View
     {
-        $diaries = $child->diaries()
-            ->orderBy('diary_date', 'desc')
-            ->paginate(12);
+        $query = $child->diaries();
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->where('diary_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->where('diary_date', '<=', $request->date_to);
+        }
+
+        // Filter by mood
+        if ($request->filled('mood')) {
+            $query->where('mood', $request->mood);
+        }
+
+        // Sort options
+        $sort = $request->input('sort', 'newest');
+        match ($sort) {
+            'oldest' => $query->orderBy('diary_date', 'asc'),
+            'title_asc' => $query->orderBy('title', 'asc'),
+            'title_desc' => $query->orderBy('title', 'desc'),
+            default => $query->orderBy('diary_date', 'desc'),
+        };
+
+        $diaries = $query->paginate(12)->withQueryString();
 
         return view('diaries.index', [
             'child' => $child,
             'diaries' => $diaries,
+            'currentSort' => $sort,
+            'request' => $request,
         ]);
     }
 
