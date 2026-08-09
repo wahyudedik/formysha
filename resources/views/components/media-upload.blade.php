@@ -14,8 +14,14 @@
         maxFiles: {{ $maxFiles }},
         maxSizeBytes: 10485760,
         existingMedia: {{ Js::from($existingMedia) }},
+        syncFileInput() {
+            const dt = new DataTransfer();
+            this.files.forEach(file => dt.items.add(file));
+            this.$refs.fileInput.files = dt.files;
+        },
         removeFile(index) {
             this.files.splice(index, 1);
+            this.syncFileInput();
         },
         removeExisting(index) {
             this.existingMedia.splice(index, 1);
@@ -40,8 +46,8 @@
         },
         handleFileSelect(e) {
             const selectedFiles = Array.from(e.target.files);
-            this.addFiles(selectedFiles);
             e.target.value = '';
+            this.addFiles(selectedFiles);
         },
         addFiles(newFiles) {
             const remaining = this.maxFiles - this.files.length;
@@ -53,6 +59,7 @@
                 }
                 this.files.push(file);
             }
+            this.syncFileInput();
         }
     }"
     class="mb-5"
@@ -85,6 +92,7 @@
 
     <input
         type="file"
+        name="{{ $name }}"
         x-ref="fileInput"
         class="sr-only"
         {{ $multiple ? 'multiple' : '' }}
@@ -132,8 +140,10 @@
         </div>
     </template>
 
-    {{-- Hidden inputs for file count --}}
+    {{-- Existing media IDs for edit forms --}}
     @if($multiple)
-        <input type="hidden" name="media_count" :value="files.length">
+        <template x-for="(media, index) in existingMedia" :key="'existing-'+index">
+            <input type="hidden" name="existing_media[]" :value="media.id">
+        </template>
     @endif
 </div>

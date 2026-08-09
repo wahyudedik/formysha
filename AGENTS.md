@@ -803,6 +803,17 @@ public/favicon.ico   → Favicon legacy
 * Enterprise Dashboard
 * Enterprise API (analytics, invitations, import)
 
+#### Phase 8 — Responsive Design Overhaul ✅
+
+* Responsive design besar-besaran pada 88+ file view Blade
+* Landing Page: hamburger menu mobile, footer centered
+* Auth Views: split design layout, mobile logo, brand color updates
+* Module Views: header flex responsive, container/form padding bertingkat, touch targets, table scrollable
+* SaaS Views: sidebar responsive mobile drawer, dashboard cards responsive grid
+* Support Views: header responsive, modal/dropdown overflow handling
+* Blade Components: child-nav scrollable, empty-state responsive, toast touch-friendly, calendar-grid responsive
+* Responsive Design Patterns standar untuk semua view baru
+
 ### Keunggulan Kompetitif
 
 * Fokus pada **Digital Life Book**, bukan sekadar album foto.
@@ -847,6 +858,61 @@ ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya 
 - Use existing Blade components before creating new ones: `x-empty-state`, `x-page-header`, `x-breadcrumb`, `x-loading`, `x-child-nav`, `x-modal`, `x-dropdown`, `x-toast`, `x-confirm-delete`, `x-pages-layout`.
 - Authenticated pages use `x-app-layout`. Public pages (like `/public/profile`) use standalone layout with Tailwind CDN. Static pages (about, privacy, terms) use `x-pages-layout`.
 - Color system: Use Tailwind custom colors — `skyBlue`, `mintGreen`, `softPink`, `lavender`, `warmYellow`, `peach`, `softOrange`, `cream`.
+
+### Responsive Design Patterns
+
+All Blade views MUST follow these responsive patterns consistently:
+
+- **Header**: `flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3` — stack di mobile, row di desktop
+- **Container**: `px-4 sm:px-6 lg:px-8` — padding konsisten di semua breakpoint
+- **Card/Form**: `p-4 sm:p-6 lg:p-8` — padding bertingkat
+- **Submit buttons**: `flex flex-col sm:flex-row items-stretch sm:items-center gap-3` — stack di mobile, row di desktop
+- **Touch targets**: `min-h-[44px]` pada semua tombol — minimum ukuran tap untuk mobile
+- **Table**: `overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0` — edge-to-edge di mobile, normal di desktop
+- **Modal**: `max-h-[90vh] overflow-y-auto` — prevent overflow di mobile
+- **Dropdown**: `max-h-[70vh] overflow-y-auto` — prevent overflow di mobile
+- **Child nav**: scrollable horizontal di mobile — `overflow-x-auto`
+- **Button rounded**: `rounded-xl` (konsisten di semua tombol)
+- **Back link** (pages-layout): icon di mobile, text di desktop
+
+#### Landing Page
+
+* Header: Hamburger menu mobile dengan full-screen overlay
+* Footer: Centered layout dengan flex-wrap
+
+#### Auth Views
+
+* Split design layout: branding panel (kiri) + form panel (kanan)
+* Mobile: logo kecil di atas form
+* Desktop: branding area dengan dekorasi animasi
+* Brand color: primary-button (softPink), text-input (softPink focus)
+
+#### Module Views
+
+* Header flex responsive: stack di mobile, row di desktop
+* Semua container, card, form, dan button mengikuti pattern di atas
+* Table wrapper: `overflow-x-auto` dengan edge-to-edge padding di mobile
+
+#### SaaS Views
+
+* Sidebar responsive dengan mobile drawer
+* Dashboard cards responsive grid
+* Tabel data scrollable di mobile
+
+#### Support Views
+
+* Semua header responsive
+* Modal dan dropdown mengikuti pattern di atas
+
+#### Blade Components
+
+* `child-nav`: scrollable horizontal di mobile
+* `empty-state`: responsive padding
+* `confirm-delete`, `modal`: responsive layout
+* `toast`: touch-friendly close button
+* `dropdown`: responsive overflow
+* `calendar-grid`: responsive header
+* `growth-chart`: flexible tabs
 
 ### Testing Conventions
 
@@ -960,7 +1026,7 @@ ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya 
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit
 * **API Tests**: AuthTest, ChildApiTest, TimelineApiTest, DiaryApiTest, AlbumApiTest, GrowthApiTest, HealthApiTest, EventApiTest, FamilyApiTest, NotificationApiTest, SearchApiTest, PlanApiTest, DashboardApiTest, SuperAdminApiTest, WebhookApiTest, LanguageApiTest, WhiteLabelApiTest, DomainApiTest, PluginApiTest, EnterpriseApiTest
 * **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, Album, Child, Diary
-* **QA Audit**: Phase 1-7 selesai, semua tests passing, Pint formatting applied
+* **QA Audit**: Phase 1-8 selesai, semua tests passing, Pint formatting applied
 
 ---
 

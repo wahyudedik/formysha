@@ -3,6 +3,7 @@
 use App\Http\Controllers\SuperAdmin\AnalyticsController;
 use App\Http\Controllers\SuperAdmin\AuditLogController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
+use App\Http\Controllers\SuperAdmin\ErrorLogController;
 use App\Http\Controllers\SuperAdmin\MonitoringController;
 use App\Http\Controllers\SuperAdmin\PaymentController;
 use App\Http\Controllers\SuperAdmin\PlanController;
@@ -60,4 +61,10 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])
 
         // Plugin Management
         Route::resource('plugins', PluginController::class)->except(['create', 'edit']);
+
+        // Error Logs
+        Route::get('/error-logs', [ErrorLogController::class, 'index'])
+            ->name('error-logs.index');
+        Route::post('/error-logs/clear', [ErrorLogController::class, 'clear'])
+            ->name('error-logs.clear');
     });

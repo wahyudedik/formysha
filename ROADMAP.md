@@ -713,6 +713,76 @@ public/favicon.ico   → Favicon legacy
 
 ---
 
+## Phase 8 — Responsive Design Overhaul ✅
+
+Perubahan responsive design besar-besaran pada **88+ file view Blade** untuk memastikan pengalaman pengguna yang optimal di semua perangkat (mobile, tablet, desktop).
+
+### Landing Page (`welcome.blade.php`)
+
+* Header: Hamburger menu mobile dengan full-screen overlay
+* Footer: Centered layout dengan flex-wrap
+
+### Auth Views (`layouts/guest.blade.php` + `auth/*.blade.php`)
+
+* Split design layout: branding panel (kiri) + form panel (kanan)
+* Mobile: logo kecil di atas form
+* Desktop: branding area dengan dekorasi animasi
+* Brand color updates: primary-button (softPink), text-input (softPink focus)
+* Semua auth views diperbarui dengan header emoji, placeholder, link navigasi
+
+### Module Views (children, timeline, albums, health, diary, growth, documents, calendar, family)
+
+* Header flex responsive: stack di mobile, row di desktop
+* Container padding: `px-4 sm:px-6 lg:px-8`
+* Form/card padding: `p-4 sm:p-6 lg:p-8`
+* Submit buttons: stack di mobile, row di desktop
+* Touch targets: `min-h-[44px]` pada semua tombol
+* Table wrapper: `overflow-x-auto` dengan edge-to-edge padding di mobile
+
+### SaaS Views (subscription, super-admin, admin)
+
+* Sidebar responsive dengan mobile drawer
+* Dashboard cards responsive grid
+* Tabel data scrollable di mobile
+
+### Support Views (notifications, search, profile, public profile)
+
+* Semua header responsive
+* Modal: `max-h-[90vh] overflow-y-auto`
+* Dropdown: `max-h-[70vh] overflow-y-auto`
+
+### Blade Components
+
+* `child-nav`: scrollable horizontal di mobile
+* `empty-state`: responsive padding
+* `confirm-delete`, `modal`: responsive layout
+* `toast`: touch-friendly close button
+* `dropdown`: responsive overflow
+* `calendar-grid`: responsive header
+* `growth-chart`: flexible tabs
+* Semua buttons: `min-h-[44px]`, `rounded-xl`
+
+### Pages Layout (`components/pages-layout.blade.php`)
+
+* Back link: icon di mobile, text di desktop
+
+### Responsive Design Patterns (Standar)
+
+```
+Header:           flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3
+Container:        px-4 sm:px-6 lg:px-8
+Card/Form:        p-4 sm:p-6 lg:p-8
+Submit buttons:   flex flex-col sm:flex-row items-stretch sm:items-center gap-3
+Touch targets:    min-h-[44px] pada semua tombol
+Table:            overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0
+Modal:            max-h-[90vh] overflow-y-auto
+Dropdown:         max-h-[70vh] overflow-y-auto
+Child nav:        scrollable horizontal di mobile
+Button rounded:   rounded-xl (konsisten)
+```
+
+---
+
 ## Tujuan Jangka Panjang
 
 ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya oleh jutaan orang tua. Produk dikembangkan secara bertahap, dimulai dari **web SaaS** sebagai fondasi utama, kemudian dapat diperluas ke aplikasi mobile, desktop, dan solusi enterprise sesuai kebutuhan pasar.

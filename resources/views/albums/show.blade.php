@@ -114,12 +114,9 @@
                     @foreach ($album->media as $item)
                         <div class="group relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 shadow-soft">
                             @if ($item->file_type === 'photo')
-                                <img src="{{ asset('storage/' . $item->file_path) }}" alt="{{ $item->alt_text ?? $item->file_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <img src="{{ asset('storage/' . $item->file_path) }}" alt="{{ $item->alt_text ?? $item->file_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                             @elseif ($item->file_type === 'video')
-                                <div class="w-full h-full flex flex-col items-center justify-center">
-                                    <span class="text-3xl mb-1">🎬</span>
-                                    <span class="text-xs text-gray-400 dark:text-gray-500">{{ $item->file_name }}</span>
-                                </div>
+                                <video src="{{ asset('storage/' . $item->file_path) }}" class="absolute inset-0 w-full h-full object-cover" preload="metadata" controls></video>
                             @elseif ($item->file_type === 'audio')
                                 <div class="w-full h-full flex flex-col items-center justify-center">
                                     <span class="text-3xl mb-1">🎵</span>
