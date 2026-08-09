@@ -60,6 +60,53 @@ disable_maintenance() {
     log_info "Maintenance mode NONAKTIF."
 }
 
+validate_and_fix_env() {
+    local env_file="${APP_DIR}/.env"
+    local fixed=0
+
+    if [[ ! -f "${env_file}" ]]; then
+        log_error "File .env tidak ditemukan di ${env_file}"
+    fi
+
+    log_info "Memvalidasi format .env..."
+
+    local tmp_file
+    tmp_file=$(mktemp)
+
+    while IFS= read -r line || [[ -n "${line}" ]]; do
+        # Skip comments, empty lines, and lines that are already quoted or use ${VAR}
+        if [[ -z "${line}" ]] || [[ "${line}" =~ ^[[:space:]]*# ]] || [[ "${line}" =~ =\" ]] || [[ "${line}" =~ =\$ ]] || [[ "${line}" =~ =[[:space:]]*$ ]]; then
+            echo "${line}" >> "${tmp_file}"
+            continue
+        fi
+
+        # Match KEY=VALUE pattern
+        if [[ "${line}" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.+)$ ]]; then
+            local key="${BASH_REMATCH[1]}"
+            local value="${BASH_REMATCH[2]}"
+
+            # Check if value contains spaces but is NOT quoted
+            if [[ "${value}" =~ [[:space:]] ]] && [[ ! "${value}" =~ ^\" ]] && [[ ! "${value}" =~ ^\' ]]; then
+                log_warn "FIX: ${key}=${value} → ${key}=\"${value}\" (spasi tanpa kutip)"
+                echo "${key}=\"${value}\"" >> "${tmp_file}"
+                fixed=$((fixed + 1))
+                continue
+            fi
+        fi
+
+        echo "${line}" >> "${tmp_file}"
+    done < "${env_file}"
+
+    if [[ ${fixed} -gt 0 ]]; then
+        cp "${env_file}" "${env_file}.bak.$(date +%s)"
+        mv "${tmp_file}" "${env_file}"
+        log_success ".env diperbaiki: ${fixed} value dengan spasi ditambahkan kutip."
+    else
+        rm -f "${tmp_file}"
+        log_success ".env format valid."
+    fi
+}
+
 clear_all_caches() {
     cd "${APP_DIR}"
 
@@ -167,6 +214,9 @@ cd "${APP_DIR}"
 # Composer root safety
 export COMPOSER_ALLOW_SUPERUSER=1
 
+# Validasi & auto-fix .env (handle value dengan spasi tanpa kutip)
+validate_and_fix_env
+
 #-------------------------------------------------------------------------------
 # MODE: ROLLBACK
 #-------------------------------------------------------------------------------
@@ -202,6 +252,9 @@ if [[ "${MODE}" == "rollback" ]]; then
         cp "${LATEST_ENV}" "${APP_DIR}/.env"
         log_success ".env restored dari backup."
     fi
+
+    # Validasi .env setelah restore
+    validate_and_fix_env
 
     # Git rollback
     git checkout "${PREV_COMMIT}"
