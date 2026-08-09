@@ -92,7 +92,7 @@ describe('TenantService', function () {
             'plan_id' => $freePlan->id,
             'status' => Subscription::STATUS_ACTIVE,
             'starts_at' => now(),
-            'ends_at' => now()->addCentury(),
+            'ends_at' => null,
         ]);
 
         // No children — can add

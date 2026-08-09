@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
             ✏️ {{ __('Edit Tenant') }}
         </h2>
     </x-slot>
@@ -17,9 +17,9 @@
                     ['label' => 'Edit'],
                 ]" />
 
-                <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                    <div class="p-6 border-b border-gray-100">
-                        <h3 class="font-semibold text-gray-800">Edit: {{ $tenant->name }}</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">Edit: {{ $tenant->name }}</h3>
                     </div>
 
                     <form method="POST" action="{{ route('super-admin.tenants.update', $tenant) }}" class="p-6">
@@ -50,9 +50,9 @@
                                         name="is_active"
                                         value="1"
                                         {{ old('is_active', $tenant->is_active) ? 'checked' : '' }}
-                                        class="w-5 h-5 rounded-lg border-gray-300 text-softPink-400 focus:ring-softPink-300"
+                                        class="w-5 h-5 rounded-lg border-gray-300 dark:border-gray-600 text-softPink-400 focus:ring-softPink-300"
                                     >
-                                    <span class="text-sm font-medium text-gray-700">Tenant Aktif</span>
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Tenant Aktif</span>
                                 </label>
                             </div>
                         </div>

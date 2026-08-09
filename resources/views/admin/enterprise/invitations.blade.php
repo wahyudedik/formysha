@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 ✉️ {{ __('Undangan Pengguna') }}
             </h2>
         </div>
@@ -21,8 +21,8 @@
                 ]" />
 
                 {{-- Invite Form --}}
-                <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100 mb-6">
-                    <h3 class="font-semibold text-gray-800 mb-4">Kirim Undangan Baru</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Kirim Undangan Baru</h3>
                     <form x-data="{ sending: false }" @submit.prevent="
                         sending = true;
                         fetch('{{ route('enterprise.invite') }}', {
@@ -53,20 +53,20 @@
                     ">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                                 <input
                                     x-ref="email"
                                     type="email"
                                     required
                                     placeholder="user@example.com"
-                                    class="w-full rounded-xl border-gray-300 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm"
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm"
                                 />
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Peran</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Peran</label>
                                 <select
                                     x-ref="role"
-                                    class="w-full rounded-xl border-gray-300 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm"
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm"
                                 >
                                     <option value="parent">Orang Tua (Parent)</option>
                                     <option value="tenant_admin">Admin Tenant</option>
@@ -87,37 +87,37 @@
                 </div>
 
                 {{-- Invitations List --}}
-                <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
-                    <h3 class="font-semibold text-gray-800 mb-4">Undangan Aktif</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Undangan Aktif</h3>
 
                     @if ($invitations->isEmpty())
                         <div class="text-center py-8">
                             <div class="text-4xl mb-3">📭</div>
-                            <p class="text-gray-500">Belum ada undangan aktif.</p>
+                            <p class="text-gray-500 dark:text-gray-400">Belum ada undangan aktif.</p>
                         </div>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-gray-100">
-                                        <th class="text-left py-3 px-4 font-semibold text-gray-600">Email</th>
-                                        <th class="text-left py-3 px-4 font-semibold text-gray-600">Peran</th>
-                                        <th class="text-left py-3 px-4 font-semibold text-gray-600">Dikirim Oleh</th>
-                                        <th class="text-left py-3 px-4 font-semibold text-gray-600">Kedaluwarsa</th>
-                                        <th class="text-right py-3 px-4 font-semibold text-gray-600">Aksi</th>
+                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-600 dark:text-gray-400">Email</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-600 dark:text-gray-400">Peran</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-600 dark:text-gray-400">Dikirim Oleh</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-600 dark:text-gray-400">Kedaluwarsa</th>
+                                        <th class="text-right py-3 px-4 font-semibold text-gray-600 dark:text-gray-400">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($invitations as $invitation)
-                                        <tr class="border-b border-gray-50 hover:bg-gray-50">
-                                            <td class="py-3 px-4 font-medium text-gray-800">{{ $invitation->email }}</td>
+                                        <tr class="border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                            <td class="py-3 px-4 font-medium text-gray-800 dark:text-gray-100">{{ $invitation->email }}</td>
                                             <td class="py-3 px-4">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium {{ $invitation->role === 'tenant_admin' ? 'bg-lavender-100 text-lavender-700' : 'bg-mintGreen-100 text-mintGreen-700' }}">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium {{ $invitation->role === 'tenant_admin' ? 'bg-lavender-100 dark:bg-lavender-950/30 text-lavender-700 dark:text-lavender-400' : 'bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-700 dark:text-mintGreen-400' }}">
                                                     {{ $invitation->role === 'tenant_admin' ? 'Admin Tenant' : 'Orang Tua' }}
                                                 </span>
                                             </td>
-                                            <td class="py-3 px-4 text-gray-600">{{ $invitation->invitedBy?->name ?? '—' }}</td>
-                                            <td class="py-3 px-4 text-gray-600">{{ $invitation->expires_at->format('d M Y H:i') }}</td>
+                                            <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{{ $invitation->invitedBy?->name ?? '—' }}</td>
+                                            <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{{ $invitation->expires_at->format('d M Y H:i') }}</td>
                                             <td class="py-3 px-4 text-right">
                                                 <button
                                                     x-data="{ revoking: false }"
@@ -138,7 +138,7 @@
                                                         }
                                                     "
                                                     :disabled="revoking"
-                                                    class="px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
+                                                    class="px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors disabled:opacity-50"
                                                 >
                                                     Batalkan
                                                 </button>

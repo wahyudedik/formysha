@@ -178,7 +178,7 @@ describe('SubscriptionService', function () {
             'plan_id' => $plan->id,
             'status' => Subscription::STATUS_ACTIVE,
             'starts_at' => now(),
-            'ends_at' => now()->addCentury(),
+            'ends_at' => null,
         ]);
 
         expect($service->isSubscriptionActive($tenant))->toBeTrue();

@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('growth.index', $child) }}" class="text-gray-400 hover:text-gray-600 transition">
+            <a href="{{ route('growth.index', $child) }}" class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 📏 {{ __('Tambah Pengukuran') }}
             </h2>
         </div>
@@ -14,18 +14,18 @@
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
                 <div class="p-6 sm:p-8">
                     <x-child-selector :children="$children" :child="$child" :route-name="'growth.create'" />
 
                     <!-- Child Info -->
-                    <div class="flex items-center gap-3 mb-6 p-4 bg-gradient-to-r from-mintGreen-50 to-skyBlue-50 rounded-2xl">
-                        <div class="w-10 h-10 rounded-xl {{ $child->gender === 'female' ? 'bg-softPink-100' : 'bg-skyBlue-100' }} flex items-center justify-center text-lg">
+                    <div class="flex items-center gap-3 mb-6 p-4 bg-gradient-to-r from-mintGreen-50 to-skyBlue-50 dark:from-mintGreen-950/30 dark:via-gray-800 dark:to-skyBlue-950/30 rounded-2xl">
+                        <div class="w-10 h-10 rounded-xl {{ $child->gender === 'female' ? 'bg-softPink-100 dark:bg-softPink-950/30' : 'bg-skyBlue-100 dark:bg-skyBlue-950/30' }} flex items-center justify-center text-lg">
                             {{ $child->gender === 'female' ? '👧' : '👦' }}
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">{{ __('Pengukuran untuk') }}</p>
-                            <p class="font-semibold text-gray-800">{{ $child->nickname ?? $child->name }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Pengukuran untuk') }}</p>
+                            <p class="font-semibold text-gray-800 dark:text-gray-100">{{ $child->nickname ?? $child->name }}</p>
                         </div>
                     </div>
 
@@ -63,7 +63,7 @@
                         <!-- Notes -->
                         <div class="mb-6">
                             <x-input-label for="notes" :value="__('Catatan (opsional)')" />
-                            <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full border-gray-300 focus:border-mintGreen-500 focus:ring-mintGreen-500 rounded-2xl shadow-soft" placeholder="Catatan tambahan tentang pengukuran ini...">{{ old('notes') }}</textarea>
+                            <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 focus:border-mintGreen-500 focus:ring-mintGreen-500 rounded-2xl shadow-soft dark:bg-gray-700 dark:text-gray-200" placeholder="Catatan tambahan tentang pengukuran ini...">{{ old('notes') }}</textarea>
                             <x-input-error :messages="$errors->get('notes')" class="mt-2" />
                         </div>
 

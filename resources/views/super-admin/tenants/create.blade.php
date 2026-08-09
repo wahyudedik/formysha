@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
             ➕ {{ __('Tambah Tenant Baru') }}
         </h2>
     </x-slot>
@@ -16,10 +16,10 @@
                     ['label' => 'Tambah Baru'],
                 ]" />
 
-                <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                    <div class="p-6 border-b border-gray-100">
-                        <h3 class="font-semibold text-gray-800">Form Tambah Tenant</h3>
-                        <p class="text-sm text-gray-500 mt-1">Isi informasi tenant baru di bawah ini.</p>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">Form Tambah Tenant</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Isi informasi tenant baru di bawah ini.</p>
                     </div>
 
                     <form method="POST" action="{{ route('super-admin.tenants.store') }}" class="p-6">
@@ -38,7 +38,7 @@
                                 <x-input-label for="slug" :value="__('Slug (opsional)')" />
                                 <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full input-focus" :value="old('slug')" placeholder="Otomatis dari nama jika kosong" />
                                 <x-input-error :messages="$errors->get('slug')" class="mt-1" />
-                                <p class="text-xs text-gray-400 mt-1">Jika dikosongkan, slug akan dibuat otomatis dari nama.</p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Jika dikosongkan, slug akan dibuat otomatis dari nama.</p>
                             </div>
                         </div>
 

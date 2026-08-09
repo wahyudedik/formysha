@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\TenantService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,9 +43,18 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Create tenant for the new user (same as API registration flow)
+        $tenantService = app(TenantService::class);
+        $tenant = $tenantService->createTenant([
+            'name' => $request->name."'s Family",
+        ], $user);
+
         event(new Registered($user));
 
         Auth::login($user);
+
+        // Set tenant in session so getCurrentTenant() works immediately
+        $tenantService->switchTenant($tenant);
 
         return redirect(route('dashboard', absolute: false));
     }

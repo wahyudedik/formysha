@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-bold text-2xl text-gray-800 leading-tight">
+            <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-100 leading-tight">
                 🔔 Notifikasi
             </h2>
             @if($unreadCount > 0)
@@ -20,8 +20,8 @@
 
     <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Summary -->
-        <div class="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-            <div class="flex items-center gap-4 text-sm text-gray-500">
+        <div class="mb-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+            <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                 <span class="inline-flex items-center gap-1">
                     <span class="w-2 h-2 bg-skyBlue rounded-full"></span>
                     Total: {{ $notifications->total() }} notifikasi
@@ -38,8 +38,8 @@
         @if($notifications->isEmpty())
             <div class="text-center py-12">
                 <div class="text-6xl mb-4">🔔</div>
-                <h3 class="text-lg font-semibold text-gray-700 mb-2">Belum Ada Notifikasi</h3>
-                <p class="text-gray-500">Notifikasi baru akan muncul di sini ketika ada aktivitas penting.</p>
+                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Belum Ada Notifikasi</h3>
+                <p class="text-gray-500 dark:text-gray-400">Notifikasi baru akan muncul di sini ketika ada aktivitas penting.</p>
             </div>
         @else
             <div class="space-y-3">

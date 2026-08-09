@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
             💳 {{ __('Upload Bukti Pembayaran') }}
         </h2>
     </x-slot>
@@ -13,49 +13,49 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {{-- Subscription Info --}}
-            <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                <div class="p-6 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-800">📋 {{ __('Detail Langganan') }}</h3>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Detail Langganan') }}</h3>
                 </div>
                 <div class="p-6 space-y-4">
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500">Paket</span>
-                        <span class="text-sm font-bold text-gray-800">{{ $subscription->plan->name ?? '-' }}</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Paket</span>
+                        <span class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->name ?? '-' }}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500">Status</span>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-warmYellow-100 text-warmYellow-600">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Status</span>
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-warmYellow-100 dark:bg-warmYellow-950/30 text-warmYellow-600 dark:text-warmYellow-400">
                             Menunggu Pembayaran
                         </span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500">Jumlah</span>
-                        <span class="text-lg font-bold text-gray-800">{{ $subscription->plan->getPriceMonthlyFormatted() }}/bulan</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Jumlah</span>
+                        <span class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->getPriceMonthlyFormatted() }}/bulan</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500">Dibuat</span>
-                        <span class="text-sm text-gray-600">{{ $subscription->created_at->locale('id')->isoFormat('D MMMM YYYY') }}</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Dibuat</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-300">{{ $subscription->created_at->locale('id')->isoFormat('D MMMM YYYY') }}</span>
                     </div>
                 </div>
             </div>
 
             {{-- Bank Accounts --}}
-            <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                <div class="p-6 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-800">🏦 {{ __('Rekening Tujuan') }}</h3>
-                    <p class="text-xs text-gray-500 mt-1">Transfer ke salah satu rekening berikut:</p>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏦 {{ __('Rekening Tujuan') }}</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Transfer ke salah satu rekening berikut:</p>
                 </div>
                 <div class="p-6 space-y-4">
                     @foreach (config('saas.banks', []) as $bankName => $bankInfo)
-                        <div class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600">
                             <div class="flex items-center justify-between mb-1">
-                                <span class="font-bold text-sm text-gray-800">{{ $bankName }}</span>
+                                <span class="font-bold text-sm text-gray-800 dark:text-gray-100">{{ $bankName }}</span>
                                 <button type="button" class="text-xs text-skyBlue-600 hover:text-skyBlue-700" x-data x-on:click="navigator.clipboard.writeText('{{ $bankInfo['account'] }}'); $el.textContent = 'Tersalin!'; setTimeout(() => $el.textContent = 'Salin', 2000)">
                                     📋 Salin
                                 </button>
                             </div>
-                            <p class="text-sm font-mono text-gray-700">{{ $bankInfo['account'] }}</p>
-                            <p class="text-xs text-gray-500">a/n {{ $bankInfo['holder'] }}</p>
+                            <p class="text-sm font-mono text-gray-700 dark:text-gray-200">{{ $bankInfo['account'] }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">a/n {{ $bankInfo['holder'] }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -63,9 +63,9 @@
         </div>
 
         {{-- Upload Form --}}
-        <div class="mt-6 bg-white rounded-2xl shadow-soft overflow-hidden">
-            <div class="p-6 border-b border-gray-100">
-                <h3 class="font-semibold text-gray-800">📤 {{ __('Upload Bukti Transfer') }}</h3>
+        <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                <h3 class="font-semibold text-gray-800 dark:text-gray-100">📤 {{ __('Upload Bukti Transfer') }}</h3>
             </div>
 
             <form method="POST" action="{{ route('subscription.payment.store') }}" enctype="multipart/form-data" class="p-6">
@@ -77,7 +77,7 @@
                     {{-- Bank Name --}}
                     <div>
                         <x-input-label for="bank_name" :value="__('Bank yang Digunakan')" />
-                        <select id="bank_name" name="bank_name" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm" required>
+                        <select id="bank_name" name="bank_name" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" required>
                             <option value="">Pilih bank...</option>
                             @foreach (config('saas.banks', []) as $bankName => $bankInfo)
                                 <option value="{{ $bankName }}" {{ old('bank_name') === $bankName ? 'selected' : '' }}>
@@ -99,19 +99,19 @@
                     <div>
                         <x-input-label for="proof" :value="__('Bukti Transfer (Gambar)')" />
                         <div class="mt-2" x-data="{ fileName: '' }">
-                            <label for="proof" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-softPink-300 hover:bg-softPink-50/30 transition">
+                            <label for="proof" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-softPink-300 hover:bg-softPink-50/30 dark:hover:bg-softPink-950/20 transition">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
-                                    <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-10 h-10 mb-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <p class="text-sm text-gray-500"><span class="font-semibold">Klik untuk upload</span></p>
-                                    <p class="text-xs text-gray-400">PNG, JPG, JPEG (Maks. 5MB)</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Klik untuk upload</span></p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500">PNG, JPG, JPEG (Maks. 5MB)</p>
                                 </div>
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="fileName">
                                     <svg class="w-10 h-10 mb-3 text-mintGreen-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    <p class="text-sm text-gray-600 font-medium" x-text="fileName"></p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 font-medium" x-text="fileName"></p>
                                 </div>
                                 <input id="proof" name="proof" type="file" class="hidden" accept="image/*" required x-on:change="fileName = $event.target.files[0].name">
                             </label>
@@ -122,7 +122,7 @@
                     {{-- Notes --}}
                     <div>
                         <x-input-label for="notes" :value="__('Catatan (opsional)')" />
-                        <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm" placeholder="Contoh: Transfer dari BCA...">{{ old('notes') }}</textarea>
+                        <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" placeholder="Contoh: Transfer dari BCA...">{{ old('notes') }}</textarea>
                         <x-input-error :messages="$errors->get('notes')" class="mt-1" />
                     </div>
                 </div>

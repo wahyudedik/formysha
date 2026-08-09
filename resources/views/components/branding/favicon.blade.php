@@ -3,7 +3,7 @@
     $faviconUrl = null;
 
     if ($tenant) {
-        $branding = \App\Models\TenantBranding::where('tenant_id', $tenant->id)->first();
+        $branding = $tenant->branding;
         if ($branding && $branding->favicon_path) {
             $faviconUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($branding->favicon_path);
         }

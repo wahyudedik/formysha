@@ -45,6 +45,10 @@ class PaymentController extends Controller
                 ->with('error', 'Anda belum memiliki organisasi.');
         }
 
+        // Verify the subscription belongs to this tenant to prevent unauthorized payment submissions.
+        $subscription = Subscription::findOrFail($validated['subscription_id']);
+        abort_unless($subscription->tenant_id === $tenant->id, 403);
+
         $proofPath = $request->file('proof')->store('payments/proofs', 'public');
 
         $bankConfig = config("saas.banks.{$validated['bank_name']}", []);

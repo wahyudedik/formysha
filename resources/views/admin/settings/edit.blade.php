@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 ⚙️ {{ __('Pengaturan') }}
             </h2>
         </div>
@@ -25,34 +25,34 @@
 
                     <div class="max-w-2xl space-y-6">
                         {{-- Organization Name --}}
-                        <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
-                            <h3 class="font-semibold text-gray-800 mb-4">🏢 {{ __('Informasi Organisasi') }}</h3>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🏢 {{ __('Informasi Organisasi') }}</h3>
                             <div>
-                                <label for="organization_name" class="block text-sm font-medium text-gray-700 mb-1">Nama Organisasi</label>
+                                <label for="organization_name" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Nama Organisasi</label>
                                 <input
                                     type="text"
                                     id="organization_name"
                                     name="organization_name"
                                     value="{{ old('organization_name', $settings['organization_name'] ?? $tenant->name) }}"
-                                    class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-skyBlue-500 focus:ring-skyBlue-500"
                                     placeholder="Nama organisasi Anda"
                                 >
                                 @error('organization_name')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
 
                         {{-- Timezone & Language --}}
-                        <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
-                            <h3 class="font-semibold text-gray-800 mb-4">🌍 {{ __('Lokalisasi') }}</h3>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🌍 {{ __('Lokalisasi') }}</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="timezone" class="block text-sm font-medium text-gray-700 mb-1">Zona Waktu</label>
+                                    <label for="timezone" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Zona Waktu</label>
                                     <select
                                         id="timezone"
                                         name="timezone"
-                                        class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                        class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-skyBlue-500 focus:ring-skyBlue-500"
                                     >
                                         @php
                                             $timezones = [
@@ -68,16 +68,16 @@
                                         @endforeach
                                     </select>
                                     @error('timezone')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div>
-                                    <label for="language" class="block text-sm font-medium text-gray-700 mb-1">Bahasa</label>
+                                    <label for="language" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Bahasa</label>
                                     <select
                                         id="language"
                                         name="language"
-                                        class="w-full rounded-xl border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500"
+                                        class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-skyBlue-500 focus:ring-skyBlue-500"
                                     >
                                         @php
                                             $languages = [
@@ -91,7 +91,7 @@
                                         @endforeach
                                     </select>
                                     @error('language')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>

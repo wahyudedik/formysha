@@ -12,6 +12,6 @@
 <div {{ $attributes->merge(['class' => 'flex flex-col items-center justify-center gap-3 py-8']) }}>
     <div class="{{ $sizeClasses }} border-4 border-softPink-200 border-t-softPink-400 rounded-full animate-spin"></div>
     @if ($text)
-        <p class="text-sm text-gray-400">{{ $text }}</p>
+        <p class="text-sm text-gray-400 dark:text-gray-500">{{ $text }}</p>
     @endif
 </div>

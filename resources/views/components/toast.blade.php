@@ -13,10 +13,10 @@
                 info: 'ℹ️'
             },
             colors: {
-                success: 'bg-mintGreen-50 border-mintGreen-200 text-mintGreen-800',
-                error: 'bg-red-50 border-red-200 text-red-800',
-                warning: 'bg-warmYellow-50 border-warmYellow-200 text-warmYellow-800',
-                info: 'bg-skyBlue-50 border-skyBlue-200 text-skyBlue-800'
+                success: 'bg-mintGreen-50 border-mintGreen-200 text-mintGreen-800 dark:bg-mintGreen-950/30 dark:border-mintGreen-800 dark:text-mintGreen-300',
+                error: 'bg-red-50 border-red-200 text-red-800 dark:bg-red-950/30 dark:border-red-800 dark:text-red-300',
+                warning: 'bg-warmYellow-50 border-warmYellow-200 text-warmYellow-800 dark:bg-warmYellow-950/30 dark:border-warmYellow-800 dark:text-warmYellow-300',
+                info: 'bg-skyBlue-50 border-skyBlue-200 text-skyBlue-800 dark:bg-skyBlue-950/30 dark:border-skyBlue-800 dark:text-skyBlue-300'
             }
         }"
         x-init="setTimeout(() => { show = false }, 5000)"

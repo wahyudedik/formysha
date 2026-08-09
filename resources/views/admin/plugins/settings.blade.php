@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 ⚙️ Pengaturan: {{ $plugin->name }}
             </h2>
         </div>
@@ -18,12 +18,12 @@
                     ['label' => 'Pengaturan: ' . $plugin->name],
                 ]" />
 
-                <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="text-3xl">{{ $plugin->icon ?? '🧩' }}</span>
                         <div>
-                            <h3 class="font-bold text-gray-800">{{ $plugin->name }}</h3>
-                            <p class="text-sm text-gray-500">v{{ $plugin->version }} · {{ $plugin->author }}</p>
+                            <h3 class="font-bold text-gray-800 dark:text-gray-100">{{ $plugin->name }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">v{{ $plugin->version }} · {{ $plugin->author }}</p>
                         </div>
                     </div>
 
@@ -32,16 +32,16 @@
                         @method('PUT')
 
                         <div class="mb-4">
-                            <label for="settings" class="block text-sm font-medium text-gray-700 mb-1">Pengaturan (JSON)</label>
+                            <label for="settings" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pengaturan (JSON)</label>
                             <textarea
                                 id="settings"
                                 name="settings"
                                 rows="10"
-                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm font-mono"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm font-mono"
                                 placeholder='{"key": "value"}'
                             >{{ json_encode($settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
                             @error('settings')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
 

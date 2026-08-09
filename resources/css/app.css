@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent Flash of Unstyled Content (FOUC) for Alpine.js x-cloak elements */
+[x-cloak] {
+    display: none !important;
+}
+
 /* ForMysha Brand CSS Variables */
 @layer base {
     :root {
@@ -16,13 +21,28 @@
         --color-brand-text: #374151;
         --color-brand-text-light: #6b7280;
     }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --color-brand-sky-blue: #38bdf8;
+            --color-brand-mint-green: #4ade80;
+            --color-brand-soft-pink: #f472b6;
+            --color-brand-lavender: #c084fc;
+            --color-brand-warm-yellow: #facc15;
+            --color-brand-peach: #fb923c;
+            --color-brand-soft-orange: #ff5a1f;
+            --color-brand-cream: #1f2937;
+            --color-brand-text: #f3f4f6;
+            --color-brand-text-light: #9ca3af;
+        }
+    }
 }
 
 @layer components {
 
     /* Rounded Card Component */
     .card {
-        @apply bg-white rounded-2xl shadow-soft p-6 transition-all duration-200;
+        @apply bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 transition-all duration-200;
     }
 
     .card-hover {
@@ -35,7 +55,7 @@
     }
 
     .btn-secondary {
-        @apply inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl border border-gray-200 shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
+        @apply inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl border border-gray-200 dark:border-gray-600 shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
     }
 
     .btn-accent {
@@ -44,21 +64,21 @@
 
     /* Section Title */
     .section-title {
-        @apply text-2xl font-bold text-gray-800 mb-6;
+        @apply text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6;
     }
 
     /* Gradient Backgrounds */
     .bg-gradient-warm {
-        @apply bg-gradient-to-br from-softPink-50 via-cream-50 to-lavender-50;
+        @apply bg-gradient-to-br from-softPink-50 via-cream-50 to-lavender-50 dark:from-softPink-950/30 dark:via-gray-800 dark:to-lavender-950/30;
     }
 
     .bg-gradient-sky {
-        @apply bg-gradient-to-br from-skyBlue-50 via-white to-mintGreen-50;
+        @apply bg-gradient-to-br from-skyBlue-50 via-white to-mintGreen-50 dark:from-skyBlue-950/30 dark:via-gray-800 dark:to-mintGreen-950/30;
     }
 
     /* Input Focus */
     .input-focus {
-        @apply rounded-xl border-gray-300 focus:border-softPink-300 focus:ring-softPink-200 transition-all duration-200;
+        @apply rounded-xl border-gray-300 dark:border-gray-600 focus:border-softPink-300 focus:ring-softPink-200 transition-all duration-200;
     }
 
     /* Safe area for mobile bottom nav */

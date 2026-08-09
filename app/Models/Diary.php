@@ -7,7 +7,7 @@ use Database\Factories\DiaryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property int $id
@@ -73,10 +73,9 @@ class Diary extends Model
     /**
      * Get the media associated with the diary.
      */
-    public function media(): HasMany
+    public function media(): MorphMany
     {
-        return $this->hasMany(Media::class, 'mediable_id')
-            ->where('mediable_type', static::class);
+        return $this->morphMany(Media::class, 'mediable');
     }
 
     /**

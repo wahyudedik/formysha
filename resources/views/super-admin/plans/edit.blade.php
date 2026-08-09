@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
             ✏️ {{ __('Edit Paket') }}
         </h2>
     </x-slot>
@@ -23,9 +23,9 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {{-- Basic Info --}}
-                        <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100">
-                                <h3 class="font-semibold text-gray-800">📋 {{ __('Informasi Dasar') }}</h3>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Informasi Dasar') }}</h3>
                             </div>
                             <div class="p-6 space-y-5">
                                 <div>
@@ -42,15 +42,15 @@
 
                                 <div>
                                     <x-input-label for="description" :value="__('Deskripsi')" />
-                                    <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm">{{ old('description', $plan->description) }}</textarea>
+                                    <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm">{{ old('description', $plan->description) }}</textarea>
                                     <x-input-error :messages="$errors->get('description')" class="mt-1" />
                                 </div>
 
                                 <div class="flex items-center gap-3">
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="hidden" name="is_active" value="0">
-                                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', $plan->is_active) ? 'checked' : '' }} class="w-5 h-5 rounded-lg border-gray-300 text-softPink-400 focus:ring-softPink-300">
-                                        <span class="text-sm font-medium text-gray-700">Paket Aktif</span>
+                                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', $plan->is_active) ? 'checked' : '' }} class="w-5 h-5 rounded-lg border-gray-300 dark:border-gray-600 text-softPink-400 focus:ring-softPink-300">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Paket Aktif</span>
                                     </label>
                                 </div>
 
@@ -62,9 +62,9 @@
                         </div>
 
                         {{-- Pricing --}}
-                        <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100">
-                                <h3 class="font-semibold text-gray-800">💰 {{ __('Harga') }}</h3>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('Harga') }}</h3>
                             </div>
                             <div class="p-6 space-y-5">
                                 <div>
@@ -82,10 +82,10 @@
                         </div>
 
                         {{-- Limits --}}
-                        <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100">
-                                <h3 class="font-semibold text-gray-800">📊 {{ __('Batasan') }}</h3>
-                                <p class="text-xs text-gray-500 mt-1">Gunakan -1 untuk unlimited.</p>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Batasan') }}</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gunakan -1 untuk unlimited.</p>
                             </div>
                             <div class="p-6 space-y-5">
                                 <div>
@@ -121,13 +121,13 @@
                         </div>
 
                         {{-- Features --}}
-                        <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                            <div class="p-6 border-b border-gray-100">
-                                <h3 class="font-semibold text-gray-800">✨ {{ __('Fitur') }}</h3>
-                                <p class="text-xs text-gray-500 mt-1">Satu fitur per baris.</p>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">✨ {{ __('Fitur') }}</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Satu fitur per baris.</p>
                             </div>
                             <div class="p-6">
-                                <textarea name="features[]" rows="6" class="block w-full border-gray-300 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm" placeholder="Timeline&#10;Galeri Foto&#10;Diary&#10;Dokumen">{{ is_array(old('features')) ? implode("\n", old('features')) : (is_array($plan->features) ? implode("\n", $plan->features) : '') }}</textarea>
+                                <textarea name="features[]" rows="6" class="block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm" placeholder="Timeline&#10;Galeri Foto&#10;Diary&#10;Dokumen">{{ is_array(old('features')) ? implode("\n", old('features')) : (is_array($plan->features) ? implode("\n", $plan->features) : '') }}</textarea>
                             </div>
                         </div>
                     </div>

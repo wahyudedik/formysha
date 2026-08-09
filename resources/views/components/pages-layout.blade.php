@@ -16,6 +16,10 @@
         body { font-family: 'Nunito', sans-serif; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #fdf2f8 0%, #FFFDF7 50%, #faf5ff 100%); color: #374151; min-height: 100vh; }
         a { text-decoration: none; color: #a855f7; }
         a:hover { text-decoration: underline; }
+        @media (prefers-color-scheme: dark) {
+            body { background: linear-gradient(135deg, #1a1025 0%, #111827 50%, #0f172a 100%); color: #e5e7eb; }
+            a { color: #c084fc; }
+        }
     </style>
 </head>
 <body>
@@ -23,20 +27,20 @@
         <nav class="max-w-4xl mx-auto flex items-center justify-between py-6">
             <a href="{{ url('/') }}" class="flex items-center gap-2" style="text-decoration: none;">
                 <img src="{{ asset('logo.png') }}" alt="ForMysha" class="h-10 w-auto" />
-                <span class="font-extrabold text-xl text-gray-800">ForMysha</span>
+                <span class="font-extrabold text-xl text-gray-800 dark:text-gray-100">ForMysha</span>
             </a>
-            <a href="{{ url('/') }}" class="text-sm text-gray-500 hover:text-gray-700">← Kembali ke Beranda</a>
+            <a href="{{ url('/') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">← Kembali ke Beranda</a>
         </nav>
     </header>
 
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
-        <div class="bg-white rounded-3xl shadow-sm p-8 sm:p-12">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ $pageTitle }}</h1>
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-8 sm:p-12">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">{{ $pageTitle }}</h1>
             {{ $slot }}
         </div>
     </main>
 
-    <footer class="text-center py-8 text-sm text-gray-400">
+    <footer class="text-center py-8 text-sm text-gray-400 dark:text-gray-500">
         <p>&copy; {{ date('Y') }} {{ config('app.name', 'ForMysha') }}. Hak cipta dilindungi.</p>
     </footer>
 </body>

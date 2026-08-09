@@ -56,7 +56,7 @@ class TenantService
     }
 
     /**
-     * Get current tenant from session or request.
+     * Get current tenant from session or authenticated user's tenant_id.
      */
     public function getCurrentTenant(): ?Tenant
     {
@@ -64,6 +64,18 @@ class TenantService
 
         if ($tenantId) {
             return Tenant::find($tenantId);
+        }
+
+        // Fallback: resolve from authenticated user's tenant_id
+        $user = request()->user();
+        if ($user && $user->tenant_id) {
+            $tenant = Tenant::find($user->tenant_id);
+            if ($tenant) {
+                // Cache in session for subsequent requests
+                $this->switchTenant($tenant);
+
+                return $tenant;
+            }
         }
 
         return null;

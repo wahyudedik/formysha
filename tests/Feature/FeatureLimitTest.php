@@ -33,7 +33,7 @@ describe('Feature Limit Middleware', function () {
             'plan_id' => $freePlan->id,
             'status' => Subscription::STATUS_ACTIVE,
             'starts_at' => now(),
-            'ends_at' => now()->addCentury(),
+            'ends_at' => null,
         ]);
 
         $user = User::factory()->create([
@@ -82,7 +82,7 @@ describe('Feature Limit Middleware', function () {
             'plan_id' => $freePlan->id,
             'status' => Subscription::STATUS_ACTIVE,
             'starts_at' => now(),
-            'ends_at' => now()->addCentury(),
+            'ends_at' => null,
         ]);
 
         $tenantService = app(TenantService::class);
@@ -116,7 +116,7 @@ describe('Feature Limit Middleware', function () {
             'plan_id' => $freePlan->id,
             'status' => Subscription::STATUS_ACTIVE,
             'starts_at' => now(),
-            'ends_at' => now()->addCentury(),
+            'ends_at' => null,
         ]);
 
         $user = User::factory()->create([

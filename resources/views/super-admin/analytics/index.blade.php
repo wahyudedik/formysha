@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
             📊 {{ __('Analytics') }}
         </h2>
     </x-slot>
@@ -20,59 +20,59 @@
                 {{-- Stats Cards --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     {{-- Revenue Bulan Ini --}}
-                    <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-xl bg-mintGreen-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-xl bg-mintGreen-50 dark:bg-mintGreen-950/30 flex items-center justify-center">
                                 <span class="text-2xl">💰</span>
                             </div>
                             <div>
-                                <p class="text-lg font-bold text-gray-800">Rp {{ number_format($revenueThisMonth, 0, ',', '.') }}</p>
-                                <p class="text-xs text-gray-500">Pendapatan Bulan Ini</p>
+                                <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueThisMonth, 0, ',', '.') }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Pendapatan Bulan Ini</p>
                             </div>
                         </div>
                         @if ($revenueLastMonth > 0)
                             @php $growth = round((($revenueThisMonth - $revenueLastMonth) / $revenueLastMonth) * 100, 1); @endphp
-                            <div class="mt-3 text-xs {{ $growth >= 0 ? 'text-mintGreen-600' : 'text-red-600' }}">
+                            <div class="mt-3 text-xs {{ $growth >= 0 ? 'text-mintGreen-600 dark:text-mintGreen-400' : 'text-red-600 dark:text-red-400' }}">
                                 {{ $growth >= 0 ? '↑' : '↓' }} {{ abs($growth) }}% dari bulan lalu
                             </div>
                         @endif
                     </div>
 
                     {{-- Total Revenue --}}
-                    <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-xl bg-skyBlue-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 flex items-center justify-center">
                                 <span class="text-2xl">🏦</span>
                             </div>
                             <div>
-                                <p class="text-lg font-bold text-gray-800">Rp {{ number_format($revenueTotal, 0, ',', '.') }}</p>
-                                <p class="text-xs text-gray-500">Total Pendapatan</p>
+                                <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueTotal, 0, ',', '.') }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Total Pendapatan</p>
                             </div>
                         </div>
                     </div>
 
                     {{-- Active Tenants --}}
-                    <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-xl bg-lavender-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 flex items-center justify-center">
                                 <span class="text-2xl">🏢</span>
                             </div>
                             <div>
-                                <p class="text-2xl font-bold text-gray-800">{{ $activeTenants }} / {{ $totalTenants }}</p>
-                                <p class="text-xs text-gray-500">Tenant Aktif</p>
+                                <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $activeTenants }} / {{ $totalTenants }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Tenant Aktif</p>
                             </div>
                         </div>
                     </div>
 
                     {{-- Churn Rate --}}
-                    <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-xl bg-warmYellow-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-xl bg-warmYellow-50 dark:bg-warmYellow-950/30 flex items-center justify-center">
                                 <span class="text-2xl">📉</span>
                             </div>
                             <div>
-                                <p class="text-2xl font-bold text-gray-800">{{ $churnRate }}%</p>
-                                <p class="text-xs text-gray-500">Churn Rate (30 hari)</p>
+                                <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $churnRate }}%</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Churn Rate (30 hari)</p>
                             </div>
                         </div>
                     </div>
@@ -80,17 +80,17 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     {{-- Revenue per Month --}}
-                    <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100">
-                            <h3 class="font-semibold text-gray-800">📈 {{ __('Pendapatan Bulanan') }}</h3>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Pendapatan Bulanan') }}</h3>
                         </div>
                         <div class="p-6">
                             <div class="space-y-3">
                                 @forelse ($revenuePerMonth as $item)
                                     <div class="flex items-center gap-4">
-                                        <span class="text-sm text-gray-600 w-24 shrink-0">{{ $item['month'] }}</span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300 w-24 shrink-0">{{ $item['month'] }}</span>
                                         <div class="flex-1">
-                                            <div class="w-full bg-gray-100 rounded-full h-4">
+                                            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-4">
                                                 @php
                                                     $maxRevenue = collect($revenuePerMonth)->max('amount');
                                                     $revPercentage = $maxRevenue > 0 ? ($item['amount'] / $maxRevenue) * 100 : 0;
@@ -101,14 +101,14 @@
                                                 ></div>
                                             </div>
                                         </div>
-                                        <span class="text-sm font-medium text-gray-800 w-32 text-right shrink-0">
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100 w-32 text-right shrink-0">
                                             Rp {{ number_format($item['amount'], 0, ',', '.') }}
                                         </span>
                                     </div>
                                 @empty
                                     <div class="text-center py-8">
                                         <div class="text-4xl mb-3">📊</div>
-                                        <p class="text-sm text-gray-500">Belum ada data pendapatan.</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada data pendapatan.</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -116,17 +116,17 @@
                     </div>
 
                     {{-- New Tenants per Month --}}
-                    <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100">
-                            <h3 class="font-semibold text-gray-800">📈 {{ __('Tenant Baru per Bulan') }}</h3>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Tenant Baru per Bulan') }}</h3>
                         </div>
                         <div class="p-6">
                             <div class="space-y-3">
                                 @forelse ($newTenantsPerMonth as $item)
                                     <div class="flex items-center gap-4">
-                                        <span class="text-sm text-gray-600 w-24 shrink-0">{{ $item['month'] }}</span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300 w-24 shrink-0">{{ $item['month'] }}</span>
                                         <div class="flex-1">
-                                            <div class="w-full bg-gray-100 rounded-full h-4">
+                                            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-4">
                                                 @php
                                                     $maxTenants = collect($newTenantsPerMonth)->max('count');
                                                     $tenantPercentage = $maxTenants > 0 ? ($item['count'] / $maxTenants) * 100 : 0;
@@ -137,14 +137,14 @@
                                                 ></div>
                                             </div>
                                         </div>
-                                        <span class="text-sm font-medium text-gray-800 w-16 text-right shrink-0">
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100 w-16 text-right shrink-0">
                                             {{ $item['count'] }}
                                         </span>
                                     </div>
                                 @empty
                                     <div class="text-center py-8">
                                         <div class="text-4xl mb-3">🏢</div>
-                                        <p class="text-sm text-gray-500">Belum ada data tenant.</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada data tenant.</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -154,9 +154,9 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Subscription Distribution --}}
-                    <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100">
-                            <h3 class="font-semibold text-gray-800">📊 {{ __('Distribusi Langganan') }}</h3>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Distribusi Langganan') }}</h3>
                         </div>
                         <div class="p-6">
                             <div class="space-y-3">
@@ -174,16 +174,16 @@
                                         };
                                     @endphp
                                     <div class="flex items-center gap-4">
-                                        <span class="text-sm text-gray-600 w-28 shrink-0">{{ $item['status'] }}</span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300 w-28 shrink-0">{{ $item['status'] }}</span>
                                         <div class="flex-1">
-                                            <div class="w-full bg-gray-100 rounded-full h-4">
+                                            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-4">
                                                 <div
                                                     class="h-4 rounded-full bg-gradient-to-r {{ $color }} transition-all duration-500"
                                                     style="width: {{ $subPercentage }}%"
                                                 ></div>
                                             </div>
                                         </div>
-                                        <span class="text-sm font-medium text-gray-800 w-16 text-right shrink-0">
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100 w-16 text-right shrink-0">
                                             {{ $item['count'] }}
                                         </span>
                                     </div>
@@ -193,28 +193,28 @@
                     </div>
 
                     {{-- Top Plans --}}
-                    <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100">
-                            <h3 class="font-semibold text-gray-800">🏆 {{ __('Paket Populer') }}</h3>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏆 {{ __('Paket Populer') }}</h3>
                         </div>
                         <div class="p-6">
                             @if ($topPlans->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">📋</div>
-                                    <p class="text-sm text-gray-500">Belum ada data paket.</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada data paket.</p>
                                 </div>
                             @else
                                 <div class="space-y-3">
                                     @foreach ($topPlans as $plan)
-                                        <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition">
+                                        <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                                             <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-lavender-400 to-skyBlue-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
                                                 {{ $loop->iteration }}
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-gray-800">{{ $plan->name }}</p>
-                                                <p class="text-xs text-gray-500">{{ $plan->subscriptions_count }} langganan</p>
+                                                <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $plan->name }}</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $plan->subscriptions_count }} langganan</p>
                                             </div>
-                                            <span class="text-sm font-medium text-gray-800 shrink-0">
+                                            <span class="text-sm font-medium text-gray-800 dark:text-gray-100 shrink-0">
                                                 {{ $plan->getPriceMonthlyFormatted() }}/bln
                                             </span>
                                         </div>
@@ -227,24 +227,24 @@
 
                 {{-- Revenue by Plan --}}
                 @if ($revenueByPlan->isNotEmpty())
-                    <div class="mt-6 bg-white rounded-2xl shadow-soft overflow-hidden">
-                        <div class="p-6 border-b border-gray-100">
-                            <h3 class="font-semibold text-gray-800">💰 {{ __('Pendapatan per Paket') }}</h3>
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('Pendapatan per Paket') }}</h3>
                         </div>
                         <div class="p-6">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
-                                        <tr class="border-b border-gray-100">
-                                            <th class="text-left px-4 py-3 font-semibold text-gray-600">Paket</th>
-                                            <th class="text-right px-4 py-3 font-semibold text-gray-600">Total Pendapatan</th>
+                                        <tr class="border-b border-gray-100 dark:border-gray-700">
+                                            <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Paket</th>
+                                            <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Total Pendapatan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($revenueByPlan as $item)
-                                            <tr class="border-b border-gray-50">
-                                                <td class="px-4 py-3 text-gray-800 font-medium">{{ $item->name }}</td>
-                                                <td class="px-4 py-3 text-gray-800 text-right">Rp {{ number_format($item->total_revenue, 0, ',', '.') }}</td>
+                                            <tr class="border-b border-gray-50 dark:border-gray-700/50">
+                                                <td class="px-4 py-3 text-gray-800 dark:text-gray-100 font-medium">{{ $item->name }}</td>
+                                                <td class="px-4 py-3 text-gray-800 dark:text-gray-100 text-right">Rp {{ number_format($item->total_revenue, 0, ',', '.') }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -37,6 +37,7 @@ class GrowthController extends Controller
         $chartData = $this->growthService->getGrowthChartData($child);
         $whoWeight = $this->growthService->getWhoWeightPercentiles($child->gender);
         $whoHeight = $this->growthService->getWhoHeightPercentiles($child->gender);
+        $whoHead = $this->growthService->getWhoHeadPercentiles($child->gender);
 
         $assessment = null;
         if ($latestGrowth) {
@@ -51,6 +52,7 @@ class GrowthController extends Controller
             'chartData' => $chartData,
             'whoWeight' => $whoWeight,
             'whoHeight' => $whoHeight,
+            'whoHead' => $whoHead,
             'assessment' => $assessment,
         ]);
     }
@@ -80,6 +82,22 @@ class GrowthController extends Controller
 
         return redirect()->route('growth.index', $child)
             ->with('status', 'Data pertumbuhan berhasil disimpan!');
+    }
+
+    /**
+     * Display the specified growth record.
+     */
+    public function show(Request $request, Child $child, Growth $growth): View
+    {
+        abort_unless($growth->child_id === $child->id, 403);
+
+        $assessment = $this->growthService->assessGrowth($child, $growth);
+
+        return view('growth.show', [
+            'child' => $child,
+            'growth' => $growth,
+            'assessment' => $assessment,
+        ]);
     }
 
     /**

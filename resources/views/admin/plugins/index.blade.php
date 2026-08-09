@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 🧩 Marketplace Plugin
             </h2>
         </div>
@@ -18,8 +18,8 @@
                 ]" />
 
                 {{-- Installed Plugins --}}
-                <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100 mb-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">📦 Plugin Terinstall</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700 mb-6">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">📦 Plugin Terinstall</h3>
 
                     @if($installedPlugins->isEmpty())
                         <x-empty-state
@@ -30,28 +30,28 @@
                     @else
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($installedPlugins as $tenantPlugin)
-                                <div class="border border-gray-200 rounded-xl p-4 {{ $tenantPlugin->is_enabled ? 'bg-white' : 'bg-gray-50 opacity-75' }}">
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 {{ $tenantPlugin->is_enabled ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700/50 opacity-75' }}">
                                     <div class="flex items-start justify-between mb-3">
                                         <div class="flex items-center gap-2">
                                             <span class="text-2xl">{{ $tenantPlugin->plugin->icon ?? '🧩' }}</span>
                                             <div>
-                                                <h4 class="font-semibold text-gray-800 text-sm">{{ $tenantPlugin->plugin->name }}</h4>
-                                                <p class="text-xs text-gray-500">v{{ $tenantPlugin->plugin->version }}</p>
+                                                <h4 class="font-semibold text-gray-800 dark:text-gray-100 text-sm">{{ $tenantPlugin->plugin->name }}</h4>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">v{{ $tenantPlugin->plugin->version }}</p>
                                             </div>
                                         </div>
                                         @if($tenantPlugin->is_enabled)
-                                            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-mintGreen-100 text-mintGreen-700">Aktif</span>
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-700 dark:text-mintGreen-400">Aktif</span>
                                         @else
-                                            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">Nonaktif</span>
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">Nonaktif</span>
                                         @endif
                                     </div>
 
-                                    <p class="text-xs text-gray-600 mb-3 line-clamp-2">{{ $tenantPlugin->plugin->description ?? 'Tidak ada deskripsi.' }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">{{ $tenantPlugin->plugin->description ?? 'Tidak ada deskripsi.' }}</p>
 
                                     <div class="flex items-center gap-2">
                                         <form method="POST" action="{{ route('admin.plugins.toggle', $tenantPlugin->plugin) }}">
                                             @csrf
-                                            <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium {{ $tenantPlugin->is_enabled ? 'bg-warmYellow-100 text-warmYellow-700 hover:bg-warmYellow-200' : 'bg-mintGreen-100 text-mintGreen-700 hover:bg-mintGreen-200' }} transition-colors">
+                                            <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium {{ $tenantPlugin->is_enabled ? 'bg-warmYellow-100 dark:bg-warmYellow-950/30 text-warmYellow-700 dark:text-warmYellow-400 hover:bg-warmYellow-200 dark:hover:bg-warmYellow-950/50' : 'bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-700 dark:text-mintGreen-400 hover:bg-mintGreen-200 dark:hover:bg-mintGreen-950/50' }} transition-colors">
                                                 {{ $tenantPlugin->is_enabled ? '⏸️ Nonaktifkan' : '▶️ Aktifkan' }}
                                             </button>
                                         </form>
@@ -59,7 +59,7 @@
                                         <form method="POST" action="{{ route('admin.plugins.uninstall', $tenantPlugin->plugin) }}" onsubmit="return confirm('Apakah Anda yakin ingin menguninstall plugin ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
+                                            <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors">
                                                 🗑️ Hapus
                                             </button>
                                         </form>
@@ -71,8 +71,8 @@
                 </div>
 
                 {{-- Available Plugins --}}
-                <div class="bg-white rounded-2xl shadow-soft p-6 border border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">🏪 Tersedia di Marketplace</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">🏪 Tersedia di Marketplace</h3>
 
                     @if($availablePlugins->isEmpty())
                         <x-empty-state
@@ -86,33 +86,33 @@
                                 @php
                                     $isInstalled = in_array($plugin->id, $installedPluginIds);
                                 @endphp
-                                <div class="border border-gray-200 rounded-xl p-4 {{ $isInstalled ? 'bg-mintGreen-50 border-mintGreen-200' : 'bg-white' }}">
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 {{ $isInstalled ? 'bg-mintGreen-50 dark:bg-mintGreen-950/20 border-mintGreen-200 dark:border-mintGreen-900/30' : 'bg-white dark:bg-gray-800' }}">
                                     <div class="flex items-start justify-between mb-3">
                                         <div class="flex items-center gap-2">
                                             <span class="text-2xl">{{ $plugin->icon ?? '🧩' }}</span>
                                             <div>
-                                                <h4 class="font-semibold text-gray-800 text-sm">{{ $plugin->name }}</h4>
-                                                <p class="text-xs text-gray-500">v{{ $plugin->version }} · {{ $plugin->author }}</p>
+                                                <h4 class="font-semibold text-gray-800 dark:text-gray-100 text-sm">{{ $plugin->name }}</h4>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">v{{ $plugin->version }} · {{ $plugin->author }}</p>
                                             </div>
                                         </div>
                                         @if($plugin->is_official)
-                                            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-skyBlue-100 text-skyBlue-700">Resmi</span>
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400">Resmi</span>
                                         @endif
                                     </div>
 
-                                    <p class="text-xs text-gray-600 mb-3 line-clamp-2">{{ $plugin->description ?? 'Tidak ada deskripsi.' }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">{{ $plugin->description ?? 'Tidak ada deskripsi.' }}</p>
 
                                     <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-500">📥 {{ $plugin->install_count }} install</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">📥 {{ $plugin->install_count }} install</span>
 
                                         @if($isInstalled)
-                                            <span class="px-3 py-1.5 rounded-lg text-xs font-medium bg-mintGreen-100 text-mintGreen-700">
+                                            <span class="px-3 py-1.5 rounded-lg text-xs font-medium bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-700 dark:text-mintGreen-400">
                                                 ✅ Terinstall
                                             </span>
                                         @else
                                             <form method="POST" action="{{ route('admin.plugins.install', $plugin) }}">
                                                 @csrf
-                                                <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-skyBlue-100 text-skyBlue-700 hover:bg-skyBlue-200 transition-colors">
+                                                <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400 hover:bg-skyBlue-200 dark:hover:bg-skyBlue-950/50 transition-colors">
                                                     📥 Install
                                                 </button>
                                             </form>

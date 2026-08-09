@@ -14,14 +14,14 @@
             <x-child-selector :children="$children" :child="$child" :route-name="'health.create'" />
 
             {{-- Child Info --}}
-            <div class="mb-6 p-4 bg-skyBlue-50 rounded-2xl border border-skyBlue-100">
+            <div class="mb-6 p-4 bg-skyBlue-50 dark:bg-skyBlue-950/30 rounded-2xl border border-skyBlue-100 dark:border-skyBlue-900/30">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-skyBlue-100 flex items-center justify-center text-lg">
+                    <div class="w-10 h-10 rounded-full bg-skyBlue-100 dark:bg-skyBlue-950/50 flex items-center justify-center text-lg">
                         👶
                     </div>
                     <div>
-                        <p class="font-semibold text-gray-800">{{ $child->name }}</p>
-                        <p class="text-sm text-gray-500">{{ $child->age ?? 'Baru lahir' }}</p>
+                        <p class="font-semibold text-gray-800 dark:text-gray-100">{{ $child->name }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $child->age ?? 'Baru lahir' }}</p>
                     </div>
                 </div>
             </div>
@@ -30,8 +30,8 @@
                 @csrf
 
                 {{-- Type --}}
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-sm font-semibold text-gray-800 mb-4">Jenis Catatan</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4">Jenis Catatan</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         @php
                             $types = [
@@ -44,10 +44,10 @@
                             ];
                         @endphp
                         @foreach ($types as $typeKey => $typeInfo)
-                            <label class="flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition {{ old('type') === $typeKey ? 'border-skyBlue-500 bg-skyBlue-50' : 'border-gray-200 hover:border-gray-300' }}">
+                            <label class="flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition {{ old('type') === $typeKey ? 'border-skyBlue-500 bg-skyBlue-50 dark:bg-skyBlue-950/30' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500' }}">
                                 <input type="radio" name="type" value="{{ $typeKey }}" {{ old('type') === $typeKey ? 'checked' : '' }} class="hidden">
                                 <span class="text-lg">{{ $typeInfo['icon'] }}</span>
-                                <span class="text-sm font-medium text-gray-700">{{ $typeInfo['label'] }}</span>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ $typeInfo['label'] }}</span>
                             </label>
                         @endforeach
                     </div>
@@ -55,8 +55,8 @@
                 </div>
 
                 {{-- Name & Date --}}
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-                    <h3 class="text-sm font-semibold text-gray-800">Detail</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-4">
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-100">Detail</h3>
 
                     <div>
                         <x-input-label for="name" value="Nama *" />
@@ -72,14 +72,14 @@
 
                     <div>
                         <x-input-label for="description" value="Deskripsi" />
-                        <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-skyBlue-500 focus:ring-skyBlue-500 shadow-sm text-sm" placeholder="Deskripsi singkat...">{{ old('description') }}</textarea>
+                        <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-xl focus:border-skyBlue-500 focus:ring-skyBlue-500 shadow-sm text-sm dark:bg-gray-700 dark:text-gray-200" placeholder="Deskripsi singkat...">{{ old('description') }}</textarea>
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
                 </div>
 
                 {{-- Doctor & Hospital --}}
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-                    <h3 class="text-sm font-semibold text-gray-800">Dokter & Fasilitas</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-4">
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-100">Dokter & Fasilitas</h3>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -97,26 +97,26 @@
                 </div>
 
                 {{-- Notes & Next Date --}}
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-                    <h3 class="text-sm font-semibold text-gray-800">Catatan Tambahan</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-4">
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-100">Catatan Tambahan</h3>
 
                     <div>
                         <x-input-label for="notes" value="Catatan" />
-                        <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-skyBlue-500 focus:ring-skyBlue-500 shadow-sm text-sm" placeholder="Catatan tambahan...">{{ old('notes') }}</textarea>
+                        <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-xl focus:border-skyBlue-500 focus:ring-skyBlue-500 shadow-sm text-sm dark:bg-gray-700 dark:text-gray-200" placeholder="Catatan tambahan...">{{ old('notes') }}</textarea>
                         <x-input-error :messages="$errors->get('notes')" class="mt-2" />
                     </div>
 
                     <div>
                         <x-input-label for="next_date" value="Jadwal Berikutnya (Opsional)" />
                         <x-text-input id="next_date" name="next_date" type="date" class="mt-1 block w-full" value="{{ old('next_date') }}" />
-                        <p class="text-xs text-gray-400 mt-1">Untuk imunisasi atau pemeriksaan rutin berikutnya</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Untuk imunisasi atau pemeriksaan rutin berikutnya</p>
                         <x-input-error :messages="$errors->get('next_date')" class="mt-2" />
                     </div>
                 </div>
 
                 {{-- Actions --}}
                 <div class="flex items-center justify-end gap-3">
-                    <a href="{{ route('health.index', $child) }}" class="px-6 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition">
+                    <a href="{{ route('health.index', $child) }}" class="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                         Batal
                     </a>
                     <x-primary-button type="submit">

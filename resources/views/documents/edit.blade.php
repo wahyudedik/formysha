@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('documents.show', [$child, $document]) }}" class="text-gray-400 hover:text-gray-600 transition">
+            <a href="{{ route('documents.show', [$child, $document]) }}" class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 ✏️ {{ __('Edit Dokumen') }}
             </h2>
         </div>
@@ -14,16 +14,16 @@
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
                 <div class="p-6 sm:p-8">
                     <!-- Child Info -->
-                    <div class="flex items-center gap-3 mb-6 p-4 bg-gradient-to-r from-skyBlue-50 to-lavender-50 rounded-2xl">
-                        <div class="w-10 h-10 rounded-xl {{ $child->gender === 'female' ? 'bg-softPink-100' : 'bg-skyBlue-100' }} flex items-center justify-center text-lg">
+                    <div class="flex items-center gap-3 mb-6 p-4 bg-gradient-to-r from-skyBlue-50 to-lavender-50 dark:from-skyBlue-950/30 dark:via-gray-800 dark:to-lavender-950/30 rounded-2xl">
+                        <div class="w-10 h-10 rounded-xl {{ $child->gender === 'female' ? 'bg-softPink-100 dark:bg-softPink-950/30' : 'bg-skyBlue-100 dark:bg-skyBlue-950/30' }} flex items-center justify-center text-lg">
                             {{ $child->gender === 'female' ? '👧' : '👦' }}
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">{{ __('Edit dokumen untuk') }}</p>
-                            <p class="font-semibold text-gray-800">{{ $child->nickname ?? $child->name }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Edit dokumen untuk') }}</p>
+                            <p class="font-semibold text-gray-800 dark:text-gray-100">{{ $child->nickname ?? $child->name }}</p>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                         <!-- Type -->
                         <div class="mb-5">
                             <x-input-label for="type" :value="__('Jenis Dokumen')" />
-                            <select id="type" name="type" class="mt-1 block w-full border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500 rounded-2xl shadow-soft" required>
+                            <select id="type" name="type" class="mt-1 block w-full border-gray-300 dark:border-gray-600 focus:border-skyBlue-500 focus:ring-skyBlue-500 rounded-2xl shadow-soft dark:bg-gray-700 dark:text-gray-200" required>
                                 <option value="">{{ __('Pilih jenis dokumen...') }}</option>
                                 <option value="birth_certificate" {{ old('type', $document->type) === 'birth_certificate' ? 'selected' : '' }}>📜 Akta Lahir</option>
                                 <option value="family_card" {{ old('type', $document->type) === 'family_card' ? 'selected' : '' }}>🏠 Kartu Keluarga</option>
@@ -58,26 +58,26 @@
                         <!-- Description -->
                         <div class="mb-5">
                             <x-input-label for="description" :value="__('Deskripsi (opsional)')" />
-                            <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 focus:border-skyBlue-500 focus:ring-skyBlue-500 rounded-2xl shadow-soft">{{ old('description', $document->description) }}</textarea>
+                            <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 focus:border-skyBlue-500 focus:ring-skyBlue-500 rounded-2xl shadow-soft dark:bg-gray-700 dark:text-gray-200">{{ old('description', $document->description) }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
                         <!-- File Upload -->
                         <div class="mb-5">
                             <x-input-label for="file" :value="__('Ganti File (opsional)')" />
-                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-skyBlue-400 transition bg-gradient-to-br from-skyBlue-50/50 to-lavender-50/50">
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl hover:border-skyBlue-400 transition bg-gradient-to-br from-skyBlue-50/50 to-lavender-50/50 dark:from-skyBlue-950/20 dark:to-lavender-950/20">
                                 <div class="space-y-2 text-center">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 24">
                                         <path d="M28 8H20a4 4 0 00-4 4v12a4 4 0 004 4h16a4 4 0 004-4V12a4 4 0 00-4-4h-8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                                         <path d="M24 16v-8m0 0l-3 3m3-3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                                     </svg>
-                                    <div class="flex text-sm text-gray-600 justify-center">
+                                    <div class="flex text-sm text-gray-600 dark:text-gray-300 justify-center">
                                         <label for="file" class="relative cursor-pointer rounded-xl font-medium text-skyBlue-600 hover:text-skyBlue-500">
                                             <span>{{ __('Pilih file baru') }}</span>
                                             <input id="file" name="file" type="file" class="sr-only" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                         </label>
                                     </div>
-                                    <p class="text-xs text-gray-400">File saat ini: {{ $document->file_name }}</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500">File saat ini: {{ $document->file_name }}</p>
                                 </div>
                             </div>
                             <x-input-error :messages="$errors->get('file')" class="mt-2" />
@@ -101,8 +101,8 @@
                         <div class="mb-6" x-data="{ checked: {{ old('is_private', $document->is_private ? 'true' : 'false') }} }">
                             <label class="flex items-center gap-3 cursor-pointer">
                                 <input type="hidden" name="is_private" value="0">
-                                <input type="checkbox" name="is_private" value="1" x-model="checked" class="rounded border-gray-300 text-skyBlue-500 focus:ring-skyBlue-500">
-                                <span class="text-sm text-gray-700">🔒 {{ __('Tandai sebagai privat') }}</span>
+                                <input type="checkbox" name="is_private" value="1" x-model="checked" class="rounded border-gray-300 dark:border-gray-600 text-skyBlue-500 focus:ring-skyBlue-500 dark:bg-gray-700">
+                                <span class="text-sm text-gray-700 dark:text-gray-200">🔒 {{ __('Tandai sebagai privat') }}</span>
                             </label>
                         </div>
 

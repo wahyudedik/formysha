@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/children/{child}/growth', [GrowthController::class, 'index'])->name('growth.index');
         Route::get('/children/{child}/growth/create', [GrowthController::class, 'create'])->name('growth.create');
         Route::post('/children/{child}/growth', [GrowthController::class, 'store'])->name('growth.store');
+        Route::get('/children/{child}/growth/{growth}', [GrowthController::class, 'show'])->name('growth.show');
         Route::get('/children/{child}/growth/{growth}/edit', [GrowthController::class, 'edit'])->name('growth.edit');
         Route::put('/children/{child}/growth/{growth}', [GrowthController::class, 'update'])->name('growth.update');
         Route::delete('/children/{child}/growth/{growth}', [GrowthController::class, 'destroy'])->name('growth.destroy');

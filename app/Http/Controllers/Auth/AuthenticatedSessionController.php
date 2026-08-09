@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\TenantService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,16 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        // Set tenant in session from user's tenant_id if not already set
+        $user = $request->user();
+        if ($user && $user->tenant_id && ! session()->has('tenant_id')) {
+            $tenantService = app(TenantService::class);
+            $tenant = $user->tenant;
+            if ($tenant) {
+                $tenantService->switchTenant($tenant);
+            }
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

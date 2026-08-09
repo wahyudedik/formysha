@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('family.index', $child) }}" class="text-gray-400 hover:text-gray-600 transition">
+            <a href="{{ route('family.index', $child) }}" class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 {{ __('Edit') }} {{ $familyMember->name }}
             </h2>
         </div>
@@ -14,10 +14,10 @@
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-soft sm:rounded-3xl p-6 sm:p-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6 sm:p-8">
                 <div class="mb-6">
-                    <p class="text-sm text-gray-500">
-                        {{ __('Mengedit anggota keluarga untuk') }} <span class="font-semibold text-gray-800">{{ $child->nickname ?? $child->name }}</span>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {{ __('Mengedit anggota keluarga untuk') }} <span class="font-semibold text-gray-800 dark:text-gray-100">{{ $child->nickname ?? $child->name }}</span>
                     </p>
                 </div>
 
@@ -35,7 +35,7 @@
                     <!-- Relationship -->
                     <div>
                         <x-input-label for="relationship" :value="__('Hubungan *')" />
-                        <select id="relationship" name="relationship" class="mt-1 block w-full border-gray-300 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition" required>
+                        <select id="relationship" name="relationship" class="mt-1 block w-full border-gray-300 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" required>
                             <option value="">{{ __('Pilih Hubungan') }}</option>
                             <option value="father" {{ old('relationship', $familyMember->relationship) === 'father' ? 'selected' : '' }}>👨 Ayah</option>
                             <option value="mother" {{ old('relationship', $familyMember->relationship) === 'mother' ? 'selected' : '' }}>👩 Ibu</option>
@@ -65,7 +65,7 @@
                     <!-- Primary Toggle -->
                     <div class="flex items-center gap-3">
                         <input type="hidden" name="is_primary" value="0">
-                        <input type="checkbox" id="is_primary" name="is_primary" value="1" {{ old('is_primary', $familyMember->is_primary) ? 'checked' : '' }} class="rounded border-gray-300 text-softPink-300 focus:ring-softPink-200">
+                        <input type="checkbox" id="is_primary" name="is_primary" value="1" {{ old('is_primary', $familyMember->is_primary) ? 'checked' : '' }} class="rounded border-gray-300 text-softPink-300 focus:ring-softPink-200 dark:border-gray-600 dark:bg-gray-700">
                         <x-input-label for="is_primary" :value="__('Tandai sebagai kontak utama')" class="!mb-0" />
                     </div>
 
