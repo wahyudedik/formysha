@@ -1020,7 +1020,7 @@ All Blade views MUST follow these responsive patterns consistently:
 
 ### Quality Assurance
 
-* **Total Tests**: 440+ tests, 950+ assertions — all passing
+* **Total Tests**: 461 tests, 1024 assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit

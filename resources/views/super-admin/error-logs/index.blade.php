@@ -130,15 +130,14 @@
                             </button>
 
                             {{-- Clear Log --}}
-                            <form method="POST" action="{{ route('super-admin.error-logs.clear') }}" class="inline" x-data onsubmit="return confirm('Yakin ingin mengosongkan log file?')">
-                                @csrf
-                                <button
-                                    type="submit"
-                                    class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-medium transition min-h-[44px]"
-                                >
-                                    Hapus Log
-                                </button>
-                            </form>
+                            <button
+                                type="button"
+                                x-data
+                                x-on:click.prevent="$dispatch('delete-confirm', 'delete-error-logs')"
+                                class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-medium transition min-h-[44px]"
+                            >
+                                Hapus Log
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -260,7 +259,6 @@
     {{-- Hidden textarea for copy --}}
     <textarea id="copy-buffer" class="fixed opacity-0 pointer-events-none" style="top: -9999px;"></textarea>
 
-    @push('scripts')
     <script>
         function copyLogEntry(element) {
             const raw = element.getAttribute('data-raw');
@@ -304,5 +302,12 @@
             }, 2000);
         }
     </script>
-    @endpush
+
+    {{-- Delete Confirmation for Clear Log --}}
+    <x-confirm-delete
+        id="delete-error-logs"
+        title="{{ __('Hapus Semua Log') }}"
+        message="{{ __('Apakah Anda yakin ingin mengosongkan semua log file? Tindakan ini tidak dapat dibatalkan.') }}"
+        action="{{ route('super-admin.error-logs.clear') }}"
+    />
 </x-app-layout>

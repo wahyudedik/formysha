@@ -347,7 +347,6 @@
         </div>
     </div>
 
-    @push('scripts')
     <script>
         function brandingForm() {
             return {
@@ -373,5 +372,4 @@
             }
         }
     </script>
-    @endpush
 </x-app-layout>

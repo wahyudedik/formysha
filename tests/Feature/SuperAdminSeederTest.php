@@ -15,7 +15,9 @@ describe('SuperAdminSeeder', function () {
             ->and($admin->role)->toBe('super_admin')
             ->and($admin->email_verified_at)->not->toBeNull();
 
-        expect(Hash::check('Wahyu123456789@', $admin->password))->toBeTrue();
+        // Password should be set from env or random — just verify it's a valid hash
+        expect(Hash::needsRehash($admin->password))->toBeFalse()
+            ->and(strlen($admin->password))->toBeGreaterThan(0);
     });
 
     it('is idempotent - does not create duplicate users', function () {

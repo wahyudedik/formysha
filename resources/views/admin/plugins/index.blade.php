@@ -56,17 +56,26 @@
                                             </button>
                                         </form>
 
-                                        <form method="POST" action="{{ route('admin.plugins.uninstall', $tenantPlugin->plugin) }}" onsubmit="return confirm('Apakah Anda yakin ingin menguninstall plugin ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors">
-                                                🗑️ Hapus
-                                            </button>
-                                        </form>
+                                        <button type="button"
+                                            x-data
+                                            x-on:click.prevent="$dispatch('delete-confirm', 'delete-plugin-{{ $tenantPlugin->plugin->id }}')"
+                                            class="min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors">
+                                            🗑️ Hapus
+                                        </button>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
+
+                        {{-- Delete Confirmation Modals --}}
+                        @foreach($installedPlugins as $tenantPlugin)
+                            <x-confirm-delete
+                                id="delete-plugin-{{ $tenantPlugin->plugin->id }}"
+                                title="{{ __('Hapus Plugin') }}"
+                                message="{{ __('Apakah Anda yakin ingin menguninstall plugin') }} '{{ $tenantPlugin->plugin->name }}'? {{ __('Tindakan ini tidak dapat dibatalkan.') }}"
+                                action="{{ route('admin.plugins.uninstall', $tenantPlugin->plugin) }}"
+                            />
+                        @endforeach
                     @endif
                 </div>
 

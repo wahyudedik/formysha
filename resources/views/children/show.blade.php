@@ -170,16 +170,22 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6">
                 <h4 class="text-lg font-bold text-red-600 dark:text-red-400 mb-3">⚠️ Zona Berbahaya</h4>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Menghapus profil anak akan menghapus semua data terkait secara permanen.</p>
-                <form method="POST" action="{{ route('children.destroy', $child) }}" x-data="{ confirming: false }" @submit.prevent="if(confirm('Apakah Anda yakin ingin menghapus profil {{ $child->name }}? Semua data akan hilang secara permanen.')) $el.submit();">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 text-sm min-h-[44px]">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        {{ __('Hapus Profil') }}
-                    </button>
-                </form>
+                <button type="button"
+                    x-data
+                    x-on:click.prevent="$dispatch('delete-confirm', 'delete-child-{{ $child->id }}')"
+                    class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 text-sm min-h-[44px]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    {{ __('Hapus Profil') }}
+                </button>
+
+                <x-confirm-delete
+                    id="delete-child-{{ $child->id }}"
+                    title="{{ __('Hapus Profil Anak') }}"
+                    message="{{ __('Apakah Anda yakin ingin menghapus profil ' . $child->name . '? Semua data akan hilang secara permanen. Tindakan ini tidak dapat dibatalkan.') }}"
+                    action="{{ route('children.destroy', $child) }}"
+                />
             </div>
                 </div>
             </div>

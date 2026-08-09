@@ -12,13 +12,19 @@
                 <a href="{{ route('health.edit', [$child, $healthRecord]) }}" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-skyBlue-500 text-white rounded-xl hover:bg-skyBlue-600 transition text-sm font-medium min-h-[44px]">
                     ✏️ Edit
                 </a>
-                <form method="POST" action="{{ route('health.destroy', [$child, $healthRecord]) }}" x-data>
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-red-500 text-white rounded-xl hover:bg-red-600 transition text-sm font-medium min-h-[44px]" x-on:click.prevent="if(confirm('Yakin ingin menghapus catatan ini?')) $el.closest('form').submit()">
-                        🗑️ Hapus
-                    </button>
-                </form>
+                <button type="button"
+                    x-data
+                    x-on:click.prevent="$dispatch('delete-confirm', 'delete-health-{{ $healthRecord->id }}')"
+                    class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-red-500 text-white rounded-xl hover:bg-red-600 transition text-sm font-medium min-h-[44px]">
+                    🗑️ Hapus
+                </button>
+
+                <x-confirm-delete
+                    id="delete-health-{{ $healthRecord->id }}"
+                    title="{{ __('Hapus Catatan Kesehatan') }}"
+                    message="{{ __('Apakah Anda yakin ingin menghapus catatan kesehatan ini? Tindakan ini tidak dapat dibatalkan.') }}"
+                    action="{{ route('health.destroy', [$child, $healthRecord]) }}"
+                />
             </div>
         </div>
     </x-slot>

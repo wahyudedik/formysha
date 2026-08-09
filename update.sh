@@ -69,7 +69,6 @@ clear_all_caches() {
     php artisan view:clear
     php artisan event:clear
     php artisan cache:clear
-    php artisan temp:clear 2>/dev/null || true
 
     log_info "Rebuilding cache..."
     php artisan config:cache
@@ -81,9 +80,9 @@ clear_all_caches() {
 }
 
 restart_queue_workers() {
-    supervisorctl stop "formysha-worker:*" 2>/dev/null || true
+    supervisorctl stop "formysha:*" 2>/dev/null || true
     sleep 2
-    supervisorctl start "formysha-worker:*" 2>/dev/null || true
+    supervisorctl start "formysha:*" 2>/dev/null || true
     log_success "Queue worker direstart."
 }
 

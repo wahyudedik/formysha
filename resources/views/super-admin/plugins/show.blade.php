@@ -5,14 +5,20 @@
                 🧩 {{ $plugin->name }}
             </h2>
             <div class="flex flex-row flex-wrap gap-2">
-                <form method="POST" action="{{ route('super-admin.plugins.destroy', $plugin) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus plugin ini?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="min-h-[44px] px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
-                        🗑️ Hapus
-                    </button>
-                </form>
+                <button type="button"
+                    x-data
+                    x-on:click.prevent="$dispatch('delete-confirm', 'delete-plugin-{{ $plugin->id }}')"
+                    class="min-h-[44px] px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
+                    🗑️ Hapus
+                </button>
             </div>
+
+            <x-confirm-delete
+                id="delete-plugin-{{ $plugin->id }}"
+                title="{{ __('Hapus Plugin') }}"
+                message="{{ __('Apakah Anda yakin ingin menghapus plugin ini? Tindakan ini tidak dapat dibatalkan.') }}"
+                action="{{ route('super-admin.plugins.destroy', $plugin) }}"
+            />
         </div>
     </x-slot>
 

@@ -22,6 +22,11 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
         ]);
 
+        // Hanya buat test data di environment local atau testing
+        if (! app()->environment('local', 'testing')) {
+            return;
+        }
+
         // Create a test user with children (skip if already exists)
         $existingUser = User::where('email', 'budi@for-mysha.my.id')->first();
 

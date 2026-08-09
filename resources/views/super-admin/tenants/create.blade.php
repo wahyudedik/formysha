@@ -59,7 +59,6 @@
         </div>
     </div>
 
-    @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const nameInput = document.getElementById('name');
@@ -79,5 +78,4 @@
             }
         });
     </script>
-    @endpush
 </x-app-layout>

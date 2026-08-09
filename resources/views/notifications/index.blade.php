@@ -48,6 +48,16 @@
                 @endforeach
             </div>
 
+            {{-- Delete Confirmation Modals --}}
+            @foreach($notifications as $notification)
+                <x-confirm-delete
+                    id="delete-notification-{{ $notification->id }}"
+                    title="{{ __('Hapus Notifikasi') }}"
+                    message="{{ __('Apakah Anda yakin ingin menghapus notifikasi ini? Tindakan ini tidak dapat dibatalkan.') }}"
+                    action="{{ route('notifications.destroy', $notification) }}"
+                />
+            @endforeach
+
             <!-- Pagination -->
             <div class="mt-6">
                 {{ $notifications->links() }}

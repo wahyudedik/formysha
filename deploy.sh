@@ -310,10 +310,10 @@ fi
 if ! is_step_done 8; then
     log_info "Step 8: Setup Queue Worker dengan Supervisor..."
 
-    SUPERVISOR_CONF="/etc/supervisor/conf.d/formysha-worker.conf"
+    SUPERVISOR_CONF="/etc/supervisor/conf.d/formysha.conf"
 
     cat > "${SUPERVISOR_CONF}" << EOF
-[program:formysha-worker]
+[program:formysha]
 process_name=%(program_name)s_%(process_num)02d
 command=php ${APP_DIR}/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
 autostart=true
@@ -329,7 +329,7 @@ EOF
 
     supervisorctl reread 2>/dev/null || true
     supervisorctl update 2>/dev/null || true
-    supervisorctl start "formysha-worker:*" 2>/dev/null || true
+    supervisorctl start "formysha:*" 2>/dev/null || true
 
     mark_step 8
 fi
@@ -542,7 +542,7 @@ if ! is_step_done 13; then
         log_warn "Database connection tidak dapat diverifikasi."
     fi
 
-    if supervisorctl status formysha-worker:* 2>/dev/null | grep -q "RUNNING"; then
+    if supervisorctl status formysha:* 2>/dev/null | grep -q "RUNNING"; then
         log_success "Queue worker OK"
     else
         log_warn "Queue worker belum running. Cek: supervisorctl status"
@@ -578,6 +578,6 @@ log_success ""
 log_success "  Useful Commands:"
 log_success "  - Logs:      tail -f ${APP_DIR}/storage/logs/laravel.log"
 log_success "  - Queue:     supervisorctl status"
-log_success "  - Restart:   supervisorctl restart formysha-worker:*"
+log_success "  - Restart:   supervisorctl restart formysha:*"
 log_success "  - Cache:     cd ${APP_DIR} && php artisan cache:clear"
 log_success ""

@@ -147,16 +147,22 @@
                         <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
                             Menghapus custom domain akan mengembalikan akses ke URL default ForMysha.
                         </p>
-                        <form method="POST" action="{{ route('admin.domain.remove') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus custom domain?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="min-h-[44px] px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
-                                🗑️ Hapus Domain
-                            </button>
-                        </form>
+                        <button type="button"
+                            x-data
+                            x-on:click.prevent="$dispatch('delete-confirm', 'delete-domain')"
+                            class="min-h-[44px] px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
+                            🗑️ Hapus Domain
+                        </button>
                     </div>
                 @endif
             </div>
         </div>
     </div>
+
+    <x-confirm-delete
+        id="delete-domain"
+        title="{{ __('Hapus Custom Domain') }}"
+        message="{{ __('Apakah Anda yakin ingin menghapus custom domain? Domain akan dikembalikan ke URL default ForMysha.') }}"
+        action="{{ route('admin.domain.remove') }}"
+    />
 </x-app-layout>

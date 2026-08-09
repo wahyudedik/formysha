@@ -120,30 +120,23 @@
                                             <td class="py-3 px-4 text-gray-600 dark:text-gray-300">{{ $invitation->expires_at->format('d M Y H:i') }}</td>
                                             <td class="py-3 px-4 text-right">
                                                 <button
-                                                    x-data="{ revoking: false }"
-                                                    @click="
-                                                        if (confirm('Batalkan undangan ini?')) {
-                                                            revoking = true;
-                                                            fetch('{{ route('enterprise.revoke-invitation', $invitation) }}', {
-                                                                method: 'DELETE',
-                                                                headers: {
-                                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                                                    'Accept': 'application/json'
-                                                                }
-                                                            })
-                                                            .then(r => r.json())
-                                                            .then(data => {
-                                                                if (data.success) window.location.reload();
-                                                            });
-                                                        }
-                                                    "
-                                                    :disabled="revoking"
-                                                    class="min-h-[44px] px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors disabled:opacity-50"
+                                                    type="button"
+                                                    x-data
+                                                    x-on:click.prevent="$dispatch('delete-confirm', 'delete-invitation-{{ $invitation->id }}')"
+                                                    class="min-h-[44px] px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors"
                                                 >
                                                     Batalkan
                                                 </button>
                                             </td>
                                         </tr>
+
+                                        {{-- Delete Confirmation Modal --}}
+                                        <x-confirm-delete
+                                            id="delete-invitation-{{ $invitation->id }}"
+                                            title="{{ __('Batalkan Undangan') }}"
+                                            message="{{ __('Apakah Anda yakin ingin membatalkan undangan untuk') }} '{{ $invitation->email }}'? {{ __('Tindakan ini tidak dapat dibatalkan.') }}"
+                                            action="{{ route('enterprise.revoke-invitation', $invitation) }}"
+                                        />
                                     @endforeach
                                 </tbody>
                             </table>

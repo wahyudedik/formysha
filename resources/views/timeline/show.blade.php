@@ -170,13 +170,19 @@
                     ← {{ __('Kembali ke Timeline') }}
                 </a>
 
-                <form method="POST" action="{{ route('timeline.destroy', [$child, $timeline]) }}" x-data="{ show: false }" @submit.prevent="if (confirm('Yakin ingin menghapus kenangan ini?')) $el.submit()">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-4 py-2.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium rounded-xl transition text-sm min-h-[44px]">
-                        🗑️ {{ __('Hapus Kenangan') }}
-                    </button>
-                </form>
+                <button type="button"
+                    x-data
+                    x-on:click.prevent="$dispatch('delete-confirm', 'delete-timeline-{{ $timeline->id }}')"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-4 py-2.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium rounded-xl transition text-sm min-h-[44px]">
+                    🗑️ {{ __('Hapus Kenangan') }}
+                </button>
+
+                <x-confirm-delete
+                    id="delete-timeline-{{ $timeline->id }}"
+                    title="{{ __('Hapus Kenangan') }}"
+                    message="{{ __('Apakah Anda yakin ingin menghapus kenangan ini? Tindakan ini tidak dapat dibatalkan.') }}"
+                    action="{{ route('timeline.destroy', [$child, $timeline]) }}"
+                />
             </div>
         </div>
     </div>
