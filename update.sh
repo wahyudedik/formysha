@@ -167,9 +167,6 @@ cd "${APP_DIR}"
 # Composer root safety
 export COMPOSER_ALLOW_SUPERUSER=1
 
-# Safety: quote APP_NAME if unquoted (dotenv requires quotes for values with spaces)
-sed -i '/^APP_NAME=[^"]/s/^APP_NAME=\(.*\)$/APP_NAME="\1"/' "${APP_DIR}/.env" 2>/dev/null || true
-
 #-------------------------------------------------------------------------------
 # MODE: ROLLBACK
 #-------------------------------------------------------------------------------
