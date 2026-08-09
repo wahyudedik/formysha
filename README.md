@@ -9,7 +9,7 @@
 
 # ForMysha
 
-## Digital Life Book SaaS Go
+## Digital Life Book SaaS
 
 **Versi:** 1.0
 
