@@ -95,6 +95,18 @@
                             {{ __('👶 Anak Saya') }}
                         </x-dropdown-link>
 
+                        @if (auth()->user()->role === 'parent')
+                            <x-dropdown-link :href="route('subscription.current')">
+                                {{ __('📦 Langganan Saya') }}
+                            </x-dropdown-link>
+                        @endif
+
+                        <x-dropdown-link :href="route('search.index')">
+                            {{ __('🔍 Pencarian') }}
+                        </x-dropdown-link>
+
+                        <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('👤 Profil Saya') }}
                         </x-dropdown-link>

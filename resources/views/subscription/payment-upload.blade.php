@@ -99,7 +99,8 @@
                     <div>
                         <x-input-label for="proof" :value="__('Bukti Transfer (Gambar)')" />
                         <div class="mt-2" x-data="{ fileName: '' }">
-                            <label for="proof" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-softPink-300 hover:bg-softPink-50/30 dark:hover:bg-softPink-950/20 transition">
+                            <div class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-softPink-300 hover:bg-softPink-50/30 dark:hover:bg-softPink-950/20 transition"
+                                 @click="$refs.proofInput.click()">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
                                     <svg class="w-10 h-10 mb-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -113,8 +114,8 @@
                                     </svg>
                                     <p class="text-sm text-gray-600 dark:text-gray-300 font-medium" x-text="fileName"></p>
                                 </div>
-                                <input id="proof" name="proof" type="file" class="hidden" accept="image/*" required x-on:change="fileName = $event.target.files[0].name">
-                            </label>
+                            </div>
+                            <input id="proof" name="proof" type="file" x-ref="proofInput" class="sr-only" accept="image/*" required x-on:change="fileName = $event.target.files[0]?.name ?? ''">
                         </div>
                         <x-input-error :messages="$errors->get('proof')" class="mt-1" />
                     </div>
