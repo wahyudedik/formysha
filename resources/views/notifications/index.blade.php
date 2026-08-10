@@ -36,11 +36,11 @@
         </div>
 
         @if($notifications->isEmpty())
-            <div class="text-center py-12">
-                <div class="text-6xl mb-4">🔔</div>
-                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Belum Ada Notifikasi</h3>
-                <p class="text-gray-500 dark:text-gray-400">Notifikasi baru akan muncul di sini ketika ada aktivitas penting.</p>
-            </div>
+            <x-empty-state
+                icon="🔔"
+                title="{{ __('Belum Ada Notifikasi') }}"
+                description="{{ __('Notifikasi baru akan muncul di sini ketika ada aktivitas penting.') }}"
+            />
         @else
             <div class="space-y-3">
                 @foreach($notifications as $notification)

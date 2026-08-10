@@ -35,17 +35,13 @@
                 <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">📋 {{ __('Semua Acara') }}</h3>
 
                 @if ($events->isEmpty())
-                    <div class="text-center py-12">
-                        <div class="text-6xl mb-4">📅</div>
-                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ __('Belum Ada Acara') }}</h3>
-                        <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('Jadwalkan acara penting ' . ($child->nickname ?? $child->name) . ' di sini.') }}</p>
-                        <a href="{{ route('calendar.create', $child) }}" class="btn-primary min-h-[44px]">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            {{ __('Tambah Acara Pertama') }}
-                        </a>
-                    </div>
+                    <x-empty-state
+                        icon="📅"
+                        title="{{ __('Belum Ada Acara') }}"
+                        description="{{ __('Jadwalkan acara penting ' . ($child->nickname ?? $child->name) . ' di sini.') }}"
+                        action-url="{{ route('calendar.create', $child) }}"
+                        action-text="{{ __('Tambah Acara Pertama') }}"
+                    />
                 @else
                     <div class="space-y-4">
                         @foreach ($events as $event)

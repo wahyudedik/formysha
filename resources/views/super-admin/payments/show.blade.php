@@ -149,7 +149,7 @@
             <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">✅ Setujui Pembayaran</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Konfirmasi bahwa pembayaran ini telah diterima.</p>
 
-            <form method="POST" action="{{ route('super-admin.payments.approve', $payment) }}">
+            <form method="POST" action="{{ route('super-admin.payments.approve', $payment) }}" x-data="{ loading: false }" @submit="loading = true">
                 @csrf
 
                 <div class="mb-4">
@@ -161,8 +161,9 @@
                     <button type="button" x-on:click="$dispatch('close-modal', 'approve-payment')" class="min-h-[44px] px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                         Batal
                     </button>
-                    <button type="submit" class="min-h-[44px] px-4 py-2 rounded-xl bg-mintGreen-500 text-white text-sm font-semibold hover:bg-mintGreen-600 transition">
-                        Ya, Setujui
+                    <button type="submit" x-bind:disabled="loading" class="min-h-[44px] px-4 py-2 rounded-xl bg-mintGreen-500 text-white text-sm font-semibold hover:bg-mintGreen-600 transition disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2">
+                        <svg x-show="loading" class="w-4 h-4 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <span x-text="loading ? 'Menyetujui...' : 'Ya, Setujui'"></span>
                     </button>
                 </div>
             </form>
@@ -175,7 +176,7 @@
             <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">❌ Tolak Pembayaran</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Berikan alasan penolakan pembayaran ini.</p>
 
-            <form method="POST" action="{{ route('super-admin.payments.reject', $payment) }}">
+            <form method="POST" action="{{ route('super-admin.payments.reject', $payment) }}" x-data="{ loading: false }" @submit="loading = true">
                 @csrf
 
                 <div class="mb-4">
@@ -188,8 +189,9 @@
                     <button type="button" x-on:click="$dispatch('close-modal', 'reject-payment')" class="min-h-[44px] px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                         Batal
                     </button>
-                    <button type="submit" class="min-h-[44px] px-4 py-2 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition">
-                        Ya, Tolak
+                    <button type="submit" x-bind:disabled="loading" class="min-h-[44px] px-4 py-2 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2">
+                        <svg x-show="loading" class="w-4 h-4 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <span x-text="loading ? 'Menolak...' : 'Ya, Tolak'"></span>
                     </button>
                 </div>
             </form>

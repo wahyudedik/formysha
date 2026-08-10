@@ -113,13 +113,14 @@
                         @endif
 
                         {{-- CTA Button --}}
-                        <form method="POST" action="{{ route('subscription.subscribe', $plan) }}">
+                        <form method="POST" action="{{ route('subscription.subscribe', $plan) }}" x-data="{ loading: false }" @submit="loading = true">
                             @csrf
-                            <button type="submit" class="w-full py-3 min-h-[44px] rounded-xl text-white font-semibold text-sm {{ $buttonColor }} transition-all duration-200 shadow-soft hover:shadow-soft-md">
+                            <button type="submit" x-bind:disabled="loading" class="w-full py-3 min-h-[44px] rounded-xl text-white font-semibold text-sm {{ $buttonColor }} transition-all duration-200 shadow-soft hover:shadow-soft-md disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2">
+                                <svg x-show="loading" class="w-4 h-4 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                 @if ($isFree)
-                                    Mulai Gratis
+                                    <span x-text="loading ? 'Mengaktifkan...' : 'Mulai Gratis'"></span>
                                 @else
-                                    Pilih Paket Ini
+                                    <span x-text="loading ? 'Memproses...' : 'Pilih Paket Ini'"></span>
                                 @endif
                             </button>
                         </form>

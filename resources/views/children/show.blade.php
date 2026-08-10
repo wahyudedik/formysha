@@ -36,7 +36,7 @@
         </div>
     </x-slot>
 
-    <div class="py-12 has-bottom-nav">
+    <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row gap-4 lg:gap-8">
                 <x-child-nav :child="$child" />

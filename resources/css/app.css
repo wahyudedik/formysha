@@ -86,10 +86,6 @@
         padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
-    /* Mobile bottom nav padding */
-    .has-bottom-nav {
-        @apply pb-20 lg:pb-0;
-    }
 }
 
 @layer utilities {
@@ -143,7 +139,6 @@
     /* Hide navigation, footer, sidebar, buttons, and non-essential UI */
     nav,
     footer,
-    .has-bottom-nav>nav,
     [x-data]>button,
     .btn-primary,
     .btn-secondary,

@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $child->nickname ?? $child->name }} — ForMysha</title>
     <meta name="description" content="Profil publik {{ $child->nickname ?? $child->name }} di ForMysha">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="{{ $child->nickname ?? $child->name }} — ForMysha">
+    <meta property="og:description" content="Profil publik {{ $child->nickname ?? $child->name }} di ForMysha — Digital Life Book">
+    <meta property="og:url" content="{{ url()->current() }}">
+    @if($child->photo)
+        <meta property="og:image" content="{{ asset('storage/'.$child->photo) }}">
+    @endif
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $child->nickname ?? $child->name }} — ForMysha">
+    <meta name="twitter:description" content="Profil publik {{ $child->nickname ?? $child->name }} di ForMysha — Digital Life Book">
+    @if($child->photo)
+        <meta name="twitter:image" content="{{ asset('storage/'.$child->photo) }}">
+    @endif
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

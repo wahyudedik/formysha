@@ -25,20 +25,20 @@ return [
 
     'banks' => [
         'BRI' => [
-            'account' => env('BILLING_BRI_ACCOUNT', '211801008728508'),
-            'holder' => env('BILLING_BRI_HOLDER', 'WAHYU DEDIK DWI ASTONO'),
+            'account' => env('BILLING_BRI_ACCOUNT', ''),
+            'holder' => env('BILLING_BRI_HOLDER', ''),
         ],
         'JAGO' => [
-            'account' => env('BILLING_JAGO_ACCOUNT', '106818913479'),
-            'holder' => env('BILLING_JAGO_HOLDER', 'WAHYU DEDIK DWI ASTONO'),
+            'account' => env('BILLING_JAGO_ACCOUNT', ''),
+            'holder' => env('BILLING_JAGO_HOLDER', ''),
         ],
         'BTN' => [
-            'account' => env('BILLING_BTN_ACCOUNT', '5901500292405'),
-            'holder' => env('BILLING_BTN_HOLDER', 'WAHYU DEDIK DWI ASTONO'),
+            'account' => env('BILLING_BTN_ACCOUNT', ''),
+            'holder' => env('BILLING_BTN_HOLDER', ''),
         ],
         'BSI' => [
-            'account' => env('BILLING_BSI_ACCOUNT', '7243220925'),
-            'holder' => env('BILLING_BSI_HOLDER', 'WAHYU DEDIK DWI ASTONO'),
+            'account' => env('BILLING_BSI_ACCOUNT', ''),
+            'holder' => env('BILLING_BSI_HOLDER', ''),
         ],
     ],
 

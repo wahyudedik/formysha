@@ -55,7 +55,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">🔧 Atur Custom Domain</h3>
 
-                    <form method="POST" action="{{ route('admin.domain.update') }}">
+                    <form method="POST" action="{{ route('admin.domain.update') }}" x-data="{ loading: false }" @submit="loading = true">
                         @csrf
                         @method('PUT')
 
@@ -78,15 +78,17 @@
                         </div>
 
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                            <button type="submit" class="btn-primary text-sm min-h-[44px]">
-                                💾 Simpan Domain
+                            <button type="submit" x-bind:disabled="loading" class="btn-primary text-sm min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2">
+                                <svg x-show="loading" class="w-4 h-4 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                <span x-text="loading ? 'Menyimpan...' : '💾 Simpan Domain'"></span>
                             </button>
 
                             @if($domainStatus['custom_domain'])
-                                <form method="POST" action="{{ route('admin.domain.verify') }}" class="inline">
+                                <form method="POST" action="{{ route('admin.domain.verify') }}" class="inline" x-data="{ loading: false }" @submit="loading = true">
                                     @csrf
-                                    <button type="submit" class="btn-accent text-sm min-h-[44px]">
-                                        🔍 Verifikasi DNS
+                                    <button type="submit" x-bind:disabled="loading" class="btn-accent text-sm min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2">
+                                        <svg x-show="loading" class="w-4 h-4 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        <span x-text="loading ? 'Memverifikasi...' : '🔍 Verifikasi DNS'"></span>
                                     </button>
                                 </form>
                             @endif

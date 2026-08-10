@@ -12,7 +12,7 @@ set -euo pipefail
 DOMAIN="formysha.my.id"
 APP_DIR="/www/wwwroot/${DOMAIN}"
 APP_USER="www"
-PHP_VERSION="8.3"
+PHP_VERSION="8.4"
 BRANCH="main"
 LOG_DIR="${APP_DIR}/storage/logs"
 
