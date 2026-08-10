@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Enums\TenantType;
 use App\Models\ClinicalNote;
 use App\Models\Referral;
 use App\Models\Staff;
 use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class TenantController extends Controller
@@ -29,7 +31,9 @@ class TenantController extends Controller
      */
     public function create(): View
     {
-        return view('super-admin.tenants.create');
+        $tenantTypes = TenantType::cases();
+
+        return view('super-admin.tenants.create', compact('tenantTypes'));
     }
 
     /**
@@ -37,10 +41,18 @@ class TenantController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $validTypes = collect(TenantType::cases())->pluck('value')->implode(',');
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:tenants,slug'],
+            'type' => ['required', 'string', 'in:'.$validTypes],
         ]);
+
+        // Auto-generate slug from name if not provided
+        if (empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['name']);
+        }
 
         Tenant::create($validated);
 

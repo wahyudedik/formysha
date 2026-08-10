@@ -40,6 +40,25 @@
                                 <x-input-error :messages="$errors->get('slug')" class="mt-1" />
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Jika dikosongkan, slug akan dibuat otomatis dari nama.</p>
                             </div>
+
+                            {{-- Type --}}
+                            <div>
+                                <x-input-label for="type" :value="__('Tipe Tenant')" />
+                                <select id="type" name="type" class="mt-1 block w-full input-focus border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-softPink-300 focus:ring-softPink-300" required>
+                                    <option value="">-- Pilih Tipe --</option>
+                                    @foreach($tenantTypes as $type)
+                                        <option value="{{ $type->value }}" {{ old('type') === $type->value ? 'selected' : '' }}>
+                                            {{ $type->label() }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <x-input-error :messages="$errors->get('type')" class="mt-1" />
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                    <span class="font-medium text-softPink-400 dark:text-softPink-300">Keluarga</span> untuk pengguna B2C (perorangan/keluarga).
+                                    <br>
+                                    <span class="font-medium text-skyBlue-400 dark:text-skyBlue-300">Rumah Sakit, Klinik, dll.</span> untuk fasilitas kesehatan B2B.
+                                </p>
+                            </div>
                         </div>
 
                         <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">

@@ -154,6 +154,11 @@
                                 Daftar Gratis
                             </a>
                         @endif
+                        @if (Route::has('register.facility'))
+                            <a href="{{ route('register.facility') }}" class="btn-secondary text-base px-8 py-3">
+                                🏥 Daftar Fasilitas
+                            </a>
+                        @endif
                     @endauth
                 @endif
             </nav>
@@ -433,6 +438,54 @@
                         <p class="text-gray-600 dark:text-gray-300 text-sm">Identitas Indonesia</p>
                         <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">Dekat, personal, lebih bermakna</p>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- User Type Selection Section --}}
+        <section class="py-16 sm:py-20">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">
+                        Pilih Jenis Akun Anda
+                    </h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-base sm:text-lg">
+                        ForMysha tersedia untuk keluarga dan fasilitas kesehatan
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {{-- B2C Card --}}
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-soft hover:shadow-soft-md transition-all duration-200 group border-2 border-transparent hover:border-softPink-300 dark:hover:border-softPink-600">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-softPink-100 dark:bg-softPink-950/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                <span class="text-3xl">👨‍👩‍👧</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Keluarga</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                Simpan kenangan perjalanan hidup anak Anda dalam Digital Life Book pribadi
+                            </p>
+                            <span class="inline-block mt-4 text-sm font-semibold text-softPink-400 dark:text-softPink-300 group-hover:text-softPink-500 dark:group-hover:text-softPink-200 transition-colors">
+                                Daftar Gratis →
+                            </span>
+                        </a>
+                    @endif
+
+                    {{-- B2B Card --}}
+                    @if (Route::has('register.facility'))
+                        <a href="{{ route('register.facility') }}" class="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-soft hover:shadow-soft-md transition-all duration-200 group border-2 border-transparent hover:border-skyBlue-300 dark:hover:border-skyBlue-600">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-skyBlue-100 dark:bg-skyBlue-950/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                <span class="text-3xl">🏥</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Fasilitas Kesehatan</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                Klinik, rumah sakit, bidan, posyandu, daycare, atau sekolah
+                            </p>
+                            <span class="inline-block mt-4 text-sm font-semibold text-skyBlue-400 dark:text-skyBlue-300 group-hover:text-skyBlue-500 dark:group-hover:text-skyBlue-200 transition-colors">
+                                Daftar Fasilitas →
+                            </span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </section>

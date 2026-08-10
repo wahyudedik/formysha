@@ -244,4 +244,28 @@ describe('Facility Registration (B2B)', function () {
         $user = User::where('email', $email)->first();
         $this->assertAuthenticatedAs($user);
     });
+
+    it('landing page has B2B registration link for facilities', function () {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee(route('register.facility'));
+        $response->assertSee('Fasilitas');
+    });
+
+    it('login page has B2B registration link for facilities', function () {
+        $response = $this->get(route('login'));
+
+        $response->assertOk();
+        $response->assertSee(route('register.facility'));
+        $response->assertSee('Daftar Fasilitas');
+    });
+
+    it('register page has B2B registration link for facilities', function () {
+        $response = $this->get(route('register'));
+
+        $response->assertOk();
+        $response->assertSee(route('register.facility'));
+        $response->assertSee('Daftar Fasilitas');
+    });
 });

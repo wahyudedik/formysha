@@ -19,12 +19,63 @@ describe('Tenant Management (Super Admin)', function () {
             ->post(route('super-admin.tenants.store'), [
                 'name' => 'Rumah Sakit Anak',
                 'slug' => 'rs-anak',
+                'type' => 'hospital',
             ])
             ->assertRedirect(route('super-admin.tenants.index'));
 
         $this->assertDatabaseHas('tenants', [
             'name' => 'Rumah Sakit Anak',
             'slug' => 'rs-anak',
+            'type' => 'hospital',
+        ]);
+    });
+
+    it('validates type is required when creating tenant', function () {
+        $admin = User::factory()->superAdmin()->create();
+
+        $this->actingAs($admin)
+            ->post(route('super-admin.tenants.store'), [
+                'name' => 'Tanpa Tipe',
+            ])
+            ->assertSessionHasErrors('type');
+    });
+
+    it('validates type must be a valid TenantType enum', function () {
+        $admin = User::factory()->superAdmin()->create();
+
+        $this->actingAs($admin)
+            ->post(route('super-admin.tenants.store'), [
+                'name' => 'Tipe Invalid',
+                'type' => 'invalid_type',
+            ])
+            ->assertSessionHasErrors('type');
+    });
+
+    it('shows tenant type dropdown on create form', function () {
+        $admin = User::factory()->superAdmin()->create();
+
+        $this->actingAs($admin)
+            ->get(route('super-admin.tenants.create'))
+            ->assertOk()
+            ->assertSee('Tipe Tenant')
+            ->assertSee('Keluarga')
+            ->assertSee('Rumah Sakit')
+            ->assertSee('Klinik');
+    });
+
+    it('allows super admin to create a B2C family tenant', function () {
+        $admin = User::factory()->superAdmin()->create();
+
+        $this->actingAs($admin)
+            ->post(route('super-admin.tenants.store'), [
+                'name' => 'Keluarga Budi',
+                'type' => 'family',
+            ])
+            ->assertRedirect(route('super-admin.tenants.index'));
+
+        $this->assertDatabaseHas('tenants', [
+            'name' => 'Keluarga Budi',
+            'type' => 'family',
         ]);
     });
 

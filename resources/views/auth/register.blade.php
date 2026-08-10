@@ -51,13 +51,21 @@
         </div>
     </form>
 
-    {{-- Login Link --}}
-    <div class="mt-6 text-center">
+    {{-- Links --}}
+    <div class="mt-6 text-center space-y-2">
         <p class="text-sm text-gray-500 dark:text-gray-400">
             Sudah punya akun?
             <a href="{{ route('login') }}" class="font-semibold text-softPink-400 hover:text-softPink-500 dark:text-softPink-300 dark:hover:text-softPink-200 transition-colors">
                 Masuk
             </a>
         </p>
+        @if (Route::has('register.facility'))
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Ingin daftar sebagai fasilitas kesehatan?
+                <a href="{{ route('register.facility') }}" class="font-semibold text-skyBlue-400 hover:text-skyBlue-500 dark:text-skyBlue-300 dark:hover:text-skyBlue-200 transition-colors">
+                    Daftar Fasilitas
+                </a>
+            </p>
+        @endif
     </div>
 </x-guest-layout>
