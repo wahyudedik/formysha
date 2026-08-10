@@ -73,6 +73,7 @@ class FacilitySettingsController extends Controller
         } else {
             Facility::create([
                 'tenant_id' => $tenant->id,
+                'name' => $validated['name'],
                 'facility_type' => $tenant->facility_type?->value ?? 'clinic',
                 'address' => $validated['address'] ?? null,
                 'city' => $validated['city'] ?? null,

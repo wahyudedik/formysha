@@ -15,7 +15,6 @@
                 @if ($referral->status->value === 'pending' && $referral->to_tenant_id === $tenant->id)
                     <form method="POST" action="{{ route('facility.referrals.accept', $referral) }}" class="inline" x-data="{ loading: false }" @submit="loading = true">
                         @csrf
-                        @method('PATCH')
                         <button type="submit" x-bind:disabled="loading" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-mintGreen-500 hover:bg-mintGreen-600 text-white font-medium rounded-xl text-sm transition shadow-soft min-h-[44px] disabled:opacity-50">
                             ✅ {{ __('Terima') }}
                         </button>
@@ -25,7 +24,6 @@
                 @if (in_array($referral->status->value, ['pending', 'accepted']))
                     <form method="POST" action="{{ route('facility.referrals.complete', $referral) }}" class="inline" x-data="{ loading: false }" @submit="loading = true">
                         @csrf
-                        @method('PATCH')
                         <button type="submit" x-bind:disabled="loading" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-skyBlue-500 hover:bg-skyBlue-600 text-white font-medium rounded-xl text-sm transition shadow-soft min-h-[44px] disabled:opacity-50">
                             ✓ {{ __('Selesai') }}
                         </button>
@@ -161,7 +159,7 @@
             :title="__('Batalkan Rujukan')"
             :message="__('Yakin ingin membatalkan rujukan ini?')"
             :action="route('facility.referrals.cancel', $referral)"
-            method="PATCH"
+            method="POST"
         />
     @endif
 </x-app-layout>
