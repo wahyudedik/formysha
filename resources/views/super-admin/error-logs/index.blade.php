@@ -309,5 +309,6 @@
         title="{{ __('Hapus Semua Log') }}"
         message="{{ __('Apakah Anda yakin ingin mengosongkan semua log file? Tindakan ini tidak dapat dibatalkan.') }}"
         action="{{ route('super-admin.error-logs.clear') }}"
+        method="POST"
     />
 </x-app-layout>

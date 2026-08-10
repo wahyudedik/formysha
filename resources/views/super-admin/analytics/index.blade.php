@@ -253,6 +253,154 @@
                         </div>
                     </div>
                 @endif
+
+                {{-- B2B Analytics Section --}}
+                @if ($b2bTenantsPerMonth !== null)
+                    <div class="mt-8">
+                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('Analytics B2B (Fasilitas)') }}</h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                            {{-- Revenue B2B --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-softPink-50 dark:bg-softPink-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">💰</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2B, 0, ',', '.') }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Pendapatan B2B</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Revenue B2C --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">🏠</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2C, 0, ',', '.') }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Pendapatan B2C</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Top Facility --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">🏆</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $topFacilities->first()?->name ?? '-' }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fasilitas Terbesar</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {{-- B2B Tenant Growth --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                                <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Pertumbuhan Fasilitas B2B') }}</h3>
+                                </div>
+                                <div class="p-4 sm:p-6">
+                                    <div class="space-y-2">
+                                        @foreach ($b2bTenantsPerMonth as $item)
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-sm text-gray-600 dark:text-gray-300">{{ $item['month'] }}</span>
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-32 bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                                                        <div class="bg-softPink-400 h-2 rounded-full" style="width: {{ $item['count'] > 0 ? max(10, ($item['count'] / max(1, collect($b2bTenantsPerMonth)->pluck('count')->max())) * 100) : 0 }}%"></div>
+                                                    </div>
+                                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-100 w-8 text-right">{{ $item['count'] }}</span>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Clinical Notes & Referrals Growth --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                                <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Catatan Klinis & Rujukan') }}</h3>
+                                </div>
+                                <div class="p-4 sm:p-6 space-y-6">
+                                    <div>
+                                        <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Catatan Klinis per Bulan</h4>
+                                        <div class="space-y-2">
+                                            @foreach ($clinicalNotesPerMonth as $item)
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ $item['month'] }}</span>
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="w-32 bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                                                            <div class="bg-lavender-400 h-2 rounded-full" style="width: {{ $item['count'] > 0 ? max(10, ($item['count'] / max(1, collect($clinicalNotesPerMonth)->pluck('count')->max())) * 100) : 0 }}%"></div>
+                                                        </div>
+                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100 w-8 text-right">{{ $item['count'] }}</span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Rujukan per Bulan</h4>
+                                        <div class="space-y-2">
+                                            @foreach ($referralsPerMonth as $item)
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ $item['month'] }}</span>
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="w-32 bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                                                            <div class="bg-warmYellow-400 h-2 rounded-full" style="width: {{ $item['count'] > 0 ? max(10, ($item['count'] / max(1, collect($referralsPerMonth)->pluck('count')->max())) * 100) : 0 }}%"></div>
+                                                        </div>
+                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100 w-8 text-right">{{ $item['count'] }}</span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Top Facilities by Staff --}}
+                            @if ($topFacilities->isNotEmpty())
+                                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden lg:col-span-2">
+                                    <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏆 {{ __('Fasilitas Teratas (by Staf)') }}</h3>
+                                    </div>
+                                    <div class="p-4 sm:p-6">
+                                        <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                                            <table class="w-full text-sm">
+                                                <thead>
+                                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Fasilitas</th>
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Tipe</th>
+                                                        <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Jumlah Staf</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($topFacilities as $facility)
+                                                        <tr class="border-b border-gray-50 dark:border-gray-700/50">
+                                                            <td class="px-4 py-3 text-gray-800 dark:text-gray-100 font-medium">
+                                                                <a href="{{ route('super-admin.tenants.show', $facility) }}" class="hover:text-skyBlue-600 dark:hover:text-skyBlue-400 transition">
+                                                                    {{ $facility->name }}
+                                                                </a>
+                                                            </td>
+                                                            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ $facility->getTypeLabel() }}</td>
+                                                            <td class="px-4 py-3 text-gray-800 dark:text-gray-100 text-right font-medium">{{ $facility->staff_count }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

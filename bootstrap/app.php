@@ -2,8 +2,10 @@
 
 use App\Http\Middleware\EnsureActiveSubscription;
 use App\Http\Middleware\EnsureChildOwnership;
+use App\Http\Middleware\EnsureFacilityAccess;
 use App\Http\Middleware\EnsureFeatureLimit;
 use App\Http\Middleware\EnsureRole;
+use App\Http\Middleware\EnsureStaffRole;
 use App\Http\Middleware\ResolveTenant;
 use App\Http\Middleware\ResolveTenantByDomain;
 use App\Http\Middleware\SetLocale;
@@ -28,6 +30,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant' => ResolveTenant::class,
             'locale' => SetLocale::class,
             'domain.resolve' => ResolveTenantByDomain::class,
+            'facility.access' => EnsureFacilityAccess::class,
+            'staff.role' => EnsureStaffRole::class,
         ]);
 
         $middleware->web(append: [

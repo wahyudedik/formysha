@@ -66,7 +66,7 @@
 >
     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
         {{ __('Media (foto, video, audio)') }}
-        <span class="text-gray-400 font-normal">— opsional, maks {{ $maxSize }}</span>
+        <span class="text-gray-400 dark:text-gray-500 font-normal">— opsional, maks {{ $maxSize }}</span>
     </label>
 
     {{-- Drop Zone --}}

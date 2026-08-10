@@ -16,7 +16,8 @@ class EnsureFeatureLimit
     /**
      * Check if the tenant is within a feature's limit.
      *
-     * Parameterized: feature:children, feature:photos, feature:videos, feature:storage
+     * Parameterized: feature:children, feature:photos, feature:videos, feature:storage,
+     * feature:staff, feature:patients, feature:clinical_notes, feature:referrals
      */
     public function handle(Request $request, Closure $next, string $feature): Response
     {
@@ -35,6 +36,10 @@ class EnsureFeatureLimit
                 'videos', 'upload_video' => 'unggah video',
                 'family_members' => 'anggota keluarga',
                 'storage' => 'penyimpanan',
+                'staff' => 'jumlah staf',
+                'patients' => 'jumlah pasien',
+                'clinical_notes' => 'catatan klinis',
+                'referrals' => 'rujukan',
                 default => $feature,
             };
 

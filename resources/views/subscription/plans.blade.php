@@ -18,10 +18,10 @@
                 @php
                     $isFree = $plan->price_monthly === 0;
                     $gradients = [
-                        'from-gray-50 to-gray-100',
-                        'from-skyBlue-50 to-skyBlue-100',
-                        'from-softPink-50 to-lavender-100',
-                        'from-lavender-50 to-softPink-100',
+                        'from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-750',
+                        'from-skyBlue-50 to-skyBlue-100 dark:from-skyBlue-950/30 dark:to-skyBlue-900/30',
+                        'from-softPink-50 to-lavender-100 dark:from-softPink-950/30 dark:to-lavender-950/30',
+                        'from-lavender-50 to-softPink-100 dark:from-lavender-950/30 dark:to-softPink-950/30',
                     ];
                     $gradient = $gradients[$loop->index % count($gradients)];
                     $borderColors = [

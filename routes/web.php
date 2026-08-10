@@ -170,6 +170,9 @@ require __DIR__.'/subscription.php';
 // Tenant Admin routes — must be registered before catch-all public profile route
 require __DIR__.'/tenant-admin.php';
 
+// Facility Admin routes — must be registered before catch-all public profile route
+require __DIR__.'/facility-admin.php';
+
 // Auth routes must be registered before the catch-all public profile route
 require __DIR__.'/auth.php';
 

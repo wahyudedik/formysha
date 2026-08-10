@@ -937,6 +937,46 @@ Button rounded:   rounded-xl (konsisten)
 
 ---
 
+## Phase 13 — B2B Healthcare ✅
+
+### Sub-Phase 13A — B2B Foundation ✅
+
+* Tenant Type System: Enum `TenantType` — Family, Hospital, Clinic, Midwifery, Posyandu, Daycare, School
+* Staff Model: `Staff` dengan role — doctor, midwife, nurse, staff_admin, staff
+* Clinical Notes: Model `ClinicalNote` untuk catatan klinis pasien
+* Referrals: Model `Referral` untuk rujukan antar-fasilitas
+* Patient Links: Model `PatientLink` untuk tautan pasien-orang tua
+* Migrations: 8 migration baru untuk tabel B2B
+
+### Sub-Phase 13B — Facility Admin Panel ✅
+
+* 19 view Blade: dashboard, staff CRUD, patients, clinical notes, referrals, reports, settings
+* Sidebar responsive dengan mobile drawer
+* 7 form dengan loading states (Alpine.js)
+* 5 view dengan confirm-delete modal
+* Breadcrumb navigation pada sub-halaman
+* Empty state standarisasi
+* 53 tests, 108 assertions
+
+### Sub-Phase 13C — B2B Super Admin Polish ✅
+
+* Sidebar navigation: responsive mobile drawer
+* Loading states: Alpine.js pada semua form
+* Confirm-delete: component pada view yang relevan
+* Breadcrumb: `<x-breadcrumb>` pada sub-halaman
+* Empty state: `<x-empty-state>` standarisasi
+* Bug fix: `$users` undefined variable di `staff/create.blade.php`
+
+### Sub-Phase 13D — B2B Super Admin Dashboard Integration ✅
+
+* Dashboard B2B: stat cards — fasilitas B2B, staf aktif, catatan klinis, revenue breakdown
+* Tenant Detail B2B: stat cards, info fasilitas, daftar staf
+* Analytics B2B: pertumbuhan fasilitas, catatan klinis, rujukan, top fasilitas
+* Monitoring B2B: fasilitas staf terbanyak, catatan klinis terbanyak, rujukan pending
+* Full test suite: 607 tests, 1383 assertions — all passing
+
+---
+
 ## Tujuan Jangka Panjang
 
 ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya oleh jutaan orang tua. Produk dikembangkan secara bertahap, dimulai dari **web SaaS** sebagai fondasi utama, kemudian dapat diperluas ke aplikasi mobile, desktop, dan solusi enterprise sesuai kebutuhan pasar.

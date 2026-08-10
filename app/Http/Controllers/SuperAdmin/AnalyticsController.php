@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Models\ClinicalNote;
 use App\Models\Payment;
 use App\Models\Plan;
+use App\Models\Referral;
+use App\Models\Staff;
 use App\Models\Subscription;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
@@ -93,6 +96,60 @@ class AnalyticsController extends Controller
             ? round(($cancelledLast30Days / $totalActive) * 100, 1)
             : 0;
 
+        // ─── B2B Analytics ───────────────────────────────────────
+
+        $b2bTenantIds = Tenant::where('type', '!=', 'family')->pluck('id');
+
+        // B2B tenants per month (6 bulan terakhir)
+        $b2bTenantsPerMonth = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $b2bTenantsPerMonth[] = [
+                'month' => $date->locale('id')->isoFormat('MMM YYYY'),
+                'count' => Tenant::where('type', '!=', 'family')
+                    ->whereMonth('created_at', $date->month)
+                    ->whereYear('created_at', $date->year)
+                    ->count(),
+            ];
+        }
+
+        // Clinical notes per month (6 bulan terakhir)
+        $clinicalNotesPerMonth = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $clinicalNotesPerMonth[] = [
+                'month' => $date->locale('id')->isoFormat('MMM YYYY'),
+                'count' => ClinicalNote::whereMonth('created_at', $date->month)
+                    ->whereYear('created_at', $date->year)
+                    ->count(),
+            ];
+        }
+
+        // Referrals per month (6 bulan terakhir)
+        $referralsPerMonth = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $referralsPerMonth[] = [
+                'month' => $date->locale('id')->isoFormat('MMM YYYY'),
+                'count' => Referral::whereMonth('created_at', $date->month)
+                    ->whereYear('created_at', $date->year)
+                    ->count(),
+            ];
+        }
+
+        // Top facilities by staff count
+        $topFacilities = Tenant::where('type', '!=', 'family')
+            ->withCount('staff')
+            ->orderByDesc('staff_count')
+            ->take(5)
+            ->get();
+
+        // Revenue B2B vs B2C
+        $revenueB2B = Payment::where('status', 'approved')
+            ->whereIn('tenant_id', $b2bTenantIds)
+            ->sum('amount');
+        $revenueB2C = $revenueTotal - $revenueB2B;
+
         return view('super-admin.analytics.index', compact(
             'totalTenants',
             'activeTenants',
@@ -105,6 +162,12 @@ class AnalyticsController extends Controller
             'topPlans',
             'revenueByPlan',
             'churnRate',
+            'b2bTenantsPerMonth',
+            'clinicalNotesPerMonth',
+            'referralsPerMonth',
+            'topFacilities',
+            'revenueB2B',
+            'revenueB2C',
         ));
     }
 }

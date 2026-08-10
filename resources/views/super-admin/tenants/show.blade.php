@@ -80,6 +80,139 @@
                     </div>
                 </div>
 
+                {{-- B2B Facility Details --}}
+                @if ($tenant->isB2B() && $b2bData)
+                    <div class="mb-6">
+                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('Detail Fasilitas B2B') }}</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">👨‍⚕️</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $b2bData['staff_count'] }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Total Staf</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs text-mintGreen-600 dark:text-mintGreen-400">{{ $b2bData['active_staff_count'] }} aktif</div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-softPink-50 dark:bg-softPink-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">👶</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $b2bData['patient_link_count'] }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Tautan Pasien</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs text-mintGreen-600 dark:text-mintGreen-400">{{ $b2bData['active_patient_count'] }} aktif</div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">📋</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $b2bData['clinical_note_count'] }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Catatan Klinis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-warmYellow-50 dark:bg-warmYellow-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">🔄</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $b2bData['referral_count'] }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Total Rujukan</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs {{ $b2bData['pending_referral_count'] > 0 ? 'text-warmYellow-600 dark:text-warmYellow-400' : 'text-gray-500 dark:text-gray-400' }}">{{ $b2bData['pending_referral_count'] }} pending</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Facility Info --}}
+                    @if ($tenant->facility)
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden mb-6">
+                            <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏥 {{ __('Informasi Fasilitas') }}</h3>
+                            </div>
+                            <div class="p-4 sm:p-6 space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Tipe Fasilitas</span>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $tenant->getTypeLabel() }}</span>
+                                </div>
+                                @if ($tenant->address)
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Alamat</span>
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100 text-right max-w-[60%]">{{ $tenant->address }}</span>
+                                    </div>
+                                @endif
+                                @if ($tenant->phone)
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Telepon</span>
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $tenant->phone }}</span>
+                                    </div>
+                                @endif
+                                @if ($tenant->email_institution)
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Email</span>
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $tenant->email_institution }}</span>
+                                    </div>
+                                @endif
+                                @if ($tenant->license_number)
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">No. Lisensi</span>
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $tenant->license_number }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Staff List --}}
+                    @if ($b2bData['staff']->isNotEmpty())
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden mb-6">
+                            <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">👨‍⚕️ {{ __('Daftar Staf') }}</h3>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                                    <table class="w-full text-sm">
+                                        <thead>
+                                            <tr class="text-left text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-700">
+                                                <th class="pb-3 font-medium">Nama</th>
+                                                <th class="pb-3 font-medium">Role</th>
+                                                <th class="pb-3 font-medium">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-50 dark:divide-gray-700/50">
+                                            @foreach ($b2bData['staff'] as $s)
+                                                <tr>
+                                                    <td class="py-3 text-gray-800 dark:text-gray-100">{{ $s->user?->name ?? '-' }}</td>
+                                                    <td class="py-3 text-gray-600 dark:text-gray-300">{{ $s->role ?? '-' }}</td>
+                                                    <td class="py-3">
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium {{ $s->is_active ? 'bg-mintGreen-100 text-mintGreen-600 dark:bg-mintGreen-950/30 dark:text-mintGreen-400' : 'bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400' }}">
+                                                            {{ $s->is_active ? 'Aktif' : 'Nonaktif' }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endif
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Detail Info --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">

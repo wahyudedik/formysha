@@ -209,6 +209,154 @@
                         @endif
                     </div>
                 </div>
+
+                {{-- B2B Monitoring Section --}}
+                @if ($b2bTenantCount > 0)
+                    <div class="mt-8">
+                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('Monitoring B2B (Fasilitas)') }}</h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                            {{-- B2B Tenants --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-softPink-50 dark:bg-softPink-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">🏥</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $b2bTenantCount }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fasilitas Aktif</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Total Staff --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">👨‍⚕️</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalStaff }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Staf Aktif</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Pending Referrals --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl {{ $pendingReferrals > 0 ? 'bg-warmYellow-50 dark:bg-warmYellow-950/30' : 'bg-mintGreen-50 dark:bg-mintGreen-950/30' }} flex items-center justify-center">
+                                        <span class="text-2xl">{{ $pendingReferrals > 0 ? '⚠️' : '✅' }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $pendingReferrals }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Rujukan Pending</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">{{ $totalReferrals }} total rujukan</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {{-- Facilities by Staff --}}
+                            @if ($b2bFacilities->isNotEmpty())
+                                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                                    <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">👨‍⚕️ {{ __('Fasilitas dengan Staf Terbanyak') }}</h3>
+                                    </div>
+                                    <div class="p-4 sm:p-6">
+                                        <div class="space-y-3">
+                                            @foreach ($b2bFacilities as $facility)
+                                                <a href="{{ route('super-admin.tenants.show', $facility) }}" class="block p-3 rounded-xl hover:bg-softPink-50 dark:hover:bg-softPink-950/20 transition">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center gap-3 min-w-0">
+                                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-softPink-400 to-lavender-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                                                                {{ strtoupper(substr($facility->name, 0, 1)) }}
+                                                            </div>
+                                                            <div class="min-w-0">
+                                                                <p class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{{ $facility->name }}</p>
+                                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $facility->getTypeLabel() }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-100 shrink-0">{{ $facility->staff_count }} staf</span>
+                                                    </div>
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Facilities by Clinical Notes --}}
+                            @if ($topFacilitiesByNotes->isNotEmpty())
+                                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
+                                    <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Fasilitas dengan Catatan Klinis Terbanyak') }}</h3>
+                                    </div>
+                                    <div class="p-4 sm:p-6">
+                                        <div class="space-y-3">
+                                            @foreach ($topFacilitiesByNotes as $facility)
+                                                <a href="{{ route('super-admin.tenants.show', $facility) }}" class="block p-3 rounded-xl hover:bg-lavender-50 dark:hover:bg-lavender-950/20 transition">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center gap-3 min-w-0">
+                                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-lavender-400 to-skyBlue-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                                                                {{ strtoupper(substr($facility->name, 0, 1)) }}
+                                                            </div>
+                                                            <div class="min-w-0">
+                                                                <p class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{{ $facility->name }}</p>
+                                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $facility->getTypeLabel() }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-100 shrink-0">{{ $facility->clinical_notes_count }} catatan</span>
+                                                    </div>
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Facilities with Pending Referrals --}}
+                            @if ($facilitiesWithPendingReferrals->isNotEmpty())
+                                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden lg:col-span-2">
+                                    <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🔄 {{ __('Fasilitas dengan Rujukan Pending Terbanyak') }}</h3>
+                                    </div>
+                                    <div class="p-4 sm:p-6">
+                                        <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                                            <table class="w-full text-sm">
+                                                <thead>
+                                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Fasilitas</th>
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Tipe</th>
+                                                        <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Pending</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($facilitiesWithPendingReferrals as $facility)
+                                                        <tr class="border-b border-gray-50 dark:border-gray-700/50">
+                                                            <td class="px-4 py-3">
+                                                                <a href="{{ route('super-admin.tenants.show', $facility) }}" class="text-gray-800 dark:text-gray-100 font-medium hover:text-skyBlue-600 dark:hover:text-skyBlue-400 transition">
+                                                                    {{ $facility->name }}
+                                                                </a>
+                                                            </td>
+                                                            <td class="px-4 py-3 text-gray-600 dark:text-gray-300">{{ $facility->getTypeLabel() }}</td>
+                                                            <td class="px-4 py-3 text-right">
+                                                                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium {{ $facility->pending_referrals_count > 0 ? 'bg-warmYellow-100 text-warmYellow-600 dark:bg-warmYellow-950/30 dark:text-warmYellow-400' : 'bg-mintGreen-100 text-mintGreen-600 dark:bg-mintGreen-950/30 dark:text-mintGreen-400' }}">
+                                                                    {{ $facility->pending_referrals_count }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

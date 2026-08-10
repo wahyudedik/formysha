@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Models\ClinicalNote;
 use App\Models\Payment;
 use App\Models\Plan;
+use App\Models\Referral;
+use App\Models\Staff;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -43,6 +46,26 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // ─── B2B Statistics ──────────────────────────────────────
+
+        $b2bTenantCount = Tenant::where('type', '!=', 'family')->count();
+        $b2bActiveCount = Tenant::where('type', '!=', 'family')
+            ->where('is_active', true)
+            ->count();
+        $totalStaff = Staff::where('is_active', true)->count();
+        $totalPatientLinks = (new Tenant)->patientLinks()->count();
+        $clinicalNotesThisMonth = ClinicalNote::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+        $pendingReferrals = Referral::where('status', 'pending')->count();
+
+        // B2B revenue
+        $b2bTenantIds = Tenant::where('type', '!=', 'family')->pluck('id');
+        $revenueB2B = Payment::where('status', 'approved')
+            ->whereIn('tenant_id', $b2bTenantIds)
+            ->sum('amount');
+        $revenueB2C = $revenueTotal - $revenueB2B;
+
         return view('super-admin.dashboard', compact(
             'totalTenants',
             'activeTenants',
@@ -55,6 +78,14 @@ class DashboardController extends Controller
             'revenueTotal',
             'recentPayments',
             'recentTenants',
+            'b2bTenantCount',
+            'b2bActiveCount',
+            'totalStaff',
+            'totalPatientLinks',
+            'clinicalNotesThisMonth',
+            'pendingReferrals',
+            'revenueB2B',
+            'revenueB2C',
         ));
     }
 }

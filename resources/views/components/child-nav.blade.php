@@ -42,7 +42,7 @@
             <a href="{{ $module['param'] === null ? route($module['route']) : route($module['route'], $child) }}"
                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                       {{ $isActive
-                          ? 'bg-softPink-50 text-softPink-600 shadow-soft'
+                          ? 'bg-softPink-50 dark:bg-softPink-950/30 text-softPink-600 dark:text-softPink-400 shadow-soft'
                           : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50' }}">
                 <span class="text-lg">{{ $module['icon'] }}</span>
                 {{ $module['label'] }}
@@ -62,8 +62,8 @@
             <a href="{{ route($module['route'], $child) }}"
                class="flex flex-col items-center gap-0.5 px-2 py-1 min-h-[44px] rounded-xl text-xs transition-all duration-200
                       {{ $isActive
-                          ? 'text-softPink-600'
-                          : 'text-gray-400' }}">
+                          ? 'text-softPink-600 dark:text-softPink-400'
+                          : 'text-gray-400 dark:text-gray-500' }}">
                 <span class="text-lg leading-none">{{ $module['icon'] }}</span>
                 <span class="font-medium leading-tight">{{ $module['label'] }}</span>
             </a>
@@ -72,7 +72,7 @@
         <!-- More / Overflow Button -->
         <button @click="moreOpen = !moreOpen"
                 class="flex flex-col items-center gap-0.5 px-2 py-1 min-h-[44px] rounded-xl text-xs transition-all duration-200
-                       {{ $hasOverflowActive ? 'text-softPink-600' : 'text-gray-400' }}">
+                       {{ $hasOverflowActive ? 'text-softPink-600 dark:text-softPink-400' : 'text-gray-400 dark:text-gray-500' }}">
             <span class="text-lg leading-none">⋯</span>
             <span class="font-medium leading-tight">Lainnya</span>
         </button>
@@ -93,7 +93,7 @@
                    @click="moreOpen = false"
                    class="flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all duration-200
                           {{ $isActive
-                              ? 'bg-softPink-50 text-softPink-600'
+                              ? 'bg-softPink-50 dark:bg-softPink-950/30 text-softPink-600 dark:text-softPink-400'
                               : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50' }}">
                     <span class="text-lg leading-none">{{ $module['icon'] }}</span>
                     <span class="font-medium leading-tight">{{ $module['label'] }}</span>

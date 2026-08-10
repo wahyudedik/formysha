@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Models\ClinicalNote;
+use App\Models\Referral;
+use App\Models\Staff;
 use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -52,7 +55,54 @@ class TenantController extends Controller
     {
         $tenant->loadCount('users', 'children', 'subscriptions');
 
-        return view('super-admin.tenants.show', compact('tenant'));
+        // Load B2B data if this is a B2B tenant
+        $b2bData = null;
+        if ($tenant->isB2B()) {
+            $staff = Staff::where('tenant_id', $tenant->id)
+                ->with('user')
+                ->get();
+
+            $patientLinks = $tenant->patientLinks()->with('user')->get();
+
+            $clinicalNotes = ClinicalNote::where('tenant_id', $tenant->id)
+                ->latest()
+                ->take(10)
+                ->get();
+
+            $referralsFrom = Referral::where('from_tenant_id', $tenant->id)
+                ->with('toTenant')
+                ->latest()
+                ->take(10)
+                ->get();
+
+            $referralsTo = Referral::where('to_tenant_id', $tenant->id)
+                ->with('fromTenant')
+                ->latest()
+                ->take(10)
+                ->get();
+
+            $b2bData = [
+                'staff' => $staff,
+                'staff_count' => $staff->count(),
+                'active_staff_count' => $staff->where('is_active', true)->count(),
+                'patient_links' => $patientLinks,
+                'patient_link_count' => $patientLinks->count(),
+                'active_patient_count' => $patientLinks->where('status', 'active')->count(),
+                'clinical_notes' => $clinicalNotes,
+                'clinical_note_count' => ClinicalNote::where('tenant_id', $tenant->id)->count(),
+                'referrals_from' => $referralsFrom,
+                'referrals_to' => $referralsTo,
+                'referral_count' => Referral::where('from_tenant_id', $tenant->id)
+                    ->orWhere('to_tenant_id', $tenant->id)
+                    ->count(),
+                'pending_referral_count' => Referral::where(function ($query) use ($tenant) {
+                    $query->where('from_tenant_id', $tenant->id)
+                        ->orWhere('to_tenant_id', $tenant->id);
+                })->where('status', 'pending')->count(),
+            ];
+        }
+
+        return view('super-admin.tenants.show', compact('tenant', 'b2bData'));
     }
 
     /**

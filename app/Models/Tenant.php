@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\TenantType;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -13,12 +15,20 @@ use Illuminate\Support\Str;
  * @property string $id
  * @property string $name
  * @property string $slug
+ * @property TenantType $type
+ * @property string|null $facility_type
  * @property string|null $domain
  * @property string|null $logo
  * @property string|null $custom_domain
- * @property \Carbon\Carbon|null $domain_verified_at
+ * @property Carbon|null $domain_verified_at
  * @property bool $domain_dns_verified
  * @property bool $is_active
+ * @property string|null $address
+ * @property string|null $phone
+ * @property string|null $email_institution
+ * @property string|null $website
+ * @property string|null $license_number
+ * @property string|null $description
  * @property array|null $settings
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -52,12 +62,20 @@ class Tenant extends Model
     protected $fillable = [
         'name',
         'slug',
+        'type',
+        'facility_type',
         'domain',
         'logo',
         'custom_domain',
         'domain_verified_at',
         'domain_dns_verified',
         'is_active',
+        'address',
+        'phone',
+        'email_institution',
+        'website',
+        'license_number',
+        'description',
         'settings',
     ];
 
@@ -69,12 +87,15 @@ class Tenant extends Model
     protected function casts(): array
     {
         return [
+            'type' => TenantType::class,
             'is_active' => 'boolean',
             'domain_dns_verified' => 'boolean',
             'domain_verified_at' => 'datetime',
             'settings' => 'array',
         ];
     }
+
+    // ─── Relationships ───────────────────────────────────────────
 
     /**
      * Get the users belonging to this tenant.
@@ -133,9 +154,6 @@ class Tenant extends Model
     }
 
     /**
-     * Get all media files through children.
-     */
-    /**
      * Get all media files through children (polymorphic relationship).
      */
     public function media()
@@ -179,6 +197,115 @@ class Tenant extends Model
     }
 
     /**
+     * Get the facility details for B2B tenants.
+     */
+    public function facility(): HasOne
+    {
+        return $this->hasOne(Facility::class);
+    }
+
+    /**
+     * Get all staff members for this tenant.
+     */
+    public function staff(): HasMany
+    {
+        return $this->hasMany(Staff::class);
+    }
+
+    /**
+     * Get all patient links for this tenant.
+     */
+    public function patientLinks(): HasMany
+    {
+        return $this->hasMany(PatientLink::class, 'facility_tenant_id');
+    }
+
+    /**
+     * Get all clinical notes for this tenant.
+     */
+    public function clinicalNotes(): HasMany
+    {
+        return $this->hasMany(ClinicalNote::class);
+    }
+
+    /**
+     * Get all referrals originating from this tenant.
+     */
+    public function referralsFrom(): HasMany
+    {
+        return $this->hasMany(Referral::class, 'from_tenant_id');
+    }
+
+    /**
+     * Get all referrals received by this tenant.
+     */
+    public function referralsTo(): HasMany
+    {
+        return $this->hasMany(Referral::class, 'to_tenant_id');
+    }
+
+    // ─── Type Helpers ────────────────────────────────────────────
+
+    /**
+     * Check if this is a B2B tenant (hospital, clinic, etc.).
+     */
+    public function isB2B(): bool
+    {
+        if (! $this->type) {
+            return false;
+        }
+
+        /** @var TenantType $type */
+        $type = $this->type;
+
+        return $type->isB2B();
+    }
+
+    /**
+     * Check if this is a B2C tenant (family).
+     */
+    public function isB2C(): bool
+    {
+        if (! $this->type) {
+            return true;
+        }
+
+        /** @var TenantType $type */
+        $type = $this->type;
+
+        return $type->isB2C();
+    }
+
+    /**
+     * Get the facility type label.
+     */
+    public function getFacilityTypeLabel(): ?string
+    {
+        if (! $this->facility_type) {
+            return null;
+        }
+
+        return TenantType::tryFrom($this->facility_type)?->label();
+    }
+
+    /**
+     * Get the type label.
+     */
+    public function getTypeLabel(): string
+    {
+        if (! $this->type) {
+            return 'Keluarga';
+        }
+
+        /** @var TenantType $type */
+        $type = $this->type;
+
+        return $type->label();
+    }
+
+    // ─── Status Checks ──────────────────────────────────────────
+
+    /**
      * Check if the tenant is active.
      */
     public function isActive(): bool
@@ -193,6 +320,8 @@ class Tenant extends Model
     {
         return $this->activeSubscription()->exists();
     }
+
+    // ─── Feature Limits (B2C) ───────────────────────────────────
 
     /**
      * Check if the tenant can add another child.
@@ -266,6 +395,90 @@ class Tenant extends Model
         return $this->getVideoCount() < $plan->max_videos;
     }
 
+    // ─── B2B Feature Limits ─────────────────────────────────────
+
+    /**
+     * Check if the tenant can add another staff member.
+     */
+    public function canAddStaff(): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+
+        if (! $plan) {
+            return false;
+        }
+
+        /** @var int $maxStaff */
+        $maxStaff = $plan->getFeatureLimit('max_staff');
+
+        if ($maxStaff === -1) {
+            return true;
+        }
+
+        return $this->staff()->count() < $maxStaff;
+    }
+
+    /**
+     * Check if the tenant can add another patient link.
+     */
+    public function canAddPatientLink(): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+
+        if (! $plan) {
+            return false;
+        }
+
+        /** @var int $maxPatients */
+        $maxPatients = $plan->getFeatureLimit('max_patients');
+
+        if ($maxPatients === -1) {
+            return true;
+        }
+
+        return $this->patientLinks()->count() < $maxPatients;
+    }
+
+    /**
+     * Check if the tenant can create a clinical note.
+     */
+    public function canCreateClinicalNote(): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+
+        if (! $plan) {
+            return false;
+        }
+
+        /** @var int $maxNotes */
+        $maxNotes = $plan->getFeatureLimit('max_clinical_notes');
+
+        if ($maxNotes === -1) {
+            return true;
+        }
+
+        return $this->clinicalNotes()->count() < $maxNotes;
+    }
+
+    /**
+     * Check if the tenant can create a referral.
+     */
+    public function canCreateReferral(): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+
+        if (! $plan) {
+            return false;
+        }
+
+        /** @var bool $enabled */
+        $enabled = $plan->getFeatureLimit('referrals_enabled');
+
+        return (bool) $enabled;
+    }
+
+    // ─── Usage Stats ────────────────────────────────────────────
+
     /**
      * Get the total storage used by this tenant in bytes.
      */
@@ -310,5 +523,45 @@ class Tenant extends Model
     public function getVideoCount(): int
     {
         return $this->media()->where('file_type', 'video')->count();
+    }
+
+    /**
+     * Get the number of staff members in this tenant.
+     */
+    public function getStaffCount(): int
+    {
+        return $this->staff()->count();
+    }
+
+    /**
+     * Get the number of patient links in this tenant.
+     */
+    public function getPatientLinkCount(): int
+    {
+        return $this->patientLinks()->count();
+    }
+
+    /**
+     * Get the number of clinical notes in this tenant.
+     */
+    public function getClinicalNoteCount(): int
+    {
+        return $this->clinicalNotes()->count();
+    }
+
+    // ─── B2B Usage for TenantService ────────────────────────────
+
+    /**
+     * Get B2B-specific usage statistics.
+     *
+     * @return array{staff: int, patients: int, clinical_notes: int}
+     */
+    public function getB2BUsage(): array
+    {
+        return [
+            'staff' => $this->getStaffCount(),
+            'patients' => $this->getPatientLinkCount(),
+            'clinical_notes' => $this->getClinicalNoteCount(),
+        ];
     }
 }

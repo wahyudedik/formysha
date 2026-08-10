@@ -79,6 +79,85 @@
                     </div>
                 </div>
 
+                {{-- B2B Stats Cards --}}
+                @if ($b2bTenantCount > 0)
+                    <div class="mb-8">
+                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('Statistik B2B (Fasilitas)') }}</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {{-- B2B Tenants --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-softPink-50 dark:bg-softPink-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">🏥</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $b2bTenantCount }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fasilitas B2B</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs text-mintGreen-600 dark:text-mintGreen-400">
+                                    {{ $b2bActiveCount }} aktif
+                                </div>
+                            </div>
+
+                            {{-- Total Staff --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">👨‍⚕️</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalStaff }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Staf Aktif</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                                    {{ $totalPatientLinks }} tautan pasien
+                                </div>
+                            </div>
+
+                            {{-- Clinical Notes This Month --}}
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 flex items-center justify-center">
+                                        <span class="text-2xl">📋</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $clinicalNotesThisMonth }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Catatan Klinis (Bulan Ini)</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs {{ $pendingReferrals > 0 ? 'text-warmYellow-600 dark:text-warmYellow-400' : 'text-gray-500 dark:text-gray-400' }}">
+                                    {{ $pendingReferrals }} rujukan pending
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- B2B Revenue Breakdown --}}
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">💰 {{ __('Pendapatan B2B vs B2C') }}</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded-full bg-softPink-400"></div>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">B2B (Fasilitas)</span>
+                                    </div>
+                                    <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2B, 0, ',', '.') }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded-full bg-skyBlue-400"></div>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">B2C (Keluarga)</span>
+                                    </div>
+                                    <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2C, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Recent Pending Payments --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">

@@ -1199,3 +1199,28 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 * **Milestone Alerts System**: 5 tipe milestone (birthday, monthly_age, yearly_age, growth_record, immunization), scheduled command, dismissable, 14 tests
 * **Final Test Suite**: 540 tests, 1226 assertions — all passing
 * **Laravel Pint**: Semua file PHP ter-format sesuai standar
+
+## B2B Healthcare Foundation ✅ (Phase 13A-13B)
+
+* **Tenant Type System**: Enum `TenantType` — Family, Hospital, Clinic, Midwifery, Posyandu, Daycare, School
+* **Staff Model**: Model `Staff` dengan role — doctor, midwife, nurse, staff_admin, staff
+* **Clinical Notes**: Model `ClinicalNote` untuk catatan klinis pasien
+* **Referrals**: Model `Referral` untuk rujukan antar-fasilitas
+* **Patient Links**: Model `PatientLink` untuk tautan pasien-orang tua
+* **Facility Admin Panel**: 19 view — dashboard, staff CRUD, patients, clinical notes, referrals, reports, settings
+* **Sidebar Navigation**: Responsive sidebar untuk facility admin dengan mobile drawer
+* **Loading States**: Alpine.js loading states pada semua form facility admin (7 form)
+* **Confirm Delete**: `<x-confirm-delete>` component pada 5 view facility admin
+* **Breadcrumb Navigation**: `<x-breadcrumb>` component pada sub-halaman facility admin
+* **Empty State Standarisasi**: `<x-empty-state>` component pada semua halaman facility admin
+* **Facility Admin Tests**: 53 tests, 108 assertions — all passing
+
+## B2B Super Admin Integration ✅ (Phase 13C-13D)
+
+* **Dashboard B2B Stats**: Statistik B2B di Super Admin Dashboard — jumlah fasilitas, staf aktif, catatan klinis, revenue B2B vs B2C
+* **Tenant Detail B2B**: Section B2B di halaman detail tenant — stat cards, info fasilitas, daftar staf
+* **Analytics B2B**: Metrik B2B di Analytics — pertumbuhan fasilitas, catatan klinis per bulan, rujukan per bulan, top fasilitas
+* **Monitoring B2B**: Monitoring B2B — fasilitas dengan staf terbanyak, catatan klinis terbanyak, rujukan pending
+* **Bug Fix**: `$users` undefined variable di `staff/create.blade.php` — diganti dengan field name/email inline
+* **Pint**: Semua file PHP ter-format
+* **Full Test Suite**: 607 tests, 1383 assertions — all passing

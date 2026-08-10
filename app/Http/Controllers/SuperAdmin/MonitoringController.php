@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Models\AuditLog;
+use App\Models\ClinicalNote;
 use App\Models\Media;
+use App\Models\Referral;
+use App\Models\Staff;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -74,6 +77,43 @@ class MonitoringController extends Controller
         $totalMedia = Media::count();
         $totalMediaSize = Media::sum('file_size') ?? 0;
 
+        // ─── B2B Monitoring ──────────────────────────────────────
+
+        // Fasilitas dengan staf paling aktif
+        $b2bFacilities = Tenant::where('type', '!=', 'family')
+            ->where('is_active', true)
+            ->withCount(['staff' => function ($query) {
+                $query->where('is_active', true);
+            }])
+            ->orderByDesc('staff_count')
+            ->take(5)
+            ->get();
+
+        // Fasilitas dengan clinical notes paling banyak
+        $topFacilitiesByNotes = Tenant::where('type', '!=', 'family')
+            ->where('is_active', true)
+            ->withCount('clinicalNotes')
+            ->orderByDesc('clinical_notes_count')
+            ->take(5)
+            ->get();
+
+        // Fasilitas dengan referral pending terbanyak
+        $facilitiesWithPendingReferrals = Tenant::where('type', '!=', 'family')
+            ->where('is_active', true)
+            ->withCount(['referralsFrom as pending_referrals_count' => function ($query) {
+                $query->where('status', 'pending');
+            }])
+            ->orderByDesc('pending_referrals_count')
+            ->take(5)
+            ->get();
+
+        // Total B2B stats
+        $b2bTenantCount = Tenant::where('type', '!=', 'family')->count();
+        $totalStaff = Staff::where('is_active', true)->count();
+        $totalClinicalNotes = ClinicalNote::count();
+        $totalReferrals = Referral::count();
+        $pendingReferrals = Referral::where('status', 'pending')->count();
+
         return view('super-admin.monitoring.index', compact(
             'totalTenants',
             'activeTenants',
@@ -85,6 +125,14 @@ class MonitoringController extends Controller
             'totalUsers',
             'totalMedia',
             'totalMediaSize',
+            'b2bFacilities',
+            'topFacilitiesByNotes',
+            'facilitiesWithPendingReferrals',
+            'b2bTenantCount',
+            'totalStaff',
+            'totalClinicalNotes',
+            'totalReferrals',
+            'pendingReferrals',
         ));
     }
 

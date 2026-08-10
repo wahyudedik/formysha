@@ -854,6 +854,26 @@ public/favicon.ico   → Favicon legacy
 * **New Tests**: AchievementTest (7), AchievementServiceTest (4), MilestoneTest (7), MilestoneServiceTest (6) — total 540 tests, 1226 assertions
 * **Bug Fix**: `whereDate` untuk `milestone_date` comparison di MilestoneService
 
+#### Phase 13 — B2B Healthcare ✅
+
+* **Tenant Type System**: Enum `TenantType` — Family, Hospital, Clinic, Midwifery, Posyandu, Daycare, School
+* **Staff Model**: Model `Staff` dengan role — doctor, midwife, nurse, staff_admin, staff
+* **Clinical Notes**: Model `ClinicalNote` untuk catatan klinis pasien
+* **Referrals**: Model `Referral` untuk rujukan antar-fasilitas
+* **Patient Links**: Model `PatientLink` untuk tautan pasien-orang tua
+* **Facility Admin Panel**: 19 view — dashboard, staff CRUD, patients, clinical notes, referrals, reports, settings
+* **Sidebar Navigation**: Responsive sidebar untuk facility admin dengan mobile drawer
+* **Loading States**: Alpine.js loading states pada semua form facility admin (7 form)
+* **Confirm Delete**: `<x-confirm-delete>` component pada 5 view facility admin
+* **Breadcrumb Navigation**: `<x-breadcrumb>` component pada sub-halaman facility admin
+* **Empty State Standarisasi**: `<x-empty-state>` component pada semua halaman facility admin
+* **B2B Dashboard**: Statistik B2B di Super Admin Dashboard — fasilitas, staf, catatan klinis, revenue
+* **B2B Tenant Detail**: Section B2B di halaman detail tenant — stat cards, info fasilitas, daftar staf
+* **B2B Analytics**: Metrik B2B — pertumbuhan fasilitas, catatan klinis, rujukan, top fasilitas
+* **B2B Monitoring**: Monitoring — fasilitas staf terbanyak, catatan klinis terbanyak, rujukan pending
+* **Bug Fix**: `$users` undefined variable di `staff/create.blade.php`
+* **Tests**: 607 tests, 1383 assertions — all passing
+
 ### Keunggulan Kompetitif
 
 * Fokus pada **Digital Life Book**, bukan sekadar album foto.
@@ -1060,18 +1080,19 @@ All Blade views MUST follow these responsive patterns consistently:
 
 ### Quality Assurance
 
-* **Total Tests**: 540 tests, 1226 assertions — all passing
+* **Total Tests**: 607 tests, 1383 assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
-* **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit, Achievement, Milestone
+* **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit, Achievement, Milestone, FacilityAdmin
 * **API Tests**: AuthTest, ChildApiTest, TimelineApiTest, DiaryApiTest, AlbumApiTest, GrowthApiTest, HealthApiTest, EventApiTest, FamilyApiTest, NotificationApiTest, SearchApiTest, PlanApiTest, DashboardApiTest, SuperAdminApiTest, WebhookApiTest, LanguageApiTest, WhiteLabelApiTest, DomainApiTest, PluginApiTest, EnterpriseApiTest
 * **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, ImageOptimizationService, SearchService, NotificationService, CacheService, AchievementService, MilestoneService, Album, Child, Diary
 * **Feature Tests (Phase 10)**: SubscriptionLifecycleTest (6 tests)
 * **Feature Tests (Phase 12)**: AchievementTest (7), AchievementServiceTest (4), MilestoneTest (7), MilestoneServiceTest (6) — 25 tests baru
-* **QA Audit**: Phase 1-12 selesai, semua tests passing, Pint formatting applied
-* **Loading States**: Alpine.js loading states pada semua form submit (25 form):
+* **QA Audit**: Phase 1-13 selesai, semua tests passing, Pint formatting applied
+* **Loading States**: Alpine.js loading states pada semua form submit (32 form):
   - Core: children, timeline, albums, diaries, growth, health, documents, calendar, family, auth (login, register)
   - Admin: subscription/payment-upload, super-admin/tenants (create/edit), super-admin/plans (create/edit)
+  - Facility Admin: staff (create/edit), patients (create), clinical-notes (create/edit), referrals (create), settings
   - Pola: `x-data="{ loading: false }"` + `@submit="loading = true"` + `:disabled="loading"` + animate-spin SVG
 * **Subscription Flow Fix**: Perbaikan bug kritis pada flow subscription/payment:
   - `tenant_id` di-set saat pembuatan anak (ChildController::store)

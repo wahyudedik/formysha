@@ -139,4 +139,40 @@ class Plan extends Model
 
         return $this->max_storage_mb.' MB';
     }
+
+    /**
+     * Get a specific feature limit from the features JSON.
+     *
+     * @param  string  $key  Feature key (e.g. max_staff, max_patients, referrals_enabled)
+     */
+    public function getFeatureLimit(string $key): int|bool|null
+    {
+        $features = $this->features ?? [];
+
+        return $features[$key] ?? null;
+    }
+
+    /**
+     * Check if this is the free plan.
+     */
+    public function isFree(): bool
+    {
+        return $this->price_monthly === 0;
+    }
+
+    /**
+     * Scope: get the free plan.
+     */
+    public function scopeFree($query)
+    {
+        return $query->where('price_monthly', 0)->where('is_active', true);
+    }
+
+    /**
+     * Scope: get active plans.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }

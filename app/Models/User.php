@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\StaffRole;
 use Database\Factories\UserFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,7 +28,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 #[Fillable(['name', 'email', 'password', 'avatar', 'phone', 'date_of_birth', 'address', 'role', 'language', 'timezone', 'tenant_id'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
@@ -164,5 +164,48 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isTenantAdmin(): bool
     {
         return $this->role === 'tenant_admin';
+    }
+
+    /**
+     * Check if the user is a facility admin.
+     */
+    public function isFacilityAdmin(): bool
+    {
+        return $this->role === 'tenant_admin' && $this->tenant?->isB2B();
+    }
+
+    /**
+     * Get the staff record for this user (B2B).
+     */
+    public function staff(): HasMany
+    {
+        return $this->hasMany(Staff::class);
+    }
+
+    /**
+     * Get the active staff record for the current tenant.
+     */
+    public function activeStaff(): HasOne
+    {
+        return $this->hasOne(Staff::class)
+            ->where('is_active', true)
+            ->where('tenant_id', $this->tenant_id);
+    }
+
+    /**
+     * Check if the user has a specific staff role.
+     */
+    public function hasStaffRole(string ...$roles): bool
+    {
+        $staff = $this->activeStaff;
+
+        if (! $staff) {
+            return false;
+        }
+
+        /** @var StaffRole $staffRole */
+        $staffRole = $staff->staff_role;
+
+        return in_array($staffRole->value, $roles);
     }
 }

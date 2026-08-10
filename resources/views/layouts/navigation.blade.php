@@ -24,7 +24,7 @@
                     <x-nav-link :href="route('children.index')" :active="request()->routeIs('children.*')">
                         {{ __('Anak Saya') }}
                     </x-nav-link>
-                    @if (auth()->user()->role === 'parent')
+                    @if (in_array(auth()->user()->role, ['parent', 'tenant_admin']))
                         <x-nav-link :href="route('subscription.plans')" :active="request()->routeIs('subscription.*')">
                             {{ __('Paket Langganan') }}
                         </x-nav-link>
@@ -95,7 +95,7 @@
                             {{ __('👶 Anak Saya') }}
                         </x-dropdown-link>
 
-                        @if (auth()->user()->role === 'parent')
+                        @if (in_array(auth()->user()->role, ['parent', 'tenant_admin']))
                             <x-dropdown-link :href="route('subscription.current')">
                                 {{ __('📦 Langganan Saya') }}
                             </x-dropdown-link>
@@ -196,7 +196,7 @@
             <x-responsive-nav-link :href="route('children.index')" :active="request()->routeIs('children.*')">
                 {{ __('👶 Anak Saya') }}
             </x-responsive-nav-link>
-            @if (auth()->user()->role === 'parent')
+            @if (in_array(auth()->user()->role, ['parent', 'tenant_admin']))
                 <x-responsive-nav-link :href="route('subscription.plans')" :active="request()->routeIs('subscription.*')">
                     {{ __('💳 Paket Langganan') }}
                 </x-responsive-nav-link>
@@ -211,9 +211,11 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('subscription.current')" :active="request()->routeIs('subscription.current')">
-                    {{ __('📦 Langganan Saya') }}
-                </x-responsive-nav-link>
+                @if (in_array(auth()->user()->role, ['parent', 'tenant_admin']))
+                    <x-responsive-nav-link :href="route('subscription.current')" :active="request()->routeIs('subscription.current')">
+                        {{ __('📦 Langganan Saya') }}
+                    </x-responsive-nav-link>
+                @endif
 
                 <x-responsive-nav-link :href="route('search.index')" :active="request()->routeIs('search.*')">
                     {{ __('🔍 Pencarian') }}
