@@ -9,6 +9,7 @@ use App\Models\Referral;
 use App\Models\Staff;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ReportController extends Controller
@@ -45,10 +46,14 @@ class ReportController extends Controller
             ->groupBy('type')
             ->pluck('total', 'type');
 
-        // Monthly notes (last 6 months)
+        // Monthly notes (last 6 months) — DB-agnostic date formatting
+        $dateExpr = match (DB::getDriverName()) {
+            'sqlite' => "strftime('%%Y-%%m', created_at)",
+            default => "DATE_FORMAT(created_at, '%%Y-%%m')",
+        };
         $monthlyNotes = ClinicalNote::where('tenant_id', $tenant->id)
             ->where('created_at', '>=', now()->subMonths(6))
-            ->selectRaw("strftime('%Y-%m', created_at) as month, count(*) as total")
+            ->selectRaw("{$dateExpr} as month, count(*) as total")
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month');

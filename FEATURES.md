@@ -1224,3 +1224,16 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 * **Bug Fix**: `$users` undefined variable di `staff/create.blade.php` — diganti dengan field name/email inline
 * **Pint**: Semua file PHP ter-format
 * **Full Test Suite**: 607 tests, 1383 assertions — all passing
+
+## Comprehensive Audit & Bug Fixes ✅ (Phase 14)
+
+* **Bug Fix — SQLite/MySQL Compatibility**: `strftime()` diganti dengan `DATE_FORMAT()` di `ReportController` untuk kompatibilitas MySQL production; menggunakan `DB::getDriverName()` untuk cross-database support
+* **Bug Fix — Staff Role Security**: Staff creation di `StaffController` tidak lagi memberikan role `tenant_admin` (full admin access), diganti dengan role `parent`
+* **Bug Fix — B2B Child Queries**: `PatientLinkController`, `ClinicalNoteController`, `ReferralController` — query children melalui relasi `PatientLink` (bukan `tenant_id` langsung) karena di B2B, anak dimiliki oleh tenant keluarga
+* **Bug Fix — Achievement di Public Profile**: Menampilkan data achievement aktual di halaman publik (bukan placeholder "segera hadir") dengan grid layout responsif
+* **UX — Breadcrumb di Profile Edit**: Menambahkan `<x-breadcrumb>` component ke halaman profil
+* **UX — Status Label Konsisten**: Mobile cards di subscription history sekarang menggunakan format emoji + label yang sama dengan desktop table
+* **Child Model**: Menambahkan relasi `achievements()` HasMany relationship
+* **Public Profile Controller**: Eager-load earned achievements untuk section awards
+* **Full Test Suite**: 614 tests, 1404 assertions — all passing
+* **Laravel Pint**: Semua file ter-format

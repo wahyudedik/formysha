@@ -184,6 +184,14 @@ class Child extends Model
     }
 
     /**
+     * Get the child's achievements.
+     */
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(Achievement::class);
+    }
+
+    /**
      * Get the child's age in years.
      */
     public function getAgeAttribute(): ?string

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FacilityAdmin;
 use App\Enums\ReferralStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Child;
+use App\Models\PatientLink;
 use App\Models\Referral;
 use App\Models\Staff;
 use App\Models\Tenant;
@@ -50,7 +51,10 @@ class ReferralController extends Controller
             ->where('type', '!=', 'family')
             ->where('is_active', true)
             ->get();
-        $children = Child::where('tenant_id', $tenant->id)->get();
+        // Children are linked to facilities through PatientLink, not by tenant_id
+        $linkedChildIds = PatientLink::where('facility_tenant_id', $tenant->id)
+            ->pluck('child_id');
+        $children = Child::whereIn('id', $linkedChildIds)->with('user')->get();
 
         return view('facility-admin.referrals.create', compact('tenant', 'facilities', 'children'));
     }

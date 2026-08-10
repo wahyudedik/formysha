@@ -36,7 +36,10 @@ class PatientLinkController extends Controller
     public function create(): View
     {
         $tenant = $this->tenantService->getCurrentTenant();
-        $children = Child::where('tenant_id', $tenant->id)->get();
+        // Children are linked to facilities through PatientLink, not by tenant_id
+        $linkedChildIds = PatientLink::where('facility_tenant_id', $tenant->id)
+            ->pluck('child_id');
+        $children = Child::whereIn('id', $linkedChildIds)->with('user')->get();
         $parents = User::where('role', 'parent')->get();
 
         return view('facility-admin.patients.create', compact('tenant', 'children', 'parents'));

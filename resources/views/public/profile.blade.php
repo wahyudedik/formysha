@@ -178,10 +178,27 @@
                 <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                     🏆 Penghargaan
                 </h2>
-                <div class="text-center py-8 text-gray-400 dark:text-gray-500">
-                    <span class="text-4xl block mb-2">⭐</span>
-                    <p>Fitur penghargaan segera hadir</p>
-                </div>
+                @if($child->achievements->count() > 0)
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                        @foreach($child->achievements as $achievement)
+                            <div class="text-center p-3 sm:p-4 rounded-xl bg-gradient-to-br from-warmYellow-50 to-peach-50 dark:from-warmYellow-900/20 dark:to-peach-900/20 border border-warmYellow-100 dark:border-warmYellow-800/30">
+                                <span class="text-3xl sm:text-4xl block mb-2">{{ $achievement->icon ?? '⭐' }}</span>
+                                <p class="font-semibold text-gray-800 dark:text-gray-100 text-sm">{{ $achievement->name }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $achievement->description }}</p>
+                                @if($achievement->earned_at)
+                                    <p class="text-xs text-warmYellow-600 dark:text-warmYellow-400 mt-2">
+                                        {{ $achievement->earned_at->format('d M Y') }}
+                                    </p>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 text-gray-400 dark:text-gray-500">
+                        <span class="text-4xl block mb-2">⭐</span>
+                        <p>Belum ada penghargaan</p>
+                    </div>
+                @endif
             </div>
         @endif
 

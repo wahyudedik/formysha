@@ -6,6 +6,7 @@ use App\Enums\ClinicalNoteType;
 use App\Http\Controllers\Controller;
 use App\Models\Child;
 use App\Models\ClinicalNote;
+use App\Models\PatientLink;
 use App\Models\Staff;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
@@ -37,7 +38,10 @@ class ClinicalNoteController extends Controller
     public function create(): View
     {
         $tenant = $this->tenantService->getCurrentTenant();
-        $children = Child::where('tenant_id', $tenant->id)->get();
+        // Children are linked to facilities through PatientLink, not by tenant_id
+        $linkedChildIds = PatientLink::where('facility_tenant_id', $tenant->id)
+            ->pluck('child_id');
+        $children = Child::whereIn('id', $linkedChildIds)->with('user')->get();
         $staffMembers = Staff::where('tenant_id', $tenant->id)
             ->where('is_active', true)
             ->with('user')
@@ -101,7 +105,10 @@ class ClinicalNoteController extends Controller
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($clinicalNote->tenant_id === $tenant->id, 403);
         $clinicalNote->load(['child', 'staffUser']);
-        $children = Child::where('tenant_id', $tenant->id)->get();
+        // Children are linked to facilities through PatientLink, not by tenant_id
+        $linkedChildIds = PatientLink::where('facility_tenant_id', $tenant->id)
+            ->pluck('child_id');
+        $children = Child::whereIn('id', $linkedChildIds)->with('user')->get();
         $staffMembers = Staff::where('tenant_id', $tenant->id)
             ->where('is_active', true)
             ->with('user')

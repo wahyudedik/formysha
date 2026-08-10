@@ -58,12 +58,12 @@ class StaffController extends Controller
             'license_number' => 'nullable|string|max:100',
         ]);
 
-        // Create user
+        // Create user — staff uses 'parent' role (not tenant_admin) to prevent admin panel access
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make(Str::random(12)),
-            'role' => 'tenant_admin',
+            'role' => 'parent',
             'tenant_id' => $tenant->id,
         ]);
 

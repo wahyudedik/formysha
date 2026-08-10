@@ -104,7 +104,13 @@
                                 'cancelled' => 'bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400',
                                 default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                             } }}">
-                            {{ ucfirst($sub->status) }}
+                            {{ match($sub->status) {
+                                'active' => '✅ Aktif',
+                                'pending' => '⏳ Pending',
+                                'inactive' => '⏸️ Tidak Aktif',
+                                'cancelled' => '❌ Dibatalkan',
+                                default => ucfirst($sub->status),
+                            } }}
                         </span>
                     </div>
                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $sub->created_at->locale('id')->isoFormat('D MMMM YYYY') }}</p>

@@ -975,6 +975,25 @@ Button rounded:   rounded-xl (konsisten)
 * Monitoring B2B: fasilitas staf terbanyak, catatan klinis terbanyak, rujukan pending
 * Full test suite: 607 tests, 1383 assertions — all passing
 
+## Phase 14 — Comprehensive Audit & Bug Fixes ✅
+
+### Sub-Phase 14.1 — Critical Bug Fixes
+
+* **SQLite/MySQL Compatibility**: `ReportController` — `strftime()` → `DATE_FORMAT()` dengan `DB::getDriverName()` untuk cross-database support
+* **Staff Role Security**: `StaffController` — role `tenant_admin` → `parent` saat pembuatan staf baru
+* **B2B Child Queries**: `PatientLinkController`, `ClinicalNoteController`, `ReferralController` — query children melalui relasi `PatientLink` (bukan `tenant_id` langsung)
+* **Achievement di Public Profile**: Menampilkan data achievement aktual dengan grid layout responsif
+
+### Sub-Phase 14.2 — UX Improvements & Documentation
+
+* **Breadcrumb di Profile Edit**: `<x-breadcrumb>` component pada halaman profil
+* **Status Label Konsisten**: Mobile cards subscription history menggunakan emoji + label
+* **Child Model**: Relasi `achievements()` HasMany
+* **Public Profile Controller**: Eager-load earned achievements
+* **Test Update**: FacilityAdminTest & PublicProfileTest updated
+* **Full Test Suite**: 614 tests, 1404 assertions — all passing
+* **Laravel Pint**: Semua file ter-format
+
 ---
 
 ## Tujuan Jangka Panjang

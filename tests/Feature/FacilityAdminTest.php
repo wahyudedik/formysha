@@ -109,7 +109,7 @@ describe('Facility Admin — Staff Management', function () {
 
         $staffUser = User::where('name', 'Dr. Baru')->first();
         expect($staffUser)->not->toBeNull();
-        expect($staffUser->role)->toBe('tenant_admin');
+        expect($staffUser->role)->toBe('parent');
         expect($staffUser->tenant_id)->toBe($facility['tenant']->id);
 
         $staffRecord = Staff::where('user_id', $staffUser->id)->first();

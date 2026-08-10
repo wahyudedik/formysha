@@ -15,9 +15,14 @@ class PublicProfileController extends Controller
     {
         $child = Child::where('slug', $slug)
             ->where('is_public', true)
-            ->with(['timelines' => function ($query) {
-                $query->latest()->take(5);
-            }])
+            ->with([
+                'timelines' => function ($query) {
+                    $query->latest()->take(5);
+                },
+                'achievements' => function ($query) {
+                    $query->whereNotNull('earned_at')->latest('earned_at');
+                },
+            ])
             ->firstOrFail();
 
         $publicData = $child->public_profile_data ?? [];
