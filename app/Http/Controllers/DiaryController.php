@@ -89,7 +89,7 @@ class DiaryController extends Controller
         }
 
         return redirect()->route('diaries.index', $child)
-            ->with('status', 'Catatan harian berhasil dibuat!');
+            ->with('status', __('status.diaries_created'));
     }
 
     /**
@@ -130,7 +130,7 @@ class DiaryController extends Controller
         $diary->update($request->validated());
 
         return redirect()->route('diaries.show', [$child, $diary])
-            ->with('status', 'Catatan harian berhasil diperbarui!');
+            ->with('status', __('status.diaries_updated'));
     }
 
     /**
@@ -143,6 +143,6 @@ class DiaryController extends Controller
         $diary->delete();
 
         return redirect()->route('diaries.index', $child)
-            ->with('status', 'Catatan harian berhasil dihapus.');
+            ->with('status', __('status.diaries_deleted'));
     }
 }

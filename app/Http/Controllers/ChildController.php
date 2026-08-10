@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\Child;
+use App\Services\AccountDeletionService;
 use App\Services\TenantService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,7 +59,7 @@ class ChildController extends Controller
         $child = $request->user()->children()->create($data);
 
         return redirect()->route('children.show', $child)
-            ->with('status', 'Profil anak berhasil dibuat!');
+            ->with('status', __('status.children_created'));
     }
 
     /**
@@ -102,22 +103,17 @@ class ChildController extends Controller
         $child->update($data);
 
         return redirect()->route('children.show', $child)
-            ->with('status', 'Profil anak berhasil diperbarui!');
+            ->with('status', __('status.children_updated'));
     }
 
     /**
      * Remove the specified child from storage.
      */
-    public function destroy(Request $request, Child $child): RedirectResponse
+    public function destroy(Request $request, Child $child, AccountDeletionService $deletionService): RedirectResponse
     {
-        // Delete photo if exists
-        if ($child->photo) {
-            Storage::disk('public')->delete($child->photo);
-        }
-
-        $child->delete();
+        $deletionService->deleteChildData($child);
 
         return redirect()->route('children.index')
-            ->with('status', 'Profil anak berhasil dihapus.');
+            ->with('status', __('status.children_deleted'));
     }
 }

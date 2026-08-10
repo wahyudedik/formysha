@@ -67,7 +67,7 @@ class CalendarController extends Controller
         $child->events()->create($validated);
 
         return redirect()->route('calendar.index', $child)
-            ->with('status', 'Acara berhasil disimpan!');
+            ->with('status', __('status.calendar_created'));
     }
 
     /**
@@ -106,7 +106,7 @@ class CalendarController extends Controller
         $event->update($request->validated());
 
         return redirect()->route('calendar.show', [$child, $event])
-            ->with('status', 'Acara berhasil diperbarui!');
+            ->with('status', __('status.calendar_updated'));
     }
 
     /**
@@ -119,6 +119,6 @@ class CalendarController extends Controller
         $event->delete();
 
         return redirect()->route('calendar.index', $child)
-            ->with('status', 'Acara berhasil dihapus.');
+            ->with('status', __('status.calendar_deleted'));
     }
 }

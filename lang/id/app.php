@@ -517,6 +517,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Profile Form
+    |--------------------------------------------------------------------------
+    */
+
+    'profile_form' => [
+        'information_title' => 'Informasi Profil',
+        'information_description' => 'Perbarui informasi profil dan alamat email akun Anda.',
+        'name' => 'Nama',
+        'email' => 'Email',
+        'email_unverified' => 'Alamat email Anda belum diverifikasi.',
+        'resend_verification' => 'Klik di sini untuk mengirim ulang email verifikasi.',
+        'verification_sent' => 'Tautan verifikasi baru telah dikirim ke alamat email Anda.',
+        'save' => 'Simpan',
+        'saved' => 'Tersimpan.',
+        'update_password_title' => 'Perbarui Kata Sandi',
+        'update_password_description' => 'Pastikan akun Anda menggunakan kata sandi yang panjang dan acak untuk tetap aman.',
+        'current_password' => 'Kata Sandi Saat Ini',
+        'new_password' => 'Kata Sandi Baru',
+        'confirm_password' => 'Konfirmasi Kata Sandi',
+        'delete_account_title' => 'Hapus Akun',
+        'delete_account_description' => 'Setelah akun Anda dihapus, semua sumber daya dan data akan dihapus secara permanen. Sebelum menghapus akun, silakan unduh data atau informasi yang ingin Anda pertahankan.',
+        'delete_account_button' => 'Hapus Akun',
+        'delete_account_confirm_title' => 'Apakah Anda yakin ingin menghapus akun Anda?',
+        'delete_account_confirm_description' => 'Setelah akun Anda dihapus, semua sumber daya dan data akan dihapus secara permanen. Masukkan kata sandi Anda untuk mengonfirmasi bahwa Anda ingin menghapus akun secara permanen.',
+        'cancel' => 'Batal',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Export
     |--------------------------------------------------------------------------
     */
@@ -601,4 +630,45 @@ return [
         'login_customization' => 'Kustomisasi Login',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Status Messages
+    |--------------------------------------------------------------------------
+    */
+
+    'status' => [
+        'children_created' => 'Profil anak berhasil dibuat!',
+        'children_updated' => 'Profil anak berhasil diperbarui!',
+        'children_deleted' => 'Profil anak berhasil dihapus.',
+        'timeline_created' => 'Kenangan berhasil ditambahkan!',
+        'timeline_updated' => 'Kenangan berhasil diperbarui!',
+        'timeline_deleted' => 'Kenangan berhasil dihapus.',
+        'albums_created' => 'Album berhasil dibuat!',
+        'albums_updated' => 'Album berhasil diperbarui!',
+        'albums_deleted' => 'Album berhasil dihapus.',
+        'diaries_created' => 'Catatan harian berhasil dibuat!',
+        'diaries_updated' => 'Catatan harian berhasil diperbarui!',
+        'diaries_deleted' => 'Catatan harian berhasil dihapus.',
+        'documents_created' => 'Dokumen berhasil disimpan!',
+        'documents_updated' => 'Dokumen berhasil diperbarui!',
+        'documents_deleted' => 'Dokumen berhasil dihapus.',
+        'calendar_created' => 'Acara berhasil disimpan!',
+        'calendar_updated' => 'Acara berhasil diperbarui!',
+        'calendar_deleted' => 'Acara berhasil dihapus.',
+        'growth_created' => 'Data pertumbuhan berhasil disimpan!',
+        'growth_updated' => 'Data pertumbuhan berhasil diperbarui!',
+        'growth_deleted' => 'Data pertumbuhan berhasil dihapus.',
+        'health_created' => 'Catatan kesehatan berhasil disimpan!',
+        'health_updated' => 'Catatan kesehatan berhasil diperbarui!',
+        'health_deleted' => 'Catatan kesehatan berhasil dihapus.',
+        'family_created' => 'Anggota keluarga berhasil ditambahkan!',
+        'family_updated' => 'Anggota keluarga berhasil diperbarui!',
+        'family_deleted' => 'Anggota keluarga berhasil dihapus.',
+        'media_created' => 'Media berhasil ditambahkan!',
+        'media_deleted' => 'Media berhasil dihapus.',
+        'milestones_checked' => 'Pengecekan milestone berhasil dilakukan!',
+        'milestones_dismissed' => 'Milestone alert berhasil ditutup.',
+        'achievements_new_count' => ':count pencapaian baru berhasil dibuka!',
+        'achievements_already_checked' => 'Semua pencapaian sudah diperiksa. Teruslah beraktivitas!',
+    ],
 ];

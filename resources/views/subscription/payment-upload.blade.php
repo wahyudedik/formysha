@@ -7,8 +7,8 @@
 
     <div class="py-8 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-breadcrumb :items="[
-            ['label' => 'Langganan', 'url' => route('subscription.current')],
-            ['label' => 'Upload Pembayaran'],
+            ['label' => __('Langganan'), 'url' => route('subscription.current')],
+            ['label' => __('Upload Pembayaran')],
         ]" />
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -19,21 +19,21 @@
                 </div>
                 <div class="p-4 sm:p-6 space-y-4">
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Paket</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('Paket') }}</span>
                         <span class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->name ?? '-' }}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Status</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('Status') }}</span>
                         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-warmYellow-100 dark:bg-warmYellow-950/30 text-warmYellow-600 dark:text-warmYellow-400">
-                            Menunggu Pembayaran
+                            {{ __('Menunggu Pembayaran') }}
                         </span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Jumlah</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('Jumlah') }}</span>
                         <span class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->getPriceMonthlyFormatted() }}/bulan</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Dibuat</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('Dibuat') }}</span>
                         <span class="text-sm text-gray-600 dark:text-gray-300">{{ $subscription->created_at->locale('id')->isoFormat('D MMMM YYYY') }}</span>
                     </div>
                 </div>
@@ -43,15 +43,15 @@
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                 <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏦 {{ __('Rekening Tujuan') }}</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Transfer ke salah satu rekening berikut:</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('Transfer ke salah satu rekening berikut:') }}</p>
                 </div>
                 <div class="p-4 sm:p-6 space-y-4">
                     @foreach (config('saas.banks', []) as $bankName => $bankInfo)
                         <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="font-bold text-sm text-gray-800 dark:text-gray-100">{{ $bankName }}</span>
-                                <button type="button" class="text-xs text-skyBlue-600 hover:text-skyBlue-700" x-data x-on:click="navigator.clipboard.writeText('{{ $bankInfo['account'] }}'); $el.textContent = 'Tersalin!'; setTimeout(() => $el.textContent = 'Salin', 2000)">
-                                    📋 Salin
+                                <button type="button" class="text-xs text-skyBlue-600 hover:text-skyBlue-700" x-data x-on:click="navigator.clipboard.writeText('{{ $bankInfo['account'] }}'); $el.textContent = '{{ __('Tersalin!') }}'; setTimeout(() => $el.textContent = '{{ __('Salin') }}', 2000)">
+                                    📋 {{ __('Salin') }}
                                 </button>
                             </div>
                             <p class="text-sm font-mono text-gray-700 dark:text-gray-200">{{ $bankInfo['account'] }}</p>
@@ -78,7 +78,7 @@
                     <div>
                         <x-input-label for="bank_name" :value="__('Bank yang Digunakan')" />
                         <select id="bank_name" name="bank_name" class="mt-1 block w-full border-gray-300 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" required>
-                            <option value="">Pilih bank...</option>
+                            <option value="">{{ __('Pilih bank...') }}</option>
                             @foreach (config('saas.banks', []) as $bankName => $bankInfo)
                                 <option value="{{ $bankName }}" {{ old('bank_name') === $bankName ? 'selected' : '' }}>
                                     {{ $bankName }} — {{ $bankInfo['account'] }}

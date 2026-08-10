@@ -118,6 +118,20 @@
 
                         <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
 
+                        @if (auth()->user()->role === 'super_admin')
+                            <x-dropdown-link :href="route('super-admin.dashboard')">
+                                {{ __('🛡️ Super Admin') }}
+                            </x-dropdown-link>
+
+                            <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+                        @endif
+
+                        <x-dropdown-link :href="route('erasure.index')" class="text-red-600 dark:text-red-400">
+                            {{ __('🗑️ Hapus Akun') }}
+                        </x-dropdown-link>
+
+                        <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -242,6 +256,10 @@
 
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('👤 Profil Saya') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('erasure.index')" class="text-red-600 dark:text-red-400">
+                    {{ __('🗑️ Hapus Akun') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

@@ -129,7 +129,7 @@
 
         {{-- Mobile Menu Overlay --}}
         <div id="mobileMenu" class="mobile-menu">
-            <button onclick="closeMobileMenu()" class="mobile-menu-close" aria-label="Tutup menu">
+            <button onclick="closeMobileMenu()" class="mobile-menu-close" aria-label="{{ __('Tutup menu') }}">
                 <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -138,25 +138,25 @@
             <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'ForMysha') }}" class="w-20 h-20" />
 
             <nav class="flex flex-col items-center gap-4 text-base">
-                <a href="{{ route('pages.about') }}" class="text-gray-600 dark:text-gray-300 hover:text-softPink-400 dark:hover:text-softPink-300 font-semibold transition-colors">Tentang</a>
+                <a href="{{ route('pages.about') }}" class="text-gray-600 dark:text-gray-300 hover:text-softPink-400 dark:hover:text-softPink-300 font-semibold transition-colors">{{ __('Tentang') }}</a>
 
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/dashboard') }}" class="btn-primary text-base px-8 py-3">
-                            Dashboard
+                            {{ __('Dashboard') }}
                         </a>
                     @else
                         <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-softPink-400 dark:hover:text-softPink-300 font-semibold transition-colors">
-                            Masuk
+                            {{ __('Masuk') }}
                         </a>
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" class="btn-primary text-base px-8 py-3 mt-2">
-                                Daftar Gratis
+                                {{ __('Daftar Gratis') }}
                             </a>
                         @endif
                         @if (Route::has('register.facility'))
                             <a href="{{ route('register.facility') }}" class="btn-secondary text-base px-8 py-3">
-                                🏥 Daftar Fasilitas
+                                🏥 {{ __('Daftar Fasilitas') }}
                             </a>
                         @endif
                     @endauth
@@ -173,7 +173,7 @@
                 </div>
 
                 <div class="hidden sm:flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
-                    <a href="{{ route('pages.about') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Tentang</a>
+                    <a href="{{ route('pages.about') }}" class="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">{{ __('Tentang') }}</a>
                 </div>
 
                 {{-- Desktop Auth Buttons --}}
@@ -181,15 +181,15 @@
                     @if (Route::has('login'))
                         @auth
                             <a href="{{ url('/dashboard') }}" class="btn-primary text-sm">
-                                Dashboard
+                                {{ __('Dashboard') }}
                             </a>
                         @else
                             <a href="{{ route('login') }}" class="btn-secondary text-sm">
-                                Masuk
+                                {{ __('Masuk') }}
                             </a>
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="btn-primary text-sm">
-                                    Daftar Gratis
+                                    {{ __('Daftar Gratis') }}
                                 </a>
                             @endif
                         @endauth
@@ -197,7 +197,7 @@
                 </div>
 
                 {{-- Mobile Hamburger Button --}}
-                <button onclick="openMobileMenu()" class="sm:hidden flex items-center justify-center w-10 h-10 rounded-xl hover:bg-white/60 dark:hover:bg-white/10 transition-colors" aria-label="Buka menu">
+                <button onclick="openMobileMenu()" class="sm:hidden flex items-center justify-center w-10 h-10 rounded-xl hover:bg-white/60 dark:hover:bg-white/10 transition-colors" aria-label="{{ __('Buka menu') }}">
                     <svg class="w-6 h-6 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -235,27 +235,27 @@
 
                 {{-- Tagline --}}
                 <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-gray-800 dark:text-gray-100 mb-4 leading-tight animate-slide-up">
-                    Untuk <span class="text-gradient-brand">Buah Hatiku</span>
+                    {{ __('Untuk') }} <span class="text-gradient-brand">{{ __('Buah Hatiku') }}</span>
                 </h1>
 
                 <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-4 leading-relaxed animate-slide-up" style="animation-delay: 0.1s;">
-                    Simpan setiap momen, kenangan, dan perjalanan hidup anak sejak lahir hingga dewasa dalam satu tempat yang aman, terstruktur, dan mudah diakses.
+                    {{ __('Simpan setiap momen, kenangan, dan perjalanan hidup anak sejak lahir hingga dewasa dalam satu tempat yang aman, terstruktur, dan mudah diakses.') }}
                 </p>
 
                 <p class="text-sm text-gray-400 dark:text-gray-500 mb-8 animate-slide-up" style="animation-delay: 0.15s;">
-                    Digital Life Book untuk Setiap Anak, Kenangan untuk Selamanya 💕
+                    {{ __('Digital Life Book untuk Setiap Anak, Kenangan untuk Selamanya') }} 💕
                 </p>
 
                 {{-- CTA Buttons --}}
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style="animation-delay: 0.2s;">
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="btn-primary text-base px-8 py-4 shadow-soft-md hover:shadow-soft-lg">
-                            Mulai Gratis Sekarang 💕
+                            {{ __('Mulai Gratis Sekarang') }} 💕
                         </a>
                     @endif
                     @if (Route::has('login'))
                         <a href="{{ route('login') }}" class="btn-secondary text-base px-8 py-4">
-                            Masuk ke Akun
+                            {{ __('Masuk ke Akun') }}
                         </a>
                     @endif
                 </div>
@@ -267,10 +267,10 @@
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12 sm:mb-16">
                     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-                        Semua Kenangan dalam Satu Tempat
+                        {{ __('Semua Kenangan dalam Satu Tempat') }}
                     </h2>
                     <p class="text-gray-500 dark:text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
-                        ForMysha bukan sekadar album foto. Ini adalah Digital Life Book untuk perjalanan hidup anak Anda.
+                        {{ __('ForMysha bukan sekadar album foto. Ini adalah Digital Life Book untuk perjalanan hidup anak Anda.') }}
                     </p>
                 </div>
 
@@ -282,9 +282,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">My Timeline</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('My Timeline') }}</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">
-                            Abadikan setiap momen penting dalam timeline.
+                            {{ __('Abadikan setiap momen penting dalam timeline.') }}
                         </p>
                     </div>
 
@@ -295,9 +295,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">My Gallery</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('My Gallery') }}</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">
-                            Kumpulkan foto dan video dalam album rapi.
+                            {{ __('Kumpulkan foto dan video dalam album rapi.') }}
                         </p>
                     </div>
 
@@ -308,9 +308,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">My Growth</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('My Growth') }}</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">
-                            Pantau pertumbuhan dengan grafik mudah dipahami.
+                            {{ __('Pantau pertumbuhan dengan grafik mudah dipahami.') }}
                         </p>
                     </div>
 
@@ -321,9 +321,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">My Health</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('My Health') }}</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">
-                            Catat riwayat imunisasi dan kesehatan.
+                            {{ __('Catat riwayat imunisasi dan kesehatan.') }}
                         </p>
                     </div>
 
@@ -334,9 +334,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">My Family</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('My Family') }}</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">
-                            Berbagi kenangan dengan keluarga tercinta.
+                            {{ __('Berbagi kenangan dengan keluarga tercinta.') }}
                         </p>
                     </div>
                 </div>
@@ -348,7 +348,7 @@
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-                        💕 Satu Aplikasi, Banyak Manfaat 💕
+                        💕 {{ __('Satu Aplikasi, Banyak Manfaat') }} 💕
                     </h2>
                 </div>
 
@@ -358,8 +358,8 @@
                         <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-softPink-100 dark:bg-softPink-950/30 flex items-center justify-center">
                             <span class="text-2xl">🔒</span>
                         </div>
-                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">Aman & Privat</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">Data keluarga Anda aman bersama kami</p>
+                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('Aman & Privat') }}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">{{ __('Data keluarga Anda aman bersama kami') }}</p>
                     </div>
 
                     {{-- Benefit 2 --}}
@@ -367,8 +367,8 @@
                         <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-skyBlue-100 dark:bg-skyBlue-950/30 flex items-center justify-center">
                             <span class="text-2xl">☁️</span>
                         </div>
-                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">Backup Otomatis</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">Kenangan tidak akan pernah hilang</p>
+                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('Backup Otomatis') }}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">{{ __('Kenangan tidak akan pernah hilang') }}</p>
                     </div>
 
                     {{-- Benefit 3 --}}
@@ -376,8 +376,8 @@
                         <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-mintGreen-100 dark:bg-mintGreen-950/30 flex items-center justify-center">
                             <span class="text-2xl">📱</span>
                         </div>
-                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">Akses di Mana Saja</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">Bisa diakses dari berbagai perangkat</p>
+                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('Akses di Mana Saja') }}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">{{ __('Bisa diakses dari berbagai perangkat') }}</p>
                     </div>
 
                     {{-- Benefit 4 --}}
@@ -385,8 +385,8 @@
                         <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-warmYellow-100 dark:bg-warmYellow-950/30 flex items-center justify-center">
                             <span class="text-2xl">📤</span>
                         </div>
-                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">Unduh & Bagikan</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">Ekspor kenangan dalam PDF</p>
+                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('Unduh & Bagikan') }}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">{{ __('Ekspor kenangan dalam PDF') }}</p>
                     </div>
 
                     {{-- Benefit 5 --}}
@@ -394,8 +394,8 @@
                         <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-lavender-100 dark:bg-lavender-950/30 flex items-center justify-center">
                             <span class="text-2xl">😊</span>
                         </div>
-                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">Mudah Digunakan</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">Desain lucu, sederhana, untuk semua orang tua</p>
+                        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1">{{ __('Mudah Digunakan') }}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">{{ __('Desain lucu, sederhana, untuk semua orang tua') }}</p>
                     </div>
                 </div>
             </div>
@@ -406,7 +406,7 @@
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-                        Mengapa <span class="text-gradient-brand">ForMysha</span>?
+                        {{ __('Mengapa') }} <span class="text-gradient-brand">ForMysha</span>?
                     </h2>
                 </div>
 
@@ -414,29 +414,29 @@
                     {{-- For --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-soft hover:shadow-soft-md transition">
                         <div class="text-3xl font-extrabold text-softPink-400 mb-2">For</div>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Untuk</p>
-                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">Dibuat untuk setiap keluarga</p>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">{{ __('Untuk') }}</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">{{ __('Dibuat untuk setiap keluarga') }}</p>
                     </div>
 
                     {{-- My --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-soft hover:shadow-soft-md transition">
                         <div class="text-3xl font-extrabold text-skyBlue-400 mb-2">My</div>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Milikku</p>
-                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">Cinta dan kenangan yang tak tergantikan</p>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">{{ __('Milikku') }}</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">{{ __('Cinta dan kenangan yang tak tergantikan') }}</p>
                     </div>
 
                     {{-- Sha --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-soft hover:shadow-soft-md transition">
                         <div class="text-3xl font-extrabold text-lavender-400 mb-2">Sha</div>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Simbol Anak</p>
-                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">Setiap anak, setiap cerita</p>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">{{ __('Simbol Anak') }}</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">{{ __('Setiap anak, setiap cerita') }}</p>
                     </div>
 
                     {{-- .my.id --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-soft hover:shadow-soft-md transition">
                         <div class="text-3xl font-extrabold text-mintGreen-400 mb-2">.my.id</div>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Identitas Indonesia</p>
-                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">Dekat, personal, lebih bermakna</p>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">{{ __('Identitas Indonesia') }}</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">{{ __('Dekat, personal, lebih bermakna') }}</p>
                     </div>
                 </div>
             </div>
@@ -447,10 +447,10 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-                        Pilih Jenis Akun Anda
+                        {{ __('Pilih Jenis Akun Anda') }}
                     </h2>
                     <p class="text-gray-500 dark:text-gray-400 text-base sm:text-lg">
-                        ForMysha tersedia untuk keluarga dan fasilitas kesehatan
+                        {{ __('ForMysha tersedia untuk keluarga dan fasilitas kesehatan') }}
                     </p>
                 </div>
 
@@ -461,12 +461,12 @@
                             <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-softPink-100 dark:bg-softPink-950/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                                 <span class="text-3xl">👨‍👩‍👧</span>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Keluarga</h3>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">{{ __('Keluarga') }}</h3>
                             <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                Simpan kenangan perjalanan hidup anak Anda dalam Digital Life Book pribadi
+                                {{ __('Simpan kenangan perjalanan hidup anak Anda dalam Digital Life Book pribadi') }}
                             </p>
                             <span class="inline-block mt-4 text-sm font-semibold text-softPink-400 dark:text-softPink-300 group-hover:text-softPink-500 dark:group-hover:text-softPink-200 transition-colors">
-                                Daftar Gratis →
+                                {{ __('Daftar Gratis') }} →
                             </span>
                         </a>
                     @endif
@@ -477,12 +477,12 @@
                             <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-skyBlue-100 dark:bg-skyBlue-950/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                                 <span class="text-3xl">🏥</span>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Fasilitas Kesehatan</h3>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">{{ __('Fasilitas Kesehatan') }}</h3>
                             <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                Klinik, rumah sakit, bidan, posyandu, daycare, atau sekolah
+                                {{ __('Klinik, rumah sakit, bidan, posyandu, daycare, atau sekolah') }}
                             </p>
                             <span class="inline-block mt-4 text-sm font-semibold text-skyBlue-400 dark:text-skyBlue-300 group-hover:text-skyBlue-500 dark:group-hover:text-skyBlue-200 transition-colors">
-                                Daftar Fasilitas →
+                                {{ __('Daftar Fasilitas') }} →
                             </span>
                         </a>
                     @endif
@@ -499,21 +499,21 @@
                     <div class="absolute bottom-4 left-4 text-lavender-200 dark:text-lavender-800 text-xl float" style="animation-delay: 1s;">✨</div>
 
                     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-                        Simpan Hari ini, Kenang Selamanya 💕
+                        {{ __('Simpan Hari ini, Kenang Selamanya') }} 💕
                     </h2>
                     <p class="text-gray-500 dark:text-gray-400 text-base sm:text-lg mb-8 max-w-lg mx-auto">
-                        Setiap anak memiliki cerita. Setiap momen layak dikenang. Buat akun gratis Anda sekarang.
+                        {{ __('Setiap anak memiliki cerita. Setiap momen layak dikenang. Buat akun gratis Anda sekarang.') }}
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" class="btn-primary text-base px-8 py-4 shadow-soft-md hover:shadow-soft-lg">
-                                Daftar Gratis
+                                {{ __('Daftar Gratis') }}
                             </a>
                         @endif
                         @if (Route::has('login'))
                             <a href="{{ route('login') }}" class="btn-secondary text-base px-8 py-4">
-                                Masuk
+                                {{ __('Masuk') }}
                             </a>
                         @endif
                     </div>
@@ -535,13 +535,13 @@
                     </div>
 
                     <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-400 dark:text-gray-500">
-                        <a href="{{ route('pages.about') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Tentang Kami</a>
-                        <a href="{{ route('pages.privacy') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Kebijakan Privasi</a>
-                        <a href="{{ route('pages.terms') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Syarat & Ketentuan</a>
+                        <a href="{{ route('pages.about') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">{{ __('Tentang Kami') }}</a>
+                        <a href="{{ route('pages.privacy') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">{{ __('Kebijakan Privasi') }}</a>
+                        <a href="{{ route('pages.terms') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">{{ __('Syarat & Ketentuan') }}</a>
                     </div>
 
                     <p class="text-sm text-gray-400 dark:text-gray-500">
-                        &copy; {{ date('Y') }} {{ config('app.name', 'ForMysha') }}. Hak cipta dilindungi.
+                        &copy; {{ date('Y') }} {{ config('app.name', 'ForMysha') }}. {{ __('Hak cipta dilindungi.') }}
                     </p>
 
                     <p class="text-xs text-gray-300 dark:text-gray-600 italic">

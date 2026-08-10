@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FamilyMemberPermission;
 use App\Http\Requests\StoreFamilyMemberRequest;
 use App\Http\Requests\UpdateFamilyMemberRequest;
 use App\Models\Child;
@@ -26,6 +27,7 @@ class FamilyMemberController extends Controller
         return view('family.index', [
             'child' => $child,
             'familyMembers' => $familyMembers,
+            'permissions' => FamilyMemberPermission::options(),
         ]);
     }
 
@@ -39,6 +41,7 @@ class FamilyMemberController extends Controller
         return view('family.create', [
             'child' => $child,
             'children' => $children,
+            'permissions' => FamilyMemberPermission::options(),
         ]);
     }
 
@@ -50,6 +53,13 @@ class FamilyMemberController extends Controller
         $data = $request->validated();
         $data['tenant_id'] = $child->tenant_id;
 
+        // Auto-set permission level based on relationship if not provided
+        if (! isset($data['permission_level'])) {
+            $data['permission_level'] = in_array($data['relationship'], ['father', 'mother', 'guardian'])
+                ? FamilyMemberPermission::Edit
+                : FamilyMemberPermission::View;
+        }
+
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('family-photos', 'public');
         }
@@ -57,7 +67,7 @@ class FamilyMemberController extends Controller
         $child->familyMembers()->create($data);
 
         return redirect()->route('family.index', $child)
-            ->with('status', 'Anggota keluarga berhasil ditambahkan!');
+            ->with('status', __('status.family_created'));
     }
 
     /**
@@ -70,6 +80,7 @@ class FamilyMemberController extends Controller
         return view('family.edit', [
             'child' => $child,
             'familyMember' => $familyMember,
+            'permissions' => FamilyMemberPermission::options(),
         ]);
     }
 
@@ -93,7 +104,7 @@ class FamilyMemberController extends Controller
         $familyMember->update($data);
 
         return redirect()->route('family.index', $child)
-            ->with('status', 'Anggota keluarga berhasil diperbarui!');
+            ->with('status', __('status.family_updated'));
     }
 
     /**
@@ -111,6 +122,6 @@ class FamilyMemberController extends Controller
         $familyMember->delete();
 
         return redirect()->route('family.index', $child)
-            ->with('status', 'Anggota keluarga berhasil dihapus.');
+            ->with('status', __('status.family_deleted'));
     }
 }

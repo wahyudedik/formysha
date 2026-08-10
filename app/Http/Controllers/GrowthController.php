@@ -90,7 +90,7 @@ class GrowthController extends Controller
         $child->growths()->create($validated);
 
         return redirect()->route('growth.index', $child)
-            ->with('status', 'Data pertumbuhan berhasil disimpan!');
+            ->with('status', __('status.growth_created'));
     }
 
     /**
@@ -132,7 +132,7 @@ class GrowthController extends Controller
         $growth->update($request->validated());
 
         return redirect()->route('growth.index', $child)
-            ->with('status', 'Data pertumbuhan berhasil diperbarui!');
+            ->with('status', __('status.growth_updated'));
     }
 
     /**
@@ -145,6 +145,6 @@ class GrowthController extends Controller
         $growth->delete();
 
         return redirect()->route('growth.index', $child)
-            ->with('status', 'Data pertumbuhan berhasil dihapus.');
+            ->with('status', __('status.growth_deleted'));
     }
 }

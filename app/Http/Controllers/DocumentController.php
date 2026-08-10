@@ -88,7 +88,7 @@ class DocumentController extends Controller
         $child->documents()->create($validated);
 
         return redirect()->route('documents.index', $child)
-            ->with('status', 'Dokumen berhasil disimpan!');
+            ->with('status', __('status.documents_created'));
     }
 
     /**
@@ -137,7 +137,7 @@ class DocumentController extends Controller
         $document->update($validated);
 
         return redirect()->route('documents.show', [$child, $document])
-            ->with('status', 'Dokumen berhasil diperbarui!');
+            ->with('status', __('status.documents_updated'));
     }
 
     /**
@@ -150,6 +150,6 @@ class DocumentController extends Controller
         $document->delete();
 
         return redirect()->route('documents.index', $child)
-            ->with('status', 'Dokumen berhasil dihapus.');
+            ->with('status', __('status.documents_deleted'));
     }
 }

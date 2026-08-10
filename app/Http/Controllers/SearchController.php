@@ -24,6 +24,7 @@ class SearchController extends Controller
         $counts = [
             'all' => 0,
             'timeline' => 0,
+            'album' => 0,
             'diary' => 0,
             'document' => 0,
             'health' => 0,
@@ -51,6 +52,28 @@ class SearchController extends Controller
                         'child' => $item->child->name,
                         'url' => route('timeline.show', [$item->child, $item]),
                         'color' => 'bg-skyBlue-100 text-skyBlue-700',
+                    ]));
+                }
+            }
+
+            // Map albums
+            if (in_array($module, ['all', 'album'])) {
+                $albums = $searchResults['albums'];
+
+                $counts['album'] = $albums->count();
+
+                if ($module === 'album') {
+                    $results = $albums;
+                } else {
+                    $results = $results->merge($albums->map(fn ($item) => [
+                        'type' => 'album',
+                        'icon' => '🖼️',
+                        'title' => $item->name,
+                        'description' => $item->description,
+                        'date' => $item->created_at?->format('d M Y'),
+                        'child' => $item->child->name,
+                        'url' => route('albums.show', [$item->child, $item]),
+                        'color' => 'bg-peach-100 text-peach-700',
                     ]));
                 }
             }
@@ -143,7 +166,7 @@ class SearchController extends Controller
                 }
             }
 
-            $counts['all'] = $counts['timeline'] + $counts['diary'] + $counts['document'] + $counts['health'] + $counts['growth'];
+            $counts['all'] = $counts['timeline'] + $counts['album'] + $counts['diary'] + $counts['document'] + $counts['health'] + $counts['growth'];
 
             if ($module === 'all') {
                 $results = $results->sortByDesc('date')->values();

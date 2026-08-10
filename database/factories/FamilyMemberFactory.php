@@ -30,6 +30,7 @@ class FamilyMemberFactory extends Factory
             'email' => fake()->optional(0.5)->safeEmail(),
             'photo' => null,
             'is_primary' => fake()->boolean(30),
+            'permission_level' => in_array($relationship, ['father', 'mother', 'guardian']) ? 'edit' : 'view',
         ];
     }
 
@@ -70,6 +71,16 @@ class FamilyMemberFactory extends Factory
     {
         return $this->state(fn (array $attributes): array => [
             'is_primary' => true,
+        ]);
+    }
+
+    /**
+     * Indicate the permission level.
+     */
+    public function withPermission(string $level): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'permission_level' => $level,
         ]);
     }
 }

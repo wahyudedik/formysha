@@ -13,6 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string|null $phone
  * @property string|null $email
  * @property bool $is_primary
+ * @property string $permission_level
  * @property Carbon $created_at
  */
 class FamilyMemberResource extends JsonResource
@@ -34,6 +35,8 @@ class FamilyMemberResource extends JsonResource
             'photo' => $this->photo,
             'photo_url' => $this->photo ? asset('storage/'.$this->photo) : null,
             'is_primary' => $this->is_primary,
+            'permission_level' => $this->permission_level?->value ?? 'view',
+            'permission_label' => $this->permission_level?->label() ?? 'Lihat Saja',
             'created_at' => $this->created_at,
         ];
     }

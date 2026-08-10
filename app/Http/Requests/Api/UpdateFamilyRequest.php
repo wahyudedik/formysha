@@ -28,6 +28,7 @@ class UpdateFamilyRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:255'],
             'is_primary' => ['nullable', 'boolean'],
+            'permission_level' => ['nullable', 'string', 'in:view,edit,admin'],
         ];
     }
 }

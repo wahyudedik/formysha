@@ -40,7 +40,12 @@ class SubscriptionController extends Controller
 
         if (! $tenant) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda belum memiliki organisasi.');
+                ->with('error', __('Anda belum memiliki organisasi.'));
+        }
+
+        if (! $plan->is_active) {
+            return redirect()->route('subscription.plans')
+                ->with('error', __('Paket yang dipilih tidak tersedia.'));
         }
 
         // Free plan: activate immediately, no payment needed
@@ -48,14 +53,14 @@ class SubscriptionController extends Controller
             $this->subscriptionService->activateFreePlan($tenant);
 
             return redirect()->route('subscription.current')
-                ->with('success', 'Paket gratis berhasil diaktifkan!');
+                ->with('success', __('Paket gratis berhasil diaktifkan!'));
         }
 
         // Paid plan: create pending subscription, then redirect to payment upload
         $subscription = $this->subscriptionService->createSubscription($tenant, $plan);
 
         return redirect()->route('subscription.payment.upload', $subscription)
-            ->with('success', 'Langganan berhasil dibuat. Silakan lakukan pembayaran.');
+            ->with('success', __('Langganan berhasil dibuat. Silakan lakukan pembayaran.'));
     }
 
     /**

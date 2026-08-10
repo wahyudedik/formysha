@@ -517,6 +517,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Profile Form
+    |--------------------------------------------------------------------------
+    */
+
+    'profile_form' => [
+        'information_title' => 'Profile Information',
+        'information_description' => "Update your account's profile information and email address.",
+        'name' => 'Name',
+        'email' => 'Email',
+        'email_unverified' => 'Your email address is unverified.',
+        'resend_verification' => 'Click here to re-send the verification email.',
+        'verification_sent' => 'A new verification link has been sent to your email address.',
+        'save' => 'Save',
+        'saved' => 'Saved.',
+        'update_password_title' => 'Update Password',
+        'update_password_description' => 'Ensure your account is using a long, random password to stay secure.',
+        'current_password' => 'Current Password',
+        'new_password' => 'New Password',
+        'confirm_password' => 'Confirm Password',
+        'delete_account_title' => 'Delete Account',
+        'delete_account_description' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.',
+        'delete_account_button' => 'Delete Account',
+        'delete_account_confirm_title' => 'Are you sure you want to delete your account?',
+        'delete_account_confirm_description' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
+        'cancel' => 'Cancel',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Export
     |--------------------------------------------------------------------------
     */
@@ -601,4 +630,45 @@ return [
         'login_customization' => 'Login Customization',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Status Messages
+    |--------------------------------------------------------------------------
+    */
+
+    'status' => [
+        'children_created' => 'Child profile created successfully!',
+        'children_updated' => 'Child profile updated successfully!',
+        'children_deleted' => 'Child profile deleted successfully.',
+        'timeline_created' => 'Memory added successfully!',
+        'timeline_updated' => 'Memory updated successfully!',
+        'timeline_deleted' => 'Memory deleted successfully.',
+        'albums_created' => 'Album created successfully!',
+        'albums_updated' => 'Album updated successfully!',
+        'albums_deleted' => 'Album deleted successfully.',
+        'diaries_created' => 'Diary entry created successfully!',
+        'diaries_updated' => 'Diary entry updated successfully!',
+        'diaries_deleted' => 'Diary entry deleted successfully.',
+        'documents_created' => 'Document saved successfully!',
+        'documents_updated' => 'Document updated successfully!',
+        'documents_deleted' => 'Document deleted successfully.',
+        'calendar_created' => 'Event saved successfully!',
+        'calendar_updated' => 'Event updated successfully!',
+        'calendar_deleted' => 'Event deleted successfully.',
+        'growth_created' => 'Growth data saved successfully!',
+        'growth_updated' => 'Growth data updated successfully!',
+        'growth_deleted' => 'Growth data deleted successfully.',
+        'health_created' => 'Health record saved successfully!',
+        'health_updated' => 'Health record updated successfully!',
+        'health_deleted' => 'Health record deleted successfully.',
+        'family_created' => 'Family member added successfully!',
+        'family_updated' => 'Family member updated successfully!',
+        'family_deleted' => 'Family member deleted successfully.',
+        'media_created' => 'Media added successfully!',
+        'media_deleted' => 'Media deleted successfully.',
+        'milestones_checked' => 'Milestone check completed successfully!',
+        'milestones_dismissed' => 'Milestone alert dismissed.',
+        'achievements_new_count' => ':count new achievement(s) unlocked!',
+        'achievements_already_checked' => 'All achievements have been checked. Keep going!',
+    ],
 ];

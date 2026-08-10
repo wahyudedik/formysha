@@ -83,21 +83,21 @@
                                 <div class="bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-2xl px-4 py-3 text-center shadow-soft min-w-[80px]">
                                     <div class="text-lg font-bold text-softPink-600 dark:text-softPink-400">🎂</div>
                                     <div class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $child->age ?? '—' }}</div>
-                                    <div class="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide">Usia</div>
+                                    <div class="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide">{{ __('Usia') }}</div>
                                 </div>
 
                                 <!-- Momen -->
                                 <div class="bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-2xl px-4 py-3 text-center shadow-soft min-w-[80px]">
                                     <div class="text-lg font-bold text-mintGreen-600 dark:text-mintGreen-400">📸</div>
                                     <div class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $totalMediaCount }}</div>
-                                    <div class="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide">Momen</div>
+                                    <div class="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide">{{ __('Momen') }}</div>
                                 </div>
 
                                 <!-- Dokumen -->
                                 <div class="bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-2xl px-4 py-3 text-center shadow-soft min-w-[80px]">
                                     <div class="text-lg font-bold text-skyBlue-600 dark:text-skyBlue-400">📄</div>
                                     <div class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $totalDocumentCount }}</div>
-                                    <div class="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide">Dokumen</div>
+                                    <div class="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide">{{ __('Dokumen') }}</div>
                                 </div>
                             </div>
                         </div>
@@ -206,8 +206,8 @@
                                         <div class="min-w-0 flex-1">
                                             <p class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ $growth->child->name }}</p>
                                             <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                @if($growth->weight_label) Berat: {{ $growth->weight_label }} @endif
-                                                @if($growth->height_label) · Tinggi: {{ $growth->height_label }} @endif
+                                                @if($growth->weight_label) {{ __('Berat') }}: {{ $growth->weight_label }} @endif
+                                                @if($growth->height_label) · {{ __('Tinggi') }}: {{ $growth->height_label }} @endif
                                                 · {{ $growth->formatted_date }}
                                             </p>
                                         </div>

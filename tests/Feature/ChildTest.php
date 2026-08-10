@@ -1,9 +1,15 @@
 <?php
 
 use App\Models\Child;
+use App\Models\Diary;
+use App\Models\Document;
+use App\Models\Event;
+use App\Models\Growth;
+use App\Models\HealthRecord;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenant;
+use App\Models\Timeline;
 use App\Models\User;
 
 describe('Child Management', function () {
@@ -245,5 +251,42 @@ describe('Child Management', function () {
         ]);
 
         expect($tenant->children()->count())->toBe(2);
+    });
+
+    it('deletes child and cascades related data', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        // Create related data
+        Timeline::factory()->create(['child_id' => $child->id]);
+        Diary::factory()->create(['child_id' => $child->id]);
+        Growth::factory()->create(['child_id' => $child->id]);
+        HealthRecord::factory()->create(['child_id' => $child->id]);
+        Event::factory()->create(['child_id' => $child->id]);
+        Document::factory()->create(['child_id' => $child->id]);
+
+        $this->actingAs($user)
+            ->delete(route('children.destroy', $child))
+            ->assertRedirect(route('children.index'));
+
+        $this->assertDatabaseMissing('children', ['id' => $child->id]);
+        $this->assertDatabaseCount('timelines', 0);
+        $this->assertDatabaseCount('diaries', 0);
+        $this->assertDatabaseCount('growths', 0);
+        $this->assertDatabaseCount('health_records', 0);
+        $this->assertDatabaseCount('events', 0);
+        $this->assertDatabaseCount('documents', 0);
+    });
+
+    it('prevents deleting other users child', function () {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $otherUser->id]);
+
+        $this->actingAs($user)
+            ->delete(route('children.destroy', $child))
+            ->assertForbidden();
+
+        $this->assertDatabaseHas('children', ['id' => $child->id]);
     });
 });

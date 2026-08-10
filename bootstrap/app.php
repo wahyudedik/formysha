@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureActiveSubscription;
 use App\Http\Middleware\EnsureChildOwnership;
 use App\Http\Middleware\EnsureFacilityAccess;
+use App\Http\Middleware\EnsureFamilyPermission;
 use App\Http\Middleware\EnsureFeatureLimit;
 use App\Http\Middleware\EnsureRole;
 use App\Http\Middleware\EnsureStaffRole;
@@ -24,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'child.ownership' => EnsureChildOwnership::class,
+            'family.permission' => EnsureFamilyPermission::class,
             'role' => EnsureRole::class,
             'tenant.active' => EnsureActiveSubscription::class,
             'feature.limit' => EnsureFeatureLimit::class,

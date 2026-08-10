@@ -42,10 +42,10 @@ class AchievementController extends Controller
 
         if ($count > 0) {
             return redirect()->route('achievements.index', $child)
-                ->with('status', "🎉 {$count} pencapaian baru berhasil dibuka!");
+                ->with('status', __('status.achievements_new_count', ['count' => $count]));
         }
 
         return redirect()->route('achievements.index', $child)
-            ->with('status', 'Semua pencapaian sudah diperiksa. Teruslah beraktivitas!');
+            ->with('status', __('status.achievements_already_checked'));
     }
 }

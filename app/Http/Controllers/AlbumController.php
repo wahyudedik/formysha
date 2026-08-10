@@ -76,7 +76,7 @@ class AlbumController extends Controller
         }
 
         return redirect()->route('albums.index', $child)
-            ->with('status', 'Album berhasil dibuat!');
+            ->with('status', __('status.albums_created'));
     }
 
     /**
@@ -117,7 +117,7 @@ class AlbumController extends Controller
         $album->update($request->validated());
 
         return redirect()->route('albums.show', [$child, $album])
-            ->with('status', 'Album berhasil diperbarui!');
+            ->with('status', __('status.albums_updated'));
     }
 
     /**
@@ -130,6 +130,6 @@ class AlbumController extends Controller
         $album->delete();
 
         return redirect()->route('albums.index', $child)
-            ->with('status', 'Album berhasil dihapus.');
+            ->with('status', __('status.albums_deleted'));
     }
 }

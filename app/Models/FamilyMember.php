@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\FamilyMemberPermission;
 use Database\Factories\FamilyMemberFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $email
  * @property string|null $photo
  * @property bool $is_primary
+ * @property FamilyMemberPermission $permission_level
  */
 class FamilyMember extends Model
 {
@@ -39,6 +41,7 @@ class FamilyMember extends Model
         'email',
         'photo',
         'is_primary',
+        'permission_level',
     ];
 
     /**
@@ -50,6 +53,7 @@ class FamilyMember extends Model
     {
         return [
             'is_primary' => 'boolean',
+            'permission_level' => FamilyMemberPermission::class,
         ];
     }
 
@@ -84,5 +88,29 @@ class FamilyMember extends Model
             'other' => 'Lainnya',
             default => $this->relationship,
         };
+    }
+
+    /**
+     * Check if this family member can edit data.
+     */
+    public function canEdit(): bool
+    {
+        return $this->permission_level->canEdit();
+    }
+
+    /**
+     * Check if this family member can manage (admin) data.
+     */
+    public function canManage(): bool
+    {
+        return $this->permission_level->canManage();
+    }
+
+    /**
+     * Check if this family member has at least the given permission level.
+     */
+    public function hasPermission(FamilyMemberPermission $required): bool
+    {
+        return $this->permission_level->level() >= $required->level();
     }
 }

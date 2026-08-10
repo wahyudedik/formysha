@@ -4,9 +4,11 @@ use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\ConsentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiaryController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ErasureController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\GrowthController;
@@ -48,15 +50,15 @@ Route::middleware('auth')->group(function () {
     Route::get('children', [ChildController::class, 'index'])->name('children.index');
     Route::get('children/create', [ChildController::class, 'create'])->name('children.create');
     Route::post('children', [ChildController::class, 'store'])->name('children.store')->middleware('feature.limit:children');
-    Route::put('children/{child}', [ChildController::class, 'update'])->name('children.update');
-    Route::delete('children/{child}', [ChildController::class, 'destroy'])->name('children.destroy');
 
     // All routes with {child} parameter — protected by child.ownership middleware
     Route::middleware('child.ownership')->group(function () {
 
-        // Child show/edit (explicit routes for proper URL generation)
+        // Child show/edit/update/destroy (explicit routes for proper URL generation)
         Route::get('/children/{child}', [ChildController::class, 'show'])->name('children.show');
         Route::get('/children/{child}/edit', [ChildController::class, 'edit'])->name('children.edit');
+        Route::put('children/{child}', [ChildController::class, 'update'])->name('children.update');
+        Route::delete('children/{child}', [ChildController::class, 'destroy'])->name('children.destroy');
 
         // Family member routes (nested under children)
         Route::get('/children/{child}/family', [FamilyMemberController::class, 'index'])->name('family.index');
@@ -138,6 +140,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/children/{child}/milestones/check', [MilestoneController::class, 'check'])->name('milestones.check');
         Route::post('/children/{child}/milestones/{milestoneAlert}/dismiss', [MilestoneController::class, 'dismiss'])->name('milestones.dismiss');
 
+        // Consent routes (nested under children)
+        Route::get('/children/{child}/consent', [ConsentController::class, 'index'])->name('consent.index');
+        Route::post('/children/{child}/consent', [ConsentController::class, 'update'])->name('consent.update');
+
         // Export routes (nested under children) — throttled to prevent abuse
         Route::get('/children/{child}/export/profile', [ExportController::class, 'childProfile'])->name('export.profile')->middleware('throttle:5,1');
         Route::get('/children/{child}/export/health', [ExportController::class, 'healthRecords'])->name('export.health')->middleware('throttle:5,1');
@@ -151,7 +157,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/children/{child}/diaries/{diary}/media', [MediaController::class, 'storeForDiary'])->name('media.store.diary')->middleware('feature.limit:photos');
         Route::delete('/children/{child}/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 
+        // Erasure routes (nested under children) — child deletion
+        Route::delete('/children/{child}/erasure', [ErasureController::class, 'destroyChild'])->name('erasure.destroyChild');
+
     });
+
+    // Erasure routes — account-level
+    Route::get('/erasure', [ErasureController::class, 'index'])->name('erasure.index');
+    Route::delete('/erasure/account', [ErasureController::class, 'destroyAccount'])->name('erasure.destroyAccount');
 
     // Search routes
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');

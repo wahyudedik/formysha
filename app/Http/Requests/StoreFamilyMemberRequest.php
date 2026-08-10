@@ -29,6 +29,7 @@ class StoreFamilyMemberRequest extends FormRequest
             'email' => ['nullable', 'email', 'max:255'],
             'photo' => ['nullable', 'image', 'max:2048'],
             'is_primary' => ['boolean'],
+            'permission_level' => ['nullable', 'in:view,edit,admin'],
         ];
     }
 
@@ -49,6 +50,7 @@ class StoreFamilyMemberRequest extends FormRequest
             'email.max' => 'Email maksimal 255 karakter.',
             'photo.image' => 'File harus berupa gambar.',
             'photo.max' => 'Ukuran gambar maksimal 2MB.',
+            'permission_level.in' => 'Level permission tidak valid.',
         ];
     }
 }

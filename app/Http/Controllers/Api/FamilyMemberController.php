@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\FamilyMemberPermission;
 use App\Http\Requests\Api\StoreFamilyRequest;
 use App\Http\Requests\Api\UpdateFamilyRequest;
 use App\Http\Resources\FamilyMemberResource;
@@ -36,6 +37,12 @@ class FamilyMemberController extends ApiController
         $data = $request->validated();
         $data['child_id'] = $child->id;
         $data['user_id'] = $request->user()->id;
+
+        if (! isset($data['permission_level'])) {
+            $data['permission_level'] = in_array($data['relationship'], ['father', 'mother', 'guardian'])
+                ? FamilyMemberPermission::Edit
+                : FamilyMemberPermission::View;
+        }
 
         $familyMember = FamilyMember::create($data);
 

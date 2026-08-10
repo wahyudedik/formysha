@@ -66,13 +66,21 @@
 
                             <!-- Info -->
                             <div class="flex-1 min-w-0">
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-2 flex-wrap">
                                     <h3 class="font-bold text-gray-800 dark:text-gray-100 truncate">{{ $member->name }}</h3>
                                     @if ($member->is_primary)
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-warmYellow-100 dark:bg-warmYellow-950/30 text-warmYellow-600 dark:text-warmYellow-400">
                                             ⭐ Utama
                                         </span>
                                     @endif
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium
+                                        {{ match($member->permission_level) {
+                                            'admin' => 'bg-softPink-100 dark:bg-softPink-950/30 text-softPink-600 dark:text-softPink-400',
+                                            'edit' => 'bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-600 dark:text-skyBlue-400',
+                                            default => 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400',
+                                        } }}">
+                                        {{ $member->permission_level->label() }}
+                                    </span>
                                 </div>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ $member->relationship_label }}</p>
                                 @if ($member->phone)
@@ -81,6 +89,7 @@
                                 @if ($member->email)
                                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">📧 {{ $member->email }}</p>
                                 @endif
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $member->permission_level->description() }}</p>
                             </div>
 
                             <!-- Actions -->

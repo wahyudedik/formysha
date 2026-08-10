@@ -184,4 +184,120 @@ describe('Family Member Management', function () {
 
         expect($tenant->familyMembers()->count())->toBe(2);
     });
+
+    it('sets permission_level to edit for father relationship', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->post(route('family.store', $child), [
+                'name' => 'Ayah Budi',
+                'relationship' => 'father',
+            ]);
+
+        $this->assertDatabaseHas('family_members', [
+            'child_id' => $child->id,
+            'name' => 'Ayah Budi',
+            'permission_level' => 'edit',
+        ]);
+    });
+
+    it('sets permission_level to edit for mother relationship', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->post(route('family.store', $child), [
+                'name' => 'Ibu Rina',
+                'relationship' => 'mother',
+            ]);
+
+        $this->assertDatabaseHas('family_members', [
+            'child_id' => $child->id,
+            'permission_level' => 'edit',
+        ]);
+    });
+
+    it('sets permission_level to view for other relationships', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->post(route('family.store', $child), [
+                'name' => 'Kakek Suto',
+                'relationship' => 'grandfather',
+            ]);
+
+        $this->assertDatabaseHas('family_members', [
+            'child_id' => $child->id,
+            'permission_level' => 'view',
+        ]);
+    });
+
+    it('allows setting custom permission_level', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->post(route('family.store', $child), [
+                'name' => 'Nenek Sari',
+                'relationship' => 'grandmother',
+                'permission_level' => 'admin',
+            ]);
+
+        $this->assertDatabaseHas('family_members', [
+            'child_id' => $child->id,
+            'permission_level' => 'admin',
+        ]);
+    });
+
+    it('validates permission_level values', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->post(route('family.store', $child), [
+                'name' => 'Test',
+                'relationship' => 'sibling',
+                'permission_level' => 'invalid',
+            ])
+            ->assertSessionHasErrors(['permission_level']);
+    });
+
+    it('updates permission_level successfully', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+        $member = FamilyMember::factory()->create([
+            'child_id' => $child->id,
+            'permission_level' => 'view',
+        ]);
+
+        $this->actingAs($user)
+            ->put(route('family.update', [$child, $member]), [
+                'name' => $member->name,
+                'relationship' => $member->relationship,
+                'permission_level' => 'admin',
+            ]);
+
+        $this->assertDatabaseHas('family_members', [
+            'id' => $member->id,
+            'permission_level' => 'admin',
+        ]);
+    });
+
+    it('displays permission level badge on index page', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+        FamilyMember::factory()->create([
+            'child_id' => $child->id,
+            'name' => 'Ayah Admin',
+            'relationship' => 'father',
+            'permission_level' => 'admin',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('family.index', $child))
+            ->assertOk()
+            ->assertSee('Admin Penuh');
+    });
 });

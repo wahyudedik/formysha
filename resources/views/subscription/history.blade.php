@@ -12,8 +12,8 @@
 
     <div class="py-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-breadcrumb :items="[
-            ['label' => 'Langganan', 'url' => route('subscription.current')],
-            ['label' => 'Riwayat'],
+            ['label' => __('Langganan'), 'url' => route('subscription.current')],
+            ['label' => __('Riwayat')],
         ]" />
 
         {{-- Desktop Table --}}
@@ -22,11 +22,11 @@
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="border-b border-gray-100 dark:border-gray-700">
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Tanggal</th>
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Paket</th>
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Status</th>
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Periode</th>
-                            <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Aksi</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Tanggal') }}</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Paket') }}</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Status') }}</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Periode') }}</th>
+                            <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Aksi') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,11 +52,11 @@
                                             default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                                         } }}">
                                         {{ match($sub->status) {
-                                            'active' => '✅ Aktif',
-                                            'pending' => '⏳ Pending',
-                                            'inactive' => '⏸️ Tidak Aktif',
-                                            'cancelled' => '❌ Dibatalkan',
-                                            'past_due' => '⚠️ Terlambat',
+                                            'active' => '✅ ' . __('Aktif'),
+                                            'pending' => '⏳ ' . __('Pending'),
+                                            'inactive' => '⏸️ ' . __('Tidak Aktif'),
+                                            'cancelled' => '❌ ' . __('Dibatalkan'),
+                                            'past_due' => '⚠️ ' . __('Terlambat'),
                                             default => ucfirst($sub->status),
                                         } }}
                                     </span>
@@ -73,7 +73,7 @@
                                 <td class="px-6 py-4 text-right">
                                     @if ($sub->status === 'pending')
                                         <a href="{{ route('subscription.payment.upload', $sub) }}" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-warmYellow-50 text-warmYellow-600 hover:bg-warmYellow-100 dark:bg-warmYellow-950/30 dark:text-warmYellow-400 dark:hover:bg-warmYellow-950/50 transition">
-                                            💳 Bayar
+                                            💳 {{ __('Bayar') }}
                                         </a>
                                     @endif
                                 </td>
@@ -81,7 +81,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-12">
-                                    <x-empty-state icon="📜" title="Belum Ada Riwayat" description="Riwayat langganan Anda akan muncul di sini." />
+                                    <x-empty-state icon="📜" title="{{ __('Belum Ada Riwayat') }}" description="{{ __('Riwayat langganan Anda akan muncul di sini.') }}" />
                                 </td>
                             </tr>
                         @endforelse

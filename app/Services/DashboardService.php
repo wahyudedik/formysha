@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Album;
 use App\Models\Child;
 use App\Models\Diary;
 use App\Models\Event;
@@ -134,6 +135,9 @@ class DashboardService
 
     /**
      * Get recent media (photos/videos) across all children for dashboard thumbnails.
+     *
+     * Includes media attached directly to Child, as well as media attached
+     * to Timeline, Album, and Diary records owned by the children.
      */
     protected function getRecentMedia(Collection $childIds, int $limit = 8): Collection
     {
@@ -141,9 +145,18 @@ class DashboardService
             return collect();
         }
 
-        return Media::where('mediable_type', Child::class)
-            ->whereIn('mediable_id', $childIds)
-            ->where('file_type', 'photo')
+        // Get all related model IDs owned by these children
+        $timelineIds = Timeline::whereIn('child_id', $childIds)->pluck('id');
+        $albumIds = Album::whereIn('child_id', $childIds)->pluck('id');
+        $diaryIds = Diary::whereIn('child_id', $childIds)->pluck('id');
+
+        return Media::where('file_type', 'photo')
+            ->where(function ($query) use ($childIds, $timelineIds, $albumIds, $diaryIds) {
+                $query->where(fn ($q) => $q->where('mediable_type', Child::class)->whereIn('mediable_id', $childIds))
+                    ->orWhere(fn ($q) => $q->where('mediable_type', Timeline::class)->whereIn('mediable_id', $timelineIds))
+                    ->orWhere(fn ($q) => $q->where('mediable_type', Album::class)->whereIn('mediable_id', $albumIds))
+                    ->orWhere(fn ($q) => $q->where('mediable_type', Diary::class)->whereIn('mediable_id', $diaryIds));
+            })
             ->latest()
             ->take($limit)
             ->get();
@@ -151,6 +164,8 @@ class DashboardService
 
     /**
      * Get total media count across all children.
+     *
+     * Includes media attached to Child, Timeline, Album, and Diary.
      */
     protected function getTotalMediaCount(Collection $childIds): int
     {
@@ -158,8 +173,15 @@ class DashboardService
             return 0;
         }
 
-        return Media::where('mediable_type', Child::class)
-            ->whereIn('mediable_id', $childIds)
-            ->count();
+        $timelineIds = Timeline::whereIn('child_id', $childIds)->pluck('id');
+        $albumIds = Album::whereIn('child_id', $childIds)->pluck('id');
+        $diaryIds = Diary::whereIn('child_id', $childIds)->pluck('id');
+
+        return Media::where(function ($query) use ($childIds, $timelineIds, $albumIds, $diaryIds) {
+            $query->where(fn ($q) => $q->where('mediable_type', Child::class)->whereIn('mediable_id', $childIds))
+                ->orWhere(fn ($q) => $q->where('mediable_type', Timeline::class)->whereIn('mediable_id', $timelineIds))
+                ->orWhere(fn ($q) => $q->where('mediable_type', Album::class)->whereIn('mediable_id', $albumIds))
+                ->orWhere(fn ($q) => $q->where('mediable_type', Diary::class)->whereIn('mediable_id', $diaryIds));
+        })->count();
     }
 }

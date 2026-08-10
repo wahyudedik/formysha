@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-page-header title="🔍 Pencarian" subtitle="Cari di seluruh modul ForMysha" />
+        <x-page-header title="🔍 {{ __('Pencarian') }}" subtitle="{{ __('Cari di seluruh modul ForMysha') }}" />
     </x-slot>
 
     <div class="py-8">
@@ -11,14 +11,14 @@
                     <input type="text"
                            name="q"
                            value="{{ $query }}"
-                           placeholder="Cari kenangan, dokumen, catatan kesehatan..."
+                           placeholder="{{ __('Cari kenangan, dokumen, catatan kesehatan...') }}"
                            class="w-full px-5 py-4 pl-12 text-sm bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-skyBlue-500 focus:border-skyBlue-500 shadow-sm transition dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
                            autofocus />
                     <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-lg">
                         🔍
                     </div>
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-2 min-h-[44px] bg-skyBlue-500 text-white text-sm font-medium rounded-xl hover:bg-skyBlue-600 transition">
-                        Cari
+                        {{ __('Cari') }}
                     </button>
                 </div>
             </form>
@@ -28,12 +28,13 @@
                 <div class="mb-6 flex flex-wrap gap-2">
                     @php
                         $modules = [
-                            'all' => ['label' => 'Semua', 'icon' => '🔍'],
-                            'timeline' => ['label' => 'Timeline', 'icon' => '📸'],
-                            'diary' => ['label' => 'Diary', 'icon' => '📔'],
-                            'document' => ['label' => 'Dokumen', 'icon' => '📄'],
-                            'health' => ['label' => 'Kesehatan', 'icon' => '🏥'],
-                            'growth' => ['label' => 'Pertumbuhan', 'icon' => '📏'],
+                            'all' => ['label' => __('Semua'), 'icon' => '🔍'],
+                            'timeline' => ['label' => __('Timeline'), 'icon' => '📸'],
+                            'album' => ['label' => __('Album'), 'icon' => '🖼️'],
+                            'diary' => ['label' => __('Diary'), 'icon' => '📔'],
+                            'document' => ['label' => __('Dokumen'), 'icon' => '📄'],
+                            'health' => ['label' => __('Kesehatan'), 'icon' => '🏥'],
+                            'growth' => ['label' => __('Pertumbuhan'), 'icon' => '📏'],
                         ];
                     @endphp
                     @foreach ($modules as $moduleKey => $moduleInfo)
@@ -51,13 +52,13 @@
                 @if ($results->isEmpty())
                     <x-empty-state
                         icon="🔍"
-                        title="Tidak Ada Hasil"
-                        description="Tidak ditemukan hasil untuk '{{ $query }}'. Coba kata kunci yang berbeda."
+                        title="{{ __('Tidak Ada Hasil') }}"
+                        description="{{ __('Tidak ditemukan hasil untuk') }} '{{ $query }}'. {{ __('Coba kata kunci yang berbeda.') }}"
                     />
                 @else
                     <div class="space-y-3">
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Ditemukan <span class="font-semibold text-gray-800 dark:text-gray-100">{{ $module === 'all' ? $counts['all'] : $counts[$module] }}</span> hasil untuk "<span class="font-medium text-gray-700 dark:text-gray-200">{{ $query }}</span>"
+                            {{ __('Ditemukan') }} <span class="font-semibold text-gray-800 dark:text-gray-100">{{ $module === 'all' ? $counts['all'] : $counts[$module] }}</span> {{ __('hasil untuk') }} "<span class="font-medium text-gray-700 dark:text-gray-200">{{ $query }}</span>"
                         </p>
 
                         @foreach ($results as $result)
@@ -90,8 +91,8 @@
             @else
                 <x-empty-state
                     icon="🔍"
-                    title="Mulai Mencari"
-                    description="Ketik minimal 2 karakter untuk mulai mencari di seluruh modul ForMysha."
+                    title="{{ __('Mulai Mencari') }}"
+                    description="{{ __('Ketik minimal 2 karakter untuk mulai mencari di seluruh modul ForMysha.') }}"
                 />
             @endif
         </div>

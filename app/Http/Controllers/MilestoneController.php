@@ -40,7 +40,7 @@ class MilestoneController extends Controller
         $milestoneService->checkMilestones($request->user(), $child);
 
         return redirect()->route('milestones.index', $child)
-            ->with('status', 'Pengecekan milestone berhasil dilakukan!');
+            ->with('status', __('status.milestones_checked'));
     }
 
     /**
@@ -53,6 +53,6 @@ class MilestoneController extends Controller
         $milestoneService->dismiss($milestoneAlert);
 
         return redirect()->route('milestones.index', $child)
-            ->with('status', 'Milestone alert berhasil ditutup.');
+            ->with('status', __('status.milestones_dismissed'));
     }
 }

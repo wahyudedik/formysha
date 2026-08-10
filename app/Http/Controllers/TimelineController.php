@@ -86,7 +86,7 @@ class TimelineController extends Controller
         }
 
         return redirect()->route('timeline.index', $child)
-            ->with('status', 'Kenangan berhasil ditambahkan!');
+            ->with('status', __('status.timeline_created'));
     }
 
     /**
@@ -127,7 +127,7 @@ class TimelineController extends Controller
         $timeline->update($request->validated());
 
         return redirect()->route('timeline.show', [$child, $timeline])
-            ->with('status', 'Kenangan berhasil diperbarui!');
+            ->with('status', __('status.timeline_updated'));
     }
 
     /**
@@ -140,6 +140,6 @@ class TimelineController extends Controller
         $timeline->delete();
 
         return redirect()->route('timeline.index', $child)
-            ->with('status', 'Kenangan berhasil dihapus.');
+            ->with('status', __('status.timeline_deleted'));
     }
 }

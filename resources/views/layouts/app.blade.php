@@ -54,9 +54,9 @@
                         </div>
 
                         <div class="flex items-center gap-5 text-xs text-gray-400 dark:text-gray-500">
-                            <a href="{{ route('pages.about') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Tentang Kami</a>
-                            <a href="{{ route('pages.privacy') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Kebijakan Privasi</a>
-                            <a href="{{ route('pages.terms') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Syarat & Ketentuan</a>
+                            <a href="{{ route('pages.about') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">{{ __('pages.about') }}</a>
+                            <a href="{{ route('pages.privacy') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">{{ __('pages.privacy') }}</a>
+                            <a href="{{ route('pages.terms') }}" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">{{ __('pages.terms') }}</a>
                         </div>
 
                         <p class="text-xs text-gray-400 dark:text-gray-500">

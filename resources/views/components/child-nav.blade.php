@@ -13,6 +13,7 @@
         ['route' => 'achievements.index', 'label' => 'Pencapaian', 'icon' => '🏆', 'param' => 'child'],
         ['route' => 'milestones.index', 'label' => 'Milestone', 'icon' => '🎯', 'param' => 'child'],
         ['route' => 'family.index', 'label' => 'Keluarga', 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
+        ['route' => 'consent.index', 'label' => 'Privasi', 'icon' => '🔒', 'param' => 'child'],
         ['route' => 'profile.edit', 'label' => 'Pengaturan', 'icon' => '⚙️', 'param' => null],
     ];
 

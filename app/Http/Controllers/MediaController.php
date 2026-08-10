@@ -29,7 +29,7 @@ class MediaController extends Controller
         $mediaService->uploadMultiple($request->file('media'), $timeline);
 
         return redirect()->route('timeline.show', [$child, $timeline])
-            ->with('status', 'Media berhasil ditambahkan!');
+            ->with('status', __('status.media_created'));
     }
 
     /**
@@ -48,7 +48,7 @@ class MediaController extends Controller
         $mediaService->uploadMultiple($request->file('media'), $album);
 
         return redirect()->route('albums.show', [$child, $album])
-            ->with('status', 'Media berhasil ditambahkan!');
+            ->with('status', __('status.media_created'));
     }
 
     /**
@@ -67,7 +67,7 @@ class MediaController extends Controller
         $mediaService->uploadMultiple($request->file('media'), $diary);
 
         return redirect()->route('diaries.show', [$child, $diary])
-            ->with('status', 'Media berhasil ditambahkan!');
+            ->with('status', __('status.media_created'));
     }
 
     /**
@@ -97,6 +97,6 @@ class MediaController extends Controller
         $redirectUrl = $referrer ?? route('children.show', $child);
 
         return redirect($redirectUrl)
-            ->with('status', 'Media berhasil dihapus.');
+            ->with('status', __('status.media_deleted'));
     }
 }

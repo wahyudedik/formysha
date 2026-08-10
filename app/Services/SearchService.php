@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Album;
 use App\Models\Child;
 use App\Models\Diary;
 use App\Models\Document;
@@ -20,7 +21,7 @@ class SearchService
      *
      * @var list<string>
      */
-    public const TYPES = ['child', 'timeline', 'diary', 'document', 'event', 'health', 'growth', 'family'];
+    public const TYPES = ['child', 'timeline', 'album', 'diary', 'document', 'event', 'health', 'growth', 'family'];
 
     /**
      * Maximum results per type.
@@ -45,6 +46,7 @@ class SearchService
         $results = [
             'children' => collect(),
             'timelines' => collect(),
+            'albums' => collect(),
             'diaries' => collect(),
             'documents' => collect(),
             'events' => collect(),
@@ -57,6 +59,7 @@ class SearchService
             'all' => 0,
             'child' => 0,
             'timeline' => 0,
+            'album' => 0,
             'diary' => 0,
             'document' => 0,
             'event' => 0,
@@ -73,6 +76,11 @@ class SearchService
         if (in_array($type, ['all', 'timeline'])) {
             $results['timelines'] = $this->searchTimelines($childIds, $searchTerm);
             $counts['timeline'] = $results['timelines']->count();
+        }
+
+        if (in_array($type, ['all', 'album'])) {
+            $results['albums'] = $this->searchAlbums($childIds, $searchTerm);
+            $counts['album'] = $results['albums']->count();
         }
 
         if (in_array($type, ['all', 'diary'])) {
@@ -110,6 +118,7 @@ class SearchService
         return [
             'children' => $results['children'],
             'timelines' => $results['timelines'],
+            'albums' => $results['albums'],
             'diaries' => $results['diaries'],
             'documents' => $results['documents'],
             'events' => $results['events'],
@@ -227,6 +236,22 @@ class SearchService
         return Growth::whereIn('child_id', $childIds)
             ->where(function ($q) use ($searchTerm) {
                 $q->whereRaw('LOWER(notes) LIKE ?', [$searchTerm]);
+            })
+            ->with('child')
+            ->latest()
+            ->limit(self::MAX_RESULTS)
+            ->get();
+    }
+
+    /**
+     * Search albums by name or description.
+     */
+    public function searchAlbums(Collection $childIds, string $searchTerm): Collection
+    {
+        return Album::whereIn('child_id', $childIds)
+            ->where(function ($q) use ($searchTerm) {
+                $q->whereRaw('LOWER(name) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
             })
             ->with('child')
             ->latest()

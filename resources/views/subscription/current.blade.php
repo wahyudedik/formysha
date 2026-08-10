@@ -7,8 +7,8 @@
 
     <div class="py-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-breadcrumb :items="[
-            ['label' => 'Dashboard', 'url' => route('dashboard')],
-            ['label' => 'Langganan'],
+            ['label' => __('Dashboard'), 'url' => route('dashboard')],
+            ['label' => __('Langganan')],
         ]" />
 
         @if ($subscription)
@@ -18,7 +18,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->name ?? '-' }}</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Paket langganan aktif Anda</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Paket langganan aktif Anda') }}</p>
                         </div>
                         <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-sm font-medium self-start
                             {{ match($subscription->status) {
@@ -30,11 +30,11 @@
                                 default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                             } }}">
                             {{ match($subscription->status) {
-                                'active' => '✅ Aktif',
-                                'pending' => '⏳ Menunggu Pembayaran',
-                                'inactive' => '⏸️ Tidak Aktif',
-                                'cancelled' => '❌ Dibatalkan',
-                                'past_due' => '⚠️ Terlambat Bayar',
+                                'active' => '✅ ' . __('Aktif'),
+                                'pending' => '⏳ ' . __('Menunggu Pembayaran'),
+                                'inactive' => '⏸️ ' . __('Tidak Aktif'),
+                                'cancelled' => '❌ ' . __('Dibatalkan'),
+                                'past_due' => '⚠️ ' . __('Terlambat Bayar'),
                                 default => ucfirst($subscription->status),
                             } }}
                         </span>
@@ -43,20 +43,20 @@
                     {{-- Plan Details --}}
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Harga</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Harga') }}</p>
                             <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->getPriceMonthlyFormatted() }}</p>
-                            <p class="text-[10px] text-gray-400 dark:text-gray-500">per bulan</p>
+                            <p class="text-[10px] text-gray-400 dark:text-gray-500">{{ __('per bulan') }}</p>
                         </div>
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Mulai</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Mulai') }}</p>
                             <p class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->starts_at?->locale('id')->isoFormat('D MMM YYYY') ?? '-' }}</p>
                         </div>
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Berakhir</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Berakhir') }}</p>
                             <p class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->ends_at?->locale('id')->isoFormat('D MMM YYYY') ?? '-' }}</p>
                         </div>
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Sisa Hari</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Sisa Hari') }}</p>
                             <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $subscription->daysRemaining() }}</p>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         @endphp
                         <div class="mt-6">
                             <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                <span>Penggunaan</span>
+                                <span>{{ __('Penggunaan') }}</span>
                                 <span>{{ $percent }}%</span>
                             </div>
                             <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -88,12 +88,12 @@
                         <div class="flex items-center gap-3">
                             <span class="text-3xl">⏳</span>
                             <div>
-                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">Menunggu Pembayaran</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Silakan lakukan transfer dan upload bukti pembayaran untuk mengaktifkan langganan Anda.</p>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">{{ __('Menunggu Pembayaran') }}</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Silakan lakukan transfer dan upload bukti pembayaran untuk mengaktifkan langganan Anda.') }}</p>
                             </div>
                         </div>
                         <a href="{{ route('subscription.payment.upload', $subscription) }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center whitespace-nowrap">
-                            💳 Upload Bukti
+                            💳 {{ __('Upload Bukti') }}
                         </a>
                     </div>
                 </div>

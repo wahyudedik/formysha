@@ -62,7 +62,7 @@ class HealthController extends Controller
         $child->healthRecords()->create($validated);
 
         return redirect()->route('health.index', $child)
-            ->with('status', 'Catatan kesehatan berhasil disimpan!');
+            ->with('status', __('status.health_created'));
     }
 
     /**
@@ -101,7 +101,7 @@ class HealthController extends Controller
         $healthRecord->update($request->validated());
 
         return redirect()->route('health.index', $child)
-            ->with('status', 'Catatan kesehatan berhasil diperbarui!');
+            ->with('status', __('status.health_updated'));
     }
 
     /**
@@ -114,6 +114,6 @@ class HealthController extends Controller
         $healthRecord->delete();
 
         return redirect()->route('health.index', $child)
-            ->with('status', 'Catatan kesehatan berhasil dihapus.');
+            ->with('status', __('status.health_deleted'));
     }
 }
