@@ -35,9 +35,7 @@
 
         @foreach ($modules as $module)
             @php
-                $isActive = $module['param'] === null
-                    ? request()->routeIs($module['route'])
-                    : request()->routeIs($module['route']);
+                $isActive = request()->routeIs($module['route']);
             @endphp
             <a href="{{ $module['param'] === null ? route($module['route']) : route($module['route'], $child) }}"
                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200

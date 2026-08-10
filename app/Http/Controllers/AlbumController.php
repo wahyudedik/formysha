@@ -13,6 +13,10 @@ use Illuminate\View\View;
 
 class AlbumController extends Controller
 {
+    public function __construct(
+        private MediaService $mediaService,
+    ) {}
+
     /**
      * Display a listing of albums for a child.
      */
@@ -27,7 +31,7 @@ class AlbumController extends Controller
             'oldest' => $query->orderBy('created_at', 'asc'),
             'name_asc' => $query->orderBy('name', 'asc'),
             'name_desc' => $query->orderBy('name', 'desc'),
-            'most_media' => $query->withCount('media')->orderBy('media_count', 'desc'),
+            'most_media' => $query->orderBy('media_count', 'desc'),
             default => $query->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc'),
         };
 
@@ -68,8 +72,7 @@ class AlbumController extends Controller
 
         // Handle media upload
         if (! empty($mediaFiles)) {
-            $mediaService = new MediaService;
-            $mediaService->uploadMultiple($mediaFiles, $album);
+            $this->mediaService->uploadMultiple($mediaFiles, $album);
         }
 
         return redirect()->route('albums.index', $child)

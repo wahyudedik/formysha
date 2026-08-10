@@ -13,6 +13,10 @@ use Illuminate\View\View;
 
 class DiaryController extends Controller
 {
+    public function __construct(
+        private MediaService $mediaService,
+    ) {}
+
     /**
      * Display a listing of diary entries for a child.
      */
@@ -81,8 +85,7 @@ class DiaryController extends Controller
 
         // Handle media upload
         if (! empty($mediaFiles)) {
-            $mediaService = new MediaService;
-            $mediaService->uploadMultiple($mediaFiles, $diary);
+            $this->mediaService->uploadMultiple($mediaFiles, $diary);
         }
 
         return redirect()->route('diaries.index', $child)

@@ -1,6 +1,9 @@
 <?php
 
+use App\Enums\TenantType;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -18,6 +21,34 @@ test('users can authenticate using the login screen', function () {
 
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+});
+
+test('facility admin is redirected to facility dashboard after login', function () {
+    // Create a B2B tenant (clinic) manually since Tenant doesn't have a factory
+    $tenantId = Str::uuid();
+    DB::table('tenants')->insert([
+        'id' => $tenantId,
+        'name' => 'Klinik Test',
+        'slug' => 'klinik-test-'.Str::random(5),
+        'type' => TenantType::Clinic->value,
+        'is_active' => true,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    // Create a tenant_admin user for this tenant
+    $user = User::factory()->create([
+        'role' => 'tenant_admin',
+        'tenant_id' => $tenantId,
+    ]);
+
+    $response = $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('facility.dashboard', absolute: false));
 });
 
 test('users can not authenticate with invalid password', function () {

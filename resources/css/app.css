@@ -51,15 +51,15 @@
 
     /* Soft Button */
     .btn-primary {
-        @apply inline-flex items-center justify-center px-6 py-3 bg-softPink-300 hover:bg-softPink-400 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-softPink-300 focus:ring-offset-2;
+        @apply inline-flex items-center justify-center px-6 py-3 min-h-[44px] bg-softPink-300 hover:bg-softPink-400 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-softPink-300 focus:ring-offset-2;
     }
 
     .btn-secondary {
-        @apply inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl border border-gray-200 dark:border-gray-600 shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
+        @apply inline-flex items-center justify-center px-6 py-3 min-h-[44px] bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl border border-gray-200 dark:border-gray-600 shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
     }
 
     .btn-accent {
-        @apply inline-flex items-center justify-center px-6 py-3 bg-skyBlue-300 hover:bg-skyBlue-400 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
+        @apply inline-flex items-center justify-center px-6 py-3 min-h-[44px] bg-skyBlue-300 hover:bg-skyBlue-400 text-white font-semibold rounded-xl shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-skyBlue-300 focus:ring-offset-2;
     }
 
     /* Section Title */

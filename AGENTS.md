@@ -872,7 +872,29 @@ public/favicon.ico   → Favicon legacy
 * **B2B Analytics**: Metrik B2B — pertumbuhan fasilitas, catatan klinis, rujukan, top fasilitas
 * **B2B Monitoring**: Monitoring — fasilitas staf terbanyak, catatan klinis terbanyak, rujukan pending
 * **Bug Fix**: `$users` undefined variable di `staff/create.blade.php`
-* **Tests**: 607 tests, 1383 assertions — all passing
+* **Tests**: 614 tests, 1404 assertions — all passing
+
+#### Phase 16 — Comprehensive Audit & Code Quality ✅
+
+* **PublicProfileController Eager Loading**: Menambahkan `albums` relationship ke eager loading untuk mencegah N+1 query
+* **ExportController Authorization**: Verifikasi otorisasi sudah ditangani oleh `child.ownership` middleware
+* **AlbumController Redundant withCount**: Menghapus `withCount('media')` yang redundant di sorting `most_media`
+* **DI untuk MediaService**: Refaktor DiaryController dan AlbumController menggunakan constructor injection
+* **PatientLinkController Privacy**: Scoped query parents hanya menampilkan user yang memiliki child tertaut ke fasilitas
+* **ExportTest**: 9 tests baru memverifikasi otorisasi export (owner bisa, user lain di-block 403)
+* **.env.example**: Menambahkan `AWS_URL` dan `AWS_ENDPOINT` untuk MinIO/S3 storage
+* **Dashboard Eager Loading**: Verifikasi semua relasi di dashboard view sudah di-load oleh DashboardService
+* **Tests**: 624 tests, 1417 assertions — all passing
+
+#### Phase 17 — Comprehensive Audit & Code Quality ✅
+
+* **Bug Fix — TenantAdmin Media Column**: Perbaikan kolom `type` → `file_type` di TenantAdminController (web & API)
+* **Responsive Fix — Facility Admin Tables**: Menambahkan wrapper responsive pada 5 facility-admin views
+* **UI/UX — Button Touch Target**: Menambahkan `min-h-[44px]` ke base CSS classes (`btn-primary`, `btn-secondary`, `btn-accent`)
+* **Verification — Eager Loading**: Verifikasi semua controller sudah proper eager loading
+* **Verification — Navigation**: Verifikasi navigation responsive lengkap
+* **Verification — Components**: Verifikasi empty state, breadcrumb, confirm-delete pada semua facility-admin views
+* **Tests**: 624 tests, 1417 assertions — all passing
 
 ### Keunggulan Kompetitif
 
@@ -1080,7 +1102,7 @@ All Blade views MUST follow these responsive patterns consistently:
 
 ### Quality Assurance
 
-* **Total Tests**: 607 tests, 1383 assertions — all passing
+* **Total Tests**: 624 tests, 1417 assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit, Achievement, Milestone, FacilityAdmin
@@ -1088,7 +1110,7 @@ All Blade views MUST follow these responsive patterns consistently:
 * **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, ImageOptimizationService, SearchService, NotificationService, CacheService, AchievementService, MilestoneService, Album, Child, Diary
 * **Feature Tests (Phase 10)**: SubscriptionLifecycleTest (6 tests)
 * **Feature Tests (Phase 12)**: AchievementTest (7), AchievementServiceTest (4), MilestoneTest (7), MilestoneServiceTest (6) — 25 tests baru
-* **QA Audit**: Phase 1-13 selesai, semua tests passing, Pint formatting applied
+* **QA Audit**: Phase 1-17 selesai, semua tests passing, Pint formatting applied
 * **Loading States**: Alpine.js loading states pada semua form submit (32 form):
   - Core: children, timeline, albums, diaries, growth, health, documents, calendar, family, auth (login, register)
   - Admin: subscription/payment-upload, super-admin/tenants (create/edit), super-admin/plans (create/edit)

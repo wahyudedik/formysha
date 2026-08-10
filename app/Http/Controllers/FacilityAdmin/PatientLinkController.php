@@ -40,7 +40,11 @@ class PatientLinkController extends Controller
         $linkedChildIds = PatientLink::where('facility_tenant_id', $tenant->id)
             ->pluck('child_id');
         $children = Child::whereIn('id', $linkedChildIds)->with('user')->get();
-        $parents = User::where('role', 'parent')->get();
+        // Scope parents to those whose children are linked to this facility
+        $linkedParentIds = PatientLink::where('facility_tenant_id', $tenant->id)
+            ->pluck('parent_user_id')
+            ->unique();
+        $parents = User::whereIn('id', $linkedParentIds)->get();
 
         return view('facility-admin.patients.create', compact('tenant', 'children', 'parents'));
     }

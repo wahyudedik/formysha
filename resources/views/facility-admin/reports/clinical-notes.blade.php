@@ -65,7 +65,7 @@
                         <p class="text-gray-500 dark:text-gray-400">{{ __('Tidak ada catatan klinis pada periode ini.') }}</p>
                     </div>
                 @else
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700/50">
                                 <tr>

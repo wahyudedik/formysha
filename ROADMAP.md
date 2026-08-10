@@ -994,6 +994,83 @@ Button rounded:   rounded-xl (konsisten)
 * **Full Test Suite**: 614 tests, 1404 assertions — all passing
 * **Laravel Pint**: Semua file ter-format
 
+## Phase 15 — Bug Fixes & UX Improvements ✅
+
+### Sub-Phase 15.1 — Bug & Quick Fixes
+
+* **User Model Dead Code**: Menghapus `isAdmin()` dan `isGuardian()` (role inexisten)
+* **User Model Role Label**: Membersihkan dead code role dari `getRoleLabelAttribute()`
+* **currentSubscription()**: Filter by active status + latest
+* **Environment Fixes**: `MAIL_ENCRYPTION=null` di `.env`, `APP_URL` placeholder di `.env.example`
+* **Child Nav**: Sederhanakan conditional redundant
+* **Facility Admin Navigation**: Link "Fasilitas" di header dan mobile menu
+
+### Sub-Phase 15.2 — Feature Gaps
+
+* **Dashboard Recent Timelines**: Section "Timeline Terbaru" di dashboard
+* **Dashboard Quick Access**: Tambah Album, Dokumen, Keluarga (total 9 modul)
+* **Dashboard Grid**: 3-column di mobile untuk menampung 9 modul
+
+### Sub-Phase 15.3 — Quality & Verification
+
+* **Test Verification**: 614 tests, 1404 assertions — all passing
+* **Laravel Pint**: Semua file ter-format
+
+### Sub-Phase 15B — B2B/B2C Login Differentiation ✅
+
+* **Smart Login Redirect**: `AuthenticatedSessionController` mendeteksi user type dan redirect ke route yang sesuai
+* **B2B Login Flow**: Tenant admin B2B otomatis diarahkan ke `/facility/dashboard`
+* **B2C Login Flow**: User keluarga tetap diarahkan ke `/dashboard`
+* **Test Verification**: 615 tests, 1407 assertions — all passing
+* **Laravel Pint**: Semua file ter-format
+
+---
+
+### Sub-Phase 16A — Quick Fixes ✅
+
+* **PublicProfileController Eager Loading**: Menambahkan `albums` relationship ke eager loading untuk mencegah N+1 query
+* **ExportController Authorization**: Verifikasi otorisasi sudah ditangani oleh `child.ownership` middleware
+* **AlbumController Redundant withCount**: Menghapus `withCount('media')` yang redundant di sorting `most_media`
+* **DI untuk MediaService**: Refaktor DiaryController dan AlbumController menggunakan constructor injection
+* **PatientLinkController Privacy**: Scoped query parents hanya menampilkan user yang memiliki child tertaut ke fasilitas
+* **ExportTest**: 9 tests baru memverifikasi otorisasi export (owner bisa, user lain di-block)
+* **.env.example**: Menambahkan `AWS_URL` dan `AWS_ENDPOINT` untuk MinIO/S3 storage
+* **Test Verification**: 624 tests, 1417 assertions — all passing
+
+### Sub-Phase 16B — Medium Fixes ✅
+
+* **Dashboard Eager Loading**: Verifikasi semua relasi di dashboard view sudah di-load oleh DashboardService
+* **Album is_public Flag**: DITUNDA ke Phase 17 — memerlukan database migration
+
+---
+
+## Phase 17 — Comprehensive Audit & Code Quality ✅
+
+### Bug Fix
+
+* **TenantAdmin Media Column**: Perbaikan kolom `type` → `file_type` di TenantAdminController (web & API) — Media model menggunakan `file_type`, bukan `type`
+
+### Responsive Fix
+
+* **Facility Admin Tables**: Menambahkan wrapper `overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0` pada 5 facility-admin views untuk konsistensi mobile edge-to-edge tables
+
+### UI/UX
+
+* **Button Touch Target**: Menambahkan `min-h-[44px]` ke base CSS classes (`btn-primary`, `btn-secondary`, `btn-accent`) untuk memastikan semua tombol memiliki minimum touch target 44px
+
+### Verification
+
+* **Eager Loading**: Verifikasi semua controller sudah proper eager loading relasi `child`, `media`, `staffUser`, `parentUser`
+* **Navigation Flow**: Verifikasi navigation responsive lengkap
+* **Empty States**: Verifikasi semua facility-admin views sudah menggunakan `<x-empty-state>`
+* **Breadcrumb**: Verifikasi semua facility-admin views sudah menggunakan `<x-breadcrumb>`
+* **Confirm Delete**: Verifikasi semua facility-admin delete actions sudah menggunakan `<x-confirm-delete>`
+
+### Status
+
+* 624 tests, 1417 assertions — all passing
+* Laravel Pint formatting passed
+
 ---
 
 ## Tujuan Jangka Panjang

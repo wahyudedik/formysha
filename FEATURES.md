@@ -1223,7 +1223,7 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 * **Monitoring B2B**: Monitoring B2B — fasilitas dengan staf terbanyak, catatan klinis terbanyak, rujukan pending
 * **Bug Fix**: `$users` undefined variable di `staff/create.blade.php` — diganti dengan field name/email inline
 * **Pint**: Semua file PHP ter-format
-* **Full Test Suite**: 607 tests, 1383 assertions — all passing
+* **Full Test Suite**: 614 tests, 1404 assertions — all passing
 
 ## Comprehensive Audit & Bug Fixes ✅ (Phase 14)
 
@@ -1237,3 +1237,48 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 * **Public Profile Controller**: Eager-load earned achievements untuk section awards
 * **Full Test Suite**: 614 tests, 1404 assertions — all passing
 * **Laravel Pint**: Semua file ter-format
+
+## Comprehensive Audit & Bug Fixes ✅ (Phase 15)
+
+* **Bug Fix — User Model Dead Code**: Menghapus method `isAdmin()` dan `isGuardian()` yang menggunakan role inexisten ('admin', 'guardian')
+* **Bug Fix — User Model Role Label**: Membersihkan `getRoleLabelAttribute()` dari role dead code ('guardian', 'admin')
+* **Bug Fix — currentSubscription()**: Filter relasi `currentSubscription()` hanya mengembalikan subscription dengan status 'active' menggunakan `->where('status', 'active')->latest()`
+* **Bug Fix — Environment**: Menambahkan `MAIL_ENCRYPTION=null` ke `.env`, memperbaiki `.env.example` APP_URL dari production ke localhost placeholder
+* **Bug Fix — Child Nav**: Menyederhanakan conditional redundant di `child-nav.blade.php` (kedua branch identik)
+* **Feature — Facility Admin Navigation**: Menambahkan link navigasi "Fasilitas" ke header dan mobile menu untuk tenant_admin B2B
+* **Feature — Dashboard Recent Timelines**: Menambahkan section "Timeline Terbaru" ke dashboard yang menampilkan 5 timeline terakhir
+* **Feature — Dashboard Quick Access**: Menambahkan 3 modul ke Quick Access: Album, Dokumen, Keluarga (total 9 modul)
+* **Feature — Dashboard Quick Access Grid**: Mengubah grid dari 2-column ke 3-column di mobile untuk 9 modul
+
+## B2B/B2C Login Differentiation ✅ (Phase 15B)
+
+* **Feature — Smart Login Redirect**: `AuthenticatedSessionController` mendeteksi user type dan redirect ke route yang sesuai: B2C (keluarga) ke `/dashboard`, B2B (fasilitas) ke `/facility/dashboard`
+* **Feature — B2B Login Flow**: User yang login sebagai tenant_admin dengan tipe B2B (Klinik, RS, Bidan, Posyandu, Daycare, Sekolah) otomatis diarahkan ke Facility Admin Panel
+* **Feature — B2C Login Flow**: User yang login sebagai parent tetap diarahkan ke dashboard keluarga seperti sebelumnya
+* **Test — Facility Admin Redirect**: Verifikasi redirect B2B users ke facility dashboard setelah login
+* **Test Verification**: 615 tests, 1407 assertions — all passing
+
+## Comprehensive Audit & Code Quality ✅ (Phase 16)
+
+* **Bug Fix — PublicProfileController Eager Loading**: Menambahkan `albums` relationship ke eager loading di PublicProfileController untuk mencegah N+1 query pada halaman profil publik
+* **Bug Fix — AlbumController Redundant withCount**: Menghapus `withCount('media')` yang redundant di sorting `most_media` (sudah dipanggil di query builder utama)
+* **Clean Code — DI untuk MediaService**: Refaktor DiaryController dan AlbumController menggunakan constructor injection untuk MediaService, mengganti `new MediaService` manual
+* **Privacy Fix — PatientLinkController**: Scoped query parents di PatientLinkController hanya menampilkan user yang memiliki child tertaut ke fasilitas (bukan semua parent di sistem)
+* **Security — Export Authorization**: Verifikasi bahwa ExportController sudah dilindungi oleh `child.ownership` middleware (route di dalam middleware group)
+* **Security — .env.production**: Verifikasi `.gitignore` sudah mengecualikan `.env.production` dari version control
+* **Environment — .env.example**: Menambahkan `AWS_URL` dan `AWS_ENDPOINT` ke `.env.example` untuk konfigurasi MinIO/S3-compatible storage
+* **Test — Export Authorization**: 9 tests baru (ExportTest) memverifikasi otorisasi export — owner bisa export, user lain di-block (403)
+* **Verification — Dashboard Eager Loading**: Verifikasi semua relasi yang diakses di dashboard view sudah di-load oleh DashboardService
+* **Test Verification**: 624 tests, 1417 assertions — all passing
+
+## Comprehensive Audit & Code Quality ✅ (Phase 17)
+
+* **Bug Fix — TenantAdmin Media Column**: Perbaikan kolom `type` → `file_type` di TenantAdminController (web & API) — Media model menggunakan `file_type`, bukan `type`. Query foto sebelumnya selalu return 0
+* **Responsive Fix — Facility Admin Tables**: Menambahkan wrapper `overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0` pada 5 facility-admin views untuk konsistensi mobile edge-to-edge tables: staff/index, reports/patients, reports/clinical-notes, referrals/index, clinical-notes/index
+* **UI/UX — Button Touch Target**: Menambahkan `min-h-[44px]` ke base CSS classes (`btn-primary`, `btn-secondary`, `btn-accent`) untuk memastikan semua tombol memiliki minimum touch target 44px sesuai standar mobile accessibility
+* **Verification — Eager Loading**: Verifikasi semua controller (facility-admin, tenant-admin, super-admin) sudah proper eager loading relasi `child`, `media`, `staffUser`, `parentUser`
+* **Verification — Navigation Flow**: Verifikasi navigation responsive lengkap dengan search, notifications, language switcher, dan role-based links
+* **Verification — Empty States**: Verifikasi semua facility-admin views sudah menggunakan `<x-empty-state>` component
+* **Verification — Breadcrumb**: Verifikasi semua facility-admin views sudah menggunakan `<x-breadcrumb>` component
+* **Verification — Confirm Delete**: Verifikasi semua facility-admin delete actions sudah menggunakan `<x-confirm-delete>` component
+* **Test Verification**: 624 tests, 1417 assertions — all passing

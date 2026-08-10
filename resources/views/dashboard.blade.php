@@ -254,13 +254,50 @@
             </div>
         </div>
 
+        <!-- Third Row: Recent Timelines -->
+        @if ($recentTimelines->isNotEmpty())
+            <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
+                <div class="p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">📝 {{ __('Timeline Terbaru') }}</h3>
+                        @if ($selectedChild || $children->isNotEmpty())
+                            <a href="{{ route('timeline.index', $selectedChild ?? $children->first()) }}" class="text-sm text-softPink-500 hover:text-softPink-600 dark:text-softPink-400 dark:hover:text-softPink-300 transition font-medium min-h-[44px] inline-flex items-center">
+                                {{ __('Lihat Semua') }}
+                            </a>
+                        @endif
+                    </div>
+                    <div class="space-y-3">
+                        @foreach ($recentTimelines as $timeline)
+                            <a href="{{ route('timeline.show', [$timeline->child->slug, $timeline]) }}" class="block p-3 rounded-xl hover:bg-lavender-50 dark:hover:bg-lavender-950/20 transition min-h-[44px]">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-lavender-400 to-softPink-400 flex items-center justify-center text-white text-xs flex-shrink-0">
+                                        📝
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ $timeline->title }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            {{ $timeline->child->name }}
+                                            @if($timeline->event_date) · {{ $timeline->event_date->locale('id')->isoFormat('D MMM YYYY') }}@endif
+                                        </p>
+                                    </div>
+                                    <div class="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0">
+                                        {{ $timeline->created_at->locale('id')->diffForHumans() }}
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Quick Access -->
         @if ($selectedChild || $children->isNotEmpty())
             @php $quickChild = $selectedChild ?? $children->first(); @endphp
             <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
                 <div class="p-4 sm:p-6">
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">⚡ {{ __('Akses Cepat') }}@if($selectedChild) — {{ $selectedChild->nickname ?? $selectedChild->name }}@endif</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                    <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
                         <a href="{{ route('children.index') }}" class="p-4 rounded-2xl bg-gradient-to-br from-softPink-50 to-lavender-50 dark:from-softPink-950/30 dark:to-lavender-950/30 border border-softPink-100 dark:border-softPink-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👶</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Anak') }}</div>
@@ -268,6 +305,10 @@
                         <a href="{{ route('timeline.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 border border-lavender-100 dark:border-lavender-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📸</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Timeline') }}</div>
+                        </a>
+                        <a href="{{ route('albums.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-warmYellow-50 to-peach-50 dark:from-warmYellow-950/30 dark:to-peach-950/30 border border-warmYellow-100 dark:border-warmYellow-900/30 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🖼️</div>
+                            <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Album') }}</div>
                         </a>
                         <a href="{{ route('diaries.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-peach-50 to-warmYellow-50 dark:from-peach-950/30 dark:to-warmYellow-950/30 border border-peach-100 dark:border-peach-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📔</div>
@@ -284,6 +325,14 @@
                         <a href="{{ route('health.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-skyBlue-50 to-lavender-50 dark:from-skyBlue-950/30 dark:to-lavender-950/30 border border-skyBlue-100 dark:border-skyBlue-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🏥</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Kesehatan') }}</div>
+                        </a>
+                        <a href="{{ route('documents.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-skyBlue-50 to-cream-50 dark:from-skyBlue-950/30 dark:to-gray-800 border border-skyBlue-100 dark:border-skyBlue-900/30 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📄</div>
+                            <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Dokumen') }}</div>
+                        </a>
+                        <a href="{{ route('family.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-lavender-50 to-mintGreen-50 dark:from-lavender-950/30 dark:to-mintGreen-950/30 border border-lavender-100 dark:border-lavender-900/30 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👨‍👩‍👧‍👦</div>
+                            <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Keluarga') }}</div>
                         </a>
                     </div>
                 </div>

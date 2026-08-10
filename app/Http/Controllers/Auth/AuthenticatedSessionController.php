@@ -39,6 +39,11 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
+        // Smart redirect based on user type: B2B facility admins go to facility dashboard
+        if ($user && $user->isFacilityAdmin()) {
+            return redirect()->intended(route('facility.dashboard', absolute: false));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

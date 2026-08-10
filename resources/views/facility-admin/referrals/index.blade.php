@@ -59,7 +59,7 @@
                         />
                     @else
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl">
-                            <div class="overflow-x-auto">
+                            <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-50 dark:bg-gray-700/50">
                                         <tr>

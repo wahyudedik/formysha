@@ -19,6 +19,9 @@ class PublicProfileController extends Controller
                 'timelines' => function ($query) {
                     $query->latest()->take(5);
                 },
+                'albums' => function ($query) {
+                    $query->take(6)->with('media');
+                },
                 'achievements' => function ($query) {
                     $query->whereNotNull('earned_at')->latest('earned_at');
                 },

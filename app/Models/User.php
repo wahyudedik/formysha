@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\StaffRole;
 use Database\Factories\UserFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,7 +28,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 #[Fillable(['name', 'email', 'password', 'avatar', 'phone', 'date_of_birth', 'address', 'role', 'language', 'timezone', 'tenant_id'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
@@ -73,22 +72,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Check if the user is an admin.
-     */
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
-
-    /**
-     * Check if the user is a guardian.
-     */
-    public function isGuardian(): bool
-    {
-        return $this->role === 'guardian';
-    }
-
-    /**
      * Get the user's preferred locale.
      */
     public function getPreferredLocale(): string
@@ -111,8 +94,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return match ($this->role) {
             'parent' => 'Orang Tua',
-            'guardian' => 'Wali',
-            'admin' => 'Admin',
             'super_admin' => 'Super Admin',
             'tenant_admin' => 'Tenant Admin',
             default => $this->role,
@@ -128,11 +109,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the current subscription for this user's tenant.
+     * Get the current active subscription for this user's tenant.
      */
     public function currentSubscription(): HasOne
     {
-        return $this->hasOne(Subscription::class, 'tenant_id', 'tenant_id');
+        return $this->hasOne(Subscription::class, 'tenant_id', 'tenant_id')
+            ->where('status', 'active')
+            ->latest();
     }
 
     /**

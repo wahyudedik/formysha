@@ -24,6 +24,11 @@
                     <x-nav-link :href="route('children.index')" :active="request()->routeIs('children.*')">
                         {{ __('Anak Saya') }}
                     </x-nav-link>
+                    @if (auth()->user()->isFacilityAdmin())
+                        <x-nav-link :href="route('facility.dashboard')" :active="request()->routeIs('facility.*')">
+                            {{ __('Fasilitas') }}
+                        </x-nav-link>
+                    @endif
                     @if (in_array(auth()->user()->role, ['parent', 'tenant_admin']))
                         <x-nav-link :href="route('subscription.plans')" :active="request()->routeIs('subscription.*')">
                             {{ __('Paket Langganan') }}
@@ -196,6 +201,11 @@
             <x-responsive-nav-link :href="route('children.index')" :active="request()->routeIs('children.*')">
                 {{ __('👶 Anak Saya') }}
             </x-responsive-nav-link>
+            @if (auth()->user()->isFacilityAdmin())
+                <x-responsive-nav-link :href="route('facility.dashboard')" :active="request()->routeIs('facility.*')">
+                    {{ __('🏥 Fasilitas') }}
+                </x-responsive-nav-link>
+            @endif
             @if (in_array(auth()->user()->role, ['parent', 'tenant_admin']))
                 <x-responsive-nav-link :href="route('subscription.plans')" :active="request()->routeIs('subscription.*')">
                     {{ __('💳 Paket Langganan') }}

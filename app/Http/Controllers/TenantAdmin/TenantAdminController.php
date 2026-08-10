@@ -25,7 +25,7 @@ class TenantAdminController extends Controller
         // Statistik tenant
         $totalChildren = Child::where('tenant_id', $tenant->id)->count();
         $totalTimelines = Timeline::where('tenant_id', $tenant->id)->count();
-        $totalPhotos = Media::where('tenant_id', $tenant->id)->where('type', 'photo')->count();
+        $totalPhotos = Media::where('tenant_id', $tenant->id)->where('file_type', 'photo')->count();
         $totalDocuments = Document::where('tenant_id', $tenant->id)->count();
         $totalDiaries = Diary::where('tenant_id', $tenant->id)->count();
 
