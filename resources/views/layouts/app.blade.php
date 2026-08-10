@@ -70,13 +70,53 @@
         <!-- Toast Notifications -->
         <x-toast />
 
-        <!-- Keyboard Shortcut: Ctrl+K → Search -->
-        <div x-data x-init="document.addEventListener('keydown', (e) => {
+        <!-- Keyboard Shortcuts -->
+        <div x-data="{
+            showHelp: false,
+            shortcuts: [
+                { keys: 'Ctrl + K', label: 'Pencarian' },
+                { keys: 'Ctrl + N', label: 'Tambah Anak' },
+                { keys: 'Esc', label: 'Tutup modal/dropdown' },
+                { keys: '?', label: 'Tampilkan bantuan ini' }
+            ]
+        }" x-init="document.addEventListener('keydown', (e) => {
+            // Ignore if user is typing in an input/textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 window.location.href = '{{ route('search.index') }}';
             }
-        })" x-cloak></div>
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                window.location.href = '{{ route('children.create') }}';
+            }
+            if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+                e.preventDefault();
+                showHelp = !showHelp;
+            }
+            if (e.key === 'Escape') {
+                showHelp = false;
+            }
+        })" x-cloak>
+            <!-- Keyboard Shortcuts Help Modal -->
+            <div x-show="showHelp" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-[60] flex items-center justify-center p-4" style="display: none;">
+                <div class="absolute inset-0 bg-gray-500/70 dark:bg-gray-900/70" @click="showHelp = false"></div>
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-sm w-full p-6 border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">⌨️ Pintasan Keyboard</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Navigasi lebih cepat dengan pintasan keyboard</p>
+                    <div class="space-y-3">
+                        <template x-for="shortcut in shortcuts" :key="shortcut.keys">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600 dark:text-gray-300" x-text="shortcut.label"></span>
+                                <kbd class="px-2 py-1 text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg border border-gray-200 dark:border-gray-600" x-text="shortcut.keys"></kbd>
+                            </div>
+                        </template>
+                    </div>
+                    <button @click="showHelp = false" class="mt-5 w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl text-sm font-medium transition min-h-[44px]">Tutup</button>
+                </div>
+            </div>
+        </div>
 
         <!-- PWA Service Worker Registration -->
         <script>

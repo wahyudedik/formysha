@@ -93,15 +93,15 @@
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                         <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 Grafik Metrik</h3>
                         <div class="flex gap-2">
-                            <a href="{{ route('enterprise.analytics', ['days' => 7]) }}"
+                            <a href="{{ route('admin.enterprise.analytics', ['days' => 7]) }}"
                                class="min-h-[44px] inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium transition-colors {{ $days == 7 ? 'bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
                                 7 Hari
                             </a>
-                            <a href="{{ route('enterprise.analytics', ['days' => 30]) }}"
+                            <a href="{{ route('admin.enterprise.analytics', ['days' => 30]) }}"
                                class="min-h-[44px] inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium transition-colors {{ $days == 30 ? 'bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
                                 30 Hari
                             </a>
-                            <a href="{{ route('enterprise.analytics', ['days' => 90]) }}"
+                            <a href="{{ route('admin.enterprise.analytics', ['days' => 90]) }}"
                                class="min-h-[44px] inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium transition-colors {{ $days == 90 ? 'bg-skyBlue-100 dark:bg-skyBlue-950/30 text-skyBlue-700 dark:text-skyBlue-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
                                 90 Hari
                             </a>

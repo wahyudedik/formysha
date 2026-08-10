@@ -14,3 +14,6 @@ Schedule::command('subscription:send-reminders')->dailyAt('08:00');
 
 // Backup cleanup — run weekly on Sunday at 03:00
 Schedule::command('backup:child-data', ['--cleanup' => '30'])->weekly()->sundays()->at('03:00');
+
+// Milestone alerts — run daily at 06:00
+Schedule::command('milestone:check')->dailyAt('06:00');

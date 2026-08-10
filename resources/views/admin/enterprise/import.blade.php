@@ -41,7 +41,7 @@
                         formData.append('file', $refs.file.files[0]);
                         formData.append('_token', '{{ csrf_token() }}');
 
-                        fetch('{{ route('enterprise.process-import') }}', {
+                        fetch('{{ route('admin.enterprise.process-import') }}', {
                             method: 'POST',
                             headers: { 'Accept': 'application/json' },
                             body: formData

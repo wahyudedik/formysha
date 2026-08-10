@@ -10,6 +10,8 @@
         ['route' => 'health.index', 'label' => 'Kesehatan', 'icon' => '🏥', 'param' => 'child'],
         ['route' => 'documents.index', 'label' => 'Dokumen', 'icon' => '📄', 'param' => 'child'],
         ['route' => 'calendar.index', 'label' => 'Kalender', 'icon' => '📅', 'param' => 'child'],
+        ['route' => 'achievements.index', 'label' => 'Pencapaian', 'icon' => '🏆', 'param' => 'child'],
+        ['route' => 'milestones.index', 'label' => 'Milestone', 'icon' => '🎯', 'param' => 'child'],
         ['route' => 'family.index', 'label' => 'Keluarga', 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
         ['route' => 'profile.edit', 'label' => 'Pengaturan', 'icon' => '⚙️', 'param' => null],
     ];

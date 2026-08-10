@@ -27,7 +27,7 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 transform translate-y-0"
         x-transition:leave-end="opacity-0 transform -translate-y-2"
-        class="fixed top-4 right-4 z-50 max-w-sm w-full"
+        class="fixed top-4 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:right-4 sm:left-auto z-50 max-w-sm w-[calc(100%-2rem)] sm:w-full"
     >
         <div class="flex items-center gap-3 p-4 rounded-2xl border shadow-lg" :class="colors[type]">
             <span class="text-lg" x-text="icons[type]"></span>

@@ -25,7 +25,7 @@
                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Kirim Undangan Baru</h3>
                     <form x-data="{ sending: false, toast: { show: false, message: '', type: 'error' } }" @submit.prevent="
                         sending = true;
-                        fetch('{{ route('enterprise.invite') }}', {
+                        fetch('{{ route('admin.enterprise.invite') }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -147,7 +147,7 @@
                                             id="delete-invitation-{{ $invitation->id }}"
                                             title="{{ __('Batalkan Undangan') }}"
                                             message="{{ __('Apakah Anda yakin ingin membatalkan undangan untuk') }} '{{ $invitation->email }}'? {{ __('Tindakan ini tidak dapat dibatalkan.') }}"
-                                            action="{{ route('enterprise.revoke-invitation', $invitation) }}"
+                                            action="{{ route('admin.enterprise.revoke-invitation', $invitation) }}"
                                         />
                                     @endforeach
                                 </tbody>

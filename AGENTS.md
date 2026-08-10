@@ -832,6 +832,28 @@ public/favicon.ico   → Favicon legacy
 * **Data Validation**: Document type standardisasi, date field konsisten
 * **New Tests**: CacheServiceTest (6), SubscriptionLifecycleTest (6) — total 516 tests, 1174 assertions
 
+#### Phase 11 — Comprehensive Audit & Security Hardening ✅
+
+* **Security Fix**: Hardcoded bank account details diganti empty string fallback
+* **Environment Sync**: `.env.example` tambah `SAAS_DEFAULT_TENANT_ID`
+* **PHP Version Update**: `update.sh` PHP_VERSION 8.3 → 8.4
+* **Route & Link Audit**: 284 routes, dead links enterprise views diperbaiki
+* **Responsive Tables**: Semua tabel pakai `overflow-x-auto`
+* **Loading States**: 32 form submit dengan Alpine.js loading states
+* **Open Graph Meta Tags**: Public profile page
+* **Empty State Standardization**: Calendar & notifications → `<x-empty-state>`
+* **Clean Code**: Laravel Pint passed, 516 tests (1174 assertions)
+
+#### Phase 12 — Verification, Enhancement & Advanced Features ✅
+
+* **Keyboard Shortcuts**: Ctrl+N (new), ? (help), Escape (close modal)
+* **Toast Mobile Positioning**: Center di mobile, right di desktop
+* **Print-Friendly CSS**: Rules untuk documents, health, growth, charts, family
+* **Achievement System**: 11 tipe pencapaian, service-based, AchievementController, AchievementService
+* **Milestone Alerts**: 5 tipe milestone (birthday, monthly_age, yearly_age, growth_record, immunization), scheduled command `milestone:check`
+* **New Tests**: AchievementTest (7), AchievementServiceTest (4), MilestoneTest (7), MilestoneServiceTest (6) — total 540 tests, 1226 assertions
+* **Bug Fix**: `whereDate` untuk `milestone_date` comparison di MilestoneService
+
 ### Keunggulan Kompetitif
 
 * Fokus pada **Digital Life Book**, bukan sekadar album foto.
@@ -1038,14 +1060,15 @@ All Blade views MUST follow these responsive patterns consistently:
 
 ### Quality Assurance
 
-* **Total Tests**: 516 tests, 1174 assertions — all passing
+* **Total Tests**: 540 tests, 1226 assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
-* **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit
+* **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit, Achievement, Milestone
 * **API Tests**: AuthTest, ChildApiTest, TimelineApiTest, DiaryApiTest, AlbumApiTest, GrowthApiTest, HealthApiTest, EventApiTest, FamilyApiTest, NotificationApiTest, SearchApiTest, PlanApiTest, DashboardApiTest, SuperAdminApiTest, WebhookApiTest, LanguageApiTest, WhiteLabelApiTest, DomainApiTest, PluginApiTest, EnterpriseApiTest
-* **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, ImageOptimizationService, SearchService, NotificationService, CacheService, Album, Child, Diary
+* **Unit Tests**: DashboardService, ExportService, GrowthService, TenantService, SubscriptionService, AuditService, ImageOptimizationService, SearchService, NotificationService, CacheService, AchievementService, MilestoneService, Album, Child, Diary
 * **Feature Tests (Phase 10)**: SubscriptionLifecycleTest (6 tests)
-* **QA Audit**: Phase 1-10 selesai, semua tests passing, Pint formatting applied
+* **Feature Tests (Phase 12)**: AchievementTest (7), AchievementServiceTest (4), MilestoneTest (7), MilestoneServiceTest (6) — 25 tests baru
+* **QA Audit**: Phase 1-12 selesai, semua tests passing, Pint formatting applied
 * **Loading States**: Alpine.js loading states pada semua form submit (25 form):
   - Core: children, timeline, albums, diaries, growth, health, documents, calendar, family, auth (login, register)
   - Admin: subscription/payment-upload, super-admin/tenants (create/edit), super-admin/plans (create/edit)

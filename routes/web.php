@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ChildController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MilestoneController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
@@ -126,6 +128,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/children/{child}/health/{healthRecord}/edit', [HealthController::class, 'edit'])->name('health.edit');
         Route::put('/children/{child}/health/{healthRecord}', [HealthController::class, 'update'])->name('health.update');
         Route::delete('/children/{child}/health/{healthRecord}', [HealthController::class, 'destroy'])->name('health.destroy');
+
+        // Achievement routes (nested under children)
+        Route::get('/children/{child}/achievements', [AchievementController::class, 'index'])->name('achievements.index');
+        Route::post('/children/{child}/achievements/check', [AchievementController::class, 'check'])->name('achievements.check');
+
+        // Milestone routes (nested under children)
+        Route::get('/children/{child}/milestones', [MilestoneController::class, 'index'])->name('milestones.index');
+        Route::post('/children/{child}/milestones/check', [MilestoneController::class, 'check'])->name('milestones.check');
+        Route::post('/children/{child}/milestones/{milestoneAlert}/dismiss', [MilestoneController::class, 'dismiss'])->name('milestones.dismiss');
 
         // Export routes (nested under children) — throttled to prevent abuse
         Route::get('/children/{child}/export/profile', [ExportController::class, 'childProfile'])->name('export.profile')->middleware('throttle:5,1');

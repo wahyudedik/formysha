@@ -226,6 +226,45 @@
     nav[role="navigation"] {
         display: none !important;
     }
+
+    /* Document views — full width for certificates */
+    .document-preview,
+    .document-card {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 16px !important;
+    }
+
+    /* Health & Growth records — clean layout */
+    .health-record,
+    .growth-record,
+    .timeline-event {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #e5e7eb !important;
+        padding: 12px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Charts — ensure visibility */
+    canvas,
+    svg.chart {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Family member cards */
+    .family-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Growth chart wrapper */
+    .growth-chart-container {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
 }
 
 /* Print header (hidden on screen) */
