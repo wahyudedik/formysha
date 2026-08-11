@@ -44,7 +44,7 @@
                                     <p class="text-sm font-medium text-softPink-700 dark:text-softPink-300">{{ __('Kode Tautan') }}</p>
                                     <p class="text-2xl font-bold text-softPink-800 dark:text-softPink-200 font-mono tracking-wider">{{ $patientLink->link_code }}</p>
                                 </div>
-                                <button type="button" onclick="navigator.clipboard.writeText('{{ $patientLink->link_code }}')" class="inline-flex items-center justify-center gap-1 px-4 py-2 bg-softPink-500 hover:bg-softPink-600 text-white font-medium rounded-xl text-sm transition min-h-[44px]">
+                                <button type="button" onclick="const v='{{ $patientLink->link_code }}'; if(navigator.clipboard){navigator.clipboard.writeText(v)}else{const t=document.createElement('textarea');t.value=v;t.style.position='fixed';t.style.left='-9999px';document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t)}" class="inline-flex items-center justify-center gap-1 px-4 py-2 bg-softPink-500 hover:bg-softPink-600 text-white font-medium rounded-xl text-sm transition min-h-[44px]">
                                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                     </svg>

@@ -15,7 +15,7 @@
                 @if ($child->is_public)
                     <button type="button"
                             x-data="{ copied: false }"
-                            x-on:click="navigator.clipboard.writeText('{{ url('/' . $child->slug) }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                            x-on:click="const url='{{ url('/' . $child->slug) }}'; if(navigator.clipboard){navigator.clipboard.writeText(url)}else{const t=document.createElement('textarea');t.value=url;t.style.position='fixed';t.style.left='-9999px';document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t)}; copied = true; setTimeout(() => copied = false, 2000)"
                             class="inline-flex items-center justify-center gap-1 px-3 py-2 bg-mintGreen-100 dark:bg-mintGreen-950/30 border border-mintGreen-200 dark:border-mintGreen-800 text-mintGreen-700 dark:text-mintGreen-400 font-medium rounded-xl text-sm hover:bg-mintGreen-200 dark:hover:bg-mintGreen-900/40 transition min-h-[44px]">
                         <svg x-show="!copied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />

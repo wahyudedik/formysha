@@ -50,7 +50,7 @@
                         <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="font-bold text-sm text-gray-800 dark:text-gray-100">{{ $bankName }}</span>
-                                <button type="button" class="text-xs text-skyBlue-600 hover:text-skyBlue-700" x-data x-on:click="navigator.clipboard.writeText('{{ $bankInfo['account'] }}'); $el.textContent = '{{ __('Tersalin!') }}'; setTimeout(() => $el.textContent = '{{ __('Salin') }}', 2000)">
+                                <button type="button" class="text-xs text-skyBlue-600 hover:text-skyBlue-700" x-data x-on:click="const v='{{ $bankInfo['account'] }}'; if(navigator.clipboard){navigator.clipboard.writeText(v)}else{const t=document.createElement('textarea');t.value=v;t.style.position='fixed';t.style.left='-9999px';document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t)}; $el.textContent = '{{ __('Tersalin!') }}'; setTimeout(() => $el.textContent = '{{ __('Salin') }}', 2000)">
                                     📋 {{ __('Salin') }}
                                 </button>
                             </div>

@@ -31,7 +31,7 @@
                             <option value="">{{ __('Pilih Fasilitas') }}</option>
                             @foreach ($tenants as $tenant)
                                 <option value="{{ $tenant->id }}" {{ old('tenant_id') == $tenant->id ? 'selected' : '' }}>
-                                    {{ $tenant->name }}{{ $tenant->type ? ' (' . $tenant->type . ')' : '' }}
+                                    {{ $tenant->name }}{{ $tenant->type ? ' (' . $tenant->type->label() . ')' : '' }}
                                 </option>
                             @endforeach
                         </select>

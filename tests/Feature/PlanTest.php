@@ -87,10 +87,16 @@ describe('Plan Management (Super Admin)', function () {
         // Run the seeder
         (new PlanSeeder)->run();
 
-        expect(Plan::count())->toBe(4);
+        // B2C plans: free, family, family-plus, family-pro
+        // B2B plans: b2b-basic, b2b-growth, b2b-pro, enterprise
+        expect(Plan::count())->toBe(8);
         expect(Plan::where('slug', 'free')->exists())->toBeTrue();
-        expect(Plan::where('slug', 'basic')->exists())->toBeTrue();
-        expect(Plan::where('slug', 'premium')->exists())->toBeTrue();
+        expect(Plan::where('slug', 'family')->exists())->toBeTrue();
+        expect(Plan::where('slug', 'family-plus')->exists())->toBeTrue();
+        expect(Plan::where('slug', 'family-pro')->exists())->toBeTrue();
+        expect(Plan::where('slug', 'b2b-basic')->exists())->toBeTrue();
+        expect(Plan::where('slug', 'b2b-growth')->exists())->toBeTrue();
+        expect(Plan::where('slug', 'b2b-pro')->exists())->toBeTrue();
         expect(Plan::where('slug', 'enterprise')->exists())->toBeTrue();
     });
 

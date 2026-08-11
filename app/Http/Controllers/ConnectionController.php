@@ -36,7 +36,7 @@ class ConnectionController extends Controller
     public function create(Request $request, Child $child): View
     {
         $children = $request->user()->children()->get();
-        $tenants = Tenant::where('status', 'active')->orderBy('name')->get();
+        $tenants = Tenant::where('is_active', true)->orderBy('name')->get();
 
         return view('connections.create', [
             'child' => $child,

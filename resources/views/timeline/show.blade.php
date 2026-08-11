@@ -184,10 +184,24 @@
                     }
                 },
                 copyLink() {
-                    navigator.clipboard.writeText(this.shareUrl).then(() => {
+                    const text = this.shareUrl;
+                    const doCopy = () => {
                         this.copied = true;
                         setTimeout(() => this.copied = false, 2000);
-                    });
+                    };
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(text).then(doCopy);
+                    } else {
+                        const t = document.createElement('textarea');
+                        t.value = text;
+                        t.style.position = 'fixed';
+                        t.style.left = '-9999px';
+                        document.body.appendChild(t);
+                        t.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(t);
+                        doCopy();
+                    }
                 },
                 copied: false
             }">

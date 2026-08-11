@@ -282,6 +282,7 @@ class FamilyAndFacilitySeeder extends Seeder
         $clinic = Tenant::firstOrCreate(
             ['slug' => 'klinik-sehat-bunda'],
             [
+                'id' => (string) Str::uuid(),
                 'name' => 'Klinik Sehat Bunda',
                 'type' => TenantType::Clinic,
                 'is_active' => true,
