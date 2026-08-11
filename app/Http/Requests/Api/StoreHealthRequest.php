@@ -23,7 +23,7 @@ class StoreHealthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required', 'string', 'in:immunization,disease,medication,allergy,checkup,vaccination'],
+            'type' => ['required', 'string', 'in:immunization,illness,medication,allergy,checkup,other'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'date' => ['required', 'date'],

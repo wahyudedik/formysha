@@ -63,23 +63,72 @@
                         </div>
 
                         <!-- File Upload -->
-                        <div class="mb-5">
+                        <div class="mb-5" x-data="{ fileName: '', fileSize: '', filePreview: '', fileCategory: '' }">
                             <x-input-label for="file" :value="__('Ganti File (opsional)')" />
-                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl hover:border-skyBlue-400 transition bg-gradient-to-br from-skyBlue-50/50 to-lavender-50/50 dark:from-skyBlue-950/20 dark:to-lavender-950/20">
-                                <div class="space-y-2 text-center">
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl hover:border-skyBlue-400 transition bg-gradient-to-br from-skyBlue-50/50 to-lavender-50/50 dark:from-skyBlue-950/20 dark:to-lavender-950/20 cursor-pointer"
+                                 @click="$refs.docFileInput.click()">
+                                {{-- Current file info --}}
+                                <div x-show="!fileName" class="space-y-2 text-center">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 24">
                                         <path d="M28 8H20a4 4 0 00-4 4v12a4 4 0 004 4h16a4 4 0 004-4V12a4 4 0 00-4-4h-8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                                         <path d="M24 16v-8m0 0l-3 3m3-3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                                     </svg>
                                     <div class="flex text-sm text-gray-600 dark:text-gray-300 justify-center">
-                                        <label for="file" class="relative cursor-pointer rounded-xl font-medium text-skyBlue-600 hover:text-skyBlue-500">
-                                            <span>{{ __('Pilih file baru') }}</span>
-                                            <input id="file" name="file" type="file" class="sr-only" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                                        </label>
+                                        <span class="font-medium text-skyBlue-600">{{ __('Pilih file baru') }}</span>
                                     </div>
                                     <p class="text-xs text-gray-400 dark:text-gray-500">File saat ini: {{ $document->file_name }}</p>
                                 </div>
+                                {{-- Preview State --}}
+                                <div x-show="fileName" class="space-y-3 text-center">
+                                    <template x-if="fileCategory === 'image' && filePreview">
+                                        <div class="relative inline-block">
+                                            <img :src="filePreview" class="max-h-32 max-w-full rounded-xl shadow-soft object-contain mx-auto" :alt="fileName" />
+                                            <div class="absolute -top-2 -right-2 bg-mintGreen-500 rounded-full p-1">
+                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template x-if="fileCategory !== 'image'">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-16 h-16 rounded-2xl bg-skyBlue-100 dark:bg-skyBlue-950/30 flex items-center justify-center mb-2">
+                                                <span class="text-3xl" x-text="fileCategory === 'pdf' ? '📕' : '📄'"></span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate max-w-[250px]" x-text="fileName"></p>
+                                        <p class="text-xs text-gray-400 dark:text-gray-500" x-text="fileSize"></p>
+                                    </div>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-600 dark:text-mintGreen-400 text-xs font-medium">
+                                        ✓ {{ __('File baru siap diunggah') }}
+                                    </span>
+                                </div>
                             </div>
+                            <input id="file" name="file" type="file" class="sr-only" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                   x-ref="docFileInput"
+                                   @change="
+                                       const file = $event.target.files[0];
+                                       if (file) {
+                                           fileName = file.name;
+                                           const ext = file.name.split('.').pop().toLowerCase();
+                                           if (['jpg','jpeg','png','gif','webp'].includes(ext)) {
+                                               fileCategory = 'image';
+                                               filePreview = URL.createObjectURL(file);
+                                           } else if (ext === 'pdf') {
+                                               fileCategory = 'pdf';
+                                               filePreview = '';
+                                           } else {
+                                               fileCategory = 'file';
+                                               filePreview = '';
+                                           }
+                                           if (file.size >= 1048576) fileSize = (file.size / 1048576).toFixed(2) + ' MB';
+                                           else if (file.size >= 1024) fileSize = (file.size / 1024).toFixed(2) + ' KB';
+                                           else fileSize = file.size + ' B';
+                                       }
+                                   "
+                            >
                             <x-input-error :messages="$errors->get('file')" class="mt-2" />
                         </div>
 

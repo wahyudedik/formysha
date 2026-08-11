@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('health.update', [$child, $healthRecord]) }}" method="POST" class="space-y-6" x-data="{ loading: false }" @submit="loading = true">
+            <form action="{{ route('health.update', [$child, $healthRecord]) }}" method="POST" class="space-y-6" x-data="{ loading: false, selectedType: '{{ old('type', $healthRecord->type) }}' }" @submit="loading = true">
                 @csrf
                 @method('PUT')
 
@@ -43,8 +43,12 @@
                             ];
                         @endphp
                         @foreach ($types as $typeKey => $typeInfo)
-                            <label class="flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition {{ old('type', $healthRecord->type) === $typeKey ? 'border-skyBlue-500 bg-skyBlue-50 dark:bg-skyBlue-950/30' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500' }}">
-                                <input type="radio" name="type" value="{{ $typeKey }}" {{ old('type', $healthRecord->type) === $typeKey ? 'checked' : '' }} class="hidden">
+                            <label
+                                class="flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition min-h-[44px]"
+                                :class="selectedType === '{{ $typeKey }}' ? 'border-skyBlue-500 bg-skyBlue-50 dark:bg-skyBlue-950/30' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+                                @click="selectedType = '{{ $typeKey }}'"
+                            >
+                                <input type="radio" name="type" value="{{ $typeKey }}" x-model="selectedType" class="hidden">
                                 <span class="text-lg">{{ $typeInfo['icon'] }}</span>
                                 <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ $typeInfo['label'] }}</span>
                             </label>

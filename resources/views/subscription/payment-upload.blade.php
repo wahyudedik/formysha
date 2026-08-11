@@ -98,24 +98,44 @@
                     {{-- Proof --}}
                     <div>
                         <x-input-label for="proof" :value="__('Bukti Transfer (Gambar)')" />
-                        <div class="mt-2" x-data="{ fileName: '' }">
-                            <div class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-softPink-300 hover:bg-softPink-50/30 dark:hover:bg-softPink-950/20 transition"
+                        <div class="mt-2" x-data="{ fileName: '', filePreview: '' }">
+                            <div class="flex flex-col items-center justify-center w-full min-h-[10rem] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-softPink-300 hover:bg-softPink-50/30 dark:hover:bg-softPink-950/20 transition"
                                  @click="$refs.proofInput.click()">
-                                <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
+                                {{-- Empty State --}}
+                                <div x-show="!fileName" class="flex flex-col items-center justify-center pt-5 pb-6">
                                     <svg class="w-10 h-10 mb-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Klik untuk upload</span></p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">{{ __('Klik untuk upload') }}</span></p>
                                     <p class="text-xs text-gray-400 dark:text-gray-500">PNG, JPG, JPEG (Maks. 5MB)</p>
                                 </div>
-                                <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="fileName">
-                                    <svg class="w-10 h-10 mb-3 text-mintGreen-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 font-medium" x-text="fileName"></p>
+                                {{-- Preview State --}}
+                                <div x-show="fileName" class="flex flex-col items-center justify-center p-4 w-full">
+                                    <template x-if="filePreview">
+                                        <div class="relative mb-3">
+                                            <img :src="filePreview" class="max-h-40 max-w-full rounded-xl shadow-soft object-contain" :alt="fileName" />
+                                            <div class="absolute -top-2 -right-2 bg-mintGreen-500 rounded-full p-1">
+                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 font-medium truncate max-w-full" x-text="fileName"></p>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-600 dark:text-mintGreen-400 text-xs font-medium mt-2">
+                                        ✓ {{ __('Siap diunggah') }}
+                                    </span>
                                 </div>
                             </div>
-                            <input id="proof" name="proof" type="file" x-ref="proofInput" class="sr-only" accept="image/*" required x-on:change="fileName = $event.target.files[0]?.name ?? ''">
+                            <input id="proof" name="proof" type="file" x-ref="proofInput" class="sr-only" accept="image/*" required
+                                   x-on:change="
+                                       const file = $event.target.files[0];
+                                       if (file) {
+                                           fileName = file.name;
+                                           filePreview = URL.createObjectURL(file);
+                                       }
+                                   "
+                            >
                         </div>
                         <x-input-error :messages="$errors->get('proof')" class="mt-1" />
                     </div>

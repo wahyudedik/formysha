@@ -39,7 +39,7 @@ describe('Health API', function () {
             ->assertJsonPath('data.name', 'BCG');
     });
 
-    it('can create a disease record', function () {
+    it('can create an illness record', function () {
         $user = User::factory()->create();
         $token = $user->createToken('test-token')->plainTextToken;
 
@@ -47,14 +47,14 @@ describe('Health API', function () {
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
             ->postJson('/api/v1/children/'.$child->slug.'/health-records', [
-                'type' => 'disease',
+                'type' => 'illness',
                 'name' => 'Demam',
                 'description' => 'Demam tinggi 39°C',
                 'date' => '2025-05-10',
             ]);
 
         $response->assertCreated()
-            ->assertJsonPath('data.type', 'disease')
+            ->assertJsonPath('data.type', 'illness')
             ->assertJsonPath('data.name', 'Demam');
     });
 });

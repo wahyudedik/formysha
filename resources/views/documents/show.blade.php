@@ -98,18 +98,80 @@
                     </div>
 
                     <!-- File Info -->
-                    <div class="p-4 bg-gradient-to-r from-skyBlue-50 to-lavender-50 dark:from-skyBlue-950/30 dark:to-lavender-950/30 rounded-2xl">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ $document->file_name }}</p>
+                    <div class="p-4 bg-gradient-to-r from-skyBlue-50 to-lavender-50 dark:from-skyBlue-950/30 dark:to-lavender-950/30 rounded-2xl"
+                         x-data="{
+                             showPreview: false,
+                             fileExt: '{{ strtolower(pathinfo($document->file_name, PATHINFO_EXTENSION)) }}',
+                             fileUrl: '{{ asset("storage/" . $document->file_path) }}',
+                             isImage: {{ in_array(strtolower(pathinfo($document->file_name, PATHINFO_EXTENSION)), ['jpg','jpeg','png','gif','webp']) ? 'true' : 'false' }}
+                         }">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{{ $document->file_name }}</p>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ $document->formatted_size }}</p>
                             </div>
-                            <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn-primary text-sm min-h-[44px]">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                                {{ __('Download') }}
-                            </a>
+                            <div class="flex items-center gap-2 shrink-0">
+                                {{-- Preview button for images --}}
+                                <template x-if="isImage">
+                                    <button type="button" @click="showPreview = true; document.body.classList.add('overflow-hidden')" class="inline-flex items-center gap-1 px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition min-h-[44px]">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        {{ __('Lihat') }}
+                                    </button>
+                                </template>
+                                {{-- PDF: open in new tab --}}
+                                <template x-if="fileExt === 'pdf'">
+                                    <a :href="fileUrl" target="_blank" class="inline-flex items-center gap-1 px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition min-h-[44px]">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        {{ __('Buka') }}
+                                    </a>
+                                </template>
+                                {{-- Download --}}
+                                <a href="{{ asset('storage/' . $document->file_path) }}" download="{{ $document->file_name }}" class="inline-flex items-center gap-1 px-3 py-2 bg-softPink-500 hover:bg-softPink-600 text-white text-sm font-medium rounded-xl shadow-soft transition min-h-[44px]">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    {{ __('Download') }}
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- Image Preview Lightbox --}}
+                        <div
+                            x-show="showPreview"
+                            x-transition:enter="ease-out duration-300"
+                            x-transition:enter-start="opacity-0"
+                            x-transition:enter-end="opacity-100"
+                            x-transition:leave="ease-in duration-200"
+                            x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0"
+                            class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+                            @click.self="showPreview = false; document.body.classList.remove('overflow-hidden')"
+                            @keydown.escape.window="showPreview = false; document.body.classList.remove('overflow-hidden')"
+                            style="display: none;"
+                        >
+                            <div class="relative max-w-full max-h-full flex flex-col items-center" @click.stop>
+                                <button type="button" @click="showPreview = false; document.body.classList.remove('overflow-hidden')" class="absolute -top-12 right-0 sm:top-0 sm:right-0 text-white hover:text-gray-300 transition p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center z-10">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <p class="text-white text-sm mb-3 text-center truncate max-w-[80vw]">{{ $document->file_name }}</p>
+                                <img :src="fileUrl" alt="{{ $document->name }}" class="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl" />
+                                <div class="flex items-center gap-3 mt-3">
+                                    <a :href="fileUrl" download="{{ $document->file_name }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm rounded-xl transition min-h-[44px]">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                        </svg>
+                                        {{ __('Download') }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

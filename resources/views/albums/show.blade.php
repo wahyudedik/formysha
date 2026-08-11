@@ -94,35 +94,12 @@
                     <p class="text-gray-500 dark:text-gray-400">{{ __('Mulai tambahkan foto dan video ke album ini.') }}</p>
                 </div>
             @else
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" x-data>
                     @foreach ($album->media as $item)
-                        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 shadow-soft">
-                            @if ($item->file_type === 'photo')
-                                <img src="{{ asset('storage/' . $item->file_path) }}" alt="{{ $item->alt_text ?? $item->file_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-                            @elseif ($item->file_type === 'video')
-                                <video src="{{ asset('storage/' . $item->file_path) }}" class="absolute inset-0 w-full h-full object-cover" preload="metadata" controls></video>
-                            @elseif ($item->file_type === 'audio')
-                                <div class="w-full h-full flex flex-col items-center justify-center">
-                                    <span class="text-3xl mb-1">🎵</span>
-                                    <span class="text-xs text-gray-400 dark:text-gray-500">{{ $item->file_name }}</span>
-                                </div>
-                            @else
-                                <div class="w-full h-full flex flex-col items-center justify-center">
-                                    <span class="text-3xl mb-1">📄</span>
-                                    <span class="text-xs text-gray-400 dark:text-gray-500">{{ $item->file_name }}</span>
-                                </div>
-                            @endif
-
-                            <!-- Hover Overlay -->
-                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-end">
-                                <div class="w-full p-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <p class="text-xs font-medium truncate">{{ $item->file_name }}</p>
-                                    <p class="text-xs opacity-75">{{ $item->file_type_label }} · {{ $item->formatted_size }}</p>
-                                </div>
-                            </div>
-
+                        <div class="relative">
+                            <x-media-preview :media="$item" />
                             <!-- Delete Button -->
-                            <button type="button" class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition shadow-lg"
+                            <button type="button" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition shadow-lg z-10"
                                 x-data
                                 x-on:click.prevent="$dispatch('delete-confirm', 'delete-media-{{ $item->id }}')">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -23,7 +23,7 @@ class UpdateHealthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['sometimes', 'required', 'string', 'in:immunization,disease,medication,allergy,checkup,vaccination'],
+            'type' => ['sometimes', 'required', 'string', 'in:immunization,illness,medication,allergy,checkup,other'],
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'date' => ['sometimes', 'required', 'date'],

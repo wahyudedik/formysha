@@ -117,37 +117,12 @@
                         @if ($timeline->media->isEmpty())
                             <p class="text-sm text-gray-400 dark:text-gray-500">{{ __('empty_states.no_media_attached') }}</p>
                         @else
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" x-data>
                                 @foreach ($timeline->media as $media)
-                                    <div class="relative group rounded-2xl overflow-hidden bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 shadow-soft aspect-square">
-                                        @if ($media->file_type === 'photo')
-                                            <img src="{{ asset('storage/' . $media->file_path) }}" alt="{{ $media->alt_text ?? $media->file_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-                                        @elseif ($media->file_type === 'video')
-                                            <video src="{{ asset('storage/' . $media->file_path) }}" class="absolute inset-0 w-full h-full object-cover" preload="metadata" controls></video>
-                                        @elseif ($media->file_type === 'audio')
-                                            <div class="w-full h-full flex flex-col items-center justify-center p-3">
-                                                <span class="text-4xl mb-2">🎵</span>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-full">{{ $media->file_name }}</p>
-                                                <p class="text-xs text-gray-400 dark:text-gray-500">{{ $media->formatted_size }}</p>
-                                            </div>
-                                        @else
-                                            <div class="w-full h-full flex flex-col items-center justify-center p-3">
-                                                <span class="text-4xl mb-2">📄</span>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-full">{{ $media->file_name }}</p>
-                                                <p class="text-xs text-gray-400 dark:text-gray-500">{{ $media->formatted_size }}</p>
-                                            </div>
-                                        @endif
-
-                                        <!-- Hover Overlay -->
-                                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-end">
-                                            <div class="w-full p-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <p class="text-xs font-medium truncate">{{ $media->file_name }}</p>
-                                                <p class="text-xs opacity-75">{{ $media->file_type_label }} · {{ $media->formatted_size }}</p>
-                                            </div>
-                                        </div>
-
+                                    <div class="relative">
+                                        <x-media-preview :media="$media" />
                                         <!-- Delete Button -->
-                                        <button type="button" class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition shadow-lg"
+                                        <button type="button" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition shadow-lg z-10"
                                             x-data
                                             x-on:click.prevent="$dispatch('delete-confirm', 'delete-media-{{ $media->id }}')">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
