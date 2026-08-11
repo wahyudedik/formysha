@@ -74,7 +74,7 @@ class TenantController extends Controller
                 ->with('user')
                 ->get();
 
-            $patientLinks = $tenant->patientLinks()->with('user')->get();
+            $patientLinks = $tenant->patientLinks()->with('parentUser')->get();
 
             $clinicalNotes = ClinicalNote::where('tenant_id', $tenant->id)
                 ->latest()

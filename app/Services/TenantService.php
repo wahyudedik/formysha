@@ -298,7 +298,7 @@ class TenantService
      */
     public function getTenantPatientLinks(Tenant $tenant): Collection
     {
-        return $tenant->patientLinks()->with(['child', 'user'])->get();
+        return $tenant->patientLinks()->with(['child', 'parentUser'])->get();
     }
 
     /**
