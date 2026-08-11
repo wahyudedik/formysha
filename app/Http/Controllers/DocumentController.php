@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DocumentType;
 use App\Http\Requests\StoreDocumentRequest;
 use App\Http\Requests\UpdateDocumentRequest;
 use App\Models\Child;
@@ -36,16 +37,7 @@ class DocumentController extends Controller
 
         $documents = $query->paginate(12)->withQueryString();
 
-        $documentTypes = [
-            'birth_certificate' => '📜 Akta Lahir',
-            'family_card' => '🏠 Kartu Keluarga',
-            'kia' => '🪪 KIA',
-            'bpjs' => '🏥 BPJS',
-            'passport' => '✈️ Paspor',
-            'certificate' => '🎓 Sertifikat',
-            'report_card' => '📋 Rapor',
-            'other' => '📄 Lainnya',
-        ];
+        $documentTypes = DocumentType::options();
 
         return view('documents.index', [
             'child' => $child,

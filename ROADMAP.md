@@ -1190,6 +1190,142 @@ Audit komprehensif untuk production readiness — bug fixes, security hardening,
 
 ---
 
+## Phase 20 — Comprehensive Audit & Code Quality ✅
+
+Audit kode komprehensif — enum type safety, i18n, type hints, dependency injection, bug fixes, dan test coverage.
+
+### Sub-Phase 20.1 — DocumentType Enum
+
+* **DocumentType Enum**: Buat `app/Enums/DocumentType.php` dengan 8 cases — BirthCertificate, FamilyCard, Kia, Bpjs, Passport, Certificate, ReportCard, Other
+* **Enum Methods**: `label()` (terjemahan ID), `emoji()` (ikon per jenis), `options()` (array untuk form select)
+* **Document Model Cast**: `'type' => DocumentType::class` di casts() — otomatis convert string ke enum
+* **DocumentController**: Menggunakan `DocumentType::options()` menggantikan hardcoded array
+
+### Sub-Phase 20.2 — i18n Translation Keys
+
+* **lang/id/app.php**: 50+ translation keys baru — status.tenant_created, plugin_created, plan_created, payment_approved, payment_rejected, logs_cleared, settings_saved, dll
+* **lang/en/app.php**: 50+ English translations corresponding keys
+* **Document Types**: 8 translation keys untuk document type labels
+* **Coverage**: SuperAdmin, TenantAdmin, FacilityAdmin, Subscription, Notification, Export, Erasure
+
+### Sub-Phase 20.3 — Hardcoded Strings → __() Helper
+
+* **42 hardcoded strings** di 19 controllers/middleware di-wrap dengan `__()` translation helper
+* **SuperAdmin Controllers** (5): TenantController (3), PluginController (3), PlanController (3), PaymentController (2), ErrorLogController (1)
+* **TenantAdmin Controllers** (4): SettingsController (1), PluginController (1), DomainController (3), BrandingController (2)
+* **FacilityAdmin Controllers** (5): StaffController (3), ClinicalNoteController (3), ReferralController (4), PatientLinkController (4), FacilitySettingsController (1)
+* **Core Controllers/Middleware** (5): Subscription/PaymentController (2), NotificationController (2), ExportController (4), EnsureActiveSubscription (1), ErasureController (1)
+* **Pattern**: `with('success', 'hardcoded')` → `with('status', __('status.key'))`
+
+### Sub-Phase 20.4 — Return Type Hints
+
+* **15 methods** di 5 FacilityAdmin controllers ditambah `: RedirectResponse` return type
+* **StaffController**: store, update, destroy
+* **ClinicalNoteController**: store, update, destroy
+* **ReferralController**: store, accept, complete, cancel
+* **PatientLinkController**: store, update, destroy, revoke
+* **FacilitySettingsController**: update
+* **Import**: `use Illuminate\Http\RedirectResponse;` di semua controller
+
+### Sub-Phase 20.5 — MediaService Constructor Injection
+
+* **TimelineController**: Tambah `public function __construct(private MediaService $mediaService) {}`, ganti `$mediaService = new MediaService` → `$this->mediaService`
+* **MediaController**: Tambah `public function __construct(private MediaService $mediaService) {}`, ganti 4 instance `new MediaService` → `$this->mediaService`
+* **Benefit**: Proper DI, testable, single instance per request
+
+### Sub-Phase 20.6 — Tests & QA
+
+* **DocumentTypeTest**: 7 tests — enum cases, string values, labels, emojis, options array, cast from string
+* **DocumentTest Update**: Adapt assertions untuk DocumentType enum cast
+* **Bug Fix — Carbon Import**: Tambah `use Illuminate\Support\Carbon;` di Document model untuk fix "Class App\Models\Carbon not found"
+* **693 tests, 1668 assertions — all passing**
+* Laravel Pint formatting passed
+
+---
+
+## Phase 21 — Architecture Evolution ✅ Selesai
+
+Evolusi arsitektur ForMysha dari Digital Life Book menjadi **Digital Life Book & Family Life Platform** dengan sistem Connection, Family Tree, dan B2B Assisted Registration.
+
+### Sub-Phase 21.1 — Core Architecture Design
+
+* **Identity → Family → Person → Relationship → Organization → Connection → Permission → Collaboration → Audit Trail → Family Tree**
+* **Prinsip: 1 Anak ≠ 1 Akun** — Anak adalah profil/entitas, bukan akun login terpisah
+* **User Account (Orang Tua) → Family → Child Profile → Connection → Organization**
+
+### Sub-Phase 21.2 — 10 Prinsip Inti
+
+1. Satu Akun, Banyak Keluarga & Organisasi
+2. Anak Bukan Akun
+3. Keluarga Adalah Pemilik Data
+4. Organisasi adalah Partner, Bukan Pemilik
+5. Connection ≠ Ownership
+6. Permission-Based Access
+7. Audit Trail Wajib
+8. B2B adalah Gateway ke B2C
+9. Subscription Tied to Family/Organization
+10. Family Tree sebagai Core Feature
+
+### Sub-Phase 21.3 — Connection System
+
+* **Connection Status**: Active, Pending, Referred
+* **Permission Levels**: View, Comment, Edit, Manage
+* Keluarga adalah pemilik data dan mengontrol semua permission
+* Organisasi tidak bisa mengubah permission tanpa persetujuan keluarga
+* Semua akses tercatat dalam Audit Trail
+
+### Sub-Phase 21.4 — B2B Assisted Registration
+
+* Organisasi membuat profil pasien/siswa
+* Keluarga diundang via email/WhatsApp
+* Keluarga membuat akun dan mengklaim profil
+* Data dari organisasi otomatis terhubung
+* Permission diatur oleh keluarga
+
+### Sub-Phase 21.5 — Family Tree
+
+* Visualisasi hubungan keluarga dan organisasi
+* Relationship mapping (ayah, ibu, kakek, nenek, wali)
+* Connection ke organisasi (rumah sakit, sekolah)
+* Permission-based access control
+* Timeline gabungan dari semua hubungan
+
+### Sub-Phase 21.6 — Audit Trail & Activity History
+
+* **Audit Trail Format**: WHO, WHAT, WHEN, WHERE, WHY, PERMISSION
+* **Activity & Access History** di kedua sisi (B2C & B2B)
+* Timeline kronologis semua interaksi
+* Filter berdasarkan user, jenis aksi, tanggal
+
+### Sub-Phase 21.7 — Updated Pricing
+
+#### B2C (Family)
+
+| Paket | Harga | Fitur Utama |
+|-------|-------|-------------|
+| 🟢 Free | Rp0 | 1 anak, 10 foto, 500MB, timeline, gallery, dokumen |
+| 💗 Family | Rp19.000/bulan | 3 anak, 200 foto, 5GB, + growth, health |
+| 💙 Family Plus | Rp39.000/bulan | 5 anak, 500 foto, 15GB, + calendar, export, priority |
+| ⭐ Family Pro | Rp79.000/bulan | 10 anak, unlimited foto, 50GB, + custom API, white label, family tree |
+
+#### B2B (Organization)
+
+| Paket | Harga | Fitur Utama |
+|-------|-------|-------------|
+| 🏥 B2B Basic | Rp299.000/bulan | 50 profil anak, 5 staf, clinical notes |
+| 🏥 B2B Growth | Rp799.000/bulan | 200 profil anak, 20 staf, referrals, analytics |
+| 🏥 B2B Pro | Rp1.999.000/bulan | 1000 profil anak, unlimited staf, API, white label |
+| 🏢 Enterprise | Custom | Custom fitur, dedicated support, SLA |
+
+### Sub-Phase 21.8 — Referral System
+
+* B2B mereferensikan keluarga ke B2C
+* Tracking referral antar organisasi
+* Reward/milestone untuk referral aktif
+* Status: Active, Pending, Referred
+
+---
+
 ## Tujuan Jangka Panjang
 
 ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya oleh jutaan orang tua. Produk dikembangkan secara bertahap, dimulai dari **web SaaS** sebagai fondasi utama, kemudian dapat diperluas ke aplikasi mobile, desktop, dan solusi enterprise sesuai kebutuhan pasar.

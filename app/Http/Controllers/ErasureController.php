@@ -95,6 +95,6 @@ class ErasureController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login')
-            ->with('status', __('Akun dan seluruh data berhasil dihapus permanen.'));
+            ->with('status', __('status.account_deleted_permanently'));
     }
 }

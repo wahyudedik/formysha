@@ -4,6 +4,7 @@ use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\ConsentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiaryController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ErasureController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FamilyMemberController;
+use App\Http\Controllers\FamilyTreeController;
 use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LanguageController;
@@ -156,6 +158,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/children/{child}/albums/{album}/media', [MediaController::class, 'storeForAlbum'])->name('media.store.album')->middleware('feature.limit:photos');
         Route::post('/children/{child}/diaries/{diary}/media', [MediaController::class, 'storeForDiary'])->name('media.store.diary')->middleware('feature.limit:photos');
         Route::delete('/children/{child}/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
+
+        // Connection routes (nested under children)
+        Route::get('/children/{child}/connections', [ConnectionController::class, 'index'])->name('connections.index');
+        Route::get('/children/{child}/connections/create', [ConnectionController::class, 'create'])->name('connections.create');
+        Route::post('/children/{child}/connections', [ConnectionController::class, 'store'])->name('connections.store');
+        Route::get('/children/{child}/connections/{connection}', [ConnectionController::class, 'show'])->name('connections.show');
+        Route::get('/children/{child}/connections/{connection}/edit', [ConnectionController::class, 'edit'])->name('connections.edit');
+        Route::put('/children/{child}/connections/{connection}', [ConnectionController::class, 'update'])->name('connections.update');
+        Route::delete('/children/{child}/connections/{connection}', [ConnectionController::class, 'destroy'])->name('connections.destroy');
+        Route::post('/children/{child}/connections/{connection}/approve', [ConnectionController::class, 'approve'])->name('connections.approve');
+        Route::post('/children/{child}/connections/{connection}/reject', [ConnectionController::class, 'reject'])->name('connections.reject');
+        Route::post('/children/{child}/connections/{connection}/revoke', [ConnectionController::class, 'revoke'])->name('connections.revoke');
+
+        // Family Tree routes (nested under children)
+        Route::get('/children/{child}/family-tree', [FamilyTreeController::class, 'index'])->name('children.family-tree');
 
         // Erasure routes (nested under children) — child deletion
         Route::delete('/children/{child}/erasure', [ErasureController::class, 'destroyChild'])->name('erasure.destroyChild');

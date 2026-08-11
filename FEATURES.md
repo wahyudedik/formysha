@@ -1373,3 +1373,137 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 * **SubscriptionTest — Feature Comparison**: Test verifikasi tabel perbandingan fitur ditampilkan di halaman plans
 * **SubscriptionTest — Inactive Plan**: Test verifikasi subscribe ke inactive plan ditolak dan redirect ke halaman plans
 * **Total Phase 19B**: 7 tests baru — 686 tests, 1589 assertions — all passing
+
+## Comprehensive Audit & Code Quality ✅ (Phase 20)
+
+### DocumentType Enum
+
+* **DocumentType Enum**: Buat `app/Enums/DocumentType.php` — 8 cases (BirthCertificate, FamilyCard, Kia, Bpjs, Passport, Certificate, ReportCard, Other) dengan `label()` (terjemahan ID), `emoji()` (ikon per jenis), `options()` (array untuk form select)
+* **Document Model Cast**: `'type' => DocumentType::class` di casts() — otomatis convert string ke enum saat reading dari database
+* **DocumentController**: Menggunakan `DocumentType::options()` menggantikan hardcoded `$documentTypes` array
+* **getTypeLabelAttribute**: Disederhanakan menjadi `return $this->type->emoji().' '.$this->type->label()`
+
+### i18n Translation Keys
+
+* **lang/id/app.php**: 50+ translation keys baru — status messages untuk SuperAdmin (tenant, plugin, plan, payment, logs), TenantAdmin (settings, plugin, domain, branding), FacilityAdmin (staff, clinical notes, referrals, patient links, settings), Subscription, Notification, Export, Erasure, Document Types
+* **lang/en/app.php**: 50+ English translations corresponding keys
+* **Total**: ~100+ translation keys baru untuk komprehensif i18n coverage
+
+### Hardcoded Strings → __() Helper
+
+* **42 hardcoded strings** di 19 controllers/middleware di-wrap dengan `__()` translation helper
+* **SuperAdmin Controllers**: TenantController (3 strings), PluginController (3), PlanController (3), PaymentController (2), ErrorLogController (1)
+* **TenantAdmin Controllers**: SettingsController (1), PluginController (1), DomainController (3), BrandingController (2)
+* **FacilityAdmin Controllers**: StaffController (3), ClinicalNoteController (3), ReferralController (4), PatientLinkController (4), FacilitySettingsController (1)
+* **Core Controllers/Middleware**: Subscription/PaymentController (2), NotificationController (2), ExportController (4), EnsureActiveSubscription (1), ErasureController (1)
+* **Pattern**: `with('success', 'hardcoded string')` → `with('status', __('status.key'))`
+
+### Return Type Hints
+
+* **15 methods** di 5 FacilityAdmin controllers ditambah `: RedirectResponse` return type declaration
+* **StaffController**: store, update, destroy
+* **ClinicalNoteController**: store, update, destroy
+* **ReferralController**: store, accept, complete, cancel
+* **PatientLinkController**: store, update, destroy, revoke
+* **FacilitySettingsController**: update
+* **Import**: `use Illuminate\Http\RedirectResponse;` ditambahkan di semua controller
+
+### MediaService Constructor Injection
+
+* **TimelineController**: Refaktor dari manual `new MediaService` ke constructor injection — `public function __construct(private MediaService $mediaService) {}`
+* **MediaController**: Refaktor dari 4 instance `new MediaService` ke constructor injection — 4 methods menggunakan `$this->mediaService`
+* **Benefit**: Proper dependency injection, testable, single instance per request, PSR-12 compliant
+
+### Bug Fix — Carbon Import
+
+* **Document Model**: Tambah `use Illuminate\Support\Carbon;` import — fix "Class App\Models\Carbon not found" error
+* **Root Cause**: PHP resolving bare `Carbon` to `App\Models\Carbon` namespace (tidak ada explicit import)
+* **Impact**: Fix error di `getFormattedIssuedDateAttribute()`, `getFormattedExpiryDateAttribute()`, dan `getIsExpiredAttribute()`
+
+### Tests
+
+* **DocumentTypeTest**: 7 tests — enum cases exist, correct string values, non-empty labels, correct emojis, options array, options contain emoji+label, can cast from string
+* **DocumentTest Update**: Adapt assertions untuk DocumentType enum — `toBeInstanceOf(DocumentType::class)`, `DocumentType::Passport`, enum label methods
+* **Total Phase 20**: 7 tests baru — 693 tests, 1668 assertions — all passing
+
+---
+
+## Architecture Evolution — Core Architecture ✅ (Phase 21)
+
+### Core Architecture Concept
+
+* **Identity → Family → Person → Relationship → Organization → Connection → Permission → Collaboration → Audit Trail → Family Tree**
+* **Prinsip: 1 Anak ≠ 1 Akun** — Anak adalah profil/entitas, bukan akun login terpisah
+* **User Account (Orang Tua) → Family → Child Profile → Connection → Organization**
+* Satu orang tua bisa memiliki banyak anak. Satu anak bisa terhubung ke banyak organisasi. Satu akun = satu identitas digital.
+
+### 10 Prinsip Inti
+
+1. **Satu Akun, Banyak Keluarga & Organisasi** — Login sekali, akses semua
+2. **Anak Bukan Akun** — Anak adalah profil/entitas, bukan akun login terpisah
+3. **Keluarga Adalah Pemilik Data** — Organisasi hanya memiliki akses berdasarkan permission
+4. **Organisasi adalah Partner, Bukan Pemilik** — Akses diatur oleh permission level
+5. **Connection ≠ Ownership** — Terhubung tidak berarti memiliki
+6. **Permission-Based Access** — View, Comment, Edit, Manage
+7. **Audit Trail Wajib** — WHO, WHAT, WHEN, WHERE, WHY, PERMISSION
+8. **B2B adalah Gateway ke B2C** — Organisasi membantu registrasi keluarga baru
+9. **Subscription Tied to Family/Organization** — Bukan individual user
+10. **Family Tree sebagai Core Feature** — Fondasi yang menghubungkan semua data
+
+### Connection System
+
+* **Connection Status**: Active (hubungan aktif), Pending (menunggu persetujuan), Referred (direferensikan organisasi lain)
+* **Permission Levels**: View (lihat saja), Comment (lihat + komentar), Edit (lihat + edit), Manage (full akses)
+* Keluarga adalah pemilik data dan mengontrol semua permission
+* Organisasi tidak bisa mengubah permission tanpa persetujuan keluarga
+* Semua akses tercatat dalam Audit Trail
+* Connection bisa diakhiri kapan saja oleh pemilik data
+
+### B2B Assisted Registration
+
+* Organisasi membuat profil pasien/siswa
+* Keluarga diundang via email/WhatsApp
+* Keluarga membuat akun dan mengklaim profil
+* Data dari organisasi otomatis terhubung
+* Permission diatur oleh keluarga
+* B2B membantu akuisisi B2C yang powerful
+
+### Family Tree
+
+* **Visualisasi hubungan keluarga dan organisasi** — Fondasi data, bukan sekadar fitur visual
+* **Relationship Types**: Keluarga (Ayah, Ibu, Kakek, Nenek, Wali, Saudara), Organisasi (RS, Klinik, Sekolah, Daycare, Posyandu), Campuran (Keluarga ↔ Organisasi melalui Connection)
+* **Permission-based**: Setiap hubungan memiliki level akses tersendiri
+* **Activity & Access History**: Log semua akses ke profil anak di kedua sisi (B2C & B2B)
+
+### Audit Trail
+
+* **Format**: WHO (user_id — user_name), WHAT (action — entity_type entity_id), WHEN (timestamp), WHERE (ip_address — device — user_agent), WHY (reason, optional), PERMISSION (permission_level — connection_id)
+* **Scope**: Semua aksi pada data keluarga, akses organisasi, perubahan permission, login/logout
+* **Activity & Access History** di kedua sisi — timeline kronologis semua interaksi
+
+### Referral System
+
+* B2B mereferensikan keluarga ke B2C
+* Tracking referral antar organisasi
+* Reward/milestone untuk referral aktif
+* Status: Active, Pending, Referred
+
+### Updated Pricing
+
+#### B2C (Family)
+
+| Paket | Harga | Fitur Utama |
+|-------|-------|-------------|
+| 🟢 Free | Rp0 | 1 anak, 10 foto, 500MB, timeline, gallery, dokumen |
+| 💗 Family | Rp19.000/bulan | 3 anak, 200 foto, 5GB, + growth, health |
+| 💙 Family Plus | Rp39.000/bulan | 5 anak, 500 foto, 15GB, + calendar, export, priority |
+| ⭐ Family Pro | Rp79.000/bulan | 10 anak, unlimited foto, 50GB, + custom API, white label, family tree |
+
+#### B2B (Organization)
+
+| Paket | Harga | Fitur Utama |
+|-------|-------|-------------|
+| 🏥 B2B Basic | Rp299.000/bulan | 50 profil anak, 5 staf, clinical notes |
+| 🏥 B2B Growth | Rp799.000/bulan | 200 profil anak, 20 staf, referrals, analytics |
+| 🏥 B2B Pro | Rp1.999.000/bulan | 1000 profil anak, unlimited staf, API, white label |
+| 🏢 Enterprise | Custom | Custom fitur, dedicated support, SLA |

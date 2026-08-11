@@ -32,7 +32,7 @@ class EnsureActiveSubscription
 
         if ($tenant && ! $this->cacheService->isSubscriptionActive($tenant)) {
             return redirect()->route('subscription.plans')
-                ->with('warning', 'Anda perlu mengaktifkan paket berlangganan.');
+                ->with('warning', __('status.subscription_warning'));
         }
 
         return $next($request);

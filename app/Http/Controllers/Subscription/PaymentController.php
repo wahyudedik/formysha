@@ -42,7 +42,7 @@ class PaymentController extends Controller
 
         if (! $tenant) {
             return redirect()->route('dashboard')
-                ->with('error', 'Anda belum memiliki organisasi.');
+                ->with('error', __('status.no_organization'));
         }
 
         // Verify the subscription belongs to this tenant to prevent unauthorized payment submissions.
@@ -69,6 +69,6 @@ class PaymentController extends Controller
         ]);
 
         return redirect()->route('subscription.current')
-            ->with('success', 'Bukti pembayaran berhasil dikirim. Menunggu verifikasi admin.');
+            ->with('status', __('status.payment_proof_sent'));
     }
 }

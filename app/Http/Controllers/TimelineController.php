@@ -13,6 +13,10 @@ use Illuminate\View\View;
 
 class TimelineController extends Controller
 {
+    public function __construct(
+        private MediaService $mediaService,
+    ) {}
+
     /**
      * Display a listing of timeline entries for a child.
      */
@@ -81,8 +85,7 @@ class TimelineController extends Controller
 
         // Handle media upload
         if (! empty($mediaFiles)) {
-            $mediaService = new MediaService;
-            $mediaService->uploadMultiple($mediaFiles, $timeline);
+            $this->mediaService->uploadMultiple($mediaFiles, $timeline);
         }
 
         return redirect()->route('timeline.index', $child)

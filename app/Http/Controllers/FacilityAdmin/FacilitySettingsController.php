@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FacilityAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Facility;
 use App\Services\TenantService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -28,7 +29,7 @@ class FacilitySettingsController extends Controller
     /**
      * Update facility settings.
      */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
 
@@ -86,6 +87,6 @@ class FacilitySettingsController extends Controller
         }
 
         return redirect()->route('facility.settings.edit')
-            ->with('success', 'Pengaturan fasilitas berhasil diperbarui.');
+            ->with('status', __('status.facility_settings_updated'));
     }
 }

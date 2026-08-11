@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Database\Factories\DocumentFactory;
+use App\Enums\DocumentType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int $child_id
  * @property int $user_id
  * @property string $name
- * @property string $type
+ * @property DocumentType $type
  * @property string|null $description
  * @property string $file_path
  * @property string $file_name
@@ -54,6 +54,7 @@ class Document extends Model
     protected function casts(): array
     {
         return [
+            'type' => DocumentType::class,
             'is_private' => 'boolean',
             'file_size' => 'integer',
             'issued_date' => 'date',
@@ -82,17 +83,7 @@ class Document extends Model
      */
     public function getTypeLabelAttribute(): string
     {
-        return match ($this->type) {
-            'birth_certificate' => '📜 Akta Lahir',
-            'family_card' => '🏠 Kartu Keluarga',
-            'kia' => '🪪 KIA',
-            'bpjs' => '🏥 BPJS',
-            'passport' => '✈️ Paspor',
-            'certificate' => '🎓 Sertifikat',
-            'report_card' => '📋 Rapor',
-            'other' => '📄 Lainnya',
-            default => $this->type,
-        };
+        return $this->type->emoji().' '.$this->type->label();
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AuditLog;
+use App\Models\Connection;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -94,5 +95,46 @@ class AuditService
     public function userInvited(User $user): AuditLog
     {
         return $this->log('user.invited', $user, null, [], $user->toArray());
+    }
+
+    /**
+     * Log an audit event with connection context.
+     */
+    public function logWithConnection(
+        string $event,
+        string $description,
+        ?Model $auditable = null,
+        ?Connection $connection = null,
+        ?array $oldValues = null,
+        ?array $newValues = null,
+    ): AuditLog {
+        $request = request();
+        $user = $request instanceof Request ? $request->user() : null;
+
+        $tenantId = null;
+
+        if ($connection && $connection->tenant_id) {
+            $tenantId = $connection->tenant_id;
+        } elseif ($auditable && $auditable->tenant_id ?? false) {
+            $tenantId = $auditable->tenant_id;
+        } elseif ($user && $user->tenant_id ?? false) {
+            $tenantId = $user->tenant_id;
+        } elseif ($request instanceof Request) {
+            $tenantId = $request->user()?->tenant_id;
+        }
+
+        return AuditLog::create([
+            'tenant_id' => $tenantId,
+            'user_id' => $user?->id,
+            'connection_id' => $connection?->id,
+            'event' => $event,
+            'description' => $description,
+            'auditable_type' => $auditable?->getMorphClass(),
+            'auditable_id' => $auditable?->getKey(),
+            'old_values' => $oldValues ?: null,
+            'new_values' => $newValues ?: null,
+            'ip_address' => $request instanceof Request ? $request->ip() : null,
+            'user_agent' => $request instanceof Request ? $request->userAgent() : null,
+        ]);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\ConnectionPermission;
 use App\Enums\PatientLinkStatus;
+use App\Services\ConnectionService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -120,5 +122,43 @@ class PatientLink extends Model
     public function hasPermission(string $permission): bool
     {
         return $this->permissions[$permission] ?? false;
+    }
+
+    /**
+     * Send invitation to the parent — set status to Pending and generate link_code if not exists.
+     */
+    public function sendInvitation(): void
+    {
+        if (empty($this->link_code)) {
+            $this->link_code = strtoupper(Str::random(8));
+        }
+
+        $this->update([
+            'status' => PatientLinkStatus::Pending,
+            'link_code' => $this->link_code,
+        ]);
+    }
+
+    /**
+     * Claim the profile — set parent_user_id, status to Active, and create Connection.
+     */
+    public function claimProfile(User $parent): void
+    {
+        $this->update([
+            'parent_user_id' => $parent->id,
+            'status' => PatientLinkStatus::Active,
+            'linked_at' => now(),
+        ]);
+
+        // Create connection between child and facility tenant
+        if ($this->child && $this->facilityTenant) {
+            $connectionService = app(ConnectionService::class);
+            $connectionService->assistedRegistration(
+                $this->child,
+                $this->facilityTenant,
+                $parent,
+                ConnectionPermission::View
+            );
+        }
     }
 }

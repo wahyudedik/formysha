@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PlanSeeder::class,
             SuperAdminSeeder::class,
+            FamilyAndFacilitySeeder::class,
         ]);
 
         // Hanya buat test data di environment local atau testing

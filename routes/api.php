@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AlbumController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ChildController;
+use App\Http\Controllers\Api\ConnectionApiController;
 use App\Http\Controllers\Api\DashboardApiController;
 use App\Http\Controllers\Api\DiaryController;
 use App\Http\Controllers\Api\DocumentController;
@@ -164,6 +165,17 @@ Route::prefix('v1')->group(function () {
             Route::get('/children/{child}/family-members/{familyMember}', [FamilyMemberController::class, 'show'])->name('api.family-members.show');
             Route::put('/children/{child}/family-members/{familyMember}', [FamilyMemberController::class, 'update'])->name('api.family-members.update');
             Route::delete('/children/{child}/family-members/{familyMember}', [FamilyMemberController::class, 'destroy'])->name('api.family-members.destroy');
+
+            // Connections
+            Route::get('/children/{child}/connections', [ConnectionApiController::class, 'index'])->name('api.connections.index');
+            Route::post('/children/{child}/connections', [ConnectionApiController::class, 'store'])->name('api.connections.store');
+            Route::get('/children/{child}/connections/{connection}', [ConnectionApiController::class, 'show'])->name('api.connections.show');
+            Route::put('/children/{child}/connections/{connection}', [ConnectionApiController::class, 'update'])->name('api.connections.update');
+            Route::delete('/children/{child}/connections/{connection}', [ConnectionApiController::class, 'destroy'])->name('api.connections.destroy');
+            Route::post('/children/{child}/connections/{connection}/approve', [ConnectionApiController::class, 'approve'])->name('api.connections.approve');
+            Route::post('/children/{child}/connections/{connection}/reject', [ConnectionApiController::class, 'reject'])->name('api.connections.reject');
+            Route::post('/children/{child}/connections/{connection}/revoke', [ConnectionApiController::class, 'revoke'])->name('api.connections.revoke');
+            Route::get('/children/{child}/connections/{connection}/activities', [ConnectionApiController::class, 'activities'])->name('api.connections.activities');
 
             // Notifications
             Route::get('/notifications', [NotificationApiController::class, 'index'])->name('api.notifications.index');

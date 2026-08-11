@@ -137,6 +137,6 @@ class ErrorLogController extends Controller
         }
 
         return redirect()->route('super-admin.error-logs.index')
-            ->with('success', 'Log file berhasil dikosongkan.');
+            ->with('status', __('status.logs_cleared'));
     }
 }

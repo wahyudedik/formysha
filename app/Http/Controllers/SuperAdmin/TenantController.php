@@ -57,7 +57,7 @@ class TenantController extends Controller
         Tenant::create($validated);
 
         return redirect()->route('super-admin.tenants.index')
-            ->with('success', 'Tenant berhasil dibuat.');
+            ->with('status', __('status.tenant_created'));
     }
 
     /**
@@ -139,7 +139,7 @@ class TenantController extends Controller
         $tenant->update($validated);
 
         return redirect()->route('super-admin.tenants.index')
-            ->with('success', 'Tenant berhasil diperbarui.');
+            ->with('status', __('status.tenant_updated'));
     }
 
     /**
@@ -150,7 +150,7 @@ class TenantController extends Controller
         $tenant->delete();
 
         return redirect()->route('super-admin.tenants.index')
-            ->with('success', 'Tenant berhasil dihapus.');
+            ->with('status', __('status.tenant_deleted'));
     }
 
     /**

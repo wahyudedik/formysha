@@ -140,6 +140,6 @@ class PluginController extends Controller
         $this->pluginService->updatePluginSettings($tenant, $plugin, $validated['settings'] ?? []);
 
         return redirect()->route('admin.plugins.settings', $plugin)
-            ->with('success', 'Pengaturan plugin berhasil disimpan.');
+            ->with('status', __('status.plugin_settings_saved'));
     }
 }

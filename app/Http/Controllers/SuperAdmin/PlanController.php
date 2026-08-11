@@ -52,7 +52,7 @@ class PlanController extends Controller
         Plan::create($validated);
 
         return redirect()->route('super-admin.plans.index')
-            ->with('success', 'Paket berhasil dibuat.');
+            ->with('status', __('status.plan_created'));
     }
 
     /**
@@ -88,7 +88,7 @@ class PlanController extends Controller
         $plan->update($validated);
 
         return redirect()->route('super-admin.plans.index')
-            ->with('success', 'Paket berhasil diperbarui.');
+            ->with('status', __('status.plan_updated'));
     }
 
     /**
@@ -99,6 +99,6 @@ class PlanController extends Controller
         $plan->delete();
 
         return redirect()->route('super-admin.plans.index')
-            ->with('success', 'Paket berhasil dihapus.');
+            ->with('status', __('status.plan_deleted'));
     }
 }

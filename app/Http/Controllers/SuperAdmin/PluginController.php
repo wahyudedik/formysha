@@ -46,7 +46,7 @@ class PluginController extends Controller
         Plugin::create($validated);
 
         return redirect()->route('super-admin.plugins.index')
-            ->with('success', 'Plugin berhasil didaftarkan.');
+            ->with('status', __('status.plugin_created'));
     }
 
     /**
@@ -89,7 +89,7 @@ class PluginController extends Controller
         $plugin->update($validated);
 
         return redirect()->route('super-admin.plugins.show', $plugin)
-            ->with('success', 'Plugin berhasil diperbarui.');
+            ->with('status', __('status.plugin_updated'));
     }
 
     /**
@@ -100,6 +100,6 @@ class PluginController extends Controller
         $plugin->delete();
 
         return redirect()->route('super-admin.plugins.index')
-            ->with('success', 'Plugin berhasil dihapus.');
+            ->with('status', __('status.plugin_deleted'));
     }
 }

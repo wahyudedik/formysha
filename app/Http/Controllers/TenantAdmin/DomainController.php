@@ -64,7 +64,7 @@ class DomainController extends Controller
         $this->domainService->setDomain($tenant, $domain);
 
         return redirect()->route('admin.domain.index')
-            ->with('success', 'Custom domain berhasil disimpan. Silakan ikuti instruksi DNS verifikasi.');
+            ->with('status', __('status.domain_saved'));
     }
 
     /**
@@ -90,7 +90,7 @@ class DomainController extends Controller
             $this->domainService->markDomainVerified($tenant);
 
             return redirect()->route('admin.domain.index')
-                ->with('success', 'Domain berhasil diverifikasi! DNS records sudah benar.');
+                ->with('status', __('status.domain_verified'));
         }
 
         return redirect()->route('admin.domain.index')
@@ -112,6 +112,6 @@ class DomainController extends Controller
         $this->domainService->removeDomain($tenant);
 
         return redirect()->route('admin.domain.index')
-            ->with('success', 'Custom domain berhasil dihapus.');
+            ->with('status', __('status.domain_deleted'));
     }
 }

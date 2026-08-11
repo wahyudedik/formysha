@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\DocumentType;
 use App\Models\Child;
 use App\Models\Document;
 use App\Models\User;
@@ -10,7 +11,7 @@ it('can create a document', function () {
 
     expect($document)->toBeInstanceOf(Document::class);
     expect($document->name)->toBeString();
-    expect($document->type)->toBeString();
+    expect($document->type)->toBeInstanceOf(DocumentType::class);
     expect($document->child_id)->toBeInt();
     expect($document->user_id)->toBeInt();
 });
@@ -72,21 +73,12 @@ it('casts expiry_date as date', function () {
     expect($document->expiry_date)->toBeInstanceOf(Carbon::class);
 });
 
-it('returns correct type labels', function () {
-    $types = [
-        'birth_certificate' => '📜 Akta Lahir',
-        'family_card' => '🏠 Kartu Keluarga',
-        'kia' => '🪪 KIA',
-        'bpjs' => '🏥 BPJS',
-        'passport' => '✈️ Paspor',
-        'certificate' => '🎓 Sertifikat',
-        'report_card' => '📋 Rapor',
-        'other' => '📄 Lainnya',
-    ];
-
-    foreach ($types as $type => $label) {
-        $document = Document::factory()->create(['type' => $type]);
-        expect($document->type_label)->toBe($label);
+it('returns correct type labels via enum', function () {
+    foreach (DocumentType::cases() as $type) {
+        $document = Document::factory()->create(['type' => $type->value]);
+        expect($document->type)->toBeInstanceOf(DocumentType::class);
+        expect($document->type_label)->toContain($type->emoji());
+        expect($document->type_label)->toContain($type->label());
     }
 });
 
@@ -169,7 +161,7 @@ it('can be created with private state', function () {
 it('can be created with specific type state', function () {
     $document = Document::factory()->ofType('passport')->create();
 
-    expect($document->type)->toBe('passport');
+    expect($document->type)->toBe(DocumentType::Passport);
 });
 
 it('child has many documents', function () {

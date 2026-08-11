@@ -58,7 +58,7 @@ class NotificationController extends Controller
             ]);
 
         return redirect()->route('notifications.index')
-            ->with('success', 'Semua notifikasi telah ditandai sudah dibaca.');
+            ->with('status', __('status.notifications_all_read'));
     }
 
     /**
@@ -71,6 +71,6 @@ class NotificationController extends Controller
         $notification->delete();
 
         return redirect()->route('notifications.index')
-            ->with('success', 'Notifikasi berhasil dihapus.');
+            ->with('status', __('status.notification_deleted'));
     }
 }

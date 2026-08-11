@@ -244,6 +244,14 @@ class Tenant extends Model
         return $this->hasMany(Referral::class, 'to_tenant_id');
     }
 
+    /**
+     * Get the connections for this tenant.
+     */
+    public function connections(): HasMany
+    {
+        return $this->hasMany(Connection::class);
+    }
+
     // ─── Type Helpers ────────────────────────────────────────────
 
     /**

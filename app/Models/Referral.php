@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ReferralStatus;
+use App\Enums\ReferralType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $reason
  * @property string|null $clinical_summary
  * @property string $status
+ * @property string|null $type
  * @property string|null $notes
  */
 class Referral extends Model
@@ -36,6 +38,7 @@ class Referral extends Model
         'reason',
         'clinical_summary',
         'status',
+        'type',
         'notes',
     ];
 
@@ -48,6 +51,7 @@ class Referral extends Model
     {
         return [
             'status' => ReferralStatus::class,
+            'type' => ReferralType::class,
         ];
     }
 

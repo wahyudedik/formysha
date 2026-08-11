@@ -25,32 +25,44 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Rujukan pasien ke fasilitas kesehatan lain.') }}</p>
                         </div>
 
+                        @php
+                            $childOptions = collect($children)->map(fn($child) => [
+                                'value' => (string) $child->id,
+                                'label' => $child->name,
+                                'sublabel' => $child->date_of_birth?->format('d M Y') ?? '-',
+                            ])->values()->all();
+
+                            $facilityOptions = collect($facilities)->map(fn($facility) => [
+                                'value' => (string) $facility->id,
+                                'label' => $facility->name,
+                                'sublabel' => $facility->type ?? '',
+                            ])->values()->all();
+                        @endphp
+
                         <form method="POST" action="{{ route('facility.referrals.store') }}" class="space-y-6" x-data="{ loading: false }" @submit="loading = true">
                             @csrf
 
-                            <!-- Child (Patient) -->
-                            <div>
-                                <x-input-label for="child_id" :value="__('Pasien (Anak) *')" />
-                                <select id="child_id" name="child_id" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition" required>
-                                    <option value="">{{ __('Pilih Pasien') }}</option>
-                                    @foreach ($children as $child)
-                                        <option value="{{ $child->id }}" {{ old('child_id') == $child->id ? 'selected' : '' }}>{{ $child->name }} — {{ $child->date_of_birth?->format('d M Y') ?? '-' }}</option>
-                                    @endforeach
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('child_id')" />
-                            </div>
+                            <!-- Child (Patient) - Searchable -->
+                            <x-searchable-select
+                                name="child_id"
+                                label="{{ __('Pasien (Anak)') }}"
+                                :required="true"
+                                :options="$childOptions"
+                                selected="{{ old('child_id') }}"
+                                placeholder="{{ __('Ketik nama pasien untuk mencari...') }}"
+                                error="{{ $errors->first('child_id') }}"
+                            />
 
-                            <!-- Target Facility -->
-                            <div>
-                                <x-input-label for="to_tenant_id" :value="__('Fasilitas Tujuan *')" />
-                                <select id="to_tenant_id" name="to_tenant_id" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition" required>
-                                    <option value="">{{ __('Pilih Fasilitas Tujuan') }}</option>
-                                    @foreach ($facilities as $facility)
-                                        <option value="{{ $facility->id }}" {{ old('to_tenant_id') == $facility->id ? 'selected' : '' }}>{{ $facility->name }}</option>
-                                    @endforeach
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('to_tenant_id')" />
-                            </div>
+                            <!-- Target Facility - Searchable -->
+                            <x-searchable-select
+                                name="to_tenant_id"
+                                label="{{ __('Fasilitas Tujuan') }}"
+                                :required="true"
+                                :options="$facilityOptions"
+                                selected="{{ old('to_tenant_id') }}"
+                                placeholder="{{ __('Ketik nama fasilitas tujuan...') }}"
+                                error="{{ $errors->first('to_tenant_id') }}"
+                            />
 
                             <!-- Reason -->
                             <div>

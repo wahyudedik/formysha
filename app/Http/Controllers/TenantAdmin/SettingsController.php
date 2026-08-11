@@ -60,6 +60,6 @@ class SettingsController extends Controller
         }
 
         return redirect()->route('admin.settings.edit')
-            ->with('success', 'Pengaturan berhasil disimpan.');
+            ->with('status', __('status.settings_saved'));
     }
 }

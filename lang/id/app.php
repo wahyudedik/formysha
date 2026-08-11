@@ -670,5 +670,153 @@ return [
         'milestones_dismissed' => 'Milestone alert berhasil ditutup.',
         'achievements_new_count' => ':count pencapaian baru berhasil dibuka!',
         'achievements_already_checked' => 'Semua pencapaian sudah diperiksa. Teruslah beraktivitas!',
+
+        // Super Admin
+        'tenant_created' => 'Tenant berhasil dibuat.',
+        'tenant_updated' => 'Tenant berhasil diperbarui.',
+        'tenant_deleted' => 'Tenant berhasil dihapus.',
+        'plugin_created' => 'Plugin berhasil didaftarkan.',
+        'plugin_updated' => 'Plugin berhasil diperbarui.',
+        'plugin_deleted' => 'Plugin berhasil dihapus.',
+        'plan_created' => 'Paket berhasil dibuat.',
+        'plan_updated' => 'Paket berhasil diperbarui.',
+        'plan_deleted' => 'Paket berhasil dihapus.',
+        'payment_approved' => 'Pembayaran berhasil disetujui.',
+        'payment_rejected' => 'Pembayaran berhasil ditolak.',
+        'logs_cleared' => 'Log file berhasil dikosongkan.',
+
+        // Tenant Admin
+        'settings_saved' => 'Pengaturan berhasil disimpan.',
+        'plugin_settings_saved' => 'Pengaturan plugin berhasil disimpan.',
+        'domain_saved' => 'Custom domain berhasil disimpan. Silakan ikuti instruksi DNS verifikasi.',
+        'domain_verified' => 'Domain berhasil diverifikasi! DNS records sudah benar.',
+        'domain_deleted' => 'Custom domain berhasil dihapus.',
+        'branding_updated' => 'Branding berhasil diperbarui.',
+        'branding_advanced_updated' => 'Pengaturan lanjutan branding berhasil diperbarui.',
+
+        // Facility Admin
+        'staff_created' => 'Staf berhasil ditambahkan.',
+        'staff_updated' => 'Data staf berhasil diperbarui.',
+        'staff_deactivated' => 'Staf berhasil dinonaktifkan.',
+        'clinical_note_created' => 'Catatan klinis berhasil ditambahkan.',
+        'clinical_note_updated' => 'Catatan klinis berhasil diperbarui.',
+        'clinical_note_deleted' => 'Catatan klinis berhasil dihapus.',
+        'referral_created' => 'Rujukan berhasil dibuat.',
+        'referral_accepted' => 'Rujukan berhasil diterima.',
+        'referral_completed' => 'Rujukan berhasil diselesaikan.',
+        'referral_cancelled' => 'Rujukan berhasil dibatalkan.',
+        'patient_link_created' => 'Tautan pasien berhasil dibuat. Kode: :code',
+        'patient_link_updated' => 'Data pasien berhasil diperbarui.',
+        'patient_link_revoked' => 'Tautan pasien berhasil dicabut.',
+        'facility_settings_updated' => 'Pengaturan fasilitas berhasil diperbarui.',
+
+        // Subscription
+        'subscription_warning' => 'Anda perlu mengaktifkan paket berlangganan.',
+        'no_organization' => 'Anda belum memiliki organisasi.',
+        'payment_proof_sent' => 'Bukti pembayaran berhasil dikirim. Menunggu verifikasi admin.',
+
+        // Notifications
+        'notifications_all_read' => 'Semua notifikasi telah ditandai sudah dibaca.',
+        'notification_deleted' => 'Notifikasi berhasil dihapus.',
+
+        // Export
+        'export_pdf_profile_failed' => 'Gagal membuat PDF profil: :error',
+        'export_pdf_health_failed' => 'Gagal membuat PDF kesehatan: :error',
+        'export_pdf_growth_failed' => 'Gagal membuat PDF pertumbuhan: :error',
+        'export_zip_failed' => 'Gagal membuat ZIP: :error',
+
+        // Erasure
+        'account_deleted_permanently' => 'Akun dan seluruh data berhasil dihapus permanen.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Document Types
+    |--------------------------------------------------------------------------
+    */
+
+    'document_types' => [
+        'birth_certificate' => 'Akta Lahir',
+        'family_card' => 'Kartu Keluarga',
+        'kia' => 'KIA',
+        'bpjs' => 'BPJS',
+        'passport' => 'Paspor',
+        'certificate' => 'Sertifikat',
+        'report_card' => 'Rapor',
+        'other' => 'Lainnya',
+    ],
+
+    // Phase 21 — Connection System
+    'connection' => [
+        'title' => 'Koneksi',
+        'create' => 'Buat Koneksi',
+        'edit' => 'Edit Koneksi',
+        'show' => 'Detail Koneksi',
+        'index' => 'Daftar Koneksi',
+        'empty' => 'Belum Ada Koneksi',
+        'empty_description' => 'Anda belum memiliki koneksi dengan organisasi mana pun. Mulai hubungkan keluarga Anda dengan fasilitas kesehatan, sekolah, atau organisasi lainnya.',
+        'status' => 'Status Koneksi',
+        'permission' => 'Hak Akses',
+        'invited_by' => 'Diundang Oleh',
+        'invited_at' => 'Tanggal Undangan',
+        'accepted_at' => 'Tanggal Diterima',
+        'expires_at' => 'Berlaku Hingga',
+        'approve' => 'Setujui',
+        'reject' => 'Tolak',
+        'revoke' => 'Cabut',
+        'approved' => 'Disetujui',
+        'rejected' => 'Ditolak',
+        'revoked' => 'Dicabut',
+        'created' => 'Koneksi berhasil dibuat',
+        'updated' => 'Koneksi berhasil diperbarui',
+        'deleted' => 'Koneksi berhasil dihapus',
+        'confirm_delete' => 'Apakah Anda yakin ingin menghapus koneksi ini?',
+        'search_facility' => 'Cari fasilitas...',
+    ],
+
+    // Phase 21 — Permission Levels
+    'permission_level' => [
+        'view' => 'Lihat',
+        'comment' => 'Komentar',
+        'edit' => 'Edit',
+        'manage' => 'Kelola',
+    ],
+
+    // Phase 21 — Family Tree
+    'family_tree' => [
+        'title' => 'Pohon Keluarga',
+        'owner' => 'Pemilik',
+        'family_members' => 'Anggota Keluarga',
+        'organizations' => 'Organisasi',
+        'recent_activity' => 'Aktivitas Terbaru',
+        'no_activity' => 'Belum ada aktivitas',
+    ],
+
+    // Phase 21 — Activity History
+    'activity' => [
+        'title' => 'Riwayat Aktivitas',
+        'connection_created' => 'Koneksi baru dibuat',
+        'connection_approved' => 'Koneksi disetujui',
+        'connection_rejected' => 'Koneksi ditolak',
+        'connection_revoked' => 'Koneksi dicabut',
+        'permission_updated' => 'Hak akses diperbarui',
+    ],
+
+    // Phase 21 — Referral System
+    'referral' => [
+        'type' => 'Jenis Rujukan',
+        'facility_to_facility' => 'Fasilitas ke Fasilitas',
+        'facility_to_family' => 'Fasilitas ke Keluarga',
+        'stats' => 'Statistik Rujukan',
+        'milestones' => 'Pencapaian Rujukan',
+    ],
+
+    // Phase 21 — B2B Assisted Registration
+    'assisted_registration' => [
+        'title' => 'Registrasi Terbantu',
+        'send_invitation' => 'Kirim Undangan',
+        'claim_profile' => 'Klaim Profil',
+        'invitation_sent' => 'Undangan berhasil dikirim',
+        'profile_claimed' => 'Profil berhasil diklaim',
     ],
 ];

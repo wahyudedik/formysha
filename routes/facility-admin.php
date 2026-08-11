@@ -44,6 +44,8 @@ Route::middleware(['auth', 'verified', 'tenant.active'])->prefix('facility')->na
         Route::put('/patients/{patientLink}', [PatientLinkController::class, 'update'])->name('patients.update');
         Route::delete('/patients/{patientLink}', [PatientLinkController::class, 'destroy'])->name('patients.destroy');
         Route::post('/patients/{patientLink}/revoke', [PatientLinkController::class, 'revoke'])->name('patients.revoke');
+        Route::post('/patients/{patientLink}/send-invitation', [PatientLinkController::class, 'sendInvitation'])->name('patients.send-invitation');
+        Route::post('/patients/{patientLink}/claim-profile', [PatientLinkController::class, 'claimProfile'])->name('patients.claim-profile');
     });
 
     // Clinical Notes (requires doctor, midwife, or nurse)

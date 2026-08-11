@@ -25,32 +25,44 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Pilih anak dan orang tua yang ingin dihubungkan.') }}</p>
                         </div>
 
+                        @php
+                            $childOptions = collect($children)->map(fn($child) => [
+                                'value' => (string) $child->id,
+                                'label' => $child->name,
+                                'sublabel' => $child->date_of_birth?->format('d M Y') ?? '-',
+                            ])->values()->all();
+
+                            $parentOptions = collect($parents)->map(fn($parent) => [
+                                'value' => (string) $parent->id,
+                                'label' => $parent->name,
+                                'sublabel' => $parent->email,
+                            ])->values()->all();
+                        @endphp
+
                         <form method="POST" action="{{ route('facility.patients.store') }}" class="space-y-6" x-data="{ loading: false }" @submit="loading = true">
                             @csrf
 
-                            <!-- Child -->
-                            <div>
-                                <x-input-label for="child_id" :value="__('Anak (Pasien) *')" />
-                                <select id="child_id" name="child_id" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition" required>
-                                    <option value="">{{ __('Pilih Anak') }}</option>
-                                    @foreach ($children as $child)
-                                        <option value="{{ $child->id }}" {{ old('child_id') == $child->id ? 'selected' : '' }}>{{ $child->name }} — {{ $child->date_of_birth?->format('d M Y') ?? '-' }}</option>
-                                    @endforeach
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('child_id')" />
-                            </div>
+                            <!-- Child (Searchable) -->
+                            <x-searchable-select
+                                name="child_id"
+                                label="{{ __('Anak (Pasien)') }}"
+                                :required="true"
+                                :options="$childOptions"
+                                selected="{{ old('child_id') }}"
+                                placeholder="{{ __('Ketik nama anak untuk mencari...') }}"
+                                error="{{ $errors->first('child_id') }}"
+                            />
 
-                            <!-- Parent User -->
-                            <div>
-                                <x-input-label for="parent_user_id" :value="__('Orang Tua *')" />
-                                <select id="parent_user_id" name="parent_user_id" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition" required>
-                                    <option value="">{{ __('Pilih Orang Tua') }}</option>
-                                    @foreach ($parents as $parent)
-                                        <option value="{{ $parent->id }}" {{ old('parent_user_id') == $parent->id ? 'selected' : '' }}>{{ $parent->name }} ({{ $parent->email }})</option>
-                                    @endforeach
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('parent_user_id')" />
-                            </div>
+                            <!-- Parent User (Searchable) -->
+                            <x-searchable-select
+                                name="parent_user_id"
+                                label="{{ __('Orang Tua') }}"
+                                :required="true"
+                                :options="$parentOptions"
+                                selected="{{ old('parent_user_id') }}"
+                                placeholder="{{ __('Ketik nama atau email orang tua...') }}"
+                                error="{{ $errors->first('parent_user_id') }}"
+                            />
 
                             <!-- Permissions -->
                             <div>

@@ -9,6 +9,7 @@ use App\Models\ClinicalNote;
 use App\Models\PatientLink;
 use App\Models\Staff;
 use App\Services\TenantService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -54,7 +55,7 @@ class ClinicalNoteController extends Controller
     /**
      * Store a newly created clinical note.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
 
@@ -82,7 +83,7 @@ class ClinicalNoteController extends Controller
         ]);
 
         return redirect()->route('facility.clinical-notes.show', $clinicalNote)
-            ->with('success', 'Catatan klinis berhasil ditambahkan.');
+            ->with('status', __('status.clinical_note_created'));
     }
 
     /**
@@ -121,7 +122,7 @@ class ClinicalNoteController extends Controller
     /**
      * Update the specified clinical note.
      */
-    public function update(Request $request, ClinicalNote $clinicalNote)
+    public function update(Request $request, ClinicalNote $clinicalNote): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($clinicalNote->tenant_id === $tenant->id, 403);
@@ -138,13 +139,13 @@ class ClinicalNoteController extends Controller
         $clinicalNote->update($validated);
 
         return redirect()->route('facility.clinical-notes.show', $clinicalNote)
-            ->with('success', 'Catatan klinis berhasil diperbarui.');
+            ->with('status', __('status.clinical_note_updated'));
     }
 
     /**
      * Remove the specified clinical note.
      */
-    public function destroy(ClinicalNote $clinicalNote)
+    public function destroy(ClinicalNote $clinicalNote): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($clinicalNote->tenant_id === $tenant->id, 403);
@@ -152,6 +153,6 @@ class ClinicalNoteController extends Controller
         $clinicalNote->delete();
 
         return redirect()->route('facility.clinical-notes.index')
-            ->with('success', 'Catatan klinis berhasil dihapus.');
+            ->with('status', __('status.clinical_note_deleted'));
     }
 }

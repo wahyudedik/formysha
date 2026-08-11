@@ -78,7 +78,7 @@ class BrandingController extends Controller
         $branding->update($validated);
 
         return redirect()->route('admin.branding.edit')
-            ->with('success', 'Branding berhasil diperbarui.');
+            ->with('status', __('status.branding_updated'));
     }
 
     /**
@@ -107,6 +107,6 @@ class BrandingController extends Controller
         $branding->update($validated);
 
         return redirect()->route('admin.branding.edit')
-            ->with('success', 'Pengaturan lanjutan branding berhasil diperbarui.');
+            ->with('status', __('status.branding_advanced_updated'));
     }
 }

@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
+    public function __construct(
+        private MediaService $mediaService,
+    ) {}
+
     /**
      * Store media for a timeline entry.
      */
@@ -25,8 +29,7 @@ class MediaController extends Controller
             'media.*' => ['file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,mp4,mov,webm,mp3,wav,ogg'],
         ]);
 
-        $mediaService = new MediaService;
-        $mediaService->uploadMultiple($request->file('media'), $timeline);
+        $this->mediaService->uploadMultiple($request->file('media'), $timeline);
 
         return redirect()->route('timeline.show', [$child, $timeline])
             ->with('status', __('status.media_created'));
@@ -44,8 +47,7 @@ class MediaController extends Controller
             'media.*' => ['file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,mp4,mov,webm,mp3,wav,ogg'],
         ]);
 
-        $mediaService = new MediaService;
-        $mediaService->uploadMultiple($request->file('media'), $album);
+        $this->mediaService->uploadMultiple($request->file('media'), $album);
 
         return redirect()->route('albums.show', [$child, $album])
             ->with('status', __('status.media_created'));
@@ -63,8 +65,7 @@ class MediaController extends Controller
             'media.*' => ['file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,mp4,mov,webm,mp3,wav,ogg'],
         ]);
 
-        $mediaService = new MediaService;
-        $mediaService->uploadMultiple($request->file('media'), $diary);
+        $this->mediaService->uploadMultiple($request->file('media'), $diary);
 
         return redirect()->route('diaries.show', [$child, $diary])
             ->with('status', __('status.media_created'));
@@ -89,8 +90,7 @@ class MediaController extends Controller
 
         abort_unless($isValid, 403);
 
-        $mediaService = new MediaService;
-        $mediaService->delete($media);
+        $this->mediaService->delete($media);
 
         // Redirect back to the appropriate page
         $referrer = $request->header('referer');

@@ -22,7 +22,7 @@ class ExportController extends Controller
         try {
             return $this->exportService->exportChildProfile($child);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal membuat PDF profil: '.$e->getMessage());
+            return redirect()->back()->with('error', __('status.export_pdf_profile_failed', ['error' => $e->getMessage()]));
         }
     }
 
@@ -34,7 +34,7 @@ class ExportController extends Controller
         try {
             return $this->exportService->exportHealthRecords($child);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal membuat PDF kesehatan: '.$e->getMessage());
+            return redirect()->back()->with('error', __('status.export_pdf_health_failed', ['error' => $e->getMessage()]));
         }
     }
 
@@ -46,7 +46,7 @@ class ExportController extends Controller
         try {
             return $this->exportService->exportGrowthRecords($child);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal membuat PDF pertumbuhan: '.$e->getMessage());
+            return redirect()->back()->with('error', __('status.export_pdf_growth_failed', ['error' => $e->getMessage()]));
         }
     }
 
@@ -58,7 +58,7 @@ class ExportController extends Controller
         try {
             return $this->exportService->exportChildZip($child);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal membuat ZIP: '.$e->getMessage());
+            return redirect()->back()->with('error', __('status.export_zip_failed', ['error' => $e->getMessage()]));
         }
     }
 }

@@ -11,7 +11,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $id
  * @property string|null $tenant_id
  * @property int|null $user_id
+ * @property int|null $connection_id
  * @property string $event
+ * @property string|null $description
+ * @property string|null $permission
  * @property string|null $auditable_type
  * @property int|null $auditable_id
  * @property array|null $old_values
@@ -32,7 +35,10 @@ class AuditLog extends Model
     protected $fillable = [
         'tenant_id',
         'user_id',
+        'connection_id',
         'event',
+        'description',
+        'permission',
         'auditable_type',
         'auditable_id',
         'old_values',
@@ -76,5 +82,13 @@ class AuditLog extends Model
     public function auditable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get the connection related to this audit log.
+     */
+    public function connection(): BelongsTo
+    {
+        return $this->belongsTo(Connection::class);
     }
 }

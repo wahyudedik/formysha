@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureActiveSubscription;
 use App\Http\Middleware\EnsureChildOwnership;
+use App\Http\Middleware\EnsureConnectionPermission;
 use App\Http\Middleware\EnsureFacilityAccess;
 use App\Http\Middleware\EnsureFamilyPermission;
 use App\Http\Middleware\EnsureFeatureLimit;
@@ -34,6 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'domain.resolve' => ResolveTenantByDomain::class,
             'facility.access' => EnsureFacilityAccess::class,
             'staff.role' => EnsureStaffRole::class,
+            'connection.permission' => EnsureConnectionPermission::class,
         ]);
 
         $middleware->web(append: [

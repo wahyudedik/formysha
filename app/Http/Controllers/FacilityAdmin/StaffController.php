@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Staff;
 use App\Models\User;
 use App\Services\TenantService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -46,7 +47,7 @@ class StaffController extends Controller
     /**
      * Store a newly created staff member.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
 
@@ -78,7 +79,7 @@ class StaffController extends Controller
         ]);
 
         return redirect()->route('facility.staff.index')
-            ->with('success', 'Staf berhasil ditambahkan.');
+            ->with('status', __('status.staff_created'));
     }
 
     /**
@@ -109,7 +110,7 @@ class StaffController extends Controller
     /**
      * Update the specified staff member.
      */
-    public function update(Request $request, Staff $staff)
+    public function update(Request $request, Staff $staff): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($staff->tenant_id === $tenant->id, 403);
@@ -124,13 +125,13 @@ class StaffController extends Controller
         $staff->update($validated);
 
         return redirect()->route('facility.staff.show', $staff)
-            ->with('success', 'Data staf berhasil diperbarui.');
+            ->with('status', __('status.staff_updated'));
     }
 
     /**
      * Remove the specified staff member.
      */
-    public function destroy(Staff $staff)
+    public function destroy(Staff $staff): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($staff->tenant_id === $tenant->id, 403);
@@ -138,6 +139,6 @@ class StaffController extends Controller
         $staff->update(['is_active' => false]);
 
         return redirect()->route('facility.staff.index')
-            ->with('success', 'Staf berhasil dinonaktifkan.');
+            ->with('status', __('status.staff_deactivated'));
     }
 }

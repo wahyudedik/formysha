@@ -7,6 +7,7 @@ use App\Models\Child;
 use App\Models\PatientLink;
 use App\Models\User;
 use App\Services\TenantService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -32,19 +33,22 @@ class PatientLinkController extends Controller
 
     /**
      * Show the form for creating a new patient link.
+     *
+     * NOTE: Shows ALL children and parents (not just already-linked ones)
+     * to avoid circular dependency where new patients can't be registered.
      */
     public function create(): View
     {
         $tenant = $this->tenantService->getCurrentTenant();
-        // Children are linked to facilities through PatientLink, not by tenant_id
-        $linkedChildIds = PatientLink::where('facility_tenant_id', $tenant->id)
-            ->pluck('child_id');
-        $children = Child::whereIn('id', $linkedChildIds)->with('user')->get();
-        // Scope parents to those whose children are linked to this facility
-        $linkedParentIds = PatientLink::where('facility_tenant_id', $tenant->id)
-            ->pluck('parent_user_id')
-            ->unique();
-        $parents = User::whereIn('id', $linkedParentIds)->get();
+
+        // Show all children that have a parent user account
+        $children = Child::with('user')
+            ->whereHas('user')
+            ->get();
+
+        // Show all parent users (users with role 'parent')
+        $parents = User::where('role', 'parent')
+            ->get();
 
         return view('facility-admin.patients.create', compact('tenant', 'children', 'parents'));
     }
@@ -52,7 +56,7 @@ class PatientLinkController extends Controller
     /**
      * Store a newly created patient link.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
 
@@ -62,6 +66,18 @@ class PatientLinkController extends Controller
             'permissions' => 'nullable|array',
         ]);
 
+        // Prevent duplicate active links for the same child at this facility
+        $existing = PatientLink::where('facility_tenant_id', $tenant->id)
+            ->where('child_id', $validated['child_id'])
+            ->where('status', '!=', 'revoked')
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'child_id' => __('Anak ini sudah terdaftar di fasilitas ini.'),
+            ]);
+        }
+
         $patientLink = PatientLink::create([
             'facility_tenant_id' => $tenant->id,
             'child_id' => $validated['child_id'],
@@ -70,7 +86,7 @@ class PatientLinkController extends Controller
         ]);
 
         return redirect()->route('facility.patients.show', $patientLink)
-            ->with('success', 'Tautan pasien berhasil dibuat. Kode: '.$patientLink->link_code);
+            ->with('status', __('status.patient_link_created', ['code' => $patientLink->link_code]));
     }
 
     /**
@@ -88,7 +104,7 @@ class PatientLinkController extends Controller
     /**
      * Update the specified patient link.
      */
-    public function update(Request $request, PatientLink $patientLink)
+    public function update(Request $request, PatientLink $patientLink): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($patientLink->facility_tenant_id === $tenant->id, 403);
@@ -100,13 +116,13 @@ class PatientLinkController extends Controller
         $patientLink->update($validated);
 
         return redirect()->route('facility.patients.show', $patientLink)
-            ->with('success', 'Data pasien berhasil diperbarui.');
+            ->with('status', __('status.patient_link_updated'));
     }
 
     /**
      * Remove (revoke) the specified patient link.
      */
-    public function destroy(PatientLink $patientLink)
+    public function destroy(PatientLink $patientLink): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($patientLink->facility_tenant_id === $tenant->id, 403);
@@ -114,13 +130,13 @@ class PatientLinkController extends Controller
         $patientLink->revoke();
 
         return redirect()->route('facility.patients.index')
-            ->with('success', 'Tautan pasien berhasil dicabut.');
+            ->with('status', __('status.patient_link_revoked'));
     }
 
     /**
      * Revoke the patient link.
      */
-    public function revoke(PatientLink $patientLink)
+    public function revoke(PatientLink $patientLink): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($patientLink->facility_tenant_id === $tenant->id, 403);
@@ -128,6 +144,42 @@ class PatientLinkController extends Controller
         $patientLink->revoke();
 
         return redirect()->route('facility.patients.show', $patientLink)
-            ->with('success', 'Tautan pasien berhasil dicabut.');
+            ->with('status', __('status.patient_link_revoked'));
+    }
+
+    /**
+     * Send invitation to the parent for the patient link.
+     */
+    public function sendInvitation(PatientLink $patientLink): RedirectResponse
+    {
+        $tenant = $this->tenantService->getCurrentTenant();
+        abort_unless($patientLink->facility_tenant_id === $tenant->id, 403);
+
+        $patientLink->sendInvitation();
+
+        return redirect()->route('facility.patients.show', $patientLink)
+            ->with('status', __('Undangan berhasil dikirim! Kode: :code', ['code' => $patientLink->link_code]));
+    }
+
+    /**
+     * Claim the patient profile — activate link and create connection.
+     */
+    public function claimProfile(PatientLink $patientLink): RedirectResponse
+    {
+        $tenant = $this->tenantService->getCurrentTenant();
+        abort_unless($patientLink->facility_tenant_id === $tenant->id, 403);
+
+        $parent = $patientLink->parentUser;
+
+        if (! $parent) {
+            return back()->withErrors([
+                'parent' => __('Profil orang tua belum tersedia untuk tautan ini.'),
+            ]);
+        }
+
+        $patientLink->claimProfile($parent);
+
+        return redirect()->route('facility.patients.show', $patientLink)
+            ->with('status', __('Profil berhasil diklaim! Koneksi telah dibuat.'));
     }
 }

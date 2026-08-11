@@ -192,6 +192,14 @@ class Child extends Model
     }
 
     /**
+     * Get the connections for the child.
+     */
+    public function connections(): HasMany
+    {
+        return $this->hasMany(Connection::class);
+    }
+
+    /**
      * Get the child's age in years.
      */
     public function getAgeAttribute(): ?string

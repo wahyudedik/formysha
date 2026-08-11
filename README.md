@@ -9,25 +9,28 @@
 
 # ForMysha
 
-## Digital Life Book SaaS goblok
+## Digital Life Book & Family Life Platform SaaS
 
-**Versi:** 1.0
+**Versi:** 1.1
 
 ---
 
 ## Tentang ForMysha
 
-ForMysha adalah platform **Digital Life Book** berbasis web yang membantu orang tua menyimpan dan mengelola perjalanan hidup anak sejak lahir hingga dewasa dalam satu tempat yang aman, terstruktur, dan mudah diakses.
+ForMysha adalah platform **Digital Life Book & Family Life Platform** berbasis web yang membantu orang tua menyimpan dan mengelola perjalanan hidup anak sejak lahir hingga dewasa dalam satu tempat yang aman, terstruktur, dan mudah diakses.
 
-Platform ini menggabungkan dokumentasi kenangan, kesehatan, pendidikan, dokumen penting, serta aktivitas keluarga dalam satu aplikasi.
+Platform ini menggabungkan dokumentasi kenangan, kesehatan, pendidikan, dokumen penting, serta aktivitas keluarga dalam satu aplikasi — dengan sistem **Connection** yang menghubungkan keluarga dengan fasilitas kesehatan, sekolah, dan organisasi lainnya.
 
-ForMysha dibangun sebagai **Software as a Service (SaaS)** sehingga dapat digunakan oleh individu, keluarga, maupun organisasi.
+ForMysha dibangun sebagai **Software as a Service (SaaS)** yang melayani dua segmen utama:
+
+* **B2C (Family)** — Keluarga yang ingin mendokumentasikan perjalanan hidup anak.
+* **B2B (Organization)** — Fasilitas kesehatan, sekolah, dan organisasi yang mengelola data pasien/siswa.
 
 ---
 
 ## Visi
 
-Menjadi platform digital terpercaya untuk mendokumentasikan perjalanan hidup anak dari lahir hingga dewasa.
+Menjadi platform digital terpercaya untuk mendokumentasikan perjalanan hidup anak dari lahir hingga dewasa, sekaligus menjadi **jembatan digital** antara keluarga dan organisasi yang merawat mereka.
 
 ---
 
@@ -67,7 +70,83 @@ Menjadi platform digital terpercaya untuk mendokumentasikan perjalanan hidup ana
 
 ForMysha bukan sekadar album foto.
 
-ForMysha adalah **Digital Life Book** yang menyimpan seluruh perjalanan hidup anak dalam satu aplikasi, mulai dari kenangan, pertumbuhan, kesehatan, pendidikan, hingga dokumen penting.
+ForMysha adalah **Digital Life Book & Family Life Platform** yang menyimpan seluruh perjalanan hidup anak dalam satu aplikasi, mulai dari kenangan, pertumbuhan, kesehatan, pendidikan, hingga dokumen penting — dengan **sistem Connection** yang menghubungkan keluarga dengan organisasi secara aman dan terkontrol.
+
+---
+
+## Core Architecture
+
+Arsitektur inti ForMysha dibangun dengan fondasi berikut:
+
+```
+Identity → Family → Person → Relationship → Organization → Connection → Permission → Collaboration → Audit Trail → Family Tree
+```
+
+### Konsep Dasar
+
+* **Identity (User Account)** — Satu akun pengguna (orang tua/wali) bisa terhubung ke banyak keluarga dan organisasi.
+* **Family** — Unit keluarga yang memiliki satu atau lebih anak.
+* **Person / Child Profile** — Anak adalah **profil/entitas**, bukan akun terpisah.
+* **Relationship** — Hubungan keluarga (ayah, ibu, kakek, nenek, wali).
+* **Organization** — Fasilitas kesehatan, sekolah, atau organisasi lainnya (B2B).
+* **Connection** — Hubungan antara keluarga dan organisasi dengan permission-based access.
+* **Permission** — Level akses yang dikontrol oleh pemilik data (keluarga).
+* **Audit Trail** — Catatan lengkap WHO, WHAT, WHEN, WHERE, WHY, dan PERMISSION.
+* **Family Tree** — Visualisasi hubungan keluarga dan organisasi yang terhubung.
+
+### Prinsip: 1 Anak ≠ 1 Akun
+
+Anak bukan pengguna aplikasi. Anak adalah **profil/entitas** yang dimiliki oleh akun orang tua/wali.
+
+```
+User Account (Orang Tua) → Family → Child Profile → Connection → Organization
+```
+
+Satu orang tua bisa memiliki banyak anak. Satu anak bisa terhubung ke banyak organisasi. Tetapi satu akun = satu identitas digital.
+
+---
+
+## 10 Prinsip Inti ForMysha
+
+### Prinsip 1 — Satu Akun, Banyak Keluarga & Organisasi
+
+Satu akun bisa terhubung ke banyak keluarga dan organisasi. Login sekali, akses semua.
+
+### Prinsip 2 — Anak Bukan Akun
+
+Anak adalah profil/entitas, bukan akun login terpisah. Orang tua mengelola semua data anak dari akun mereka.
+
+### Prinsip 3 — Keluarga Adalah Pemilik Data
+
+Keluarga memiliki dan mengontrol semua data anak. Organisasi hanya memiliki akses berdasarkan permission yang diberikan.
+
+### Prinsip 4 — Organisasi adalah Partner, Bukan Pemilik
+
+Organisasi (B2B) terhubung melalui Connection, bukan memiliki data. Akses diatur oleh permission level.
+
+### Prinsip 5 — Connection ≠ Ownership
+
+Terhubung (connected) tidak berarti memiliki. Organisasi bisa melihat data yang diizinkan, tetapi tidak bisa mengubah atau menghapus data milik keluarga.
+
+### Prinsip 6 — Permission-Based Access
+
+Setiap Connection memiliki permission level: View, Comment, Edit, atau Manage. Keluarga mengontrol siapa bisa melakukan apa.
+
+### Prinsip 7 — Audit Trail Wajib
+
+Setiap aksi tercatat: WHO (siapa), WHAT (apa yang dilakukan), WHEN (kapan), WHERE (dari mana), WHY (alasan), dan PERMISSION (berdasarkan hak akses apa).
+
+### Prinsip 8 — B2B adalah Gateway ke B2C
+
+Organisasi (rumah sakit, sekolah) bisa membantu registrasi keluarga. Ini menjadi jalur akuisisi B2C yang powerful.
+
+### Prinsip 9 — Subscription Tied to Family/Organization
+
+Subscription terikat pada Family atau Organization, bukan pada user individual. Satu user bisa memiliki akses ke multiple subscriptions melalui connection.
+
+### Prinsip 10 — Family Tree sebagai Core Feature
+
+Family Tree bukan fitur tambahan, tetapi fondasi yang menghubungkan semua data: siapa, hubungan dengan siapa, dan terhubung ke organisasi mana.
 
 ---
 
@@ -334,7 +413,7 @@ Keduanya dapat menggunakan sistem yang sama.
 
 ### SaaS Subscription
 
-Pelanggan menyewa aplikasi melalui sistem langganan.
+Pelanggan menyewa aplikasi melalui sistem langganan. Subscription terikat pada **Family** atau **Organization**, bukan pada user individual. Satu user bisa memiliki akses ke multiple subscriptions melalui Connection.
 
 ForMysha menyediakan:
 
@@ -344,6 +423,28 @@ ForMysha menyediakan:
 * Backup.
 * Monitoring.
 * Dukungan teknis.
+
+### Pricing B2C (Family)
+
+| Paket | Harga | Fitur Utama |
+|-------|-------|-------------|
+| 🟢 **Free** | Rp0 | 1 anak, 10 foto, 500MB storage, timeline, gallery, dokumen |
+| 💗 **Family** | Rp19.000/bulan | 3 anak, 200 foto, 5GB storage, + growth tracking, health records |
+| 💙 **Family Plus** | Rp39.000/bulan | 5 anak, 500 foto, 15GB storage, + calendar, export PDF/ZIP, priority support |
+| ⭐ **Family Pro** | Rp79.000/bulan | 10 anak, unlimited foto, 50GB storage, + custom API, white label, family tree |
+
+### Pricing B2B (Organization)
+
+| Paket | Harga | Fitur Utama |
+|-------|-------|-------------|
+| 🏥 **B2B Basic** | Rp299.000/bulan | 50 profil anak, 5 staf, clinical notes, basic reporting |
+| 🏥 **B2B Growth** | Rp799.000/bulan | 200 profil anak, 20 staf, referrals, advanced analytics, custom branding |
+| 🏥 **B2B Pro** | Rp1.999.000/bulan | 1000 profil anak, unlimited staf, API integration, priority support, white label |
+| 🏢 **Enterprise** | Custom | Custom fitur, dedicated support, SLA, custom deployment |
+
+### B2B sebagai Gateway B2C
+
+Organisasi B2B (rumah sakit, sekolah) bisa membantu registrasi keluarga baru. Ketika rumah sakit mendaftarkan profil pasien, keluarga diundang untuk membuat akun B2C. Ini menjadi jalur akuisisi yang powerful — B2B membawa pengguna baru ke B2C.
 
 ---
 
@@ -479,6 +580,67 @@ Pendekatan ini menjaga biaya operasional tetap rendah dan memberi kebebasan kepa
 * Webhook
 * Request Log
 * Response Log
+
+### Family Tree
+
+* Visualisasi hubungan keluarga
+* Relationship mapping (ayah, ibu, kakek, nenek, wali)
+* Connection ke organisasi (rumah sakit, sekolah)
+* Permission-based access control
+* Timeline gabungan dari semua hubungan
+
+### Connection System
+
+* Hubungan antara keluarga dan organisasi
+* Permission levels: View, Comment, Edit, Manage
+* Connection status: Active, Pending, Referred
+* Activity & Access History di kedua sisi
+* Family bisa mengontrol akses organisasi
+
+### Referral System
+
+* B2B mereferensikan keluarga ke B2C
+* Tracking referral antar organisasi
+* Reward/milestone untuk referral aktif
+* Status: Active, Pending, Referred
+
+### Audit Trail
+
+* WHO — Siapa yang melakukan aksi
+* WHAT — Apa yang dilakukan
+* WHEN — Kapan terjadi
+* WHERE — Dari mana (device, IP)
+* WHY — Alasan (jika ada)
+* PERMISSION — Berdasarkan hak akses apa
+
+### Activity & Access History
+
+* Di sisi B2C: log semua akses ke profil anak
+* Di sisi B2B: log semua aktivitas staf pada pasien
+* Timeline kronologis semua interaksi
+* Filter berdasarkan user, jenis aksi, tanggal
+
+---
+
+## Modul Lanjutan
+
+### B2B Healthcare
+
+* Patient management
+* Clinical notes
+* Referrals
+* Staff management
+* Facility settings
+* Patient links (keluarga ↔ organisasi)
+* Reporting & analytics
+
+### B2B Assisted Registration
+
+* Organisasi membuat profil pasien
+* Keluarga diundang via email/WhatsApp
+* Keluarga membuat akun dan mengklaim profil
+* Data dari organisasi otomatis terhubung
+* Permission diatur oleh keluarga
 
 ---
 
@@ -836,13 +998,107 @@ public/favicon.ico   → Favicon legacy
 * Marketplace Plugin
 * Enterprise Dashboard
 
+### Phase 6 — Integration
+
+* REST API (Sanctum token-based)
+* Webhook System
+* Super Admin API
+* API Resources & Rate Limiting
+
+### Phase 7 — B2B Healthcare
+
+* Tenant Type System (Family, Hospital, Clinic, etc.)
+* Staff Model & Role Management
+* Clinical Notes & Referrals
+* Patient Links (keluarga ↔ organisasi)
+* Facility Admin Panel
+
+### Phase 8 — Responsive Design & UX
+
+* Responsive design 88+ file view Blade
+* Landing page, auth views, module views
+* SaaS views, support views, Blade components
+* Mobile-first design patterns
+
+### Phase 9 — Quality & Improvement
+
+* Bug fixes, documentation sync
+* Advanced filtering, sort options
+* UX improvements (empty state, validation, toast)
+* Architecture improvements
+
+### Phase 10 — PWA & Enhancement
+
+* PWA Support (manifest, service worker, offline)
+* Social sharing (Facebook, Twitter, WhatsApp, Telegram)
+* Data import (CSV/JSON)
+* Caching strategy & subscription lifecycle
+
+### Phase 11 — Security Hardening
+
+* Security fixes & environment sync
+* PHP version update
+* Route & link audit (284 routes)
+* Responsive tables, loading states
+
+### Phase 12 — Achievement & Milestones
+
+* Achievement system (11 tipe pencapaian)
+* Milestone alerts (5 tipe milestone)
+* Keyboard shortcuts, print-friendly CSS
+* Toast mobile positioning
+
+### Phase 13 — B2B Healthcare (Full)
+
+* Facility admin panel (19 views)
+* B2B dashboard & analytics
+* B2B monitoring & reporting
+* Staff, patients, clinical notes, referrals
+
+### Phase 14-17 — Audit & Code Quality
+
+* Bug fixes, responsive fixes, UI/UX improvements
+* DocumentType enum, i18n translation keys
+* MediaService constructor injection
+* Carbon import fix
+
+### Phase 18-19 — i18n & UU PDP Compliance
+
+* 50+ translation keys (ID & EN)
+* Family permission levels
+* Consent management
+* Right to erasure (account deletion)
+
+### Phase 20 — Comprehensive Audit
+
+* 42 hardcoded strings → `__()` helper
+* Return type hints (15 methods)
+* DocumentType enum with options()
+* 693 tests, 1668 assertions — all passing
+
+### Phase 21 — Architecture Evolution ✅
+
+* **Core Architecture**: Identity → Family → Person → Relationship → Organization → Connection → Permission
+* **10 Prinsip Inti** — Fondasi desain platform
+* **Connection System** — Hubungan keluarga ↔ organisasi dengan permission-based access
+* **Family Tree** — Visualisasi hubungan keluarga dan organisasi
+* **B2B Assisted Registration** — Organisasi membantu registrasi keluarga
+* **Referral System** — Tracking referral B2B → B2C
+* **Audit Trail** — WHO, WHAT, WHEN, WHERE, WHY, PERMISSION
+* **Updated Pricing** — B2C (Free, Family, Family Plus, Family Pro) + B2B (Basic, Growth, Pro, Enterprise)
+* **Subscription tied to Family/Organization**, bukan individual user
+
 ---
 
 ## Keunggulan Kompetitif
 
-* Fokus pada **Digital Life Book**, bukan sekadar album foto.
+* Fokus pada **Digital Life Book & Family Life Platform**, bukan sekadar album foto.
 * Menyatukan kenangan, kesehatan, pendidikan, dan dokumen dalam satu platform.
-* Arsitektur SaaS yang dapat digunakan oleh individu maupun organisasi.
+* **Sistem Connection** yang menghubungkan keluarga dengan organisasi secara aman.
+* **Family Tree** sebagai fondasi data, bukan sekadar fitur visual.
+* **B2B Assisted Registration** — organisasi membantu keluarga baru masuk platform.
+* **Audit Trail** komprehensif untuk transparansi dan keamanan.
+* Arsitektur SaaS yang melayani B2C (Family) dan B2B (Organization) dalam satu platform.
 * Tidak bergantung pada vendor AI atau layanan tertentu.
 * Integrasi fleksibel melalui Custom API.
 * Teknologi modern dengan Laravel dan MySQL yang mudah dikembangkan.

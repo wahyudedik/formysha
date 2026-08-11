@@ -52,7 +52,7 @@ class PaymentController extends Controller
         }
 
         return redirect()->route('super-admin.payments.index')
-            ->with('success', 'Pembayaran berhasil disetujui.');
+            ->with('status', __('status.payment_approved'));
     }
 
     /**
@@ -67,6 +67,6 @@ class PaymentController extends Controller
         $this->subscriptionService->rejectPayment($payment, $request->user(), $validated['notes']);
 
         return redirect()->route('super-admin.payments.index')
-            ->with('success', 'Pembayaran berhasil ditolak.');
+            ->with('status', __('status.payment_rejected'));
     }
 }

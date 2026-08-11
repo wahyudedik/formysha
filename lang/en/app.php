@@ -670,5 +670,153 @@ return [
         'milestones_dismissed' => 'Milestone alert dismissed.',
         'achievements_new_count' => ':count new achievement(s) unlocked!',
         'achievements_already_checked' => 'All achievements have been checked. Keep going!',
+
+        // Super Admin
+        'tenant_created' => 'Tenant created successfully.',
+        'tenant_updated' => 'Tenant updated successfully.',
+        'tenant_deleted' => 'Tenant deleted successfully.',
+        'plugin_created' => 'Plugin registered successfully.',
+        'plugin_updated' => 'Plugin updated successfully.',
+        'plugin_deleted' => 'Plugin deleted successfully.',
+        'plan_created' => 'Plan created successfully.',
+        'plan_updated' => 'Plan updated successfully.',
+        'plan_deleted' => 'Plan deleted successfully.',
+        'payment_approved' => 'Payment approved successfully.',
+        'payment_rejected' => 'Payment rejected successfully.',
+        'logs_cleared' => 'Log file cleared successfully.',
+
+        // Tenant Admin
+        'settings_saved' => 'Settings saved successfully.',
+        'plugin_settings_saved' => 'Plugin settings saved successfully.',
+        'domain_saved' => 'Custom domain saved. Please follow the DNS verification instructions.',
+        'domain_verified' => 'Domain verified! DNS records are correct.',
+        'domain_deleted' => 'Custom domain deleted successfully.',
+        'branding_updated' => 'Branding updated successfully.',
+        'branding_advanced_updated' => 'Advanced branding settings updated successfully.',
+
+        // Facility Admin
+        'staff_created' => 'Staff member added successfully.',
+        'staff_updated' => 'Staff data updated successfully.',
+        'staff_deactivated' => 'Staff member deactivated successfully.',
+        'clinical_note_created' => 'Clinical note added successfully.',
+        'clinical_note_updated' => 'Clinical note updated successfully.',
+        'clinical_note_deleted' => 'Clinical note deleted successfully.',
+        'referral_created' => 'Referral created successfully.',
+        'referral_accepted' => 'Referral accepted successfully.',
+        'referral_completed' => 'Referral completed successfully.',
+        'referral_cancelled' => 'Referral cancelled successfully.',
+        'patient_link_created' => 'Patient link created successfully. Code: :code',
+        'patient_link_updated' => 'Patient data updated successfully.',
+        'patient_link_revoked' => 'Patient link revoked successfully.',
+        'facility_settings_updated' => 'Facility settings updated successfully.',
+
+        // Subscription
+        'subscription_warning' => 'You need to activate a subscription plan.',
+        'no_organization' => 'You do not have an organization yet.',
+        'payment_proof_sent' => 'Payment proof submitted. Awaiting admin verification.',
+
+        // Notifications
+        'notifications_all_read' => 'All notifications marked as read.',
+        'notification_deleted' => 'Notification deleted successfully.',
+
+        // Export
+        'export_pdf_profile_failed' => 'Failed to generate profile PDF: :error',
+        'export_pdf_health_failed' => 'Failed to generate health PDF: :error',
+        'export_pdf_growth_failed' => 'Failed to generate growth PDF: :error',
+        'export_zip_failed' => 'Failed to generate ZIP: :error',
+
+        // Erasure
+        'account_deleted_permanently' => 'Account and all data permanently deleted.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Document Types
+    |--------------------------------------------------------------------------
+    */
+
+    'document_types' => [
+        'birth_certificate' => 'Birth Certificate',
+        'family_card' => 'Family Card',
+        'kia' => 'KIA',
+        'bpjs' => 'BPJS',
+        'passport' => 'Passport',
+        'certificate' => 'Certificate',
+        'report_card' => 'Report Card',
+        'other' => 'Other',
+    ],
+
+    // Phase 21 — Connection System
+    'connection' => [
+        'title' => 'Connection',
+        'create' => 'Create Connection',
+        'edit' => 'Edit Connection',
+        'show' => 'Connection Details',
+        'index' => 'Connection List',
+        'empty' => 'No Connections Yet',
+        'empty_description' => 'You don\'t have any connections with organizations yet. Start connecting your family with health facilities, schools, or other organizations.',
+        'status' => 'Connection Status',
+        'permission' => 'Permission',
+        'invited_by' => 'Invited By',
+        'invited_at' => 'Invitation Date',
+        'accepted_at' => 'Accepted Date',
+        'expires_at' => 'Expires At',
+        'approve' => 'Approve',
+        'reject' => 'Reject',
+        'revoke' => 'Revoke',
+        'approved' => 'Approved',
+        'rejected' => 'Rejected',
+        'revoked' => 'Revoked',
+        'created' => 'Connection created successfully',
+        'updated' => 'Connection updated successfully',
+        'deleted' => 'Connection deleted successfully',
+        'confirm_delete' => 'Are you sure you want to delete this connection?',
+        'search_facility' => 'Search facility...',
+    ],
+
+    // Phase 21 — Permission Levels
+    'permission_level' => [
+        'view' => 'View',
+        'comment' => 'Comment',
+        'edit' => 'Edit',
+        'manage' => 'Manage',
+    ],
+
+    // Phase 21 — Family Tree
+    'family_tree' => [
+        'title' => 'Family Tree',
+        'owner' => 'Owner',
+        'family_members' => 'Family Members',
+        'organizations' => 'Organizations',
+        'recent_activity' => 'Recent Activity',
+        'no_activity' => 'No activity yet',
+    ],
+
+    // Phase 21 — Activity History
+    'activity' => [
+        'title' => 'Activity History',
+        'connection_created' => 'New connection created',
+        'connection_approved' => 'Connection approved',
+        'connection_rejected' => 'Connection rejected',
+        'connection_revoked' => 'Connection revoked',
+        'permission_updated' => 'Permission updated',
+    ],
+
+    // Phase 21 — Referral System
+    'referral' => [
+        'type' => 'Referral Type',
+        'facility_to_facility' => 'Facility to Facility',
+        'facility_to_family' => 'Facility to Family',
+        'stats' => 'Referral Statistics',
+        'milestones' => 'Referral Milestones',
+    ],
+
+    // Phase 21 — B2B Assisted Registration
+    'assisted_registration' => [
+        'title' => 'Assisted Registration',
+        'send_invitation' => 'Send Invitation',
+        'claim_profile' => 'Claim Profile',
+        'invitation_sent' => 'Invitation sent successfully',
+        'profile_claimed' => 'Profile claimed successfully',
     ],
 ];

@@ -1,20 +1,23 @@
 # ForMysha
 
-## Digital Life Book SaaS
+## Digital Life Book & Family Life Platform SaaS
 
-**Versi:** 1.0
+**Versi:** 1.1
 
 ### Tentang ForMysha
 
-ForMysha adalah platform **Digital Life Book** berbasis web yang membantu orang tua menyimpan dan mengelola perjalanan hidup anak sejak lahir hingga dewasa dalam satu tempat yang aman, terstruktur, dan mudah diakses.
+ForMysha adalah platform **Digital Life Book & Family Life Platform** berbasis web yang membantu orang tua menyimpan dan mengelola perjalanan hidup anak sejak lahir hingga dewasa dalam satu tempat yang aman, terstruktur, dan mudah diakses.
 
-Platform ini menggabungkan dokumentasi kenangan, kesehatan, pendidikan, dokumen penting, serta aktivitas keluarga dalam satu aplikasi.
+Platform ini menggabungkan dokumentasi kenangan, kesehatan, pendidikan, dokumen penting, serta aktivitas keluarga dalam satu aplikasi — dengan sistem **Connection** yang menghubungkan keluarga dengan fasilitas kesehatan, sekolah, dan organisasi lainnya.
 
-ForMysha dibangun sebagai **Software as a Service (SaaS)** sehingga dapat digunakan oleh individu, keluarga, maupun organisasi.
+ForMysha dibangun sebagai **Software as a Service (SaaS)** yang melayani dua segmen utama:
+
+* **B2C (Family)** — Keluarga yang ingin mendokumentasikan perjalanan hidup anak.
+* **B2B (Organization)** — Fasilitas kesehatan, sekolah, dan organisasi yang mengelola data pasien/siswa.
 
 ### Visi
 
-Menjadi platform digital terpercaya untuk mendokumentasikan perjalanan hidup anak dari lahir hingga dewasa.
+Menjadi platform digital terpercaya untuk mendokumentasikan perjalanan hidup anak dari lahir hingga dewasa, sekaligus menjadi **jembatan digital** antara keluarga dan organisasi yang merawat mereka.
 
 ### Misi
 
@@ -48,7 +51,7 @@ Menjadi platform digital terpercaya untuk mendokumentasikan perjalanan hidup ana
 
 ForMysha bukan sekadar album foto.
 
-ForMysha adalah **Digital Life Book** yang menyimpan seluruh perjalanan hidup anak dalam satu aplikasi, mulai dari kenangan, pertumbuhan, kesehatan, pendidikan, hingga dokumen penting.
+ForMysha adalah **Digital Life Book & Family Life Platform** yang menyimpan seluruh perjalanan hidup anak dalam satu aplikasi, mulai dari kenangan, pertumbuhan, kesehatan, pendidikan, hingga dokumen penting — dengan **sistem Connection** yang menghubungkan keluarga dengan organisasi secara aman dan terkontrol.
 
 ### Mengapa Bernama ForMysha?
 
@@ -913,6 +916,16 @@ public/favicon.ico   → Favicon legacy
 * **Feature Comparison Table**: Tabel perbandingan fitur di halaman plans — desktop table + mobile cards, dynamic features dari plan model
 * **Tests**: 4 tests baru — cascade deletion, feature comparison, inactive plan rejection — 683 tests, 1570 assertions — all passing
 
+#### Phase 20 — Comprehensive Audit & Code Quality ✅
+
+* **DocumentType Enum**: Buat `app/Enums/DocumentType.php` — 8 cases (BirthCertificate, FamilyCard, Kia, Bpjs, Passport, Certificate, ReportCard, Other) dengan `label()`, `emoji()`, `options()` methods. Document model cast ke enum. DocumentController menggunakan `DocumentType::options()`
+* **i18n Translation Keys**: 50+ translation keys baru di `lang/id/app.php` dan `lang/en/app.php` — SuperAdmin, TenantAdmin, FacilityAdmin, Subscription, Notification, Export, Erasure, DocumentTypes
+* **Hardcoded Strings → __() Helper**: 42 hardcoded strings di 19 controllers/middleware di-wrap dengan `__()` — SuperAdmin (5), TenantAdmin (4), FacilityAdmin (5), Core (5)
+* **Return Type Hints**: 15 methods di 5 FacilityAdmin controllers ditambah `: RedirectResponse` return type — StaffController, ClinicalNoteController, ReferralController, PatientLinkController, FacilitySettingsController
+* **MediaService Constructor Injection**: Refaktor `TimelineController` dan `MediaController` dari manual `new MediaService` ke constructor injection `private MediaService $mediaService`
+* **Bug Fix — Carbon Import**: Tambah `use Illuminate\Support\Carbon;` di Document model untuk fix "Class App\Models\Carbon not found"
+* **Tests**: 693 tests, 1668 assertions — all passing (DocumentTypeTest 7 tests baru)
+
 ### Keunggulan Kompetitif
 
 * Fokus pada **Digital Life Book**, bukan sekadar album foto.
@@ -932,8 +945,182 @@ ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya 
 
 ---
 
-## ForMysha Project Rules
 
+## Core Architecture
+
+Arsitektur inti ForMysha dibangun dengan fondasi berikut:
+
+```
+Identity → Family → Person → Relationship → Organization → Connection → Permission → Collaboration → Audit Trail → Family Tree
+```
+
+### Konsep Dasar
+
+* **Identity (User Account)** — Satu akun pengguna (orang tua/wali) bisa terhubung ke banyak keluarga dan organisasi.
+* **Family** — Unit keluarga yang memiliki satu atau lebih anak.
+* **Person / Child Profile** — Anak adalah **profil/entitas**, bukan akun terpisah.
+* **Relationship** — Hubungan keluarga (ayah, ibu, kakek, nenek, wali).
+* **Organization** — Fasilitas kesehatan, sekolah, atau organisasi lainnya (B2B).
+* **Connection** — Hubungan antara keluarga dan organisasi dengan permission-based access.
+* **Permission** — Level akses yang dikontrol oleh pemilik data (keluarga).
+* **Audit Trail** — Catatan lengkap WHO, WHAT, WHEN, WHERE, WHY, dan PERMISSION.
+* **Family Tree** — Visualisasi hubungan keluarga dan organisasi yang terhubung.
+
+### Prinsip: 1 Anak ≠ 1 Akun
+
+Anak bukan pengguna aplikasi. Anak adalah **profil/entitas** yang dimiliki oleh akun orang tua/wali.
+
+```
+User Account (Orang Tua) → Family → Child Profile → Connection → Organization
+```
+
+Satu orang tua bisa memiliki banyak anak. Satu anak bisa terhubung ke banyak organisasi. Tetapi satu akun = satu identitas digital.
+
+---
+
+## 10 Prinsip Inti ForMysha
+
+### Prinsip 1 — Satu Akun, Banyak Keluarga & Organisasi
+
+Satu akun bisa terhubung ke banyak keluarga dan organisasi. Login sekali, akses semua.
+
+### Prinsip 2 — Anak Bukan Akun
+
+Anak adalah profil/entitas, bukan akun login terpisah. Orang tua mengelola semua data anak dari akun mereka.
+
+### Prinsip 3 — Keluarga Adalah Pemilik Data
+
+Keluarga memiliki dan mengontrol semua data anak. Organisasi hanya memiliki akses berdasarkan permission yang diberikan.
+
+### Prinsip 4 — Organisasi adalah Partner, Bukan Pemilik
+
+Organisasi (B2B) terhubung melalui Connection, bukan memiliki data. Akses diatur oleh permission level.
+
+### Prinsip 5 — Connection ≠ Ownership
+
+Terhubung (connected) tidak berarti memiliki. Organisasi bisa melihat data yang diizinkan, tetapi tidak bisa mengubah atau menghapus data milik keluarga.
+
+### Prinsip 6 — Permission-Based Access
+
+Setiap Connection memiliki permission level: View, Comment, Edit, atau Manage. Keluarga mengontrol siapa bisa melakukan apa.
+
+### Prinsip 7 — Audit Trail Wajib
+
+Setiap aksi tercatat: WHO (siapa), WHAT (apa yang dilakukan), WHEN (kapan), WHERE (dari mana), WHY (alasan), dan PERMISSION (berdasarkan hak akses apa).
+
+### Prinsip 8 — B2B adalah Gateway ke B2C
+
+Organisasi (rumah sakit, sekolah) bisa membantu registrasi keluarga baru. Ini menjadi jalur akuisisi B2C yang powerful.
+
+### Prinsip 9 — Subscription Tied to Family/Organization
+
+Subscription terikat pada Family atau Organization, bukan pada user individual. Satu user bisa memiliki akses ke multiple subscriptions melalui connection.
+
+### Prinsip 10 — Family Tree sebagai Core Feature
+
+Family Tree bukan fitur tambahan, tetapi fondasi yang menghubungkan semua data: siapa, hubungan dengan siapa, dan terhubung ke organisasi mana.
+
+---
+
+## Connection System Rules
+
+### Connection Status
+
+* **Active** — Hubungan aktif, akses penuh sesuai permission.
+* **Pending** — Menunggu persetujuan dari pemilik data (keluarga).
+* **Referred** — Direferensikan oleh organisasi lain, menunggu registrasi.
+
+### Permission Levels
+
+* **View** — Hanya bisa melihat data.
+* **Comment** — Bisa melihat dan memberikan komentar.
+* **Edit** — Bisa melihat, komentar, dan mengedit data.
+* **Manage** — Akses penuh termasuk pengaturan dan administrasi.
+
+### Rules
+
+* Keluarga adalah pemilik data dan mengontrol semua permission.
+* Organisasi tidak bisa mengubah permission tanpa persetujuan keluarga.
+* Semua akses tercatat dalam Audit Trail.
+* Connection bisa diakhiri kapan saja oleh pemilik data.
+
+---
+
+## B2B Rules
+
+### Assisted Registration Flow
+
+1. Organisasi membuat profil pasien/siswa.
+2. Keluarga diundang via email/WhatsApp.
+3. Keluarga membuat akun dan mengklaim profil.
+4. Data dari organisasi otomatis terhubung.
+5. Permission diatur oleh keluarga.
+
+### B2B Access Restrictions
+
+* Organisasi hanya bisa melihat data yang diizinkan.
+* Organisasi tidak bisa menghapus data milik keluarga.
+* Organisasi tidak bisa mengakses data keluarga lain.
+* Semua aktivitas tercatat dalam Audit Trail.
+
+### Subscription Rules
+
+* Subscription terikat pada Organization, bukan individual user.
+* Organisasi membayar berdasarkan kapasitas (jumlah profil anak + staf).
+* User individu (orang tua) tetap bisa memiliki subscription B2C sendiri.
+
+---
+
+## Family Tree Rules
+
+### Core Concept
+
+* Family Tree adalah fondasi data, bukan sekadar fitur visual.
+* Menghubungkan semua entitas: orang tua, anak, kakek/nenek, wali, organisasi.
+* Permission-based: setiap hubungan memiliki level akses tersendiri.
+
+### Relationship Types
+
+* **Keluarga**: Ayah, Ibu, Kakek, Nenek, Wali, Saudara.
+* **Organisasi**: Rumah Sakit, Klinik, Sekolah, Daycare, Posyandu.
+* **Campuran**: Keluarga ↔ Organisasi melalui Connection.
+
+### Data Flow
+
+```
+Family Tree
+├── Family Members (Kakek/Nenek, Ayah/Ibu, Anak)
+├── Organizations (RS, Sekolah, Klinik)
+│   ├── Connection Status (Active, Pending, Referred)
+│   └── Permission Level (View, Comment, Edit, Manage)
+└── Activity & Access History
+```
+
+---
+
+## Audit Trail Rules
+
+### Format
+
+```
+WHO: [user_id] — [user_name]
+WHAT: [action] — [entity_type] [entity_id]
+WHEN: [timestamp]
+WHERE: [ip_address] — [device] — [user_agent]
+WHY: [reason] (optional)
+PERMISSION: [permission_level] — [connection_id]
+```
+
+### Scope
+
+* Semua aksi pada data keluarga tercatat.
+* Akses organisasi ke data keluarga tercatat.
+* Perubahan permission tercatat.
+* Login/logout tercatat.
+
+---
+
+## ForMysha Project Rules
 ### Route Safety
 
 - Auth routes (`require __DIR__.'/auth.php'` in `routes/web.php`) MUST be registered BEFORE catch-all routes like `/{slug}`. Laravel matches routes top-to-bottom; placing catch-all before auth causes `/login`, `/register`, etc. to return 404.
@@ -1117,9 +1304,24 @@ All Blade views MUST follow these responsive patterns consistently:
 - **Super Admin API**: Routes under `/api/admin/*` with `role:super_admin` middleware.
 - **API Routes**: Defined in `routes/api.php`. Public routes first, then `auth:sanctum` protected routes, then `role:super_admin` routes.
 
+### Connection Conventions (Phase 21)
+
+- **Connection Model**: `app/Models/Connection.php` — polymorphic `connectable` (Child or FamilyMember) to `connectable_type`/`connectable_id`.
+- **ConnectionStatus Enum**: `pending`, `active`, `deleted` — used in `status` column.
+- **ConnectionPermission Enum**: `View(1)`, `Comment(2)`, `Edit(3)`, `Manage(4)` — stored as integer in `permission_level` column.
+- **ConnectionService**: `app/Services/ConnectionService.php` — handles create, approve, reject, revoke, list by connectable.
+- **ConnectionController**: `app/Http/Controllers/ConnectionController.php` — web routes for connection management.
+- **ConnectionApiController**: `app/Http/Controllers/Api/ConnectionApiController.php` — API routes under `/api/connections`.
+- **EnsureConnectionPermission**: Middleware checks connection permission level for B2B access.
+- **Activity History**: `app/Models/ActivityHistory.php` — tracks all connection-related activities (created, approved, rejected, revoked, permission_updated).
+- **Family Tree Service**: `app/Services/FamilyTreeService.php` — builds family tree data structure with members, organizations, and connections.
+- **Referral Enhancement**: `ReferralType` enum (facility_to_facility, facility_to_family) added to existing referrals table.
+- **Connection Routes**: Web routes in `routes/web.php` under `connections.*`. API routes in `routes/api.php` under `api/connections.*`.
+- **Connection Tests**: `tests/Feature/ConnectionTest.php`, `tests/Feature/Api/ConnectionApiTest.php`, `tests/Feature/ActivityHistoryTest.php`.
+
 ### Quality Assurance
 
-* **Total Tests**: 686 tests, 1589 assertions — all passing
+* **Total Tests**: 774 tests, 1871 assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit, Achievement, Milestone, FacilityAdmin
@@ -1155,6 +1357,7 @@ All Blade views MUST follow these responsive patterns consistently:
   - Fix FamilyMemberResource (tambah photo, photo_url, relationship_label)
   - Tambah `tenant_id` ke `$fillable` di FamilyMember model
   - 25 tests baru (16 Feature + 9 API)
+* **Phase 21 — Architecture Evolution**: Connection System, Family Tree, B2B Assisted Registration, Referral Enhancement, Activity History — 81 tests baru (18 test files), 774 tests, 1871 assertions
 
 ---
 

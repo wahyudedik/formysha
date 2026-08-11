@@ -10,6 +10,7 @@ use App\Models\Referral;
 use App\Models\Staff;
 use App\Models\Tenant;
 use App\Services\TenantService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -62,7 +63,7 @@ class ReferralController extends Controller
     /**
      * Store a newly created referral.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
 
@@ -92,7 +93,7 @@ class ReferralController extends Controller
         ]);
 
         return redirect()->route('facility.referrals.show', $referral)
-            ->with('success', 'Rujukan berhasil dibuat.');
+            ->with('status', __('status.referral_created'));
     }
 
     /**
@@ -113,7 +114,7 @@ class ReferralController extends Controller
     /**
      * Accept the specified referral.
      */
-    public function accept(Referral $referral)
+    public function accept(Referral $referral): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless($referral->to_tenant_id === $tenant->id, 403);
@@ -121,13 +122,13 @@ class ReferralController extends Controller
         $referral->accept();
 
         return redirect()->route('facility.referrals.show', $referral)
-            ->with('success', 'Rujukan berhasil diterima.');
+            ->with('status', __('status.referral_accepted'));
     }
 
     /**
      * Complete the specified referral.
      */
-    public function complete(Referral $referral)
+    public function complete(Referral $referral): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless(
@@ -138,13 +139,13 @@ class ReferralController extends Controller
         $referral->complete();
 
         return redirect()->route('facility.referrals.show', $referral)
-            ->with('success', 'Rujukan berhasil diselesaikan.');
+            ->with('status', __('status.referral_completed'));
     }
 
     /**
      * Cancel the specified referral.
      */
-    public function cancel(Referral $referral)
+    public function cancel(Referral $referral): RedirectResponse
     {
         $tenant = $this->tenantService->getCurrentTenant();
         abort_unless(
@@ -155,6 +156,6 @@ class ReferralController extends Controller
         $referral->cancel();
 
         return redirect()->route('facility.referrals.show', $referral)
-            ->with('success', 'Rujukan berhasil dibatalkan.');
+            ->with('status', __('status.referral_cancelled'));
     }
 }
