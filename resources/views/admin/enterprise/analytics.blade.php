@@ -143,8 +143,8 @@
                     @if (collect($metrics)->every(fn ($m) => $m->isEmpty()))
                         <div class="text-center py-8">
                             <div class="text-4xl mb-3">📭</div>
-                            <p class="text-gray-500 dark:text-gray-400">Belum ada data analytics untuk periode ini.</p>
-                            <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Data akan muncul setelah ada aktivitas di platform.</p>
+                            <p class="text-gray-500 dark:text-gray-400">{{ __('empty_states.no_analytics_data') }}</p>
+                            <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">{{ __('empty_states.analytics_data_desc') }}</p>
                         </div>
                     @endif
                 </div>

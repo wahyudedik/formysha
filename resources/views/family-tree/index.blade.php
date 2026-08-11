@@ -38,7 +38,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-2xl p-4 sm:p-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">👨‍👩‍👧‍👦 {{ __('Anggota Keluarga') }}</h3>
                 @if ($familyMembers->isEmpty())
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Belum ada anggota keluarga.') }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_family_members') }}</p>
                 @else
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         @foreach ($familyMembers as $member)
@@ -71,7 +71,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-2xl p-4 sm:p-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">🏥 {{ __('Organisasi Terhubung') }}</h3>
                 @if ($connections->isEmpty())
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Belum ada organisasi terhubung.') }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_organizations_connected') }}</p>
                 @else
                     <div class="space-y-3">
                         @foreach ($connections as $connection)
@@ -108,7 +108,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-2xl p-4 sm:p-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">📋 {{ __('Aktivitas Terbaru') }}</h3>
                 @if ($recentActivity->isEmpty())
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Belum ada aktivitas.') }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_activity') }}</p>
                 @else
                     <div class="space-y-3">
                         @foreach ($recentActivity as $activity)

@@ -37,7 +37,7 @@
                 @if ($patients->isEmpty())
                     <div class="text-center py-12">
                         <div class="text-4xl mb-3">👶</div>
-                        <p class="text-gray-500 dark:text-gray-400">{{ __('Belum ada pasien terdaftar.') }}</p>
+                        <p class="text-gray-500 dark:text-gray-400">{{ __('empty_states.no_patients') }}</p>
                     </div>
                 @else
                     <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
@@ -46,7 +46,7 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Pasien') }}</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Orang Tua') }}</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Status') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('common.status') }}</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Tanggal Hubung') }}</th>
                                 </tr>
                             </thead>

@@ -97,7 +97,7 @@
 
         @if ($growths->isEmpty())
             <div class="empty-state">
-                <p>Belum ada data pertumbuhan yang tercatat.</p>
+                <p>{{ __('empty_states.no_growth_records') }}</p>
             </div>
         @else
             <!-- Data Table -->

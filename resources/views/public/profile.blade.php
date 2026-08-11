@@ -165,7 +165,7 @@
                     @empty
                         <div class="col-span-full text-center py-8 text-gray-400 dark:text-gray-500">
                             <span class="text-4xl block mb-2">📷</span>
-                            <p>Belum ada album</p>
+                            <p>{{ __('empty_states.no_public_albums') }}</p>
                         </div>
                     @endforelse
                 </div>
@@ -196,7 +196,7 @@
                 @else
                     <div class="text-center py-8 text-gray-400 dark:text-gray-500">
                         <span class="text-4xl block mb-2">⭐</span>
-                        <p>Belum ada penghargaan</p>
+                        <p>{{ __('empty_states.no_public_awards') }}</p>
                     </div>
                 @endif
             </div>

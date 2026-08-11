@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-                🛡️ {{ __('Super Admin Dashboard') }}
+                🛡️ {{ __('super_admin.dashboard_title') }}
             </h2>
         </div>
     </x-slot>
@@ -24,11 +24,11 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalTenants }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Total Tenant</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.total_tenants') }}</p>
                             </div>
                         </div>
                         <div class="mt-3 text-xs text-mintGreen-600 dark:text-mintGreen-400">
-                            {{ $activeTenants }} aktif
+                            {{ $activeTenants }} {{ __('common.active') }}
                         </div>
                     </div>
 
@@ -40,11 +40,11 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $pendingPayments }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Menunggu Verifikasi</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.pending_verification') }}</p>
                             </div>
                         </div>
                         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                            {{ $totalPayments }} total transaksi
+                            {{ $totalPayments }} {{ __('super_admin.total_transactions') }}
                         </div>
                     </div>
 
@@ -56,11 +56,11 @@
                             </div>
                             <div>
                                 <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueThisMonth, 0, ',', '.') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Pendapatan Bulan Ini</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.revenue_this_month') }}</p>
                             </div>
                         </div>
                         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                            Total: Rp {{ number_format($revenueTotal, 0, ',', '.') }}
+                            {{ __('common.total') }}: Rp {{ number_format($revenueTotal, 0, ',', '.') }}
                         </div>
                     </div>
 
@@ -72,11 +72,11 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalPlans }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Total Paket</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.total_plans') }}</p>
                             </div>
                         </div>
                         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                            {{ $approvedPayments }} pembayaran disetujui
+                            {{ $approvedPayments }} {{ __('super_admin.approved_payments_count') }}
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                 {{-- B2B Stats Cards --}}
                 @if ($b2bTenantCount > 0)
                     <div class="mb-8">
-                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('Statistik B2B (Fasilitas)') }}</h3>
+                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('super_admin.b2b_stats_title') }}</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {{-- B2B Tenants --}}
                             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
@@ -94,11 +94,11 @@
                                     </div>
                                     <div>
                                         <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $b2bTenantCount }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fasilitas B2B</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.b2b_facilities') }}</p>
                                     </div>
                                 </div>
                                 <div class="mt-3 text-xs text-mintGreen-600 dark:text-mintGreen-400">
-                                    {{ $b2bActiveCount }} aktif
+                                    {{ $b2bActiveCount }} {{ __('common.active') }}
                                 </div>
                             </div>
 
@@ -110,11 +110,11 @@
                                     </div>
                                     <div>
                                         <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalStaff }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Staf Aktif</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.active_staff') }}</p>
                                     </div>
                                 </div>
                                 <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                                    {{ $totalPatientLinks }} tautan pasien
+                                    {{ $totalPatientLinks }} {{ __('super_admin.patient_links') }}
                                 </div>
                             </div>
 
@@ -126,11 +126,11 @@
                                     </div>
                                     <div>
                                         <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $clinicalNotesThisMonth }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Catatan Klinis (Bulan Ini)</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.clinical_notes_this_month') }}</p>
                                     </div>
                                 </div>
                                 <div class="mt-3 text-xs {{ $pendingReferrals > 0 ? 'text-warmYellow-600 dark:text-warmYellow-400' : 'text-gray-500 dark:text-gray-400' }}">
-                                    {{ $pendingReferrals }} rujukan pending
+                                    {{ $pendingReferrals }} {{ __('super_admin.pending_referrals') }}
                                 </div>
                             </div>
                         </div>
@@ -139,19 +139,19 @@
                     {{-- B2B Revenue Breakdown --}}
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-5 border border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">💰 {{ __('Pendapatan B2B vs B2C') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">💰 {{ __('super_admin.b2b_vs_b2c_revenue') }}</h3>
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <div class="w-3 h-3 rounded-full bg-softPink-400"></div>
-                                        <span class="text-sm text-gray-600 dark:text-gray-300">B2B (Fasilitas)</span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">{{ __('super_admin.b2b_facility') }}</span>
                                     </div>
                                     <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2B, 0, ',', '.') }}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <div class="w-3 h-3 rounded-full bg-skyBlue-400"></div>
-                                        <span class="text-sm text-gray-600 dark:text-gray-300">B2C (Keluarga)</span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">{{ __('super_admin.b2c_family') }}</span>
                                     </div>
                                     <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2C, 0, ',', '.') }}</span>
                                 </div>
@@ -165,9 +165,9 @@
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">⏳ {{ __('Pembayaran Pending') }}</h3>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">⏳ {{ __('super_admin.pending_payments') }}</h3>
                                 <a href="{{ route('super-admin.payments.index') }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 dark:text-skyBlue-400 dark:hover:text-skyBlue-300 transition min-h-[44px] inline-flex items-center">
-                                    Lihat Semua →
+                                    {{ __('common.view_all') }} →
                                 </a>
                             </div>
                         </div>
@@ -175,7 +175,7 @@
                             @if ($recentPayments->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">✅</div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Tidak ada pembayaran pending.</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_payments_pending') }}</p>
                                 </div>
                             @else
                                 <div class="space-y-3">
@@ -199,9 +199,9 @@
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏢 {{ __('Tenant Terbaru') }}</h3>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏢 {{ __('super_admin.recent_tenants') }}</h3>
                                 <a href="{{ route('super-admin.tenants.index') }}" class="text-sm text-skyBlue-600 hover:text-skyBlue-700 dark:text-skyBlue-400 dark:hover:text-skyBlue-300 transition min-h-[44px] inline-flex items-center">
-                                    Lihat Semua →
+                                    {{ __('common.view_all') }} →
                                 </a>
                             </div>
                         </div>
@@ -209,7 +209,7 @@
                             @if ($recentTenants->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">🏢</div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada tenant.</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_tenants') }}</p>
                                 </div>
                             @else
                                 <div class="space-y-3">
@@ -222,11 +222,11 @@
                                                     </div>
                                                     <div class="min-w-0">
                                                         <p class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{{ $tenant->name }}</p>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $tenant->users_count ?? 0 }} pengguna · {{ $tenant->children_count ?? 0 }} anak</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $tenant->users_count ?? 0 }} {{ __('super_admin.users_count') }} · {{ $tenant->children_count ?? 0 }} {{ __('super_admin.children_count') }}</p>
                                                     </div>
                                                 </div>
                                                 <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium {{ $tenant->is_active ? 'bg-mintGreen-100 text-mintGreen-600 dark:bg-mintGreen-950/30 dark:text-mintGreen-400' : 'bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400' }}">
-                                                    {{ $tenant->is_active ? 'Aktif' : 'Nonaktif' }}
+                                                    {{ $tenant->is_active ? __('common.active') : __('common.inactive') }}
                                                 </span>
                                             </div>
                                         </a>
@@ -239,23 +239,23 @@
 
                 {{-- Quick Actions --}}
                 <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6">
-                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🚀 {{ __('Aksi Cepat') }}</h3>
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">🚀 {{ __('super_admin.quick_actions') }}</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <a href="{{ route('super-admin.tenants.create') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">➕</span>
-                            <span class="text-xs font-medium text-skyBlue-700 dark:text-skyBlue-400">Tambah Tenant</span>
+                            <span class="text-xs font-medium text-skyBlue-700 dark:text-skyBlue-400">{{ __('actions.add') }} {{ __('navigation.tenants') }}</span>
                         </a>
                         <a href="{{ route('super-admin.plans.create') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-lavender-50 dark:bg-lavender-950/30 hover:bg-lavender-100 dark:hover:bg-lavender-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">📋</span>
-                            <span class="text-xs font-medium text-lavender-700 dark:text-lavender-400">Tambah Paket</span>
+                            <span class="text-xs font-medium text-lavender-700 dark:text-lavender-400">{{ __('actions.add') }} {{ __('navigation.plans') }}</span>
                         </a>
                         <a href="{{ route('super-admin.payments.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-warmYellow-50 dark:bg-warmYellow-950/30 hover:bg-warmYellow-100 dark:hover:bg-warmYellow-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">💳</span>
-                            <span class="text-xs font-medium text-warmYellow-700 dark:text-warmYellow-400">Verifikasi Bayar</span>
+                            <span class="text-xs font-medium text-warmYellow-700 dark:text-warmYellow-400">{{ __('super_admin.verify_payment') }}</span>
                         </a>
                         <a href="{{ route('super-admin.audit-logs.index') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-peach-50 dark:bg-peach-950/30 hover:bg-peach-100 dark:hover:bg-peach-950/50 transition text-center min-h-[44px] justify-center">
                             <span class="text-2xl">📜</span>
-                            <span class="text-xs font-medium text-peach-700 dark:text-peach-400">Audit Log</span>
+                            <span class="text-xs font-medium text-peach-700 dark:text-peach-400">{{ __('super_admin.audit_log') }}</span>
                         </a>
                     </div>
                 </div>

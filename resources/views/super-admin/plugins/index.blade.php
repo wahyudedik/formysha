@@ -2,13 +2,13 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-                🧩 Plugin Management
+                🧩 {{ __('plugins.management') }}
             </h2>
             <button
                 @click="showCreateModal = true"
                 class="btn-primary text-sm min-h-[44px] inline-flex items-center"
             >
-                ➕ Daftarkan Plugin
+                ➕ {{ __('plugins.register') }}
             </button>
         </div>
     </x-slot>
@@ -19,8 +19,8 @@
 
             <div class="flex-1 min-w-0" x-data="{ showCreateModal: false }">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Plugins'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.plugins')],
                 ]" />
 
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-100 dark:border-gray-700">
@@ -28,8 +28,8 @@
                         <div class="p-8">
                             <x-empty-state
                                 icon="🧩"
-                                title="Belum ada plugin"
-                                description="Daftarkan plugin pertama untuk mulai membangun marketplace."
+                                :title="__('empty_states.no_plugins')"
+                                :description="__('empty_states.no_plugins_desc')"
                             />
                         </div>
                     @else
@@ -37,12 +37,12 @@
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700/50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Plugin</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Versi</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Author</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Install</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Status</th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Aksi</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">{{ __('plugins.plugin') }}</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">{{ __('plugins.version') }}</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">{{ __('plugins.author') }}</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">{{ __('plugins.installs') }}</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">{{ __('forms.status') }}</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">{{ __('common.actions_label') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -56,7 +56,7 @@
                                                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ $plugin->slug }}</p>
                                                     </div>
                                                     @if($plugin->is_official)
-                                                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-skyBlue-100 text-skyBlue-700 dark:bg-skyBlue-950/30 dark:text-skyBlue-400">Resmi</span>
+                                                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-skyBlue-100 text-skyBlue-700 dark:bg-skyBlue-950/30 dark:text-skyBlue-400">{{ __('plugins.official') }}</span>
                                                     @endif
                                                 </div>
                                             </td>
@@ -65,14 +65,14 @@
                                             <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $plugin->install_count }}</td>
                                             <td class="px-6 py-4">
                                                 @if($plugin->is_active)
-                                                    <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-mintGreen-100 text-mintGreen-700 dark:bg-mintGreen-950/30 dark:text-mintGreen-400">Aktif</span>
+                                                    <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-mintGreen-100 text-mintGreen-700 dark:bg-mintGreen-950/30 dark:text-mintGreen-400">{{ __('common.active') }}</span>
                                                 @else
-                                                    <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">Nonaktif</span>
+                                                    <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">{{ __('common.inactive') }}</span>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-right">
                                                 <a href="{{ route('super-admin.plugins.show', $plugin) }}" class="inline-flex items-center min-h-[44px] text-skyBlue-600 dark:text-skyBlue-400 hover:text-skyBlue-800 dark:hover:text-skyBlue-300 text-sm font-medium">
-                                                    Lihat →
+                                                    {{ __('plugins.view') }}
                                                 </a>
                                             </td>
                                         </tr>
@@ -92,60 +92,60 @@
                     <div class="flex items-center justify-center min-h-screen px-4">
                         <div class="fixed inset-0 bg-gray-500 dark:bg-gray-950 dark:bg-opacity-75 bg-opacity-75" @click="showCreateModal = false"></div>
                         <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-lg w-full p-6">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">➕ Daftarkan Plugin Baru</h3>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">➕ {{ __('plugins.register_new') }}</h3>
 
                             <form method="POST" action="{{ route('super-admin.plugins.store') }}">
                                 @csrf
 
                                 <div class="grid grid-cols-2 gap-4 mb-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Nama</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{{ __('plugins.name') }}</label>
                                         <input type="text" name="name" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm" />
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Slug</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{{ __('plugins.slug') }}</label>
                                         <input type="text" name="slug" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm" />
                                     </div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Deskripsi</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{{ __('plugins.description') }}</label>
                                     <textarea name="description" rows="2" class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm"></textarea>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-4 mb-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Versi</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{{ __('plugins.version') }}</label>
                                         <input type="text" name="version" required placeholder="1.0.0" class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm" />
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Author</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{{ __('plugins.author') }}</label>
                                         <input type="text" name="author" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm" />
                                     </div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Icon (emoji)</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{{ __('plugins.icon') }}</label>
                                     <input type="text" name="icon" placeholder="🧩" class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:border-skyBlue-500 focus:ring-skyBlue-500 text-sm" />
                                 </div>
 
                                 <div class="flex items-center gap-4 mb-4">
                                     <label class="flex items-center gap-2 text-sm">
                                         <input type="checkbox" name="is_active" value="1" checked class="rounded border-gray-300 dark:border-gray-600 text-skyBlue-600 focus:ring-skyBlue-500" />
-                                        <span class="text-gray-700 dark:text-gray-200">Aktif</span>
+                                        <span class="text-gray-700 dark:text-gray-200">{{ __('common.active') }}</span>
                                     </label>
                                     <label class="flex items-center gap-2 text-sm">
                                         <input type="checkbox" name="is_official" value="1" class="rounded border-gray-300 dark:border-gray-600 text-skyBlue-600 focus:ring-skyBlue-500" />
-                                        <span class="text-gray-700 dark:text-gray-200">Resmi</span>
+                                        <span class="text-gray-700 dark:text-gray-200">{{ __('plugins.official') }}</span>
                                     </label>
                                 </div>
 
                                 <div class="flex flex-col sm:flex-row justify-end gap-3">
                                     <button type="button" @click="showCreateModal = false" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
-                                        Batal
+                                        {{ __('actions.cancel') }}
                                     </button>
                                     <button type="submit" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
-                                        💾 Simpan
+                                        💾 {{ __('actions.save') }}
                                     </button>
                                 </div>
                             </form>

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'management' => 'Manajemen Plugin',
+    'register' => 'Daftarkan Plugin',
+    'register_new' => 'Daftarkan Plugin Baru',
+    'plugin' => 'Plugin',
+    'name' => 'Nama',
+    'slug' => 'Slug',
+    'description' => 'Deskripsi',
+    'no_description' => 'Tidak ada deskripsi.',
+    'version' => 'Versi',
+    'author' => 'Author',
+    'icon' => 'Icon (emoji)',
+    'official' => 'Resmi',
+    'installs' => 'Install',
+    'view' => 'Lihat →',
+    'hooks' => 'Hooks',
+    'permissions' => 'Permissions',
+    'recent_logs' => '📋 Log Aktivitas Terbaru',
+    'statistics' => '📊 Statistik',
+    'created_at' => 'Dibuat',
+    'tenant_count' => 'Tenant Plugins',
+    'confirm_delete_title' => 'Hapus Plugin',
+    'confirm_delete_message' => 'Apakah Anda yakin ingin menghapus plugin ini? Tindakan ini tidak dapat dibatalkan.',
+];

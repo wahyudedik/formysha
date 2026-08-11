@@ -2,21 +2,21 @@
 
 @php
     $modules = [
-        ['route' => 'children.show', 'label' => __('Profil'), 'icon' => '👶', 'param' => 'child'],
-        ['route' => 'timeline.index', 'label' => __('Timeline'), 'icon' => '📸', 'param' => 'child'],
-        ['route' => 'albums.index', 'label' => __('Album'), 'icon' => '🖼️', 'param' => 'child'],
-        ['route' => 'diaries.index', 'label' => __('Diary'), 'icon' => '📔', 'param' => 'child'],
-        ['route' => 'growth.index', 'label' => __('Pertumbuhan'), 'icon' => '📏', 'param' => 'child'],
-        ['route' => 'health.index', 'label' => __('Kesehatan'), 'icon' => '🏥', 'param' => 'child'],
-        ['route' => 'documents.index', 'label' => __('Dokumen'), 'icon' => '📄', 'param' => 'child'],
-        ['route' => 'calendar.index', 'label' => __('Kalender'), 'icon' => '📅', 'param' => 'child'],
-        ['route' => 'achievements.index', 'label' => __('Pencapaian'), 'icon' => '🏆', 'param' => 'child'],
-        ['route' => 'milestones.index', 'label' => __('Milestone'), 'icon' => '🎯', 'param' => 'child'],
-        ['route' => 'family.index', 'label' => __('Keluarga'), 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
-        ['route' => 'connections.index', 'label' => __('Koneksi'), 'icon' => '🔗', 'param' => 'child'],
-        ['route' => 'children.family-tree', 'label' => __('Pohon Keluarga'), 'icon' => '🌳', 'param' => 'child'],
-        ['route' => 'consent.index', 'label' => __('Privasi'), 'icon' => '🔒', 'param' => 'child'],
-        ['route' => 'profile.edit', 'label' => __('Pengaturan'), 'icon' => '⚙️', 'param' => null],
+        ['route' => 'children.show', 'label' => __('common.profile'), 'icon' => '👶', 'param' => 'child'],
+        ['route' => 'timeline.index', 'label' => __('common.timeline'), 'icon' => '📸', 'param' => 'child'],
+        ['route' => 'albums.index', 'label' => __('common.album'), 'icon' => '🖼️', 'param' => 'child'],
+        ['route' => 'diaries.index', 'label' => __('common.diary'), 'icon' => '📔', 'param' => 'child'],
+        ['route' => 'growth.index', 'label' => __('common.growth'), 'icon' => '📏', 'param' => 'child'],
+        ['route' => 'health.index', 'label' => __('common.health'), 'icon' => '🏥', 'param' => 'child'],
+        ['route' => 'documents.index', 'label' => __('common.documents'), 'icon' => '📄', 'param' => 'child'],
+        ['route' => 'calendar.index', 'label' => __('common.calendar'), 'icon' => '📅', 'param' => 'child'],
+        ['route' => 'achievements.index', 'label' => __('common.achievements'), 'icon' => '🏆', 'param' => 'child'],
+        ['route' => 'milestones.index', 'label' => __('common.milestones'), 'icon' => '🎯', 'param' => 'child'],
+        ['route' => 'family.index', 'label' => __('common.family'), 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
+        ['route' => 'connections.index', 'label' => __('common.connections'), 'icon' => '🔗', 'param' => 'child'],
+        ['route' => 'children.family-tree', 'label' => __('common.family_tree'), 'icon' => '🌳', 'param' => 'child'],
+        ['route' => 'consent.index', 'label' => __('common.privacy'), 'icon' => '🔒', 'param' => 'child'],
+        ['route' => 'profile.edit', 'label' => __('common.settings'), 'icon' => '⚙️', 'param' => null],
     ];
 
     $visibleModules = array_slice($modules, 0, 5);
@@ -75,7 +75,7 @@
                 class="flex flex-col items-center gap-0.5 px-2 py-1 min-h-[44px] rounded-xl text-xs transition-all duration-200
                        {{ $hasOverflowActive ? 'text-softPink-600 dark:text-softPink-400' : 'text-gray-400 dark:text-gray-500' }}">
             <span class="text-lg leading-none">⋯</span>
-            <span class="font-medium leading-tight">{{ __('Lainnya') }}</span>
+            <span class="font-medium leading-tight">{{ __('common.more') }}</span>
         </button>
     </div>
 

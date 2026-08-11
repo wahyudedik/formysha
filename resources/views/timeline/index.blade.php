@@ -8,7 +8,7 @@
                     </svg>
                 </a>
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight truncate">
-                    📅 {{ __('Timeline') }} — {{ $child->nickname ?? $child->name }}
+                    📅 {{ __('common.timeline') }} — {{ $child->nickname ?? $child->name }}
                 </h2>
             </div>
             <a href="{{ route('timeline.create', $child) }}" class="shrink-0 inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-softPink-500 hover:bg-softPink-600 text-white font-medium rounded-xl text-sm shadow-soft transition min-h-[44px]">

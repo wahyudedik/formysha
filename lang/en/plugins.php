@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'management' => 'Plugin Management',
+    'register' => 'Register Plugin',
+    'register_new' => 'Register New Plugin',
+    'plugin' => 'Plugin',
+    'name' => 'Name',
+    'slug' => 'Slug',
+    'description' => 'Description',
+    'no_description' => 'No description.',
+    'version' => 'Version',
+    'author' => 'Author',
+    'icon' => 'Icon (emoji)',
+    'official' => 'Official',
+    'installs' => 'Installs',
+    'view' => 'View →',
+    'hooks' => 'Hooks',
+    'permissions' => 'Permissions',
+    'recent_logs' => '📋 Recent Activity Logs',
+    'statistics' => '📊 Statistics',
+    'created_at' => 'Created',
+    'tenant_count' => 'Tenant Plugins',
+    'confirm_delete_title' => 'Delete Plugin',
+    'confirm_delete_message' => 'Are you sure you want to delete this plugin? This action cannot be undone.',
+];

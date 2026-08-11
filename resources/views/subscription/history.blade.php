@@ -24,7 +24,7 @@
                         <tr class="border-b border-gray-100 dark:border-gray-700">
                             <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Tanggal') }}</th>
                             <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Paket') }}</th>
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Status') }}</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('common.status') }}</th>
                             <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Periode') }}</th>
                             <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Aksi') }}</th>
                         </tr>

@@ -1532,3 +1532,68 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 ### Security Enhancement
 
 * Menambahkan **rate limiting** `throttle:60,1` ke public profile route di [`routes/web.php`](routes/web.php) untuk mencegah scraping — 60 requests per menit per IP
+
+---
+
+## Comprehensive i18n Translation Audit ✅ (Phase 23)
+
+### Controller Translation Keys
+
+* [PatientLinkController.php](app/Http/Controllers/FacilityAdmin/PatientLinkController.php) — 4 hardcoded strings diganti dengan `__()` translation helper: `status.child_already_registered_at_facility`, `status.patient_link_invitation_sent`, `status.parent_profile_not_available`, `status.profile_claimed_connection_created`
+* [SubscriptionController.php](app/Http/Controllers/Subscription/SubscriptionController.php) — 4 hardcoded strings: `status.plan_not_available`, `status.free_plan_activated`, `status.subscription_created`
+* [ErasureController.php](app/Http/Controllers/ErasureController.php) — 1 hardcoded string: `status.child_data_deleted`
+* [ConsentController.php](app/Http/Controllers/ConsentController.php) — 2 hardcoded strings: `status.consent_granted`, `status.consent_revoked`
+
+### Empty States Translation Section
+
+* Menambahkan section `empty_states` ke [`lang/id/app.php`](lang/id/app.php) dan [`lang/en/app.php`](lang/en/app.php) dengan 20+ translation keys:
+  - Super Admin: plugins, payments
+  - Facility Admin: patients, clinical notes
+  - Dashboard: moments, growth, health
+  - Growth Chart: weight, height, head circumference
+  - Timeline: media attached
+  - Family Tree: organizations connected
+  - Milestones: active milestones (dengan parameter `:name`)
+  - Plugin Marketplace: installed, available
+
+### Blade View Translation Fixes
+
+* **10 views** dengan hardcoded strings di Blade component attributes (`title=`, `description=`) diperbaiki:
+  - [`super-admin/plugins/index.blade.php`](resources/views/super-admin/plugins/index.blade.php)
+  - [`super-admin/payments/index.blade.php`](resources/views/super-admin/payments/index.blade.php)
+  - [`milestones/index.blade.php`](resources/views/milestones/index.blade.php)
+  - [`admin/plugins/index.blade.php`](resources/views/admin/plugins/index.blade.php)
+* **10 views** dengan string literal di `__()` diperbaiki ke proper keys:
+  - [`dashboard.blade.php`](resources/views/dashboard.blade.php) — momen, pertumbuhan, kesehatan
+  - [`family-tree/index.blade.php`](resources/views/family-tree/index.blade.php) — anggota keluarga, organisasi, aktivitas
+  - [`facility-admin/dashboard.blade.php`](resources/views/facility-admin/dashboard.blade.php) — pasien, catatan klinis
+  - [`facility-admin/reports/patients.blade.php`](resources/views/facility-admin/reports/patients.blade.php) — pasien
+  - [`connections/show.blade.php`](resources/views/connections/show.blade.php) — aktivitas
+  - [`timeline/show.blade.php`](resources/views/timeline/show.blade.php) — media
+  - [`components/growth-chart.blade.php`](resources/views/components/growth-chart.blade.php) — berat badan, tinggi badan, lingkar kepala
+
+### Phase 24 — Comprehensive i18n Super Admin Translation Audit ✅
+
+* **Translation Keys**: ~970+ keys di kedua lang files (`lang/id/app.php`, `lang/en/app.php`)
+* **New Sections**: `monitoring` (13 keys), `audit_logs` (7 keys)
+* **New Keys**: `actions.saving`, `super_admin.dashboard_title/b2b_stats_title/edit_title/tenant_name/tenant_active/edit_label`, `plans.create_title/edit_title/basic_info/plan_name/slug_optional/description_placeholder/sort_order/pricing/price_monthly_label/free_hint/price_yearly_label/limits/unlimited_hint/max_children/max_photos/max_videos/max_storage/max_family_members/max_export_per_day/features/features_hint/features_desc/save_plan/save_changes`, `empty_states.no_audit_logs_desc`
+* **Super Admin Views Fixed** (6 views): dashboard, monitoring/index, tenants/edit, plans/create, plans/edit, audit-logs/index — semua hardcoded strings → `__()` translation helper
+* **Test Fix**: TenantTest `assertSee('Tipe Tenant')` → `assertSee(__('forms.type'))` untuk kompatibilitas dengan translation key
+* **Tests**: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
+### Phase 25 — i18n Translation File Split & Windows Compatibility ✅
+
+* **Lang File Split**: `app.php` monolith di-split menjadi 52 per-group files per locale (104 total) untuk Laravel 11+ compatibility
+* **File Structure**: Setiap section dalam `app.php` menjadi file terpisah — `achievements.php`, `actions.php`, `activity.php`, `albums.php`, `analytics.php`, `auth.php`, `branding.php`, `calendar.php`, `children.php`, `common.php`, `connection.php`, `diaries.php`, `document_types.php`, `documents.php`, `empty_states.php`, `export.php`, `facility_admin.php`, `family_tree.php`, `family.php`, `forms.php`, `growth.php`, `health.php`, `language.php`, `messages.php`, `monitoring.php`, `navigation.php`, `notifications.php`, `pages.php`, `payments.php`, `permission_level.php`, `plans.php`, `plugins.php`, `profile_form.php`, `profile.php`, `public_profile.php`, `referral.php`, `saas.php`, `search.php`, `status.php`, `subscription.php`, `super_admin.php`, `timeline.php`, `validation.php`
+* **Windows Case-Insensitive Fix**: Di Windows, `__('PlainString')` yang cocok dengan nama file lang (case-insensitive) mengembalikan array (seluruh file) — di-fix ke `__('group.key')` format
+* **Bug Fixes**: `__('timeline')` → `__('common.timeline')` di erasure view, `__('Branding')` → `__('branding.title')` di branding edit view
+* **Utility Script**: `split_lang.php` untuk automasi split `app.php` → per-group files
+* **Verification**: 249 PlainString patterns di Blade views di-scan — semua aman (Indonesian words, bukan nama file lang)
+* **Tests**: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
+### Tests
+
+* 774 tests, 1875 assertions — all passing
+* Laravel Pint formatting applied
+* Total translation files: 52 per locale (104 total) — split dari monolithic `app.php`
+* Total translation keys: ~970+ keys di kedua lang files

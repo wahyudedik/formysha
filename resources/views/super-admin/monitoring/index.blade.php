@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            🔍 {{ __('Monitoring') }}
+            🔍 {{ __('navigation.monitoring') }}
         </h2>
     </x-slot>
 
@@ -13,8 +13,8 @@
             {{-- Main Content --}}
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Monitoring'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.monitoring')],
                 ]" />
 
                 {{-- Stats Cards --}}
@@ -27,7 +27,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $activeTenants }} / {{ $totalTenants }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Tenant Aktif</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.active_tenants') }}</p>
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalUsers }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Total Pengguna</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.total_users') }}</p>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalMedia }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Total Media</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.total_media') }}</p>
                             </div>
                         </div>
                         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
@@ -69,7 +69,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $recentErrors->count() }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Error Terbaru</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('empty_states.no_recent_errors_short') }}</p>
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                 {{-- System Health --}}
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden mb-6">
                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏥 {{ __('Kesehatan Sistem') }}</h3>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏥 {{ __('monitoring.system_health') }}</h3>
                     </div>
                     <div class="p-4 sm:p-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -88,10 +88,10 @@
                                     <span class="text-2xl">{{ $databaseHealthy['status'] === 'healthy' ? '✅' : '❌' }}</span>
                                 </div>
                                 <div>
-                                    <p class="font-medium text-gray-800 dark:text-gray-100">Database</p>
+                                    <p class="font-medium text-gray-800 dark:text-gray-100">{{ __('monitoring.system_health') }} — Database</p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $databaseHealthy['message'] }}</p>
                                     @if (isset($databaseHealthy['latency']))
-                                        <p class="text-xs text-gray-400 dark:text-gray-500">Latency: {{ $databaseHealthy['latency'] }}</p>
+                                        <p class="text-xs text-gray-400 dark:text-gray-500">{{ __('monitoring.latency') }} {{ $databaseHealthy['latency'] }}</p>
                                     @endif
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                     <span class="text-2xl">{{ $cacheHealthy['status'] === 'healthy' ? '✅' : '❌' }}</span>
                                 </div>
                                 <div>
-                                    <p class="font-medium text-gray-800 dark:text-gray-100">Cache</p>
+                                    <p class="font-medium text-gray-800 dark:text-gray-100">{{ __('monitoring.system_health') }} — Cache</p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $cacheHealthy['message'] }}</p>
                                 </div>
                             </div>
@@ -114,13 +114,13 @@
                     {{-- Recent Login Activity --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">🔐 {{ __('Aktivitas Login Terbaru') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">🔐 {{ __('monitoring.recent_logins') }}</h3>
                         </div>
                         <div class="p-4 sm:p-6">
                             @if ($recentLogins->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">🔐</div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada aktivitas login.</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_login_activity') }}</p>
                                 </div>
                             @else
                                 <div class="space-y-3">
@@ -143,13 +143,13 @@
                     {{-- Error Log Summary --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">⚠️ {{ __('Log Error Terbaru') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">⚠️ {{ __('monitoring.recent_errors') }}</h3>
                         </div>
                         <div class="p-4 sm:p-6">
                             @if ($recentErrors->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">✅</div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Tidak ada error terbaru.</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_recent_errors') }}</p>
                                 </div>
                             @else
                                 <div class="space-y-3">
@@ -173,13 +173,13 @@
                 {{-- Storage Usage per Tenant --}}
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">💾 {{ __('Penggunaan Penyimpanan per Tenant') }}</h3>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">💾 {{ __('monitoring.storage_usage') }}</h3>
                     </div>
                     <div class="p-4 sm:p-6">
                         @if ($tenantStorage->isEmpty())
                             <div class="text-center py-8">
                                 <div class="text-4xl mb-3">💾</div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada data penyimpanan.</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_storage_data') }}</p>
                             </div>
                         @else
                             <div class="space-y-4">
@@ -201,7 +201,7 @@
                                                     ></div>
                                                 </div>
                                             @endif
-                                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $tenant['plan_name'] }} · {{ $tenant['children_count'] }} anak</p>
+                                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ $tenant['plan_name'] }} · {{ $tenant['children_count'] }} {{ __('monitoring.children_count') }}</p>
                                         </div>
                                     </div>
                                 @endforeach
@@ -213,7 +213,7 @@
                 {{-- B2B Monitoring Section --}}
                 @if ($b2bTenantCount > 0)
                     <div class="mt-8">
-                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('Monitoring B2B (Fasilitas)') }}</h3>
+                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('monitoring.b2b_monitoring') }}</h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                             {{-- B2B Tenants --}}
@@ -224,7 +224,7 @@
                                     </div>
                                     <div>
                                         <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $b2bTenantCount }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fasilitas Aktif</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.active_facilities') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -237,7 +237,7 @@
                                     </div>
                                     <div>
                                         <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalStaff }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Staf Aktif</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.active_staff') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -250,10 +250,10 @@
                                     </div>
                                     <div>
                                         <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $pendingReferrals }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Rujukan Pending</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('super_admin.pending_referrals') }}</p>
                                     </div>
                                 </div>
-                                <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">{{ $totalReferrals }} total rujukan</div>
+                                <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">{{ $totalReferrals }} {{ __('super_admin.total_referrals') }}</div>
                             </div>
                         </div>
 
@@ -262,7 +262,7 @@
                             @if ($b2bFacilities->isNotEmpty())
                                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">👨‍⚕️ {{ __('Fasilitas dengan Staf Terbanyak') }}</h3>
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">👨‍⚕️ {{ __('monitoring.top_facilities_by_staff') }}</h3>
                                     </div>
                                     <div class="p-4 sm:p-6">
                                         <div class="space-y-3">
@@ -278,7 +278,7 @@
                                                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ $facility->getTypeLabel() }}</p>
                                                             </div>
                                                         </div>
-                                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-100 shrink-0">{{ $facility->staff_count }} staf</span>
+                                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-100 shrink-0">{{ $facility->staff_count }} {{ __('super_admin.staff_count') }}</span>
                                                     </div>
                                                 </a>
                                             @endforeach
@@ -291,7 +291,7 @@
                             @if ($topFacilitiesByNotes->isNotEmpty())
                                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Fasilitas dengan Catatan Klinis Terbanyak') }}</h3>
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('monitoring.top_facilities_by_notes') }}</h3>
                                     </div>
                                     <div class="p-4 sm:p-6">
                                         <div class="space-y-3">
@@ -307,7 +307,7 @@
                                                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ $facility->getTypeLabel() }}</p>
                                                             </div>
                                                         </div>
-                                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-100 shrink-0">{{ $facility->clinical_notes_count }} catatan</span>
+                                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-100 shrink-0">{{ $facility->clinical_notes_count }} {{ __('monitoring.notes_count') }}</span>
                                                     </div>
                                                 </a>
                                             @endforeach
@@ -320,16 +320,16 @@
                             @if ($facilitiesWithPendingReferrals->isNotEmpty())
                                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden lg:col-span-2">
                                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🔄 {{ __('Fasilitas dengan Rujukan Pending Terbanyak') }}</h3>
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🔄 {{ __('monitoring.facilities_pending_referrals') }}</h3>
                                     </div>
                                     <div class="p-4 sm:p-6">
                                         <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                                             <table class="w-full text-sm">
                                                 <thead>
                                                     <tr class="border-b border-gray-100 dark:border-gray-700">
-                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Fasilitas</th>
-                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Tipe</th>
-                                                        <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Pending</th>
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('monitoring.facility') }}</th>
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('monitoring.type') }}</th>
+                                                        <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('common.pending') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

@@ -1356,6 +1356,90 @@ Evolusi arsitektur ForMysha dari Digital Life Book menjadi **Digital Life Book &
 
 ---
 
+## Phase 23 — Comprehensive i18n Translation Audit ✅ Selesai
+
+### Sub-Phase 23.1 — Controller Translation Keys
+
+* PatientLinkController: 4 hardcoded strings → translation keys (`status.child_already_registered_at_facility`, `status.patient_link_invitation_sent`, `status.parent_profile_not_available`, `status.profile_claimed_connection_created`)
+* SubscriptionController: 4 hardcoded strings → translation keys (`status.plan_not_available`, `status.free_plan_activated`, `status.subscription_created`)
+* ErasureController: 1 hardcoded string → translation key (`status.child_data_deleted`)
+* ConsentController: 2 hardcoded strings → translation keys (`status.consent_granted`, `status.consent_revoked`)
+
+### Sub-Phase 23.2 — Empty States Section
+
+* Menambahkan section `empty_states` ke lang files dengan 20+ keys untuk semua empty state di Blade views
+* Keys mencakup: plugins, payments, milestones, facility admin, dashboard, growth chart, timeline, family tree
+
+### Sub-Phase 23.3 — Blade View Translation Fixes
+
+* **Hardcoded di Blade component attributes** (10 views):
+  - super-admin/plugins/index.blade.php: `title` + `description` attributes
+  - super-admin/payments/index.blade.php: 2× `title` + `description` attributes
+  - milestones/index.blade.php: `title` + `description` attributes
+  - admin/plugins/index.blade.php: 2× `title` + `description` attributes
+* **String literal di `__()` → proper keys** (10 views):
+  - dashboard.blade.php: momen, pertumbuhan, kesehatan
+  - family-tree/index.blade.php: anggota keluarga, organisasi, aktivitas
+  - facility-admin/dashboard.blade.php: pasien, catatan klinis
+  - facility-admin/reports/patients.blade.php: pasien
+  - connections/show.blade.php: aktivitas
+  - timeline/show.blade.php: media
+  - components/growth-chart.blade.php: berat badan, tinggi badan, lingkar kepala
+
+### Sub-Phase 23.4 — Tests & QA
+
+* 774 tests, 1875 assertions — all passing
+* Laravel Pint formatting applied
+* Total translation keys: ~920+ keys di kedua lang files
+
+---
+
+## Phase 24 — Comprehensive i18n Super Admin Translation Audit ✅ Selesai
+
+### Sub-Phase 24.1 — Translation Keys
+
+* New `monitoring` section (13 keys): system_health, recent_logins, recent_errors, storage_usage, b2b_monitoring, top_facilities_by_staff, top_facilities_by_notes, facilities_pending_referrals, facility, type, notes_count, children_count, latency
+* New `audit_logs` section (7 keys): time, user, action, subject, detail, ip, more_items
+* New `actions.saving`, `super_admin.*` keys (6), `plans.*` keys (26), `empty_states.no_audit_logs_desc`
+
+### Sub-Phase 24.2 — Super Admin View Fixes
+
+* `dashboard.blade.php` — 7 replacements (page title, B2B stats, revenue, payments, tenants, quick actions)
+* `monitoring/index.blade.php` — 15 replacements (system health, logins, errors, storage, B2B monitoring)
+* `tenants/edit.blade.php` — 10 replacements (title, breadcrumbs, form labels, buttons)
+* `plans/create.blade.php` — 20 replacements (form labels, pricing, limits, features, buttons)
+* `plans/edit.blade.php` — 17 replacements (same pattern as create)
+* `audit-logs/index.blade.php` — 7 replacements (title, breadcrumbs, table headers, empty states)
+
+### Sub-Phase 24.3 — Test Fix & QA
+
+* TenantTest: `assertSee('Tipe Tenant')` → `assertSee(__('forms.type'))` — compatibility with translation key
+* Translation keys: ~970+ keys di kedua lang files
+* Tests: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
+---
+
+## Phase 25 — i18n Translation File Split & Windows Compatibility ✅ Selesai
+
+### Sub-Phase 25.1 — Lang File Split
+
+* `app.php` monolith di-split menjadi 52 per-group files per locale (104 total)
+* Laravel 11+ menggunakan `__('group.key')` format — setiap group = 1 file PHP
+* Utility script: `split_lang.php` untuk automasi split
+
+### Sub-Phase 25.2 — Windows Case-Insensitive Fix
+
+* **Root Cause**: Di Windows, `__('PlainString')` yang cocok dengan nama file lang (case-insensitive) memuat file tersebut dan mengembalikan seluruh array
+* **Fix Pattern**: `__('PlainString')` → `__('group.key')` menggunakan key yang benar
+* **Contoh**: `__('timeline')` → `__('common.timeline')`, `__('Branding')` → `__('branding.title')`
+
+### Sub-Phase 25.3 — Verification & QA
+
+* Comprehensive search 249 PlainString patterns di semua Blade views — semua aman (Indonesian words, bukan nama file lang)
+* Tests: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
+---
+
 ## Tujuan Jangka Panjang
 
 ForMysha bertujuan menjadi platform dokumentasi digital keluarga yang dipercaya oleh jutaan orang tua. Produk dikembangkan secara bertahap, dimulai dari **web SaaS** sebagai fondasi utama, kemudian dapat diperluas ke aplikasi mobile, desktop, dan solusi enterprise sesuai kebutuhan pasar.

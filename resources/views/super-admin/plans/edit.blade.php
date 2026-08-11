@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            ✏️ {{ __('Edit Paket') }}
+            ✏️ {{ __('plans.edit_title') }}
         </h2>
     </x-slot>
 
@@ -11,10 +11,10 @@
 
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Paket', 'url' => route('super-admin.plans.index')],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.plans'), 'url' => route('super-admin.plans.index')],
                     ['label' => $plan->name, 'url' => route('super-admin.plans.edit', $plan)],
-                    ['label' => 'Edit'],
+                    ['label' => __('actions.edit')],
                 ]" />
 
                 <form method="POST" action="{{ route('super-admin.plans.update', $plan) }}" x-data="{ loading: false }" @submit="loading = true">
@@ -25,23 +25,23 @@
                         {{-- Basic Info --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                             <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Informasi Dasar') }}</h3>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('plans.basic_info') }}</h3>
                             </div>
                             <div class="p-4 sm:p-6 space-y-5">
                                 <div>
-                                    <x-input-label for="name" :value="__('Nama Paket')" />
+                                    <x-input-label for="name" :value="__('plans.plan_name')" />
                                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full input-focus" :value="old('name', $plan->name)" required />
                                     <x-input-error :messages="$errors->get('name')" class="mt-1" />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="slug" :value="__('Slug')" />
+                                    <x-input-label for="slug" :value="__('forms.slug')" />
                                     <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full input-focus" :value="old('slug', $plan->slug)" />
                                     <x-input-error :messages="$errors->get('slug')" class="mt-1" />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="description" :value="__('Deskripsi')" />
+                                    <x-input-label for="description" :value="__('forms.description')" />
                                     <textarea id="description" name="description" rows="3" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm">{{ old('description', $plan->description) }}</textarea>
                                     <x-input-error :messages="$errors->get('description')" class="mt-1" />
                                 </div>
@@ -50,12 +50,12 @@
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="hidden" name="is_active" value="0">
                                         <input type="checkbox" name="is_active" value="1" {{ old('is_active', $plan->is_active) ? 'checked' : '' }} class="w-5 h-5 rounded-lg border-gray-300 dark:border-gray-600 text-softPink-400 focus:ring-softPink-300">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Paket Aktif</span>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ __('plans.plan_active') }}</span>
                                     </label>
                                 </div>
 
                                 <div>
-                                    <x-input-label for="sort_order" :value="__('Urutan')" />
+                                    <x-input-label for="sort_order" :value="__('plans.sort_order')" />
                                     <x-text-input id="sort_order" name="sort_order" type="number" class="mt-1 block w-full input-focus" :value="old('sort_order', $plan->sort_order)" min="0" />
                                 </div>
                             </div>
@@ -64,17 +64,17 @@
                         {{-- Pricing --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                             <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('Harga') }}</h3>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('plans.pricing') }}</h3>
                             </div>
                             <div class="p-4 sm:p-6 space-y-5">
                                 <div>
-                                    <x-input-label for="price_monthly" :value="__('Harga per Bulan (Rp)')" />
+                                    <x-input-label for="price_monthly" :value="__('plans.price_monthly_label')" />
                                     <x-text-input id="price_monthly" name="price_monthly" type="number" class="mt-1 block w-full input-focus" :value="old('price_monthly', $plan->price_monthly)" min="0" required />
                                     <x-input-error :messages="$errors->get('price_monthly')" class="mt-1" />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="price_yearly" :value="__('Harga per Tahun (Rp)')" />
+                                    <x-input-label for="price_yearly" :value="__('plans.price_yearly_label')" />
                                     <x-text-input id="price_yearly" name="price_yearly" type="number" class="mt-1 block w-full input-focus" :value="old('price_yearly', $plan->price_yearly)" min="0" />
                                     <x-input-error :messages="$errors->get('price_yearly')" class="mt-1" />
                                 </div>
@@ -84,37 +84,37 @@
                         {{-- Limits --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                             <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Batasan') }}</h3>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gunakan -1 untuk unlimited.</p>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('plans.limits') }}</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('plans.unlimited_hint') }}</p>
                             </div>
                             <div class="p-4 sm:p-6 space-y-5">
                                 <div>
-                                    <x-input-label for="max_children" :value="__('Maks. Anak')" />
+                                    <x-input-label for="max_children" :value="__('plans.max_children')" />
                                     <x-text-input id="max_children" name="max_children" type="number" class="mt-1 block w-full input-focus" :value="old('max_children', $plan->max_children)" min="-1" required />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="max_photos" :value="__('Maks. Foto')" />
+                                    <x-input-label for="max_photos" :value="__('plans.max_photos')" />
                                     <x-text-input id="max_photos" name="max_photos" type="number" class="mt-1 block w-full input-focus" :value="old('max_photos', $plan->max_photos)" min="-1" required />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="max_videos" :value="__('Maks. Video')" />
+                                    <x-input-label for="max_videos" :value="__('plans.max_videos')" />
                                     <x-text-input id="max_videos" name="max_videos" type="number" class="mt-1 block w-full input-focus" :value="old('max_videos', $plan->max_videos)" min="-1" required />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="max_storage_mb" :value="__('Maks. Storage (MB)')" />
+                                    <x-input-label for="max_storage_mb" :value="__('plans.max_storage')" />
                                     <x-text-input id="max_storage_mb" name="max_storage_mb" type="number" class="mt-1 block w-full input-focus" :value="old('max_storage_mb', $plan->max_storage_mb)" min="-1" required />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="max_family_members" :value="__('Maks. Anggota Keluarga')" />
+                                    <x-input-label for="max_family_members" :value="__('plans.max_family_members')" />
                                     <x-text-input id="max_family_members" name="max_family_members" type="number" class="mt-1 block w-full input-focus" :value="old('max_family_members', $plan->max_family_members)" min="-1" />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="max_export_per_day" :value="__('Maks. Export/Hari')" />
+                                    <x-input-label for="max_export_per_day" :value="__('plans.max_export_per_day')" />
                                     <x-text-input id="max_export_per_day" name="max_export_per_day" type="number" class="mt-1 block w-full input-focus" :value="old('max_export_per_day', $plan->max_export_per_day)" min="-1" required />
                                 </div>
                             </div>
@@ -123,8 +123,8 @@
                         {{-- Features --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                             <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">✨ {{ __('Fitur') }}</h3>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Satu fitur per baris.</p>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100">✨ {{ __('plans.features') }}</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('plans.features_hint') }}</p>
                             </div>
                             <div class="p-4 sm:p-6">
                                 <textarea name="features[]" rows="6" class="block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-xl focus:border-softPink-300 focus:ring-softPink-200 text-sm" placeholder="Timeline&#10;Galeri Foto&#10;Diary&#10;Dokumen">{{ is_array(old('features')) ? implode("\n", old('features')) : (is_array($plan->features) ? implode("\n", $plan->features) : '') }}</textarea>
@@ -138,10 +138,10 @@
                             <svg x-show="!loading" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
-                            <span x-text="loading ? '{{ __('Menyimpan...') }}' : '{{ __('Simpan Perubahan') }}'"></span>
+                            <span x-text="loading ? '{{ __('actions.saving') }}' : '{{ __('plans.save_changes') }}'"></span>
                         </button>
                         <a href="{{ route('super-admin.plans.index') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
-                            {{ __('Batal') }}
+                            {{ __('actions.cancel') }}
                         </a>
                     </div>
                 </form>

@@ -35,6 +35,10 @@ return [
         'analytics' => 'Analitik',
         'monitoring' => 'Monitoring',
         'audit_logs' => 'Log Audit',
+        'error_logs' => 'Error Logs',
+        'plugins' => 'Plugin',
+        'admin_menu' => '🛡️ Menu Admin',
+        'admin_panel' => 'Panel Manajemen',
     ],
 
     /*
@@ -69,6 +73,7 @@ return [
         'toggle_status' => 'Ubah Status',
         'mark_as_read' => 'Tandai sudah dibaca',
         'mark_all_read' => 'Tandai semua sudah dibaca',
+        'saving' => 'Menyimpan...',
     ],
 
     /*
@@ -140,6 +145,7 @@ return [
         'type' => 'Tipe',
         'status' => 'Status',
         'role' => 'Peran',
+        'actions_label' => 'Aksi',
         'notes' => 'Catatan',
         'slug' => 'Slug',
         'timezone' => 'Zona Waktu',
@@ -199,6 +205,7 @@ return [
         'unverified' => 'Belum Terverifikasi',
         'yes' => 'Ya',
         'no' => 'Tidak',
+        'detail' => 'Detail',
         'details' => 'Detail',
         'summary' => 'Ringkasan',
         'overview' => 'Ikhtisar',
@@ -708,12 +715,22 @@ return [
         'patient_link_created' => 'Tautan pasien berhasil dibuat. Kode: :code',
         'patient_link_updated' => 'Data pasien berhasil diperbarui.',
         'patient_link_revoked' => 'Tautan pasien berhasil dicabut.',
+        'child_already_registered_at_facility' => 'Anak ini sudah terdaftar di fasilitas ini.',
+        'patient_link_invitation_sent' => 'Undangan berhasil dikirim! Kode: :code',
+        'parent_profile_not_available' => 'Profil orang tua belum tersedia untuk tautan ini.',
+        'profile_claimed_connection_created' => 'Profil berhasil diklaim! Koneksi telah dibuat.',
         'facility_settings_updated' => 'Pengaturan fasilitas berhasil diperbarui.',
 
         // Subscription
         'subscription_warning' => 'Anda perlu mengaktifkan paket berlangganan.',
         'no_organization' => 'Anda belum memiliki organisasi.',
         'payment_proof_sent' => 'Bukti pembayaran berhasil dikirim. Menunggu verifikasi admin.',
+        'plan_not_available' => 'Paket yang dipilih tidak tersedia.',
+        'free_plan_activated' => 'Paket gratis berhasil diaktifkan!',
+        'subscription_created' => 'Langganan berhasil dibuat. Silakan lakukan pembayaran.',
+        'child_data_deleted' => 'Data ":name" berhasil dihapus permanen.',
+        'consent_granted' => 'Consent ":type" berhasil diberikan.',
+        'consent_revoked' => 'Consent ":type" berhasil dicabut.',
 
         // Notifications
         'notifications_all_read' => 'Semua notifikasi telah ditandai sudah dibaca.',
@@ -827,5 +844,517 @@ return [
         'claim_profile' => 'Klaim Profil',
         'invitation_sent' => 'Undangan berhasil dikirim',
         'profile_claimed' => 'Profil berhasil diklaim',
+    ],
+
+    // Empty States — used in Blade views
+    'empty_states' => [
+        // Super Admin
+        'no_tenants' => 'Belum ada tenant.',
+        'no_plans' => 'Belum ada data paket.',
+        'no_payments_pending' => 'Tidak ada pembayaran pending.',
+        'no_payment_proof' => 'Belum ada bukti transfer.',
+        'no_revenue' => 'Belum ada data pendapatan.',
+        'no_subscription_history' => 'Belum ada riwayat langganan.',
+        'no_audit_logs' => 'Belum ada audit log.',
+        'no_error_logs' => 'Tidak ada error log.',
+        'no_error_logs_desc' => 'Log file kosong atau belum ada error yang tercatat.',
+        'no_recent_errors' => 'Tidak ada error terbaru.',
+        'no_login_activity' => 'Belum ada aktivitas login.',
+        'no_storage_data' => 'Belum ada data penyimpanan.',
+        'no_plugin_logs' => 'Belum ada log aktivitas.',
+        'no_recent_errors_short' => 'Error Terbaru',
+        'no_audit_logs_desc' => 'Audit log akan muncul setelah ada aktivitas.',
+
+        // Admin / Tenant Admin
+        'no_activity' => 'Belum ada aktivitas.',
+        'no_undangan' => 'Belum ada undangan aktif.',
+        'no_import_history' => 'Belum ada riwayat import.',
+        'no_analytics_data' => 'Belum ada data analytics untuk periode ini.',
+        'analytics_data_desc' => 'Data akan muncul setelah ada aktivitas di platform.',
+
+        // Core Modules
+        'no_family_members' => 'Belum ada anggota keluarga.',
+        'no_albums' => 'Belum ada album',
+        'no_awards' => 'Belum ada penghargaan',
+        'no_calendar_events' => 'Tidak ada acara di bulan ini.',
+        'no_health_records' => 'Belum ada riwayat kesehatan yang tercatat.',
+        'no_growth_records' => 'Belum ada data pertumbuhan yang tercatat.',
+
+        // Public Profile
+        'no_public_albums' => 'Belum ada album',
+        'no_public_awards' => 'Belum ada penghargaan',
+
+        // Payments
+        'approve_payment_title' => 'Setujui Pembayaran',
+        'approve_payment_desc' => 'Konfirmasi bahwa pembayaran ini telah diterima.',
+
+        // Danger Zone
+        'danger_zone_title' => '⚠️ Zona Bahaya',
+        'danger_zone_tenant_desc' => 'Menghapus tenant akan menghapus semua data terkait secara permanen.',
+
+        // Plugins
+        'no_plugins' => 'Belum ada plugin',
+        'no_plugins_desc' => 'Daftarkan plugin pertama untuk mulai membangun marketplace.',
+        'no_plugins_installed' => 'Belum ada plugin terinstall',
+        'no_plugins_installed_desc' => 'Install plugin dari marketplace untuk menambah fitur ke tenant Anda.',
+        'no_plugins_available' => 'Belum ada plugin tersedia',
+        'no_plugins_available_desc' => 'Plugin akan muncul di sini setelah didaftarkan oleh Super Admin.',
+
+        // Payments
+        'no_payments' => 'Belum Ada Pembayaran',
+        'no_payments_desc' => 'Belum ada transaksi pembayaran.',
+
+        // Milestones
+        'no_milestones' => 'Belum ada milestone aktif',
+        'no_milestones_desc' => 'Milestone akan muncul secara otomatis saat ada pencapaian atau pengingat untuk :name.',
+
+        // Facility Admin
+        'no_patients' => 'Belum ada pasien terdaftar.',
+        'no_clinical_notes' => 'Belum ada catatan klinis.',
+
+        // Dashboard
+        'no_moments' => 'Belum ada momen.',
+        'no_growth_data' => 'Belum ada data pertumbuhan.',
+        'no_health_data' => 'Belum ada catatan kesehatan.',
+
+        // Growth Chart
+        'no_weight_data' => 'Belum ada data berat badan.',
+        'no_height_data' => 'Belum ada data tinggi badan.',
+        'no_head_circumference_data' => 'Belum ada data lingkar kepala.',
+
+        // Timeline
+        'no_media_attached' => 'Belum ada media yang dilampirkan.',
+
+        // Family Tree
+        'no_organizations_connected' => 'Belum ada organisasi terhubung.',
+    ],
+
+    // Confirm Password Page
+    'confirm_password' => [
+        'title' => 'Konfirmasi Password 🔐',
+        'description' => 'Ini adalah area aman dari aplikasi. Silakan konfirmasi password Anda sebelum melanjutkan.',
+    ],
+
+    // Error Log Filters
+    'error_log' => [
+        'all_levels' => 'Semua Level',
+        'error' => 'Error',
+        'warning' => 'Warning',
+        'info' => 'Info',
+        'title' => 'Tidak ada error log',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Super Admin — Dashboard & Monitoring Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'super_admin' => [
+        'total_tenants' => 'Total Tenant',
+        'pending_verification' => 'Menunggu Verifikasi',
+        'revenue_this_month' => 'Pendapatan Bulan Ini',
+        'total_plans' => 'Total Paket',
+        'b2b_facilities' => 'Fasilitas B2B',
+        'active_staff' => 'Staf Aktif',
+        'clinical_notes_this_month' => 'Catatan Klinis (Bulan Ini)',
+        'verify_payment' => 'Verifikasi Bayar',
+        'audit_log' => 'Audit Log',
+        'pending_payments' => 'Pembayaran Pending',
+        'recent_tenants' => 'Tenant Terbaru',
+        'quick_actions' => 'Aksi Cepat',
+        'b2b_facility' => 'B2B (Fasilitas)',
+        'b2c_family' => 'B2C (Keluarga)',
+        'b2b_vs_b2c_revenue' => 'Pendapatan B2B vs B2C',
+        'total_transactions' => 'total transaksi',
+        'approved_payments_count' => 'pembayaran disetujui',
+        'patient_links' => 'tautan pasien',
+        'pending_referrals' => 'rujukan pending',
+        'total_referrals' => 'total rujukan',
+        'users_count' => 'pengguna',
+        'children_count' => 'anak',
+        'staff_count' => 'staf',
+        'active_tenants' => 'Tenant Aktif',
+        'total_users' => 'Total Pengguna',
+        'total_media' => 'Total Media',
+        'active_facilities' => 'Fasilitas Aktif',
+        'owner' => 'Pemilik',
+        'management_panel' => 'Panel Manajemen',
+        'total_revenue' => 'Total Pendapatan',
+        'churn_rate_30d' => 'Churn Rate (30 hari)',
+        'b2b_revenue' => 'Pendapatan B2B',
+        'b2c_revenue' => 'Pendapatan B2C',
+        'top_facility' => 'Fasilitas Terbesar',
+        'clinical_notes_per_month' => 'Catatan Klinis per Bulan',
+        'staff_count_label' => 'Jumlah Staf',
+        'total' => 'Total',
+        // Tenant detail & management
+        'activate' => 'Aktifkan',
+        'deactivate' => 'Nonaktifkan',
+        'users' => 'Pengguna',
+        'children' => 'Anak',
+        'subscriptions' => 'Langganan',
+        'total_staff_count' => 'Total Staf',
+        'active_count' => 'aktif',
+        'patient_links_title' => 'Tautan Pasien',
+        'clinical_notes_title' => 'Catatan Klinis',
+        'total_referrals_title' => 'Total Rujukan',
+        'pending_count' => 'pending',
+        'b2b_facility_detail' => 'Detail Fasilitas B2B',
+        'facility_type' => 'Tipe Fasilitas',
+        'license_number' => 'No. Lisensi',
+        'domain' => 'Domain',
+        'created' => 'Dibuat',
+        'last_updated' => 'Terakhir Diperbarui',
+        'delete_tenant' => 'Hapus Tenant',
+        'delete_tenant_confirm' => 'Apakah Anda yakin ingin menghapus tenant ini? Semua data terkait akan dihapus secara permanen.',
+        // Tenant create form
+        'add_new' => 'Tambah Baru',
+        'create_tenant_form' => 'Form Tambah Tenant',
+        'create_tenant_desc' => 'Isi informasi tenant baru di bawah ini.',
+        'slug_auto_hint' => 'Otomatis dari nama jika kosong',
+        'slug_auto_desc' => 'Jika dikosongkan, slug akan dibuat otomatis dari nama.',
+        'select_type' => '-- Pilih Tipe --',
+        'type_hint_family' => 'untuk pengguna B2C (perorangan/keluarga).',
+        'type_hint_facility' => 'untuk fasilitas kesehatan B2B.',
+        // Dashboard & Monitoring
+        'dashboard_title' => 'Super Admin Dashboard',
+        'b2b_stats_title' => 'Statistik B2B (Fasilitas)',
+        // Tenant edit form
+        'edit_title' => 'Edit Tenant',
+        'tenant_name' => 'Nama Tenant',
+        'tenant_active' => 'Tenant Aktif',
+        'edit_label' => 'Edit:',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plans — Detail Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'plans' => [
+        'price_per_month' => 'Harga/Bulan',
+        'price_per_year' => 'Harga/Tahun',
+        'max_children_limit' => 'Batas Anak',
+        'storage' => 'Storage',
+        'plan_active' => 'Paket Aktif',
+        'monthly_label' => 'Bulan',
+        'yearly_label' => 'Tahun',
+        'children_label' => 'Anak',
+        // Create / Edit form labels
+        'create_title' => 'Tambah Paket Baru',
+        'edit_title' => 'Edit Paket',
+        'basic_info' => 'Informasi Dasar',
+        'plan_name' => 'Nama Paket',
+        'slug_optional' => 'Slug (opsional)',
+        'description_placeholder' => 'Deskripsi singkat paket ini...',
+        'sort_order' => 'Urutan',
+        'pricing' => 'Harga',
+        'price_monthly_label' => 'Harga per Bulan (Rp)',
+        'free_hint' => 'Masukkan 0 untuk paket gratis.',
+        'price_yearly_label' => 'Harga per Tahun (Rp)',
+        'limits' => 'Batasan',
+        'unlimited_hint' => 'Gunakan -1 untuk unlimited.',
+        'max_children' => 'Maks. Anak',
+        'max_photos' => 'Maks. Foto',
+        'max_videos' => 'Maks. Video',
+        'max_storage' => 'Maks. Storage (MB)',
+        'max_family_members' => 'Maks. Anggota Keluarga',
+        'max_export_per_day' => 'Maks. Export/Hari',
+        'features' => 'Fitur',
+        'features_hint' => 'Satu fitur per baris.',
+        'features_desc' => 'Setiap baris = satu fitur yang tersedia.',
+        'save_plan' => 'Simpan Paket',
+        'save_changes' => 'Simpan Perubahan',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payments — Detail Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'payments' => [
+        'management' => 'Manajemen Pembayaran',
+        'all' => 'Semua',
+        'pending' => 'Pending',
+        'approved' => 'Disetujui',
+        'rejected' => 'Ditolak',
+        'tenant' => 'Tenant',
+        'amount' => 'Jumlah',
+        'bank' => 'Bank',
+        'status' => 'Status',
+        'date' => 'Tanggal',
+        'view_detail' => 'Lihat Detail',
+        'detail' => 'Detail Pembayaran',
+        'info' => 'Informasi Pembayaran',
+        'waiting_verification' => 'Menunggu Verifikasi',
+        'plan' => 'Paket',
+        'bank_account' => 'No. Rekening',
+        'account_holder' => 'Atas Nama',
+        'notes_label' => 'Catatan:',
+        'notes_optional' => 'Catatan (opsional)',
+        'verified_by' => 'Diverifikasi oleh',
+        'paid_date' => 'Tanggal Bayar',
+        'verification_time' => 'Waktu Verifikasi',
+        'proof_transfer' => 'Bukti Transfer',
+        'open_new_tab' => 'Buka dalam tab baru',
+        'approving' => 'Menyetujui...',
+        'confirm_approve' => 'Ya, Setujui',
+        'reject_payment' => 'Tolak Pembayaran',
+        'reject_reason_desc' => 'Berikan alasan penolakan pembayaran ini.',
+        'reject_reason' => 'Alasan Penolakan',
+        'rejecting' => 'Menolak...',
+        'confirm_reject' => 'Ya, Tolak',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Error Logs — Detail Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'analytics' => [
+        'title' => 'Analytics',
+        'revenue_this_month' => 'Pendapatan Bulan Ini',
+        'total_revenue' => 'Total Pendapatan',
+        'active_tenants' => 'Tenant Aktif',
+        'churn_rate' => 'Churn Rate (30 hari)',
+        'monthly_revenue' => 'Pendapatan Bulanan',
+        'new_tenants_per_month' => 'Tenant Baru per Bulan',
+        'subscription_distribution' => 'Distribusi Langganan',
+        'popular_plans' => 'Paket Populer',
+        'revenue_per_plan' => 'Pendapatan per Paket',
+        'b2b_analytics' => 'Analytics B2B (Fasilitas)',
+        'revenue_b2b' => 'Pendapatan B2B',
+        'revenue_b2c' => 'Pendapatan B2C',
+        'top_facility' => 'Fasilitas Terbesar',
+        'b2b_growth' => 'Pertumbuhan Fasilitas B2B',
+        'clinical_notes_referrals' => 'Catatan Klinis & Rujukan',
+        'clinical_notes_per_month' => 'Catatan Klinis per Bulan',
+        'referrals_per_month' => 'Rujukan per Bulan',
+        'top_facilities_staff' => 'Fasilitas Teratas (by Staf)',
+        'facility' => 'Fasilitas',
+        'type' => 'Tipe',
+        'from_last_month' => 'dari bulan lalu',
+    ],
+
+    'error_logs' => [
+        'title' => 'Error Logs',
+        'errors' => 'Errors',
+        'warnings' => 'Warnings',
+        'info_label' => 'Info',
+        'log_size' => 'Ukuran Log',
+        'search_placeholder' => 'Cari error message...',
+        'copy_all' => 'Copy Semua',
+        'clear_log' => 'Hapus Log',
+        'full_message' => 'Pesan Lengkap',
+        'context' => 'Context',
+        'stack_trace' => 'Stack Trace',
+        'showing_entries' => 'Menampilkan :count log entries',
+        'clear_all_logs' => 'Hapus Semua Log',
+        'clear_all_logs_confirm' => 'Apakah Anda yakin ingin mengosongkan semua log file? Tindakan ini tidak dapat dibatalkan.',
+        'copy_success' => 'Log entry berhasil dicopy!',
+        'copy_all_success' => 'Semua log berhasil dicopy!',
+        'no_logs_to_copy' => 'Tidak ada log untuk dicopy.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plugins — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'plugins' => [
+        'management' => 'Manajemen Plugin',
+        'register' => 'Daftarkan Plugin',
+        'register_new' => 'Daftarkan Plugin Baru',
+        'plugin' => 'Plugin',
+        'name' => 'Nama',
+        'slug' => 'Slug',
+        'description' => 'Deskripsi',
+        'no_description' => 'Tidak ada deskripsi.',
+        'version' => 'Versi',
+        'author' => 'Author',
+        'icon' => 'Icon (emoji)',
+        'official' => 'Resmi',
+        'installs' => 'Install',
+        'view' => 'Lihat →',
+        'hooks' => 'Hooks',
+        'permissions' => 'Permissions',
+        'recent_logs' => '📋 Log Aktivitas Terbaru',
+        'statistics' => '📊 Statistik',
+        'created_at' => 'Dibuat',
+        'tenant_count' => 'Tenant Plugins',
+        'confirm_delete_title' => 'Hapus Plugin',
+        'confirm_delete_message' => 'Apakah Anda yakin ingin menghapus plugin ini? Tindakan ini tidak dapat dibatalkan.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Achievements
+    |--------------------------------------------------------------------------
+    */
+
+    'achievements' => [
+        'title' => 'Pencapaian',
+        'no_achievements' => 'Belum Ada Pencapaian',
+        'no_achievements_desc' => 'Mulai mencatat kenangan, mengunggah foto, dan memantau pertumbuhan untuk membuka pencapaian pertama!',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Facility Admin — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'facility_admin' => [
+        'total_patients' => 'Total Pasien',
+        'total_clinical_notes' => 'Total Catatan Klinis',
+        'total_referrals' => 'Total Rujukan',
+        'total_staff' => 'Total Staf',
+        'pending_referrals' => 'Rujukan Pending',
+        'completed_referrals' => 'Rujukan Selesai',
+    ],
+
+    // Extended keys for existing sections
+    'health' => [
+        'title' => 'Kesehatan',
+        'create' => 'Catat Kesehatan',
+        'edit' => 'Edit Catatan',
+        'show' => 'Detail Catatan',
+        'no_records' => 'Belum ada catatan kesehatan.',
+        'add_first' => 'Catat kesehatan pertama!',
+        'immunization' => 'Imunisasi',
+        'illness' => 'Penyakit',
+        'allergies' => 'Alergi',
+        'medications' => 'Obat-obatan',
+        'doctor' => 'Dokter',
+        'notes' => 'Catatan',
+        'record_date' => 'Tanggal Pencatatan',
+        'history_of' => 'Riwayat kesehatan :name',
+        'edit_title' => 'Edit Catatan Kesehatan',
+        'edit_subtitle' => 'Perbarui catatan kesehatan :name',
+        'create_title' => 'Tambah Catatan Kesehatan',
+        'create_subtitle' => 'Catat riwayat kesehatan :name',
+        'edit_record' => 'Edit',
+        'delete_record' => 'Hapus',
+    ],
+
+    'profile' => [
+        'edit' => 'Edit Profil',
+        'update' => 'Perbarui Profil',
+        'avatar' => 'Foto Profil',
+        'personal_info' => 'Informasi Pribadi',
+        'change_password' => 'Ubah Kata Sandi',
+        'current_password' => 'Kata Sandi Saat Ini',
+        'new_password' => 'Kata Sandi Baru',
+        'confirm_new_password' => 'Konfirmasi Kata Sandi Baru',
+        'delete_account' => 'Hapus Akun',
+        'delete_account_warning' => 'Setelah akun Anda dihapus, semua data akan dihapus secara permanen.',
+        'manage_info' => 'Kelola informasi profil Anda',
+    ],
+
+    'search' => [
+        'title' => 'Pencarian',
+        'placeholder' => 'Cari cerita, foto, dokumen...',
+        'no_results' => 'Tidak ada hasil yang ditemukan.',
+        'results' => 'Hasil Pencarian',
+        'timeline_results' => 'Hasil Timeline',
+        'album_results' => 'Hasil Album',
+        'document_results' => 'Hasil Dokumen',
+        'diary_results' => 'Hasil Diary',
+        'subtitle' => 'Cari di seluruh modul ForMysha',
+    ],
+
+    'subscription' => [
+        'plans' => 'Paket Langganan',
+        'subscribe' => 'Berlangganan',
+        'current_plan' => 'Paket Saat Ini',
+        'history' => 'Riwayat Langganan',
+        'payment' => 'Pembayaran',
+        'upload_proof' => 'Unggah Bukti Pembayaran',
+        'no_subscription' => 'Anda belum berlangganan.',
+        'choose_plan' => 'Pilih paket yang sesuai untuk keluarga Anda.',
+        'free_plan' => 'Paket Gratis',
+        'monthly' => '/bulan',
+        'features' => 'Fitur',
+        'max_children' => 'Maksimal Anak',
+        'max_photos' => 'Maksimal Foto',
+        'max_videos' => 'Maksimal Video',
+        'max_storage' => 'Kapasitas Penyimpanan',
+        'upload_payment_proof' => 'Unggah Bukti Transfer',
+        'bank_name' => 'Nama Bank',
+        'account_name' => 'Nama Rekening',
+        'transfer_amount' => 'Jumlah Transfer',
+        'transfer_date' => 'Tanggal Transfer',
+        'payment_status' => 'Status Pembayaran',
+        'no_history' => 'Belum Ada Riwayat',
+        'history_desc' => 'Riwayat langganan Anda akan muncul di sini.',
+    ],
+
+    'notifications' => [
+        'title' => 'Notifikasi',
+        'no_notifications' => 'Tidak ada notifikasi.',
+        'mark_all_read' => 'Tandai semua sudah dibaca',
+        'unread' => 'Belum dibaca',
+        'immunization_reminder' => 'Pengingat Imunisasi',
+        'birthday_reminder' => 'Pengingat Ulang Tahun',
+        'system_notification' => 'Notifikasi Sistem',
+        'delete' => 'Hapus notifikasi',
+    ],
+
+    'growth' => [
+        'title' => 'Pertumbuhan',
+        'create' => 'Catat Pertumbuhan',
+        'edit' => 'Edit Catatan',
+        'no_records' => 'Belum ada catatan pertumbuhan.',
+        'add_first' => 'Catat pertumbuhan pertama!',
+        'height' => 'Tinggi Badan',
+        'weight' => 'Berat Badan',
+        'head_circumference' => 'Lingkar Kepala',
+        'chart' => 'Grafik Pertumbuhan',
+        'history' => 'Riwayat',
+        'record_date' => 'Tanggal Pencatatan',
+        'measurement_detail' => 'Detail Pengukuran',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Monitoring — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'monitoring' => [
+        'system_health' => 'Kesehatan Sistem',
+        'recent_logins' => 'Aktivitas Login Terbaru',
+        'recent_errors' => 'Log Error Terbaru',
+        'storage_usage' => 'Penggunaan Penyimpanan per Tenant',
+        'b2b_monitoring' => 'Monitoring B2B (Fasilitas)',
+        'top_facilities_by_staff' => 'Fasilitas dengan Staf Terbanyak',
+        'top_facilities_by_notes' => 'Fasilitas dengan Catatan Klinis Terbanyak',
+        'facilities_pending_referrals' => 'Fasilitas dengan Rujukan Pending Terbanyak',
+        'facility' => 'Fasilitas',
+        'type' => 'Tipe',
+        'notes_count' => 'catatan',
+        'children_count' => 'anak',
+        'latency' => 'Latency:',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Audit Logs — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'audit_logs' => [
+        'time' => 'Waktu',
+        'user' => 'Pengguna',
+        'action' => 'Aksi',
+        'subject' => 'Subjek',
+        'detail' => 'Detail',
+        'ip' => 'IP',
+        'more_items' => 'lagi',
     ],
 ];

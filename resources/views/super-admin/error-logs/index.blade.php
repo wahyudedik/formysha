@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            {{ __('Error Logs') }}
+            {{ __('error_logs.title') }}
         </h2>
     </x-slot>
 
@@ -13,8 +13,8 @@
             {{-- Main Content --}}
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Error Logs'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('error_logs.title')],
                 ]" />
 
                 {{-- Success Message --}}
@@ -35,7 +35,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalErrors }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Errors</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('error_logs.errors') }}</p>
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalWarnings }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Warnings</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('error_logs.warnings') }}</p>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalInfo }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Info</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('error_logs.info_label') }}</p>
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ number_format($fileSize / 1024, 1) }} KB</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Ukuran Log</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('error_logs.log_size') }}</p>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                                 type="text"
                                 name="search"
                                 value="{{ $search }}"
-                                placeholder="Cari error message..."
+                                placeholder="{{ __('error_logs.search_placeholder') }}"
                                 class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm focus:ring-2 focus:ring-skyBlue-300 dark:focus:ring-skyBlue-600 focus:border-skyBlue-400 dark:focus:border-skyBlue-500 min-h-[44px]"
                             />
                         </div>
@@ -103,10 +103,10 @@
                                 name="level"
                                 class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm focus:ring-2 focus:ring-skyBlue-300 dark:focus:ring-skyBlue-600 focus:border-skyBlue-400 dark:focus:border-skyBlue-500 min-h-[44px]"
                             >
-                                <option value="all" {{ $level === 'all' ? 'selected' : '' }}>Semua Level</option>
-                                <option value="error" {{ $level === 'error' ? 'selected' : '' }}>Error</option>
-                                <option value="warning" {{ $level === 'warning' ? 'selected' : '' }}>Warning</option>
-                                <option value="info" {{ $level === 'info' ? 'selected' : '' }}>Info</option>
+                                <option value="all" {{ $level === 'all' ? 'selected' : '' }}>{{ __('error_log.all_levels') }}</option>
+                                <option value="error" {{ $level === 'error' ? 'selected' : '' }}>{{ __('error_log.error') }}</option>
+                                <option value="warning" {{ $level === 'warning' ? 'selected' : '' }}>{{ __('error_log.warning') }}</option>
+                                <option value="info" {{ $level === 'info' ? 'selected' : '' }}>{{ __('error_log.info') }}</option>
                                 <option value="debug" {{ $level === 'debug' ? 'selected' : '' }}>Debug</option>
                             </select>
                         </div>
@@ -117,7 +117,7 @@
                                 type="submit"
                                 class="px-5 py-2.5 bg-skyBlue-500 hover:bg-skyBlue-600 text-white rounded-xl text-sm font-medium transition min-h-[44px]"
                             >
-                                Filter
+                                {{ __('actions.filter') }}
                             </button>
 
                             {{-- Copy All --}}
@@ -126,7 +126,7 @@
                                 onclick="copyAllLogs()"
                                 class="px-5 py-2.5 bg-mintGreen-500 hover:bg-mintGreen-600 text-white rounded-xl text-sm font-medium transition min-h-[44px]"
                             >
-                                Copy Semua
+                                {{ __('error_logs.copy_all') }}
                             </button>
 
                             {{-- Clear Log --}}
@@ -136,7 +136,7 @@
                                 x-on:click.prevent="$dispatch('delete-confirm', 'delete-error-logs')"
                                 class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-medium transition min-h-[44px]"
                             >
-                                Hapus Log
+                                {{ __('error_logs.clear_log') }}
                             </button>
                         </div>
                     </form>
@@ -196,7 +196,7 @@
                                         class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-medium transition min-h-[44px] flex items-center gap-1"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                                        Copy
+                                        {{ __('actions.export') }}
                                     </button>
                                     <svg class="w-4 h-4 text-gray-400 transition-transform" :class="{ 'rotate-180': expanded }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -209,14 +209,14 @@
                                 <div class="p-4">
                                     {{-- Full Message --}}
                                     <div class="mb-3">
-                                        <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Pesan Lengkap</h4>
+                                        <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{{ __('error_logs.full_message') }}</h4>
                                         <p class="text-sm text-gray-800 dark:text-gray-100 whitespace-pre-wrap break-words">{{ $log['message'] }}</p>
                                     </div>
 
                                     {{-- Context --}}
                                     @if ($log['context'])
                                         <div class="mb-3">
-                                            <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Context</h4>
+                                            <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{{ __('error_logs.context') }}</h4>
                                             <pre class="text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-900 rounded-xl p-3 overflow-x-auto whitespace-pre-wrap break-words">{{ $log['context'] }}</pre>
                                         </div>
                                     @endif
@@ -224,7 +224,7 @@
                                     {{-- Stack Trace --}}
                                     @if ($log['stack'])
                                         <div>
-                                            <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Stack Trace</h4>
+                                            <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{{ __('error_logs.stack_trace') }}</h4>
                                             <pre class="text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-900 rounded-xl p-3 overflow-x-auto whitespace-pre-wrap break-words max-h-64 overflow-y-auto">{{ $log['stack'] }}</pre>
                                         </div>
                                     @endif
@@ -238,8 +238,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Tidak ada error log</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Log file kosong atau belum ada error yang tercatat.</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">{{ __('error_log.title') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_error_logs_desc') }}</p>
                         </div>
                     @endforelse
                 </div>
@@ -248,7 +248,7 @@
                 @if (count($logs) > 0)
                     <div class="mt-4 text-center">
                         <p class="text-xs text-gray-500 dark:text-gray-400">
-                            Menampilkan {{ count($logs) }} log entries
+                            {{ __('error_logs.showing_entries', ['count' => count($logs)]) }}
                         </p>
                     </div>
                 @endif
@@ -266,7 +266,7 @@
             buffer.value = raw;
             buffer.select();
             document.execCommand('copy');
-            showToast('Log entry berhasil dicopy!');
+            showToast('{{ __('error_logs.copy_success') }}');
         }
 
         function copyAllLogs() {
@@ -284,9 +284,9 @@
                 buffer.value = allLogs;
                 buffer.select();
                 document.execCommand('copy');
-                showToast('Semua log berhasil dicopy!');
+                showToast('{{ __('error_logs.copy_all_success') }}');
             } else {
-                showToast('Tidak ada log untuk dicopy.');
+                showToast('{{ __('error_logs.no_logs_to_copy') }}');
             }
         }
 
@@ -306,8 +306,8 @@
     {{-- Delete Confirmation for Clear Log --}}
     <x-confirm-delete
         id="delete-error-logs"
-        title="{{ __('Hapus Semua Log') }}"
-        message="{{ __('Apakah Anda yakin ingin mengosongkan semua log file? Tindakan ini tidak dapat dibatalkan.') }}"
+        :title="__('error_logs.clear_all_logs')"
+        :message="__('error_logs.clear_all_logs_confirm')"
         action="{{ route('super-admin.error-logs.clear') }}"
         method="POST"
     />

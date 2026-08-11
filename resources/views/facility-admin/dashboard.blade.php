@@ -129,7 +129,7 @@
                 @if ($recentPatients->isEmpty())
                     <div class="text-center py-8">
                         <div class="text-4xl mb-3">👶</div>
-                        <p class="text-gray-500 dark:text-gray-400">{{ __('Belum ada pasien terdaftar.') }}</p>
+                        <p class="text-gray-500 dark:text-gray-400">{{ __('empty_states.no_patients') }}</p>
                     </div>
                 @else
                     <div class="space-y-3">
@@ -162,7 +162,7 @@
                 @if ($recentClinicalNotes->isEmpty())
                     <div class="text-center py-8">
                         <div class="text-4xl mb-3">📋</div>
-                        <p class="text-gray-500 dark:text-gray-400">{{ __('Belum ada catatan klinis.') }}</p>
+                        <p class="text-gray-500 dark:text-gray-400">{{ __('empty_states.no_clinical_notes') }}</p>
                     </div>
                 @else
                     <div class="space-y-3">

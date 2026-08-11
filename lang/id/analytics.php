@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Analytics',
+    'revenue_this_month' => 'Pendapatan Bulan Ini',
+    'total_revenue' => 'Total Pendapatan',
+    'active_tenants' => 'Tenant Aktif',
+    'churn_rate' => 'Churn Rate (30 hari)',
+    'monthly_revenue' => 'Pendapatan Bulanan',
+    'new_tenants_per_month' => 'Tenant Baru per Bulan',
+    'subscription_distribution' => 'Distribusi Langganan',
+    'popular_plans' => 'Paket Populer',
+    'revenue_per_plan' => 'Pendapatan per Paket',
+    'b2b_analytics' => 'Analytics B2B (Fasilitas)',
+    'revenue_b2b' => 'Pendapatan B2B',
+    'revenue_b2c' => 'Pendapatan B2C',
+    'top_facility' => 'Fasilitas Terbesar',
+    'b2b_growth' => 'Pertumbuhan Fasilitas B2B',
+    'clinical_notes_referrals' => 'Catatan Klinis & Rujukan',
+    'clinical_notes_per_month' => 'Catatan Klinis per Bulan',
+    'referrals_per_month' => 'Rujukan per Bulan',
+    'top_facilities_staff' => 'Fasilitas Teratas (by Staf)',
+    'facility' => 'Fasilitas',
+    'type' => 'Tipe',
+    'from_last_month' => 'dari bulan lalu',
+];

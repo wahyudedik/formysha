@@ -117,7 +117,7 @@
             @if ($events->isEmpty())
                 <div class="text-center py-8">
                     <div class="text-3xl mb-2">📅</div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Tidak ada acara di bulan ini.</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_calendar_events') }}</p>
                 </div>
             @else
                 <div class="space-y-3">

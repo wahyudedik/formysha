@@ -57,7 +57,7 @@
                             </div>
 
                             <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-                                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 sm:w-40">{{ __('Status') }}</span>
+                                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 sm:w-40">{{ __('common.status') }}</span>
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-medium {{ $staff->is_active ? 'bg-mintGreen-100 dark:bg-mintGreen-950/30 text-mintGreen-700 dark:text-mintGreen-400' : 'bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-400' }}">
                                     {{ $staff->is_active ? __('Aktif') : __('Nonaktif') }}
                                 </span>

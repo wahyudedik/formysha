@@ -86,7 +86,7 @@
                         <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $connection->permission->description() }}</p>
                     </div>
                     <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-1">{{ __('Status') }}</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-1">{{ __('common.status') }}</p>
                         <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $connection->status->label() }}</p>
                     </div>
                     @if ($connection->invitedBy)
@@ -127,7 +127,7 @@
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">{{ __('Riwayat Aktivitas') }}</h3>
 
                 @if ($activities->isEmpty())
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Belum ada aktivitas.') }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_activity') }}</p>
                 @else
                     <div class="space-y-3">
                         @foreach ($activities as $activity)

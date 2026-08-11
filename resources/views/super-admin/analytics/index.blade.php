@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            📊 {{ __('Analytics') }}
+            📊 {{ __('analytics.title') }}
         </h2>
     </x-slot>
 
@@ -13,8 +13,8 @@
             {{-- Main Content --}}
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Analytics'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('analytics.title')],
                 ]" />
 
                 {{-- Stats Cards --}}
@@ -27,13 +27,13 @@
                             </div>
                             <div>
                                 <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueThisMonth, 0, ',', '.') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Pendapatan Bulan Ini</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('analytics.revenue_this_month') }}</p>
                             </div>
                         </div>
                         @if ($revenueLastMonth > 0)
                             @php $growth = round((($revenueThisMonth - $revenueLastMonth) / $revenueLastMonth) * 100, 1); @endphp
                             <div class="mt-3 text-xs {{ $growth >= 0 ? 'text-mintGreen-600 dark:text-mintGreen-400' : 'text-red-600 dark:text-red-400' }}">
-                                {{ $growth >= 0 ? '↑' : '↓' }} {{ abs($growth) }}% dari bulan lalu
+                                {{ $growth >= 0 ? '↑' : '↓' }} {{ abs($growth) }}% {{ __('analytics.from_last_month') }}
                             </div>
                         @endif
                     </div>
@@ -46,7 +46,7 @@
                             </div>
                             <div>
                                 <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueTotal, 0, ',', '.') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Total Pendapatan</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('analytics.total_revenue') }}</p>
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $activeTenants }} / {{ $totalTenants }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Tenant Aktif</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('analytics.active_tenants') }}</p>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $churnRate }}%</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Churn Rate (30 hari)</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('analytics.churn_rate') }}</p>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                     {{-- Revenue per Month --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Pendapatan Bulanan') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('analytics.monthly_revenue') }}</h3>
                         </div>
                         <div class="p-4 sm:p-6">
                             <div class="space-y-3">
@@ -108,7 +108,7 @@
                                 @empty
                                     <div class="text-center py-8">
                                         <div class="text-4xl mb-3">📊</div>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada data pendapatan.</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_revenue') }}</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -118,7 +118,7 @@
                     {{-- New Tenants per Month --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Tenant Baru per Bulan') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('analytics.new_tenants_per_month') }}</h3>
                         </div>
                         <div class="p-4 sm:p-6">
                             <div class="space-y-3">
@@ -144,7 +144,7 @@
                                 @empty
                                     <div class="text-center py-8">
                                         <div class="text-4xl mb-3">🏢</div>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada data tenant.</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_tenants') }}</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -156,7 +156,7 @@
                     {{-- Subscription Distribution --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Distribusi Langganan') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('analytics.subscription_distribution') }}</h3>
                         </div>
                         <div class="p-4 sm:p-6">
                             <div class="space-y-3">
@@ -165,11 +165,9 @@
                                     @php
                                         $subPercentage = $totalSubs > 0 ? ($item['count'] / $totalSubs) * 100 : 0;
                                         $color = match($item['status']) {
-                                            'Aktif' => 'from-mintGreen-400 to-skyBlue-400',
-                                            'Pending' => 'from-warmYellow-400 to-peach-400',
-                                            'Tidak Aktif' => 'from-gray-400 to-gray-500',
-                                            'Dibatalkan' => 'from-red-400 to-red-500',
-                                            'Jatuh Tempo' => 'from-softOrange-400 to-warmYellow-400',
+                                            __('common.active') => 'from-mintGreen-400 to-skyBlue-400',
+                                            __('payments.pending') => 'from-warmYellow-400 to-peach-400',
+                                            __('common.inactive') => 'from-gray-400 to-gray-500',
                                             default => 'from-gray-400 to-gray-500',
                                         };
                                     @endphp
@@ -195,13 +193,13 @@
                     {{-- Top Plans --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏆 {{ __('Paket Populer') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏆 {{ __('analytics.popular_plans') }}</h3>
                         </div>
                         <div class="p-4 sm:p-6">
                             @if ($topPlans->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">📋</div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada data paket.</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_plans') }}</p>
                                 </div>
                             @else
                                 <div class="space-y-3">
@@ -212,7 +210,7 @@
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $plan->name }}</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $plan->subscriptions_count }} langganan</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $plan->subscriptions_count }} {{ __('subscription.history') }}</p>
                                             </div>
                                             <span class="text-sm font-medium text-gray-800 dark:text-gray-100 shrink-0">
                                                 {{ $plan->getPriceMonthlyFormatted() }}/bln
@@ -229,15 +227,15 @@
                 @if ($revenueByPlan->isNotEmpty())
                     <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                         <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('Pendapatan per Paket') }}</h3>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-100">💰 {{ __('analytics.revenue_per_plan') }}</h3>
                         </div>
                         <div class="p-4 sm:p-6">
                             <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                                 <table class="w-full text-sm">
                                     <thead>
                                         <tr class="border-b border-gray-100 dark:border-gray-700">
-                                            <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Paket</th>
-                                            <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Total Pendapatan</th>
+                                            <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('analytics.facility') }}</th>
+                                            <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('analytics.total_revenue') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -257,7 +255,7 @@
                 {{-- B2B Analytics Section --}}
                 @if ($b2bTenantsPerMonth !== null)
                     <div class="mt-8">
-                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('Analytics B2B (Fasilitas)') }}</h3>
+                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">🏥 {{ __('analytics.b2b_analytics') }}</h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                             {{-- Revenue B2B --}}
@@ -268,7 +266,7 @@
                                     </div>
                                     <div>
                                         <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2B, 0, ',', '.') }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Pendapatan B2B</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('analytics.revenue_b2b') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -281,7 +279,7 @@
                                     </div>
                                     <div>
                                         <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Rp {{ number_format($revenueB2C, 0, ',', '.') }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Pendapatan B2C</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('analytics.revenue_b2c') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -294,7 +292,7 @@
                                     </div>
                                     <div>
                                         <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $topFacilities->first()?->name ?? '-' }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fasilitas Terbesar</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('analytics.top_facility') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -304,7 +302,7 @@
                             {{-- B2B Tenant Growth --}}
                             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                                 <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('Pertumbuhan Fasilitas B2B') }}</h3>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">📈 {{ __('analytics.b2b_growth') }}</h3>
                                 </div>
                                 <div class="p-4 sm:p-6">
                                     <div class="space-y-2">
@@ -326,11 +324,11 @@
                             {{-- Clinical Notes & Referrals Growth --}}
                             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                                 <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('Catatan Klinis & Rujukan') }}</h3>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">📋 {{ __('analytics.clinical_notes_referrals') }}</h3>
                                 </div>
                                 <div class="p-4 sm:p-6 space-y-6">
                                     <div>
-                                        <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Catatan Klinis per Bulan</h4>
+                                        <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">{{ __('analytics.clinical_notes_per_month') }}</h4>
                                         <div class="space-y-2">
                                             @foreach ($clinicalNotesPerMonth as $item)
                                                 <div class="flex items-center justify-between">
@@ -346,7 +344,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Rujukan per Bulan</h4>
+                                        <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">{{ __('analytics.referrals_per_month') }}</h4>
                                         <div class="space-y-2">
                                             @foreach ($referralsPerMonth as $item)
                                                 <div class="flex items-center justify-between">
@@ -368,16 +366,16 @@
                             @if ($topFacilities->isNotEmpty())
                                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden lg:col-span-2">
                                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏆 {{ __('Fasilitas Teratas (by Staf)') }}</h3>
+                                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">🏆 {{ __('analytics.top_facilities_staff') }}</h3>
                                     </div>
                                     <div class="p-4 sm:p-6">
                                         <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                                             <table class="w-full text-sm">
                                                 <thead>
                                                     <tr class="border-b border-gray-100 dark:border-gray-700">
-                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Fasilitas</th>
-                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Tipe</th>
-                                                        <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Jumlah Staf</th>
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('analytics.facility') }}</th>
+                                                        <th class="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('analytics.type') }}</th>
+                                                        <th class="text-right px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{{ __('super_admin.staff_count_label') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

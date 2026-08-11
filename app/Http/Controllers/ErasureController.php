@@ -63,7 +63,7 @@ class ErasureController extends Controller
         );
 
         return redirect()->route('erasure.index')
-            ->with('success', __('Data ":name" berhasil dihapus permanen.', ['name' => $child->name]));
+            ->with('success', __('status.child_data_deleted', ['name' => $child->name]));
     }
 
     /**

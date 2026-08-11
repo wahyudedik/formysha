@@ -24,8 +24,8 @@
                     @if($installedPlugins->isEmpty())
                         <x-empty-state
                             icon="🧩"
-                            title="Belum ada plugin terinstall"
-                            description="Install plugin dari marketplace untuk menambah fitur ke tenant Anda."
+                            title="{{ __('empty_states.no_plugins_installed') }}"
+                            description="{{ __('empty_states.no_plugins_installed_desc') }}"
                         />
                     @else
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -86,8 +86,8 @@
                     @if($availablePlugins->isEmpty())
                         <x-empty-state
                             icon="🏪"
-                            title="Belum ada plugin tersedia"
-                            description="Plugin akan muncul di sini setelah didaftarkan oleh Super Admin."
+                            title="{{ __('empty_states.no_plugins_available') }}"
+                            description="{{ __('empty_states.no_plugins_available_desc') }}"
                         />
                     @else
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

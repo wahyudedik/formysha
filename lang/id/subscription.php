@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'plans' => 'Paket Langganan',
+    'subscribe' => 'Berlangganan',
+    'current_plan' => 'Paket Saat Ini',
+    'history' => 'Riwayat Langganan',
+    'payment' => 'Pembayaran',
+    'upload_proof' => 'Unggah Bukti Pembayaran',
+    'no_subscription' => 'Anda belum berlangganan.',
+    'choose_plan' => 'Pilih paket yang sesuai untuk keluarga Anda.',
+    'free_plan' => 'Paket Gratis',
+    'monthly' => '/bulan',
+    'features' => 'Fitur',
+    'max_children' => 'Maksimal Anak',
+    'max_photos' => 'Maksimal Foto',
+    'max_videos' => 'Maksimal Video',
+    'max_storage' => 'Kapasitas Penyimpanan',
+    'upload_payment_proof' => 'Unggah Bukti Transfer',
+    'bank_name' => 'Nama Bank',
+    'account_name' => 'Nama Rekening',
+    'transfer_amount' => 'Jumlah Transfer',
+    'transfer_date' => 'Tanggal Transfer',
+    'payment_status' => 'Status Pembayaran',
+    'no_history' => 'Belum Ada Riwayat',
+    'history_desc' => 'Riwayat langganan Anda akan muncul di sini.',
+];

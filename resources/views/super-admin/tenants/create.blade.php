@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            ➕ {{ __('Tambah Tenant Baru') }}
+            ➕ {{ __('super_admin.add_new') }}
         </h2>
     </x-slot>
 
@@ -11,15 +11,15 @@
 
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Tenants', 'url' => route('super-admin.tenants.index')],
-                    ['label' => 'Tambah Baru'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.tenants'), 'url' => route('super-admin.tenants.index')],
+                    ['label' => __('super_admin.add_new')],
                 ]" />
 
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">Form Tambah Tenant</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Isi informasi tenant baru di bawah ini.</p>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ __('super_admin.create_tenant_form') }}</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('super_admin.create_tenant_desc') }}</p>
                     </div>
 
                     <form method="POST" action="{{ route('super-admin.tenants.store') }}" class="p-4 sm:p-6" x-data="{ loading: false }" @submit="loading = true">
@@ -28,24 +28,24 @@
                         <div class="max-w-lg space-y-5">
                             {{-- Name --}}
                             <div>
-                                <x-input-label for="name" :value="__('Nama Tenant')" />
+                                <x-input-label for="name" :value="__('forms.name')" />
                                 <x-text-input id="name" name="name" type="text" class="mt-1 block w-full input-focus" :value="old('name')" required autofocus />
                                 <x-input-error :messages="$errors->get('name')" class="mt-1" />
                             </div>
 
                             {{-- Slug --}}
                             <div>
-                                <x-input-label for="slug" :value="__('Slug (opsional)')" />
-                                <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full input-focus" :value="old('slug')" placeholder="Otomatis dari nama jika kosong" />
+                                <x-input-label for="slug" :value="__('forms.slug')" />
+                                <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full input-focus" :value="old('slug')" :placeholder="__('super_admin.slug_auto_hint')" />
                                 <x-input-error :messages="$errors->get('slug')" class="mt-1" />
-                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Jika dikosongkan, slug akan dibuat otomatis dari nama.</p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ __('super_admin.slug_auto_desc') }}</p>
                             </div>
 
                             {{-- Type --}}
                             <div>
-                                <x-input-label for="type" :value="__('Tipe Tenant')" />
+                                <x-input-label for="type" :value="__('forms.type')" />
                                 <select id="type" name="type" class="mt-1 block w-full input-focus border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-softPink-300 focus:ring-softPink-300" required>
-                                    <option value="">-- Pilih Tipe --</option>
+                                    <option value="">{{ __('super_admin.select_type') }}</option>
                                     @foreach($tenantTypes as $type)
                                         <option value="{{ $type->value }}" {{ old('type') === $type->value ? 'selected' : '' }}>
                                             {{ $type->label() }}
@@ -54,9 +54,9 @@
                                 </select>
                                 <x-input-error :messages="$errors->get('type')" class="mt-1" />
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                                    <span class="font-medium text-softPink-400 dark:text-softPink-300">Keluarga</span> untuk pengguna B2C (perorangan/keluarga).
+                                    <span class="font-medium text-softPink-400 dark:text-softPink-300">{{ __('super_admin.b2c_family') }}</span> {{ __('super_admin.type_hint_family') }}
                                     <br>
-                                    <span class="font-medium text-skyBlue-400 dark:text-skyBlue-300">Rumah Sakit, Klinik, dll.</span> untuk fasilitas kesehatan B2B.
+                                    <span class="font-medium text-skyBlue-400 dark:text-skyBlue-300">{{ __('super_admin.b2b_facility') }}</span> {{ __('super_admin.type_hint_facility') }}
                                 </p>
                             </div>
                         </div>
@@ -67,10 +67,10 @@
                                 <svg x-show="!loading" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span x-text="loading ? '{{ __('Menyimpan...') }}' : '{{ __('Simpan') }}'"></span>
+                                <span x-text="loading ? '{{ __('common.loading') }}' : '{{ __('actions.save') }}'"></span>
                             </button>
                             <a href="{{ route('super-admin.tenants.index') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
-                                {{ __('Batal') }}
+                                {{ __('actions.cancel') }}
                             </a>
                         </div>
                     </form>

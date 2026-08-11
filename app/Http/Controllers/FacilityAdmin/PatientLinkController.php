@@ -74,7 +74,7 @@ class PatientLinkController extends Controller
 
         if ($existing) {
             return back()->withErrors([
-                'child_id' => __('Anak ini sudah terdaftar di fasilitas ini.'),
+                'child_id' => __('status.child_already_registered_at_facility'),
             ]);
         }
 
@@ -158,7 +158,7 @@ class PatientLinkController extends Controller
         $patientLink->sendInvitation();
 
         return redirect()->route('facility.patients.show', $patientLink)
-            ->with('status', __('Undangan berhasil dikirim! Kode: :code', ['code' => $patientLink->link_code]));
+            ->with('status', __('status.patient_link_invitation_sent', ['code' => $patientLink->link_code]));
     }
 
     /**
@@ -173,13 +173,13 @@ class PatientLinkController extends Controller
 
         if (! $parent) {
             return back()->withErrors([
-                'parent' => __('Profil orang tua belum tersedia untuk tautan ini.'),
+                'parent' => __('status.parent_profile_not_available'),
             ]);
         }
 
         $patientLink->claimProfile($parent);
 
         return redirect()->route('facility.patients.show', $patientLink)
-            ->with('status', __('Profil berhasil diklaim! Koneksi telah dibuat.'));
+            ->with('status', __('status.profile_claimed_connection_created'));
     }
 }

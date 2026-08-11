@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'plans' => 'Subscription Plans',
+    'subscribe' => 'Subscribe',
+    'current_plan' => 'Current Plan',
+    'history' => 'Subscription History',
+    'payment' => 'Payment',
+    'upload_proof' => 'Upload Payment Proof',
+    'no_subscription' => 'You have no subscription yet.',
+    'choose_plan' => 'Choose a plan that suits your family.',
+    'free_plan' => 'Free Plan',
+    'monthly' => '/month',
+    'features' => 'Features',
+    'max_children' => 'Max Children',
+    'max_photos' => 'Max Photos',
+    'max_videos' => 'Max Videos',
+    'max_storage' => 'Storage Capacity',
+    'upload_payment_proof' => 'Upload Transfer Proof',
+    'bank_name' => 'Bank Name',
+    'account_name' => 'Account Name',
+    'transfer_amount' => 'Transfer Amount',
+    'transfer_date' => 'Transfer Date',
+    'payment_status' => 'Payment Status',
+    'no_history' => 'No History Yet',
+    'history_desc' => 'Your subscription history will appear here.',
+];

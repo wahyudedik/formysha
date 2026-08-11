@@ -117,7 +117,7 @@
                         </a>
                     </div>
                     @if ($child->familyMembers->isEmpty())
-                        <p class="text-gray-400 dark:text-gray-500 text-sm">Belum ada anggota keluarga.</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-sm">{{ __('empty_states.no_family_members') }}</p>
                     @else
                         <div class="space-y-3">
                             @foreach ($child->familyMembers->take(4) as $member)

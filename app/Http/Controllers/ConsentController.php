@@ -52,12 +52,12 @@ class ConsentController extends Controller
             );
 
             return redirect()->route('consent.index', $child)
-                ->with('success', __('Consent ":type" berhasil diberikan.', ['type' => $type->label()]));
+                ->with('success', __('status.consent_granted', ['type' => $type->label()]));
         }
 
         $this->consentService->revoke($user, $child, $type);
 
         return redirect()->route('consent.index', $child)
-            ->with('success', __('Consent ":type" berhasil dicabut.', ['type' => $type->label()]));
+            ->with('success', __('status.consent_revoked', ['type' => $type->label()]));
     }
 }

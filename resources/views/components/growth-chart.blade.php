@@ -122,7 +122,7 @@
     <div x-show="tab === 'weight'" x-transition>
         @if ($weights->isEmpty() && (!$hasWho || empty($whoWeight['median'])))
             <div class="text-center py-8 text-gray-400 dark:text-gray-500">
-                <p class="text-sm">{{ __('Belum ada data berat badan.') }}</p>
+                <p class="text-sm">{{ __('empty_states.no_weight_data') }}</p>
             </div>
         @else
             <div class="relative overflow-x-auto">
@@ -233,7 +233,7 @@
     <div x-show="tab === 'height'" x-transition>
         @if ($heights->isEmpty() && (!$hasWho || empty($whoHeight['median'])))
             <div class="text-center py-8 text-gray-400 dark:text-gray-500">
-                <p class="text-sm">{{ __('Belum ada data tinggi badan.') }}</p>
+                <p class="text-sm">{{ __('empty_states.no_height_data') }}</p>
             </div>
         @else
             <div class="relative overflow-x-auto">
@@ -344,7 +344,7 @@
     <div x-show="tab === 'head'" x-transition>
         @if ($heads->isEmpty() && (!$hasWhoHead || empty($whoHead['median'])))
             <div class="text-center py-8 text-gray-400 dark:text-gray-500">
-                <p class="text-sm">{{ __('Belum ada data lingkar kepala.') }}</p>
+                <p class="text-sm">{{ __('empty_states.no_head_circumference_data') }}</p>
             </div>
         @else
             <div class="relative overflow-x-auto">

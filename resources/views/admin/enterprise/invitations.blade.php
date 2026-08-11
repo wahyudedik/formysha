@@ -105,7 +105,7 @@
                     @if ($invitations->isEmpty())
                         <div class="text-center py-8">
                             <div class="text-4xl mb-3">📭</div>
-                            <p class="text-gray-500 dark:text-gray-400">Belum ada undangan aktif.</p>
+                            <p class="text-gray-500 dark:text-gray-400">{{ __('empty_states.no_undangan') }}</p>
                         </div>
                     @else
                         <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">

@@ -91,7 +91,7 @@
                                                 {{ $child->nickname ?? $child->name }}
                                             </h4>
                                             <p class="text-gray-500 dark:text-gray-400 text-xs">
-                                                {{ $summary['timelines'] }} {{ __('timeline') }},
+                                                {{ $summary['timelines'] }} {{ __('common.timeline') }},
                                                 {{ $summary['albums'] }} {{ __('album') }},
                                                 {{ $summary['media'] }} {{ __('media') }},
                                                 {{ $summary['diaries'] }} {{ __('diary') }},

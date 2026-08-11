@@ -57,7 +57,7 @@ describe('Tenant Management (Super Admin)', function () {
         $this->actingAs($admin)
             ->get(route('super-admin.tenants.create'))
             ->assertOk()
-            ->assertSee('Tipe Tenant')
+            ->assertSee(__('forms.type'))
             ->assertSee('Keluarga')
             ->assertSee('Rumah Sakit')
             ->assertSee('Klinik');

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            📜 {{ __('Audit Log') }}
+            📜 {{ __('navigation.audit_logs') }}
         </h2>
     </x-slot>
 
@@ -11,8 +11,8 @@
 
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Audit Log'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.audit_logs')],
                 ]" />
 
                 {{-- Desktop Table --}}
@@ -21,12 +21,12 @@
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-100 dark:border-gray-700">
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Waktu</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Pengguna</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Aksi</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Subjek</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Detail</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">IP</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('audit_logs.time') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('audit_logs.user') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('audit_logs.action') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('audit_logs.subject') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('audit_logs.detail') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('audit_logs.ip') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,7 +62,7 @@
                                                         <span class="font-mono">{{ $key }}</span>@if (!$loop->last), @endif
                                                     @endforeach
                                                     @if (count($log->new_values) > 3)
-                                                        <span class="text-gray-400 dark:text-gray-500">+{{ count($log->new_values) - 3 }} lagi</span>
+                                                        <span class="text-gray-400 dark:text-gray-500">+{{ count($log->new_values) - 3 }} {{ __('audit_logs.more_items') }}</span>
                                                     @endif
                                                 </div>
                                             @else
@@ -76,7 +76,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="6" class="px-6 py-12">
-                                            <x-empty-state icon="📜" title="Belum Ada Audit Log" description="Audit log akan muncul setelah ada aktivitas." />
+                                            <x-empty-state icon="📜" :title="__('empty_states.no_audit_logs')" :description="__('empty_states.no_audit_logs_desc')" />
                                         </td>
                                     </tr>
                                 @endforelse
@@ -111,7 +111,7 @@
                         </div>
                     @empty
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6">
-                            <x-empty-state icon="📜" title="Belum Ada Audit Log" description="Audit log akan muncul setelah ada aktivitas." />
+                            <x-empty-state icon="📜" :title="__('empty_states.no_audit_logs')" :description="__('empty_states.no_audit_logs_desc')" />
                         </div>
                     @endforelse
                 </div>

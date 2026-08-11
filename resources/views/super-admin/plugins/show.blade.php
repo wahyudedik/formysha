@@ -9,14 +9,14 @@
                     x-data
                     x-on:click.prevent="$dispatch('delete-confirm', 'delete-plugin-{{ $plugin->id }}')"
                     class="min-h-[44px] px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
-                    🗑️ Hapus
+                    🗑️ {{ __('actions.delete') }}
                 </button>
             </div>
 
             <x-confirm-delete
                 id="delete-plugin-{{ $plugin->id }}"
-                title="{{ __('Hapus Plugin') }}"
-                message="{{ __('Apakah Anda yakin ingin menghapus plugin ini? Tindakan ini tidak dapat dibatalkan.') }}"
+                :title="__('plugins.confirm_delete_title')"
+                :message="__('plugins.confirm_delete_message')"
                 action="{{ route('super-admin.plugins.destroy', $plugin) }}"
             />
         </div>
@@ -28,8 +28,8 @@
 
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Plugins', 'url' => route('super-admin.plugins.index')],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.plugins'), 'url' => route('super-admin.plugins.index')],
                     ['label' => $plugin->name],
                 ]" />
 
@@ -46,13 +46,13 @@
                             </div>
 
                             <div class="mb-4">
-                                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Deskripsi</h4>
-                                <p class="text-sm text-gray-800 dark:text-gray-100">{{ $plugin->description ?? 'Tidak ada deskripsi.' }}</p>
+                                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('plugins.description') }}</h4>
+                                <p class="text-sm text-gray-800 dark:text-gray-100">{{ $plugin->description ?? __('plugins.no_description') }}</p>
                             </div>
 
                             @if($plugin->hooks)
                                 <div class="mb-4">
-                                    <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Hooks</h4>
+                                    <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">{{ __('plugins.hooks') }}</h4>
                                     <div class="flex flex-wrap gap-2">
                                         @foreach($plugin->hooks as $hook)
                                             <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-lavender-100 text-lavender-700 dark:bg-lavender-950/30 dark:text-lavender-400">{{ $hook }}</span>
@@ -63,7 +63,7 @@
 
                             @if($plugin->permissions)
                                 <div class="mb-4">
-                                    <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Permissions</h4>
+                                    <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">{{ __('plugins.permissions') }}</h4>
                                     <div class="flex flex-wrap gap-2">
                                         @foreach($plugin->permissions as $permission)
                                             <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-warmYellow-100 text-warmYellow-700 dark:bg-warmYellow-950/30 dark:text-warmYellow-400">{{ $permission }}</span>
@@ -75,10 +75,10 @@
 
                         {{-- Recent Logs --}}
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mt-6">
-                            <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-4">📋 Log Aktivitas Terbaru</h4>
+                            <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-4">{{ __('plugins.recent_logs') }}</h4>
 
                             @if($recentLogs->isEmpty())
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada log aktivitas.</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_plugin_logs') }}</p>
                             @else
                                 <div class="space-y-3">
                                     @foreach($recentLogs as $log)
@@ -108,35 +108,35 @@
                     {{-- Sidebar Stats --}}
                     <div>
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
-                            <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-4">📊 Statistik</h4>
+                            <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-4">{{ __('plugins.statistics') }}</h4>
 
                             <div class="space-y-4">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600 dark:text-gray-300">Status</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ __('forms.status') }}</span>
                                     @if($plugin->is_active)
-                                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-mintGreen-100 text-mintGreen-700 dark:bg-mintGreen-950/30 dark:text-mintGreen-400">Aktif</span>
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-mintGreen-100 text-mintGreen-700 dark:bg-mintGreen-950/30 dark:text-mintGreen-400">{{ __('common.active') }}</span>
                                     @else
-                                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">Nonaktif</span>
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">{{ __('common.inactive') }}</span>
                                     @endif
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600 dark:text-gray-300">Resmi</span>
-                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $plugin->is_official ? '✅ Ya' : '❌ Tidak' }}</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ __('plugins.official') }}</span>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $plugin->is_official ? __('common.yes') : __('common.no') }}</span>
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600 dark:text-gray-300">Install</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ __('plugins.installs') }}</span>
                                     <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $plugin->install_count }}</span>
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600 dark:text-gray-300">Tenant Plugins</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ __('plugins.tenant_count') }}</span>
                                     <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $plugin->tenant_plugins_count }}</span>
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600 dark:text-gray-300">Dibuat</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ __('plugins.created_at') }}</span>
                                     <span class="text-sm text-gray-800 dark:text-gray-100">{{ $plugin->created_at->format('d M Y') }}</span>
                                 </div>
                             </div>

@@ -21,11 +21,11 @@ APP_DIR="/www/wwwroot/${DOMAIN}"
 REPO_URL="https://github.com/wahyudedik/formysha.git"
 BRANCH="main"
 APP_USER="www"
-PHP_VERSION="8.3"
+PHP_VERSION="8.4"
 DB_NAME="sql_formysha_my_id"
 DB_USER="sql_formysha_my_id"
-DB_PASS="3aaf5594628808"
-REDIS_PASS="cdfe97af2103606c"
+DB_PASS="${DB_PASS:-}"       # Set via env or edit here
+REDIS_PASS="${REDIS_PASS:-}" # Set via env or edit here
 
 # Step tracking file untuk resume
 STEP_FILE="/tmp/formysha_deploy_step"

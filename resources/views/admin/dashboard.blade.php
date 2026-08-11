@@ -99,7 +99,7 @@
                             @if ($recentActivity->isEmpty())
                                 <div class="text-center py-8">
                                     <div class="text-4xl mb-3">📝</div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada aktivitas.</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_activity') }}</p>
                                 </div>
                             @else
                                 <div class="space-y-3">
@@ -134,7 +134,7 @@
                             @if ($totalChildren > 0)
                                 <a href="{{ route('children.index') }}" class="flex flex-col items-center gap-2 p-4 min-h-[44px] rounded-xl bg-softPink-50 dark:bg-softPink-950/30 hover:bg-softPink-100 dark:hover:bg-softPink-950/50 transition text-center">
                                     <span class="text-2xl">👶</span>
-                                    <span class="text-xs font-medium text-softPink-700 dark:text-softPink-400">Lihat Anak</span>
+                                    <span class="text-xs font-medium text-softPink-700 dark:text-softPink-400">{{ __('actions.view') }} {{ __('children.child') }}</span>
                                 </a>
                             @endif
                             <a href="{{ route('admin.usage.index') }}" class="flex flex-col items-center gap-2 p-4 min-h-[44px] rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition text-center">

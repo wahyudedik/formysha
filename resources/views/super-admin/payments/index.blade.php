@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            💳 {{ __('Manajemen Pembayaran') }}
+            💳 {{ __('payments.management') }}
         </h2>
     </x-slot>
 
@@ -11,27 +11,27 @@
 
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Pembayaran'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.payments')],
                 ]" />
 
                 {{-- Status Filter --}}
                 <div class="flex flex-wrap gap-2 mb-4 min-h-[44px]">
                     <a href="{{ route('super-admin.payments.index') }}"
                        class="px-3 py-1.5 rounded-xl text-xs font-medium transition {{ !request('status') ? 'bg-skyBlue-100 text-skyBlue-600 dark:bg-skyBlue-950/30 dark:text-skyBlue-400' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600' }}">
-                        Semua
+                        {{ __('payments.all') }}
                     </a>
                     <a href="{{ route('super-admin.payments.index', ['status' => 'pending']) }}"
                        class="px-3 py-1.5 rounded-xl text-xs font-medium transition {{ request('status') === 'pending' ? 'bg-warmYellow-100 text-warmYellow-600 dark:bg-warmYellow-950/30 dark:text-warmYellow-400' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600' }}">
-                        ⏳ Pending
+                        ⏳ {{ __('payments.pending') }}
                     </a>
                     <a href="{{ route('super-admin.payments.index', ['status' => 'approved']) }}"
                        class="px-3 py-1.5 rounded-xl text-xs font-medium transition {{ request('status') === 'approved' ? 'bg-mintGreen-100 text-mintGreen-600 dark:bg-mintGreen-950/30 dark:text-mintGreen-400' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600' }}">
-                        ✅ Disetujui
+                        ✅ {{ __('payments.approved') }}
                     </a>
                     <a href="{{ route('super-admin.payments.index', ['status' => 'rejected']) }}"
                        class="px-3 py-1.5 rounded-xl text-xs font-medium transition {{ request('status') === 'rejected' ? 'bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600' }}">
-                        ❌ Ditolak
+                        ❌ {{ __('payments.rejected') }}
                     </a>
                 </div>
 
@@ -41,12 +41,12 @@
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-100 dark:border-gray-700">
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Tenant</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Jumlah</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Bank</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Status</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Tanggal</th>
-                                    <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Aksi</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('payments.tenant') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('payments.amount') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('payments.bank') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('payments.status') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('payments.date') }}</th>
+                                    <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('actions.filter') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,9 +69,9 @@
                                                     default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
                                                 } }}">
                                                 {{ match($payment->status) {
-                                                    'pending' => '⏳ Pending',
-                                                    'approved' => '✅ Disetujui',
-                                                    'rejected' => '❌ Ditolak',
+                                                    'pending' => '⏳ ' . __('payments.pending'),
+                                                    'approved' => '✅ ' . __('payments.approved'),
+                                                    'rejected' => '❌ ' . __('payments.rejected'),
                                                     default => ucfirst($payment->status),
                                                 } }}
                                             </span>
@@ -79,14 +79,14 @@
                                         <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs">{{ $payment->created_at->locale('id')->isoFormat('D MMM YYYY') }}</td>
                                         <td class="px-6 py-4 text-right">
                                             <a href="{{ route('super-admin.payments.show', $payment) }}" class="inline-flex items-center min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-medium bg-skyBlue-50 text-skyBlue-600 hover:bg-skyBlue-100 dark:bg-skyBlue-950/30 dark:text-skyBlue-400 dark:hover:bg-skyBlue-950/50 transition">
-                                                Lihat Detail
+                                                {{ __('payments.view_detail') }}
                                             </a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="6" class="px-6 py-12">
-                                            <x-empty-state icon="💳" title="Belum Ada Pembayaran" description="Belum ada transaksi pembayaran." />
+                                            <x-empty-state icon="💳" :title="__('empty_states.no_payments')" :description="__('empty_states.no_payments_desc')" />
                                         </td>
                                     </tr>
                                 @endforelse
@@ -116,7 +116,7 @@
                         </a>
                     @empty
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6">
-                            <x-empty-state icon="💳" title="Belum Ada Pembayaran" description="Belum ada transaksi pembayaran." />
+                            <x-empty-state icon="💳" :title="__('empty_states.no_payments')" :description="__('empty_states.no_payments_desc')" />
                         </div>
                     @endforelse
                 </div>

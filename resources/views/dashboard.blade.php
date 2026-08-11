@@ -122,7 +122,7 @@
                     @if ($recentMedia->isEmpty())
                         <div class="text-center py-8">
                             <div class="text-4xl mb-3">📷</div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Belum ada momen.') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_moments') }}</p>
                             @if ($children->isNotEmpty())
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ __('Mulai dokumentasikan momen pertama buah hati.') }}</p>
                             @endif
@@ -190,7 +190,7 @@
                     @if ($recentGrowths->isEmpty())
                         <div class="text-center py-6">
                             <div class="text-3xl mb-2">📏</div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Belum ada data pertumbuhan.') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_growth_data') }}</p>
                             @if ($children->isNotEmpty())
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ __('Pantau tinggi dan berat badan buah hati.') }}</p>
                             @endif
@@ -228,7 +228,7 @@
                     @if ($recentHealthRecords->isEmpty())
                         <div class="text-center py-6">
                             <div class="text-3xl mb-2">🏥</div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Belum ada catatan kesehatan.') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('empty_states.no_health_data') }}</p>
                             @if ($children->isNotEmpty())
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ __('Catat riwayat imunisasi dan kesehatan.') }}</p>
                             @endif
@@ -304,7 +304,7 @@
                         </a>
                         <a href="{{ route('timeline.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 border border-lavender-100 dark:border-lavender-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📸</div>
-                            <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Timeline') }}</div>
+                            <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('common.timeline') }}</div>
                         </a>
                         <a href="{{ route('albums.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-warmYellow-50 to-peach-50 dark:from-warmYellow-950/30 dark:to-peach-950/30 border border-warmYellow-100 dark:border-warmYellow-900/30 hover:shadow-medium transition text-center group">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🖼️</div>

@@ -85,7 +85,7 @@
 
         @if ($healthRecords->isEmpty())
             <div class="empty-state">
-                <p>Belum ada riwayat kesehatan yang tercatat.</p>
+                <p>{{ __('empty_states.no_health_records') }}</p>
             </div>
         @else
             @foreach ($healthRecords as $index => $record)

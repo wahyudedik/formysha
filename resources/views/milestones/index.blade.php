@@ -65,8 +65,8 @@
             @if($milestones->isEmpty())
                 <x-empty-state
                     icon="🎯"
-                    title="Belum ada milestone aktif"
-                    description="Milestone akan muncul secara otomatis saat ada pencapaian atau pengingat untuk {{ $child->name }}."
+                    title="{{ __('empty_states.no_milestones') }}"
+                    description="{{ __('empty_states.no_milestones_desc', ['name' => $child->name]) }}"
                 />
             @else
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

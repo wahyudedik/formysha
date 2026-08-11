@@ -2,13 +2,13 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-                📋 {{ __('Manajemen Paket') }}
+                📋 {{ __('subscription.plans') }}
             </h2>
             <a href="{{ route('super-admin.plans.create') }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                {{ __('Tambah Paket') }}
+                {{ __('actions.create') }}
             </a>
         </div>
     </x-slot>
@@ -19,8 +19,8 @@
 
             <div class="flex-1 min-w-0">
                 <x-breadcrumb :items="[
-                    ['label' => 'Dashboard', 'url' => route('super-admin.dashboard')],
-                    ['label' => 'Paket'],
+                    ['label' => __('navigation.dashboard'), 'url' => route('super-admin.dashboard')],
+                    ['label' => __('navigation.plans')],
                 ]" />
 
                 {{-- Desktop Table --}}
@@ -29,13 +29,13 @@
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-100 dark:border-gray-700">
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Nama</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Harga/Bulan</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Harga/Tahun</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Batas Anak</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Storage</th>
-                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Status</th>
-                                    <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">Aksi</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('forms.name') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('plans.price_per_month') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('plans.price_per_year') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('plans.max_children_limit') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('plans.storage') }}</th>
+                                    <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('forms.status') }}</th>
+                                    <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-400">{{ __('actions.filter') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,17 +53,17 @@
                                         <td class="px-6 py-4 text-gray-600 dark:text-gray-300">{{ $plan->getStorageFormatted() }}</td>
                                         <td class="px-6 py-4">
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium {{ $plan->is_active ? 'bg-mintGreen-100 text-mintGreen-600 dark:bg-mintGreen-950/30 dark:text-mintGreen-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400' }}">
-                                                {{ $plan->is_active ? 'Aktif' : 'Nonaktif' }}
+                                                {{ $plan->is_active ? __('common.active') : __('common.inactive') }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-right">
                                             <div class="flex items-center justify-end gap-2">
-                                                <a href="{{ route('super-admin.plans.edit', $plan) }}" class="p-2 rounded-lg text-gray-400 dark:text-gray-500 hover:text-skyBlue-600 dark:hover:text-skyBlue-400 hover:bg-skyBlue-50 dark:hover:bg-skyBlue-950/20 transition" title="Edit">
+                                                <a href="{{ route('super-admin.plans.edit', $plan) }}" class="p-2 rounded-lg text-gray-400 dark:text-gray-500 hover:text-skyBlue-600 dark:hover:text-skyBlue-400 hover:bg-skyBlue-50 dark:hover:bg-skyBlue-950/20 transition" title="{{ __('actions.edit') }}">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
                                                 </a>
-                                                <button type="button" class="p-2 rounded-lg text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition" title="Hapus"
+                                                <button type="button" class="p-2 rounded-lg text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition" title="{{ __('actions.delete') }}"
                                                     x-data
                                                     x-on:click.prevent="$dispatch('delete-confirm', 'delete-plan-{{ $plan->id }}')">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="7" class="px-6 py-12">
-                                            <x-empty-state icon="📋" title="Belum Ada Paket" description="Buat paket langganan pertama." action-url="{{ route('super-admin.plans.create') }}" action-text="Tambah Paket" />
+                                            <x-empty-state icon="📋" :title="__('empty_states.no_plans')" :description="__('empty_states.no_plans')" :action-url="route('super-admin.plans.create')" :action-text="__('actions.create')" />
                                         </td>
                                     </tr>
                                 @endforelse
@@ -92,30 +92,30 @@
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $plan->name }}</h3>
                                 <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium {{ $plan->is_active ? 'bg-mintGreen-100 text-mintGreen-600 dark:bg-mintGreen-950/30 dark:text-mintGreen-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400' }}">
-                                    {{ $plan->is_active ? 'Aktif' : 'Nonaktif' }}
+                                    {{ $plan->is_active ? __('common.active') : __('common.inactive') }}
                                 </span>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3">
-                                <span>Bulan: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->getPriceMonthlyFormatted() }}</strong></span>
-                                <span>Tahun: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->getPriceYearlyFormatted() }}</strong></span>
-                                <span>Anak: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->max_children === -1 ? '∞' : $plan->max_children }}</strong></span>
-                                <span>Storage: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->getStorageFormatted() }}</strong></span>
+                                <span>{{ __('plans.monthly_label') }}: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->getPriceMonthlyFormatted() }}</strong></span>
+                                <span>{{ __('plans.yearly_label') }}: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->getPriceYearlyFormatted() }}</strong></span>
+                                <span>{{ __('plans.children_label') }}: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->max_children === -1 ? '∞' : $plan->max_children }}</strong></span>
+                                <span>{{ __('plans.storage') }}: <strong class="text-gray-800 dark:text-gray-100">{{ $plan->getStorageFormatted() }}</strong></span>
                             </div>
                             <div class="flex gap-2">
                                 <a href="{{ route('super-admin.plans.edit', $plan) }}" class="flex-1 min-h-[44px] flex items-center justify-center py-2 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30 text-skyBlue-600 dark:text-skyBlue-400 text-xs font-medium hover:bg-skyBlue-100 dark:hover:bg-skyBlue-950/50 transition">
-                                    ✏️ Edit
+                                    ✏️ {{ __('actions.edit') }}
                                 </a>
                                 <button type="button"
                                     class="w-full min-h-[44px] flex items-center justify-center py-2 rounded-xl bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-100 dark:hover:bg-red-950/50 transition"
                                     x-data
                                     x-on:click.prevent="$dispatch('delete-confirm', 'delete-plan-{{ $plan->id }}')">
-                                    🗑️ Hapus
+                                    🗑️ {{ __('actions.delete') }}
                                 </button>
                             </div>
                         </div>
                     @empty
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6">
-                            <x-empty-state icon="📋" title="Belum Ada Paket" description="Buat paket langganan pertama." action-url="{{ route('super-admin.plans.create') }}" action-text="Tambah Paket" />
+                            <x-empty-state icon="📋" :title="__('empty_states.no_plans')" :description="__('empty_states.no_plans')" :action-url="route('super-admin.plans.create')" :action-text="__('actions.create')" />
                         </div>
                     @endforelse
                 </div>
@@ -124,8 +124,8 @@
                 @foreach ($plans as $plan)
                     <x-confirm-delete
                         id="delete-plan-{{ $plan->id }}"
-                        title="{{ __('Hapus Paket') }}"
-                        message="{{ __('Apakah Anda yakin ingin menghapus paket') }} '{{ $plan->name }}'? {{ __('Tindakan ini tidak dapat dibatalkan.') }}"
+                        :title="__('actions.delete')"
+                        :message="__('messages.confirm_delete')"
                         action="{{ route('super-admin.plans.destroy', $plan) }}"
                     />
                 @endforeach

@@ -29,12 +29,12 @@
                     @php
                         $modules = [
                             'all' => ['label' => __('Semua'), 'icon' => '🔍'],
-                            'timeline' => ['label' => __('Timeline'), 'icon' => '📸'],
-                            'album' => ['label' => __('Album'), 'icon' => '🖼️'],
-                            'diary' => ['label' => __('Diary'), 'icon' => '📔'],
-                            'document' => ['label' => __('Dokumen'), 'icon' => '📄'],
-                            'health' => ['label' => __('Kesehatan'), 'icon' => '🏥'],
-                            'growth' => ['label' => __('Pertumbuhan'), 'icon' => '📏'],
+                            'timeline' => ['label' => __('common.timeline'), 'icon' => '📸'],
+                            'album' => ['label' => __('common.album'), 'icon' => '🖼️'],
+                            'diary' => ['label' => __('common.diary'), 'icon' => '📔'],
+                            'document' => ['label' => __('common.documents'), 'icon' => '📄'],
+                            'health' => ['label' => __('common.health'), 'icon' => '🏥'],
+                            'growth' => ['label' => __('common.growth'), 'icon' => '📏'],
                         ];
                     @endphp
                     @foreach ($modules as $moduleKey => $moduleInfo)

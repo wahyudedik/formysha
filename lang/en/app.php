@@ -35,6 +35,10 @@ return [
         'analytics' => 'Analytics',
         'monitoring' => 'Monitoring',
         'audit_logs' => 'Audit Logs',
+        'error_logs' => 'Error Logs',
+        'plugins' => 'Plugins',
+        'admin_menu' => '🛡️ Admin Menu',
+        'admin_panel' => 'Management Panel',
     ],
 
     /*
@@ -69,6 +73,7 @@ return [
         'toggle_status' => 'Toggle Status',
         'mark_as_read' => 'Mark as read',
         'mark_all_read' => 'Mark all as read',
+        'saving' => 'Saving...',
     ],
 
     /*
@@ -140,6 +145,7 @@ return [
         'type' => 'Type',
         'status' => 'Status',
         'role' => 'Role',
+        'actions_label' => 'Actions',
         'notes' => 'Notes',
         'slug' => 'Slug',
         'timezone' => 'Timezone',
@@ -708,12 +714,22 @@ return [
         'patient_link_created' => 'Patient link created successfully. Code: :code',
         'patient_link_updated' => 'Patient data updated successfully.',
         'patient_link_revoked' => 'Patient link revoked successfully.',
+        'child_already_registered_at_facility' => 'This child is already registered at this facility.',
+        'patient_link_invitation_sent' => 'Invitation sent successfully! Code: :code',
+        'parent_profile_not_available' => 'Parent profile is not available for this link.',
+        'profile_claimed_connection_created' => 'Profile claimed successfully! Connection has been created.',
         'facility_settings_updated' => 'Facility settings updated successfully.',
 
         // Subscription
         'subscription_warning' => 'You need to activate a subscription plan.',
         'no_organization' => 'You do not have an organization yet.',
         'payment_proof_sent' => 'Payment proof submitted. Awaiting admin verification.',
+        'plan_not_available' => 'The selected plan is not available.',
+        'free_plan_activated' => 'Free plan activated successfully!',
+        'subscription_created' => 'Subscription created. Please proceed with payment.',
+        'child_data_deleted' => 'Data ":name" permanently deleted.',
+        'consent_granted' => 'Consent ":type" granted successfully.',
+        'consent_revoked' => 'Consent ":type" revoked successfully.',
 
         // Notifications
         'notifications_all_read' => 'All notifications marked as read.',
@@ -827,5 +843,517 @@ return [
         'claim_profile' => 'Claim Profile',
         'invitation_sent' => 'Invitation sent successfully',
         'profile_claimed' => 'Profile claimed successfully',
+    ],
+
+    // Empty States — used in Blade views
+    'empty_states' => [
+        // Super Admin
+        'no_tenants' => 'No tenants yet.',
+        'no_plans' => 'No plans available.',
+        'no_payments_pending' => 'No pending payments.',
+        'no_payment_proof' => 'No transfer proof.',
+        'no_revenue' => 'No revenue data.',
+        'no_subscription_history' => 'No subscription history.',
+        'no_audit_logs' => 'No audit logs.',
+        'no_error_logs' => 'No error logs.',
+        'no_error_logs_desc' => 'Log file is empty or no errors recorded.',
+        'no_recent_errors' => 'No recent errors.',
+        'no_login_activity' => 'No login activity.',
+        'no_storage_data' => 'No storage data.',
+        'no_plugin_logs' => 'No activity logs.',
+        'no_recent_errors_short' => 'Recent Errors',
+        'no_audit_logs_desc' => 'Audit logs will appear after activity.',
+
+        // Admin / Tenant Admin
+        'no_activity' => 'No activity yet.',
+        'no_undangan' => 'No active invitations.',
+        'no_import_history' => 'No import history.',
+        'no_analytics_data' => 'No analytics data for this period.',
+        'analytics_data_desc' => 'Data will appear after activity on the platform.',
+
+        // Core Modules
+        'no_family_members' => 'No family members yet.',
+        'no_albums' => 'No albums yet',
+        'no_awards' => 'No awards yet',
+        'no_calendar_events' => 'No events this month.',
+        'no_health_records' => 'No health records recorded.',
+        'no_growth_records' => 'No growth records recorded.',
+
+        // Public Profile
+        'no_public_albums' => 'No albums yet',
+        'no_public_awards' => 'No awards yet',
+
+        // Payments
+        'approve_payment_title' => 'Approve Payment',
+        'approve_payment_desc' => 'Confirm that this payment has been received.',
+
+        // Danger Zone
+        'danger_zone_title' => '⚠️ Danger Zone',
+        'danger_zone_tenant_desc' => 'Deleting this tenant will permanently delete all related data.',
+
+        // Plugins
+        'no_plugins' => 'No plugins yet',
+        'no_plugins_desc' => 'Register the first plugin to start building the marketplace.',
+        'no_plugins_installed' => 'No plugins installed',
+        'no_plugins_installed_desc' => 'Install plugins from the marketplace to add features to your tenant.',
+        'no_plugins_available' => 'No plugins available',
+        'no_plugins_available_desc' => 'Plugins will appear here after being registered by Super Admin.',
+
+        // Payments
+        'no_payments' => 'No Payments Yet',
+        'no_payments_desc' => 'No payment transactions yet.',
+
+        // Milestones
+        'no_milestones' => 'No active milestones',
+        'no_milestones_desc' => 'Milestones will appear automatically when there are achievements or reminders for :name.',
+
+        // Facility Admin
+        'no_patients' => 'No registered patients.',
+        'no_clinical_notes' => 'No clinical notes.',
+
+        // Dashboard
+        'no_moments' => 'No moments yet.',
+        'no_growth_data' => 'No growth data.',
+        'no_health_data' => 'No health records.',
+
+        // Growth Chart
+        'no_weight_data' => 'No weight data.',
+        'no_height_data' => 'No height data.',
+        'no_head_circumference_data' => 'No head circumference data.',
+
+        // Timeline
+        'no_media_attached' => 'No media attached.',
+
+        // Family Tree
+        'no_organizations_connected' => 'No organizations connected.',
+    ],
+
+    // Confirm Password Page
+    'confirm_password' => [
+        'title' => 'Confirm Password 🔐',
+        'description' => 'This is a secure area of the application. Please confirm your password before continuing.',
+    ],
+
+    // Error Log Filters
+    'error_log' => [
+        'all_levels' => 'All Levels',
+        'error' => 'Error',
+        'warning' => 'Warning',
+        'info' => 'Info',
+        'title' => 'No error logs',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Super Admin — Dashboard & Monitoring Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'super_admin' => [
+        'total_tenants' => 'Total Tenants',
+        'pending_verification' => 'Pending Verification',
+        'revenue_this_month' => 'Revenue This Month',
+        'total_plans' => 'Total Plans',
+        'b2b_facilities' => 'B2B Facilities',
+        'active_staff' => 'Active Staff',
+        'clinical_notes_this_month' => 'Clinical Notes (This Month)',
+        'verify_payment' => 'Verify Payment',
+        'audit_log' => 'Audit Log',
+        'pending_payments' => 'Pending Payments',
+        'recent_tenants' => 'Recent Tenants',
+        'quick_actions' => 'Quick Actions',
+        'b2b_facility' => 'B2B (Facility)',
+        'b2c_family' => 'B2C (Family)',
+        'b2b_vs_b2c_revenue' => 'B2B vs B2C Revenue',
+        'total_transactions' => 'total transactions',
+        'approved_payments_count' => 'approved payments',
+        'patient_links' => 'patient links',
+        'pending_referrals' => 'pending referrals',
+        'total_referrals' => 'total referrals',
+        'users_count' => 'users',
+        'children_count' => 'children',
+        'staff_count' => 'staff',
+        'active_tenants' => 'Active Tenants',
+        'total_users' => 'Total Users',
+        'total_media' => 'Total Media',
+        'active_facilities' => 'Active Facilities',
+        'owner' => 'Owner',
+        'management_panel' => 'Management Panel',
+        'total_revenue' => 'Total Revenue',
+        'churn_rate_30d' => 'Churn Rate (30 days)',
+        'b2b_revenue' => 'B2B Revenue',
+        'b2c_revenue' => 'B2C Revenue',
+        'top_facility' => 'Top Facility',
+        'clinical_notes_per_month' => 'Clinical Notes per Month',
+        'staff_count_label' => 'Staff Count',
+        'total' => 'Total',
+        // Tenant detail & management
+        'activate' => 'Activate',
+        'deactivate' => 'Deactivate',
+        'users' => 'Users',
+        'children' => 'Children',
+        'subscriptions' => 'Subscriptions',
+        'total_staff_count' => 'Total Staff',
+        'active_count' => 'active',
+        'patient_links_title' => 'Patient Links',
+        'clinical_notes_title' => 'Clinical Notes',
+        'total_referrals_title' => 'Total Referrals',
+        'pending_count' => 'pending',
+        'b2b_facility_detail' => 'B2B Facility Details',
+        'facility_type' => 'Facility Type',
+        'license_number' => 'License No.',
+        'domain' => 'Domain',
+        'created' => 'Created',
+        'last_updated' => 'Last Updated',
+        'delete_tenant' => 'Delete Tenant',
+        'delete_tenant_confirm' => 'Are you sure you want to delete this tenant? All related data will be permanently deleted.',
+        // Tenant create form
+        'add_new' => 'Add New',
+        'create_tenant_form' => 'Add Tenant Form',
+        'create_tenant_desc' => 'Fill in the new tenant information below.',
+        'slug_auto_hint' => 'Auto from name if empty',
+        'slug_auto_desc' => 'If left blank, slug will be auto-generated from the name.',
+        'select_type' => '-- Select Type --',
+        'type_hint_family' => 'for B2C users (individuals/families).',
+        'type_hint_facility' => 'for B2B healthcare facilities.',
+        // Dashboard & Monitoring
+        'dashboard_title' => 'Super Admin Dashboard',
+        'b2b_stats_title' => 'B2B Statistics (Facilities)',
+        // Tenant edit form
+        'edit_title' => 'Edit Tenant',
+        'tenant_name' => 'Tenant Name',
+        'tenant_active' => 'Tenant Active',
+        'edit_label' => 'Edit:',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plans — Detail Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'plans' => [
+        'price_per_month' => 'Price/Month',
+        'price_per_year' => 'Price/Year',
+        'max_children_limit' => 'Max Children',
+        'storage' => 'Storage',
+        'plan_active' => 'Plan Active',
+        'monthly_label' => 'Monthly',
+        'yearly_label' => 'Yearly',
+        'children_label' => 'Children',
+        // Create / Edit form labels
+        'create_title' => 'Add New Plan',
+        'edit_title' => 'Edit Plan',
+        'basic_info' => 'Basic Information',
+        'plan_name' => 'Plan Name',
+        'slug_optional' => 'Slug (optional)',
+        'description_placeholder' => 'Brief description of this plan...',
+        'sort_order' => 'Sort Order',
+        'pricing' => 'Pricing',
+        'price_monthly_label' => 'Price per Month (Rp)',
+        'free_hint' => 'Enter 0 for free plan.',
+        'price_yearly_label' => 'Price per Year (Rp)',
+        'limits' => 'Limits',
+        'unlimited_hint' => 'Use -1 for unlimited.',
+        'max_children' => 'Max. Children',
+        'max_photos' => 'Max. Photos',
+        'max_videos' => 'Max. Videos',
+        'max_storage' => 'Max. Storage (MB)',
+        'max_family_members' => 'Max. Family Members',
+        'max_export_per_day' => 'Max. Exports/Day',
+        'features' => 'Features',
+        'features_hint' => 'One feature per line.',
+        'features_desc' => 'Each line = one available feature.',
+        'save_plan' => 'Save Plan',
+        'save_changes' => 'Save Changes',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payments — Detail Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'payments' => [
+        'management' => 'Payment Management',
+        'all' => 'All',
+        'pending' => 'Pending',
+        'approved' => 'Approved',
+        'rejected' => 'Rejected',
+        'tenant' => 'Tenant',
+        'amount' => 'Amount',
+        'bank' => 'Bank',
+        'status' => 'Status',
+        'date' => 'Date',
+        'view_detail' => 'View Detail',
+        'detail' => 'Payment Detail',
+        'info' => 'Payment Information',
+        'waiting_verification' => 'Waiting Verification',
+        'plan' => 'Plan',
+        'bank_account' => 'Account No.',
+        'account_holder' => 'Account Holder',
+        'notes_label' => 'Notes:',
+        'notes_optional' => 'Notes (optional)',
+        'verified_by' => 'Verified by',
+        'paid_date' => 'Paid Date',
+        'verification_time' => 'Verification Time',
+        'proof_transfer' => 'Transfer Proof',
+        'open_new_tab' => 'Open in new tab',
+        'approving' => 'Approving...',
+        'confirm_approve' => 'Yes, Approve',
+        'reject_payment' => 'Reject Payment',
+        'reject_reason_desc' => 'Provide a reason for rejecting this payment.',
+        'reject_reason' => 'Rejection Reason',
+        'rejecting' => 'Rejecting...',
+        'confirm_reject' => 'Yes, Reject',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Error Logs — Detail Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'analytics' => [
+        'title' => 'Analytics',
+        'revenue_this_month' => 'Revenue This Month',
+        'total_revenue' => 'Total Revenue',
+        'active_tenants' => 'Active Tenants',
+        'churn_rate' => 'Churn Rate (30 days)',
+        'monthly_revenue' => 'Monthly Revenue',
+        'new_tenants_per_month' => 'New Tenants per Month',
+        'subscription_distribution' => 'Subscription Distribution',
+        'popular_plans' => 'Popular Plans',
+        'revenue_per_plan' => 'Revenue per Plan',
+        'b2b_analytics' => 'B2B Analytics (Facilities)',
+        'revenue_b2b' => 'B2B Revenue',
+        'revenue_b2c' => 'B2C Revenue',
+        'top_facility' => 'Top Facility',
+        'b2b_growth' => 'B2B Facility Growth',
+        'clinical_notes_referrals' => 'Clinical Notes & Referrals',
+        'clinical_notes_per_month' => 'Clinical Notes per Month',
+        'referrals_per_month' => 'Referrals per Month',
+        'top_facilities_staff' => 'Top Facilities (by Staff)',
+        'facility' => 'Facility',
+        'type' => 'Type',
+        'from_last_month' => 'from last month',
+    ],
+
+    'error_logs' => [
+        'title' => 'Error Logs',
+        'errors' => 'Errors',
+        'warnings' => 'Warnings',
+        'info_label' => 'Info',
+        'log_size' => 'Log Size',
+        'search_placeholder' => 'Search error message...',
+        'copy_all' => 'Copy All',
+        'clear_log' => 'Clear Log',
+        'full_message' => 'Full Message',
+        'context' => 'Context',
+        'stack_trace' => 'Stack Trace',
+        'showing_entries' => 'Showing :count log entries',
+        'clear_all_logs' => 'Clear All Logs',
+        'clear_all_logs_confirm' => 'Are you sure you want to clear all log files? This action cannot be undone.',
+        'copy_success' => 'Log entry copied successfully!',
+        'copy_all_success' => 'All logs copied successfully!',
+        'no_logs_to_copy' => 'No logs to copy.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plugins — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'plugins' => [
+        'management' => 'Plugin Management',
+        'register' => 'Register Plugin',
+        'register_new' => 'Register New Plugin',
+        'plugin' => 'Plugin',
+        'name' => 'Name',
+        'slug' => 'Slug',
+        'description' => 'Description',
+        'no_description' => 'No description.',
+        'version' => 'Version',
+        'author' => 'Author',
+        'icon' => 'Icon (emoji)',
+        'official' => 'Official',
+        'installs' => 'Installs',
+        'view' => 'View →',
+        'hooks' => 'Hooks',
+        'permissions' => 'Permissions',
+        'recent_logs' => '📋 Recent Activity Logs',
+        'statistics' => '📊 Statistics',
+        'created_at' => 'Created',
+        'tenant_count' => 'Tenant Plugins',
+        'confirm_delete_title' => 'Delete Plugin',
+        'confirm_delete_message' => 'Are you sure you want to delete this plugin? This action cannot be undone.',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Achievements
+    |--------------------------------------------------------------------------
+    */
+
+    'achievements' => [
+        'title' => 'Achievements',
+        'no_achievements' => 'No Achievements Yet',
+        'no_achievements_desc' => 'Start recording memories, uploading photos, and tracking growth to unlock your first achievement!',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Facility Admin — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'facility_admin' => [
+        'total_patients' => 'Total Patients',
+        'total_clinical_notes' => 'Total Clinical Notes',
+        'total_referrals' => 'Total Referrals',
+        'total_staff' => 'Total Staff',
+        'pending_referrals' => 'Pending Referrals',
+        'completed_referrals' => 'Completed Referrals',
+    ],
+
+    // Extended keys for existing sections
+    'health' => [
+        'title' => 'Health',
+        'create' => 'Record Health',
+        'edit' => 'Edit Record',
+        'show' => 'Record Details',
+        'no_records' => 'No health records yet.',
+        'add_first' => 'Record your first health entry!',
+        'immunization' => 'Immunization',
+        'illness' => 'Illness',
+        'allergies' => 'Allergies',
+        'medications' => 'Medications',
+        'doctor' => 'Doctor',
+        'notes' => 'Notes',
+        'record_date' => 'Record Date',
+        'history_of' => 'Health history of :name',
+        'edit_title' => 'Edit Health Record',
+        'edit_subtitle' => 'Update health record for :name',
+        'create_title' => 'Add Health Record',
+        'create_subtitle' => 'Record health history for :name',
+        'edit_record' => 'Edit',
+        'delete_record' => 'Delete',
+    ],
+
+    'profile' => [
+        'edit' => 'Edit Profile',
+        'update' => 'Update Profile',
+        'avatar' => 'Profile Photo',
+        'personal_info' => 'Personal Information',
+        'change_password' => 'Change Password',
+        'current_password' => 'Current Password',
+        'new_password' => 'New Password',
+        'confirm_new_password' => 'Confirm New Password',
+        'delete_account' => 'Delete Account',
+        'delete_account_warning' => 'Once your account is deleted, all data will be permanently removed.',
+        'manage_info' => 'Manage your profile information',
+    ],
+
+    'search' => [
+        'title' => 'Search',
+        'placeholder' => 'Search stories, photos, documents...',
+        'no_results' => 'No results found.',
+        'results' => 'Search Results',
+        'timeline_results' => 'Timeline Results',
+        'album_results' => 'Album Results',
+        'document_results' => 'Document Results',
+        'diary_results' => 'Diary Results',
+        'subtitle' => 'Search across all ForMysha modules',
+    ],
+
+    'subscription' => [
+        'plans' => 'Subscription Plans',
+        'subscribe' => 'Subscribe',
+        'current_plan' => 'Current Plan',
+        'history' => 'Subscription History',
+        'payment' => 'Payment',
+        'upload_proof' => 'Upload Payment Proof',
+        'no_subscription' => 'You have no subscription yet.',
+        'choose_plan' => 'Choose a plan that suits your family.',
+        'free_plan' => 'Free Plan',
+        'monthly' => '/month',
+        'features' => 'Features',
+        'max_children' => 'Max Children',
+        'max_photos' => 'Max Photos',
+        'max_videos' => 'Max Videos',
+        'max_storage' => 'Storage Capacity',
+        'upload_payment_proof' => 'Upload Transfer Proof',
+        'bank_name' => 'Bank Name',
+        'account_name' => 'Account Name',
+        'transfer_amount' => 'Transfer Amount',
+        'transfer_date' => 'Transfer Date',
+        'payment_status' => 'Payment Status',
+        'no_history' => 'No History Yet',
+        'history_desc' => 'Your subscription history will appear here.',
+    ],
+
+    'notifications' => [
+        'title' => 'Notifications',
+        'no_notifications' => 'No notifications.',
+        'mark_all_read' => 'Mark all as read',
+        'unread' => 'Unread',
+        'immunization_reminder' => 'Immunization Reminder',
+        'birthday_reminder' => 'Birthday Reminder',
+        'system_notification' => 'System Notification',
+        'delete' => 'Delete notification',
+    ],
+
+    'growth' => [
+        'title' => 'Growth',
+        'create' => 'Record Growth',
+        'edit' => 'Edit Record',
+        'no_records' => 'No growth records yet.',
+        'add_first' => 'Record your first growth!',
+        'height' => 'Height',
+        'weight' => 'Weight',
+        'head_circumference' => 'Head Circumference',
+        'chart' => 'Growth Chart',
+        'history' => 'History',
+        'record_date' => 'Record Date',
+        'measurement_detail' => 'Measurement Details',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Monitoring — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'monitoring' => [
+        'system_health' => 'System Health',
+        'recent_logins' => 'Recent Login Activity',
+        'recent_errors' => 'Recent Error Logs',
+        'storage_usage' => 'Storage Usage per Tenant',
+        'b2b_monitoring' => 'B2B Monitoring (Facilities)',
+        'top_facilities_by_staff' => 'Facilities with Most Staff',
+        'top_facilities_by_notes' => 'Facilities with Most Clinical Notes',
+        'facilities_pending_referrals' => 'Facilities with Most Pending Referrals',
+        'facility' => 'Facility',
+        'type' => 'Type',
+        'notes_count' => 'notes',
+        'children_count' => 'children',
+        'latency' => 'Latency:',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Audit Logs — Labels
+    |--------------------------------------------------------------------------
+    */
+
+    'audit_logs' => [
+        'time' => 'Time',
+        'user' => 'User',
+        'action' => 'Action',
+        'subject' => 'Subject',
+        'detail' => 'Detail',
+        'ip' => 'IP',
+        'more_items' => 'more',
     ],
 ];

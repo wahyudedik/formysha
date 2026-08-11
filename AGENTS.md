@@ -926,6 +926,48 @@ public/favicon.ico   → Favicon legacy
 * **Bug Fix — Carbon Import**: Tambah `use Illuminate\Support\Carbon;` di Document model untuk fix "Class App\Models\Carbon not found"
 * **Tests**: 693 tests, 1668 assertions — all passing (DocumentTypeTest 7 tests baru)
 
+#### Phase 21 — Architecture Evolution ✅
+
+* **Core Architecture**: Identity → Family → Person → Relationship → Organization → Connection → Permission → Collaboration → Audit Trail → Family Tree
+* **10 Prinsip Inti**: Satu Akun Banyak Keluarga, Anak Bukan Akun, Keluarga Pemilik Data, dll.
+* **Connection System**: Model, Service, Controller (web + API), Status & Permission Enums
+* **Family Tree**: Service, Controller, Views
+* **B2B Assisted Registration**: Flow registrasi bantuan organisasi
+* **Referral System**: Enhanced referrals dengan ReferralType enum
+* **Activity History**: Tracking aktivitas koneksi
+* **Tests**: 774 tests, 1871 assertions — 81 tests baru (18 test files)
+
+#### Phase 22 — Comprehensive Audit & Code Quality ✅
+
+* **Navigation Gap Fix**: Links Connections & Family Tree ke child-nav, children/show, dashboard
+* **i18n**: 7 translation keys baru, hardcoded strings → `__()` helper
+* **Query Optimization**: DashboardService pre-compute related media owner IDs
+* **Security**: Public profile route rate limiting `throttle:60,1`
+
+#### Phase 23 — Comprehensive i18n Translation Audit ✅
+
+* **Controller Translation Keys**: 11 hardcoded strings di 4 controllers → `__()` translation helper
+* **Empty States Section**: 20+ translation keys baru
+* **Blade View Translation Fixes**: 27 views total diperbaiki
+* **Translation Keys**: ~920+ keys di kedua lang files
+
+#### Phase 24 — Comprehensive i18n Super Admin Translation Audit ✅
+
+* **Translation Keys**: ~970+ keys di kedua lang files
+* **New Sections**: `monitoring` (13 keys), `audit_logs` (7 keys)
+* **Super Admin Views Fixed**: 6 views — dashboard, monitoring, tenants/edit, plans/create, plans/edit, audit-logs
+* **Test Fix**: TenantTest compatibility dengan translation key
+* **Tests**: 774 tests, 1875 assertions — all passing
+
+#### Phase 25 — i18n Translation File Split & Windows Compatibility ✅
+
+* **Lang File Split**: `app.php` monolith di-split menjadi 52 per-group files per locale (104 total) untuk Laravel 11+ compatibility
+* **File Structure**: `achievements.php`, `actions.php`, `activity.php`, `albums.php`, `analytics.php`, `app.php`, `assisted_registration.php`, `audit_logs.php`, `auth.php`, `branding.php`, `calendar.php`, `children.php`, `common.php`, `confirm_password.php`, `connection.php`, `diaries.php`, `document_types.php`, `documents.php`, `empty_states.php`, `error_log.php`, `error_logs.php`, `export.php`, `facility_admin.php`, `family_tree.php`, `family.php`, `forms.php`, `growth.php`, `health.php`, `language.php`, `messages.php`, `monitoring.php`, `navigation.php`, `notifications.php`, `pages.php`, `payments.php`, `permission_level.php`, `plans.php`, `plugins.php`, `profile_form.php`, `profile.php`, `public_profile.php`, `referral.php`, `saas.php`, `search.php`, `status.php`, `subscription.php`, `super_admin.php`, `timeline.php`, `validation.php`
+* **Windows Case-Insensitive Fix**: `__('PlainString')` yang cocok dengan nama file lang (case-insensitive) mengembalikan array — di-fix ke `__('group.key')` format
+* **Bug Fixes**: `__('timeline')` → `__('common.timeline')` di erasure view, `__('Branding')` → `__('branding.title')` di branding edit view
+* **Utility Script**: `split_lang.php` untuk auto-split `app.php` → per-group files
+* **Tests**: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
 ### Keunggulan Kompetitif
 
 * Fokus pada **Digital Life Book**, bukan sekadar album foto.
@@ -1225,6 +1267,15 @@ All Blade views MUST follow these responsive patterns consistently:
 - `Subscription::factory()->create()` creates a subscription with `status: active`. Use `Subscription::factory()->pending()` for pending subscriptions.
 - `Payment::factory()->create()` creates a payment with `status: pending`. Use states like `approved()`, `rejected()` for other statuses.
 
+### i18n Translation File Structure
+
+- Translation files are split per-group: `lang/{locale}/{group}.php` (52 files per locale, 104 total).
+- **Laravel 11+ uses `__('group.key')` format** — `__('common.timeline')` loads `common.php` and returns the `timeline` value.
+- **Windows Case-Insensitive Warning**: `__('PlainString')` where PlainString matches a lang file name (case-insensitive) will load that file and return the ENTIRE array, causing `htmlspecialchars()` errors. Always use `__('group.key')` format.
+- Use `__('common.key')` for shared labels (timeline, album, status, etc.).
+- Use `__('group.key')` for module-specific labels (e.g., `__('branding.title')`, `__('super_admin.dashboard_title')`).
+- Utility script: `split_lang.php` for splitting monolithic `app.php` into per-group files.
+
 ### SaaS Architecture
 
 - **Multi-tenancy**: Column-based tenancy using `tenant_id` on all user data tables. Tenant isolation is enforced via middleware.
@@ -1326,9 +1377,26 @@ All Blade views MUST follow these responsive patterns consistently:
 * **Query Optimization**: DashboardService pre-compute related media owner IDs (6 → 3 queries)
 * **Security**: Public profile route rate limiting `throttle:60,1`
 
+### Phase 23 — Comprehensive i18n Translation Audit ✅
+
+* **Controller Translation Keys**: PatientLinkController (4), SubscriptionController (4), ErasureController (1), ConsentController (2) — 11 hardcoded strings → `__()` translation helper
+* **Empty States Section**: 20+ translation keys baru di `empty_states` section — plugins, payments, milestones, facility admin, dashboard, growth chart, timeline, family tree
+* **Blade View Translation Fixes**: 10 views dengan hardcoded di Blade component attributes + 10 views dengan string literal di `__()` → proper keys (27 views total diperbaiki)
+* **Translation Keys**: ~920+ keys di kedua lang files (`lang/id/app.php`, `lang/en/app.php`)
+* **Tests**: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
+### Phase 24 — Comprehensive i18n Super Admin Translation Audit ✅
+
+* **Translation Keys**: ~970+ keys di kedua lang files (`lang/id/app.php`, `lang/en/app.php`)
+* **New Sections**: `monitoring` (13 keys), `audit_logs` (7 keys)
+* **New Keys**: `actions.saving`, `super_admin.*` keys (6), `plans.*` keys (26), `empty_states.no_audit_logs_desc`
+* **Super Admin Views Fixed** (6 views): dashboard, monitoring/index, tenants/edit, plans/create, plans/edit, audit-logs/index — semua hardcoded strings → `__()` translation helper
+* **Test Fix**: TenantTest `assertSee('Tipe Tenant')` → `assertSee(__('forms.type'))` untuk kompatibilitas dengan translation key
+* **Tests**: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
 ### Quality Assurance
 
-* **Total Tests**: 774 tests, 1871 assertions — all passing
+* **Total Tests**: 774 tests, 1875 assertions — all passing
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit, Achievement, Milestone, FacilityAdmin
@@ -1365,6 +1433,7 @@ All Blade views MUST follow these responsive patterns consistently:
   - Tambah `tenant_id` ke `$fillable` di FamilyMember model
   - 25 tests baru (16 Feature + 9 API)
 * **Phase 21 — Architecture Evolution**: Connection System, Family Tree, B2B Assisted Registration, Referral Enhancement, Activity History — 81 tests baru (18 test files), 774 tests, 1871 assertions
+* **Phase 25 — i18n Translation Split**: 52 per-group lang files per locale (104 total), Windows case-insensitive fix, utility script `split_lang.php`, 774 tests, 1875 assertions
 
 ---
 

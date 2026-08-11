@@ -23,7 +23,7 @@
                         <span class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->name ?? '-' }}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('Status') }}</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('common.status') }}</span>
                         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-warmYellow-100 dark:bg-warmYellow-950/30 text-warmYellow-600 dark:text-warmYellow-400">
                             {{ __('Menunggu Pembayaran') }}
                         </span>

@@ -115,7 +115,7 @@
                         </form>
 
                         @if ($timeline->media->isEmpty())
-                            <p class="text-sm text-gray-400 dark:text-gray-500">{{ __('Belum ada media yang dilampirkan.') }}</p>
+                            <p class="text-sm text-gray-400 dark:text-gray-500">{{ __('empty_states.no_media_attached') }}</p>
                         @else
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                 @foreach ($timeline->media as $media)

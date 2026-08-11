@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Analytics',
+    'revenue_this_month' => 'Revenue This Month',
+    'total_revenue' => 'Total Revenue',
+    'active_tenants' => 'Active Tenants',
+    'churn_rate' => 'Churn Rate (30 days)',
+    'monthly_revenue' => 'Monthly Revenue',
+    'new_tenants_per_month' => 'New Tenants per Month',
+    'subscription_distribution' => 'Subscription Distribution',
+    'popular_plans' => 'Popular Plans',
+    'revenue_per_plan' => 'Revenue per Plan',
+    'b2b_analytics' => 'B2B Analytics (Facilities)',
+    'revenue_b2b' => 'B2B Revenue',
+    'revenue_b2c' => 'B2C Revenue',
+    'top_facility' => 'Top Facility',
+    'b2b_growth' => 'B2B Facility Growth',
+    'clinical_notes_referrals' => 'Clinical Notes & Referrals',
+    'clinical_notes_per_month' => 'Clinical Notes per Month',
+    'referrals_per_month' => 'Referrals per Month',
+    'top_facilities_staff' => 'Top Facilities (by Staff)',
+    'facility' => 'Facility',
+    'type' => 'Type',
+    'from_last_month' => 'from last month',
+];
