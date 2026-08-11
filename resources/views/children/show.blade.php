@@ -145,10 +145,47 @@
             <!-- Bio -->
             @if ($child->bio)
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6">
-                    <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-3">💜 Tentang {{ $child->nickname ?? $child->name }}</h4>
+                    <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-3">💜 {{ __('Tentang') }} {{ $child->nickname ?? $child->name }}</h4>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed">{{ $child->bio }}</p>
                 </div>
             @endif
+
+            <!-- Connections & Family Tree -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Connections -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100">🔗 {{ __('Koneksi') }}</h4>
+                        <a href="{{ route('connections.index', $child) }}" class="text-sm text-softPink-400 hover:text-softPink-600 dark:text-softPink-300 dark:hover:text-softPink-200 font-medium transition">
+                            {{ __('Lihat Semua') }} →
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ __('Hubungkan dengan fasilitas kesehatan atau sekolah.') }}</p>
+                    <a href="{{ route('connections.create', $child) }}" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-skyBlue-100 hover:bg-skyBlue-200 dark:bg-skyBlue-950/30 dark:hover:bg-skyBlue-900/40 text-skyBlue-700 dark:text-skyBlue-400 font-medium rounded-xl text-sm transition-all duration-200 min-h-[44px]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        {{ __('Tambah Koneksi') }}
+                    </a>
+                </div>
+
+                <!-- Family Tree -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100">🌳 {{ __('Pohon Keluarga') }}</h4>
+                        <a href="{{ route('children.family-tree', $child) }}" class="text-sm text-softPink-400 hover:text-softPink-600 dark:text-softPink-300 dark:hover:text-softPink-200 font-medium transition">
+                            {{ __('Lihat Semua') }} →
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ __('Lihat hubungan keluarga dan organisasi terhubung.') }}</p>
+                    <a href="{{ route('children.family-tree', $child) }}" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-mintGreen-100 hover:bg-mintGreen-200 dark:bg-mintGreen-950/30 dark:hover:bg-mintGreen-900/40 text-mintGreen-700 dark:text-mintGreen-400 font-medium rounded-xl text-sm transition-all duration-200 min-h-[44px]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        {{ __('Lihat Pohon Keluarga') }}
+                    </a>
+                </div>
+            </div>
 
             <!-- Export Section -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-soft sm:rounded-3xl p-6">

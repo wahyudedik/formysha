@@ -1507,3 +1507,28 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 | 🏥 B2B Growth | Rp799.000/bulan | 200 profil anak, 20 staf, referrals, analytics |
 | 🏥 B2B Pro | Rp1.999.000/bulan | 1000 profil anak, unlimited staf, API, white label |
 | 🏢 Enterprise | Custom | Custom fitur, dedicated support, SLA |
+
+## Comprehensive Audit & Code Quality ✅ (Phase 22)
+
+### Navigation Gap Fix — Connections & Family Tree
+
+* Menambahkan link **Koneksi** dan **Pohon Keluarga** ke [`child-nav.blade.php`](resources/views/components/child-nav.blade.php) — komponen navigasi utama untuk modul anak (desktop sidebar + mobile bottom nav)
+* Menambahkan section **Connections & Family Tree** ke [`children/show.blade.php`](resources/views/children/show.blade.php) — halaman profil anak dengan shortcut ke fitur koneksi dan pohon keluarga
+* Menambahkan link **Koneksi** dan **Pohon Keluarga** ke [`dashboard.blade.php`](resources/views/dashboard.blade.php) — bagian Akses Cepat di dashboard
+
+### i18n Translation Keys
+
+* Menambahkan 7 translation keys baru ke [`lang/id/app.php`](lang/id/app.php) dan [`lang/en/app.php`](lang/en/app.php):
+  - `status.connection_created`, `status.connection_updated`, `status.connection_revoked`, `status.connection_approved`, `status.connection_rejected`
+  - `connection.revoked_by_owner`, `connection.rejected_by_owner`
+* Mengganti semua hardcoded Indonesian strings di [`ConnectionController.php`](app/Http/Controllers/ConnectionController.php) dengan `__()` translation helper
+* Menambahkan `__()` helper ke semua module labels di `child-nav.blade.php`
+
+### Query Optimization
+
+* **DashboardService** — Refactor [`getRecentMedia()`](app/Services/DashboardService.php) dan [`getTotalMediaCount()`](app/Services/DashboardService.php): pre-compute related media owner IDs (timeline, album, diary) sekali saja melalui method [`getRelatedMediaOwnerIds()`](app/Services/DashboardService.php), mengurangi 6 query redundan menjadi 3 query
+* **FamilyTreeController** — Verifikasi eager loading sudah benar di [`FamilyTreeService::getAccessHistory()`](app/Services/FamilyTreeService.php) dengan `->with('user')`
+
+### Security Enhancement
+
+* Menambahkan **rate limiting** `throttle:60,1` ke public profile route di [`routes/web.php`](routes/web.php) untuk mencegah scraping — 60 requests per menit per IP

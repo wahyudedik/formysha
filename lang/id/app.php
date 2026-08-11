@@ -727,6 +727,13 @@ return [
 
         // Erasure
         'account_deleted_permanently' => 'Akun dan seluruh data berhasil dihapus permanen.',
+
+        // Connection
+        'connection_created' => 'Koneksi berhasil dibuat!',
+        'connection_updated' => 'Koneksi berhasil diperbarui!',
+        'connection_revoked' => 'Koneksi berhasil dicabut.',
+        'connection_approved' => 'Koneksi berhasil disetujui!',
+        'connection_rejected' => 'Koneksi berhasil ditolak.',
     ],
 
     /*
@@ -772,6 +779,8 @@ return [
         'deleted' => 'Koneksi berhasil dihapus',
         'confirm_delete' => 'Apakah Anda yakin ingin menghapus koneksi ini?',
         'search_facility' => 'Cari fasilitas...',
+        'revoked_by_owner' => 'Koneksi dicabut oleh pemilik data',
+        'rejected_by_owner' => 'Koneksi ditolak oleh pemilik data',
     ],
 
     // Phase 21 — Permission Levels

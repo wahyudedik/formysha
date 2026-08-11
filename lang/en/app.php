@@ -727,6 +727,13 @@ return [
 
         // Erasure
         'account_deleted_permanently' => 'Account and all data permanently deleted.',
+
+        // Connection
+        'connection_created' => 'Connection created successfully!',
+        'connection_updated' => 'Connection updated successfully!',
+        'connection_revoked' => 'Connection revoked successfully.',
+        'connection_approved' => 'Connection approved successfully!',
+        'connection_rejected' => 'Connection rejected successfully.',
     ],
 
     /*
@@ -772,6 +779,8 @@ return [
         'deleted' => 'Connection deleted successfully',
         'confirm_delete' => 'Are you sure you want to delete this connection?',
         'search_facility' => 'Search facility...',
+        'revoked_by_owner' => 'Connection revoked by data owner',
+        'rejected_by_owner' => 'Connection rejected by data owner',
     ],
 
     // Phase 21 — Permission Levels

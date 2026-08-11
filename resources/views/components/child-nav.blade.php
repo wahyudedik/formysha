@@ -2,19 +2,21 @@
 
 @php
     $modules = [
-        ['route' => 'children.show', 'label' => 'Profil', 'icon' => '👶', 'param' => 'child'],
-        ['route' => 'timeline.index', 'label' => 'Timeline', 'icon' => '📸', 'param' => 'child'],
-        ['route' => 'albums.index', 'label' => 'Album', 'icon' => '🖼️', 'param' => 'child'],
-        ['route' => 'diaries.index', 'label' => 'Diary', 'icon' => '📔', 'param' => 'child'],
-        ['route' => 'growth.index', 'label' => 'Pertumbuhan', 'icon' => '📏', 'param' => 'child'],
-        ['route' => 'health.index', 'label' => 'Kesehatan', 'icon' => '🏥', 'param' => 'child'],
-        ['route' => 'documents.index', 'label' => 'Dokumen', 'icon' => '📄', 'param' => 'child'],
-        ['route' => 'calendar.index', 'label' => 'Kalender', 'icon' => '📅', 'param' => 'child'],
-        ['route' => 'achievements.index', 'label' => 'Pencapaian', 'icon' => '🏆', 'param' => 'child'],
-        ['route' => 'milestones.index', 'label' => 'Milestone', 'icon' => '🎯', 'param' => 'child'],
-        ['route' => 'family.index', 'label' => 'Keluarga', 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
-        ['route' => 'consent.index', 'label' => 'Privasi', 'icon' => '🔒', 'param' => 'child'],
-        ['route' => 'profile.edit', 'label' => 'Pengaturan', 'icon' => '⚙️', 'param' => null],
+        ['route' => 'children.show', 'label' => __('Profil'), 'icon' => '👶', 'param' => 'child'],
+        ['route' => 'timeline.index', 'label' => __('Timeline'), 'icon' => '📸', 'param' => 'child'],
+        ['route' => 'albums.index', 'label' => __('Album'), 'icon' => '🖼️', 'param' => 'child'],
+        ['route' => 'diaries.index', 'label' => __('Diary'), 'icon' => '📔', 'param' => 'child'],
+        ['route' => 'growth.index', 'label' => __('Pertumbuhan'), 'icon' => '📏', 'param' => 'child'],
+        ['route' => 'health.index', 'label' => __('Kesehatan'), 'icon' => '🏥', 'param' => 'child'],
+        ['route' => 'documents.index', 'label' => __('Dokumen'), 'icon' => '📄', 'param' => 'child'],
+        ['route' => 'calendar.index', 'label' => __('Kalender'), 'icon' => '📅', 'param' => 'child'],
+        ['route' => 'achievements.index', 'label' => __('Pencapaian'), 'icon' => '🏆', 'param' => 'child'],
+        ['route' => 'milestones.index', 'label' => __('Milestone'), 'icon' => '🎯', 'param' => 'child'],
+        ['route' => 'family.index', 'label' => __('Keluarga'), 'icon' => '👨‍👩‍👧‍👦', 'param' => 'child'],
+        ['route' => 'connections.index', 'label' => __('Koneksi'), 'icon' => '🔗', 'param' => 'child'],
+        ['route' => 'children.family-tree', 'label' => __('Pohon Keluarga'), 'icon' => '🌳', 'param' => 'child'],
+        ['route' => 'consent.index', 'label' => __('Privasi'), 'icon' => '🔒', 'param' => 'child'],
+        ['route' => 'profile.edit', 'label' => __('Pengaturan'), 'icon' => '⚙️', 'param' => null],
     ];
 
     $visibleModules = array_slice($modules, 0, 5);
@@ -73,7 +75,7 @@
                 class="flex flex-col items-center gap-0.5 px-2 py-1 min-h-[44px] rounded-xl text-xs transition-all duration-200
                        {{ $hasOverflowActive ? 'text-softPink-600 dark:text-softPink-400' : 'text-gray-400 dark:text-gray-500' }}">
             <span class="text-lg leading-none">⋯</span>
-            <span class="font-medium leading-tight">Lainnya</span>
+            <span class="font-medium leading-tight">{{ __('Lainnya') }}</span>
         </button>
     </div>
 

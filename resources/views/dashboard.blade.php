@@ -334,6 +334,14 @@
                             <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👨‍👩‍👧‍👦</div>
                             <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Keluarga') }}</div>
                         </a>
+                        <a href="{{ route('connections.index', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-skyBlue-50 to-lavender-50 dark:from-skyBlue-950/30 dark:to-lavender-950/30 border border-skyBlue-100 dark:border-skyBlue-900/30 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🔗</div>
+                            <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Koneksi') }}</div>
+                        </a>
+                        <a href="{{ route('children.family-tree', $quickChild) }}" class="p-4 rounded-2xl bg-gradient-to-br from-mintGreen-50 to-skyBlue-50 dark:from-mintGreen-950/30 dark:to-skyBlue-950/30 border border-mintGreen-100 dark:border-mintGreen-900/30 hover:shadow-medium transition text-center group">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🌳</div>
+                            <div class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ __('Pohon Keluarga') }}</div>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -46,13 +46,16 @@ class DashboardService
 
         $childIds = $selectedChild ? collect([$selectedChild->id]) : $children->pluck('id');
 
+        // Pre-compute related model IDs once to avoid redundant queries
+        $relatedIds = $this->getRelatedMediaOwnerIds($childIds);
+
         $recentTimelines = $this->getRecentTimelines($childIds);
         $upcomingEvents = $this->getUpcomingEvents($childIds);
         $recentDiaries = $this->getRecentDiaries($childIds);
         $recentGrowths = $this->getRecentGrowths($childIds);
         $recentHealthRecords = $this->getRecentHealthRecords($childIds);
-        $recentMedia = $this->getRecentMedia($childIds);
-        $totalMediaCount = $this->getTotalMediaCount($childIds);
+        $recentMedia = $this->getRecentMedia($childIds, 8, $relatedIds);
+        $totalMediaCount = $this->getTotalMediaCount($childIds, $relatedIds);
 
         $totalDocumentCount = $selectedChild
             ? (int) $selectedChild->documents_count
@@ -139,23 +142,34 @@ class DashboardService
      * Includes media attached directly to Child, as well as media attached
      * to Timeline, Album, and Diary records owned by the children.
      */
-    protected function getRecentMedia(Collection $childIds, int $limit = 8): Collection
+    /**
+     * Pre-compute related media owner IDs (timelines, albums, diaries) to avoid redundant queries.
+     *
+     * @return array{timelineIds: Collection, albumIds: Collection, diaryIds: Collection}
+     */
+    protected function getRelatedMediaOwnerIds(Collection $childIds): array
+    {
+        return [
+            'timelineIds' => Timeline::whereIn('child_id', $childIds)->pluck('id'),
+            'albumIds' => Album::whereIn('child_id', $childIds)->pluck('id'),
+            'diaryIds' => Diary::whereIn('child_id', $childIds)->pluck('id'),
+        ];
+    }
+
+    protected function getRecentMedia(Collection $childIds, int $limit = 8, ?array $relatedIds = null): Collection
     {
         if ($childIds->isEmpty()) {
             return collect();
         }
 
-        // Get all related model IDs owned by these children
-        $timelineIds = Timeline::whereIn('child_id', $childIds)->pluck('id');
-        $albumIds = Album::whereIn('child_id', $childIds)->pluck('id');
-        $diaryIds = Diary::whereIn('child_id', $childIds)->pluck('id');
+        $relatedIds ??= $this->getRelatedMediaOwnerIds($childIds);
 
         return Media::where('file_type', 'photo')
-            ->where(function ($query) use ($childIds, $timelineIds, $albumIds, $diaryIds) {
+            ->where(function ($query) use ($childIds, $relatedIds) {
                 $query->where(fn ($q) => $q->where('mediable_type', Child::class)->whereIn('mediable_id', $childIds))
-                    ->orWhere(fn ($q) => $q->where('mediable_type', Timeline::class)->whereIn('mediable_id', $timelineIds))
-                    ->orWhere(fn ($q) => $q->where('mediable_type', Album::class)->whereIn('mediable_id', $albumIds))
-                    ->orWhere(fn ($q) => $q->where('mediable_type', Diary::class)->whereIn('mediable_id', $diaryIds));
+                    ->orWhere(fn ($q) => $q->where('mediable_type', Timeline::class)->whereIn('mediable_id', $relatedIds['timelineIds']))
+                    ->orWhere(fn ($q) => $q->where('mediable_type', Album::class)->whereIn('mediable_id', $relatedIds['albumIds']))
+                    ->orWhere(fn ($q) => $q->where('mediable_type', Diary::class)->whereIn('mediable_id', $relatedIds['diaryIds']));
             })
             ->latest()
             ->take($limit)
@@ -167,21 +181,19 @@ class DashboardService
      *
      * Includes media attached to Child, Timeline, Album, and Diary.
      */
-    protected function getTotalMediaCount(Collection $childIds): int
+    protected function getTotalMediaCount(Collection $childIds, ?array $relatedIds = null): int
     {
         if ($childIds->isEmpty()) {
             return 0;
         }
 
-        $timelineIds = Timeline::whereIn('child_id', $childIds)->pluck('id');
-        $albumIds = Album::whereIn('child_id', $childIds)->pluck('id');
-        $diaryIds = Diary::whereIn('child_id', $childIds)->pluck('id');
+        $relatedIds ??= $this->getRelatedMediaOwnerIds($childIds);
 
-        return Media::where(function ($query) use ($childIds, $timelineIds, $albumIds, $diaryIds) {
+        return Media::where(function ($query) use ($childIds, $relatedIds) {
             $query->where(fn ($q) => $q->where('mediable_type', Child::class)->whereIn('mediable_id', $childIds))
-                ->orWhere(fn ($q) => $q->where('mediable_type', Timeline::class)->whereIn('mediable_id', $timelineIds))
-                ->orWhere(fn ($q) => $q->where('mediable_type', Album::class)->whereIn('mediable_id', $albumIds))
-                ->orWhere(fn ($q) => $q->where('mediable_type', Diary::class)->whereIn('mediable_id', $diaryIds));
+                ->orWhere(fn ($q) => $q->where('mediable_type', Timeline::class)->whereIn('mediable_id', $relatedIds['timelineIds']))
+                ->orWhere(fn ($q) => $q->where('mediable_type', Album::class)->whereIn('mediable_id', $relatedIds['albumIds']))
+                ->orWhere(fn ($q) => $q->where('mediable_type', Diary::class)->whereIn('mediable_id', $relatedIds['diaryIds']));
         })->count();
     }
 }

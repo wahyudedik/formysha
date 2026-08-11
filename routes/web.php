@@ -207,4 +207,7 @@ require __DIR__.'/facility-admin.php';
 require __DIR__.'/auth.php';
 
 // Public profile route — must be after all other routes to avoid conflicts
-Route::get('/{slug}', PublicProfileController::class)->name('public.profile');
+// Throttled to 60 requests per minute per IP to prevent scraping
+Route::get('/{slug}', PublicProfileController::class)
+    ->middleware('throttle:60,1')
+    ->name('public.profile');

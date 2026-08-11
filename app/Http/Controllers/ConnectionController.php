@@ -72,7 +72,7 @@ class ConnectionController extends Controller
         }
 
         return redirect()->route('connections.index', $child)
-            ->with('status', __('Koneksi berhasil dibuat!'));
+            ->with('status', __('status.connection_created'));
     }
 
     /**
@@ -129,7 +129,7 @@ class ConnectionController extends Controller
         }
 
         return redirect()->route('connections.show', [$child, $connection])
-            ->with('status', __('Koneksi berhasil diperbarui!'));
+            ->with('status', __('status.connection_updated'));
     }
 
     /**
@@ -144,13 +144,13 @@ class ConnectionController extends Controller
             $request->user(),
             'connection.revoked',
             null,
-            'Koneksi dicabut oleh pemilik data'
+            __('connection.revoked_by_owner')
         );
 
         $this->connectionService->revoke($connection);
 
         return redirect()->route('connections.index', $child)
-            ->with('status', __('Koneksi berhasil dicabut.'));
+            ->with('status', __('status.connection_revoked'));
     }
 
     /**
@@ -164,7 +164,7 @@ class ConnectionController extends Controller
         $this->connectionService->approve($connection);
 
         return redirect()->route('connections.show', [$child, $connection])
-            ->with('status', __('Koneksi berhasil disetujui!'));
+            ->with('status', __('status.connection_approved'));
     }
 
     /**
@@ -180,13 +180,13 @@ class ConnectionController extends Controller
             $request->user(),
             'connection.rejected',
             null,
-            'Koneksi ditolak oleh pemilik data'
+            __('connection.rejected_by_owner')
         );
 
         $this->connectionService->reject($connection);
 
         return redirect()->route('connections.index', $child)
-            ->with('status', __('Koneksi berhasil ditolak.'));
+            ->with('status', __('status.connection_rejected'));
     }
 
     /**
@@ -201,12 +201,12 @@ class ConnectionController extends Controller
             $request->user(),
             'connection.revoked',
             null,
-            'Koneksi dicabut oleh pemilik data'
+            __('connection.revoked_by_owner')
         );
 
         $this->connectionService->revoke($connection);
 
         return redirect()->route('connections.index', $child)
-            ->with('status', __('Koneksi berhasil dicabut.'));
+            ->with('status', __('status.connection_revoked'));
     }
 }
