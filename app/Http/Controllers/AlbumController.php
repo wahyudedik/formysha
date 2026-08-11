@@ -22,7 +22,13 @@ class AlbumController extends Controller
      */
     public function index(Request $request, Child $child): View
     {
-        $query = $child->albums()->withCount('media');
+        $query = $child->albums()
+            ->withCount('media')
+            ->with(['media' => function ($q) {
+                $q->where('file_type', 'photo')
+                    ->orderBy('created_at', 'desc')
+                    ->limit(4);
+            }]);
 
         // Sort options
         $sort = $request->input('sort', 'default');

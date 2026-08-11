@@ -68,10 +68,27 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @foreach ($albums as $album)
                         <a href="{{ route('albums.show', [$child, $album]) }}" class="card-hover block">
-                            <!-- Cover Photo -->
+                            <!-- Cover Photo / Grid Preview -->
                             <div class="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 mb-4">
                                 @if ($album->cover_photo)
-                                    <img src="{{ asset('storage/' . $album->cover_photo) }}" alt="{{ $album->name }}" class="w-full h-full object-cover" />
+                                    <img src="{{ asset('storage/' . $album->cover_photo) }}" alt="{{ $album->name }}" class="w-full h-full object-cover" loading="lazy" />
+                                @elseif ($album->media->isNotEmpty())
+                                    {{-- Grid 2x2 photo preview --}}
+                                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 gap-0.5">
+                                        @foreach ($album->media as $item)
+                                            <div class="overflow-hidden bg-gray-100 dark:bg-gray-700">
+                                                @if ($item->thumbnail_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($item->thumbnail_path))
+                                                    <img src="{{ asset('storage/' . $item->thumbnail_path) }}" alt="" class="w-full h-full object-cover" loading="lazy" />
+                                                @elseif (\Illuminate\Support\Facades\Storage::disk('public')->exists($item->file_path))
+                                                    <img src="{{ asset('storage/' . $item->file_path) }}" alt="" class="w-full h-full object-cover" loading="lazy" />
+                                                @else
+                                                    <div class="w-full h-full flex items-center justify-center">
+                                                        <span class="text-lg">📸</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 @else
                                     <div class="w-full h-full flex flex-col items-center justify-center">
                                         <span class="text-4xl mb-2">📸</span>
