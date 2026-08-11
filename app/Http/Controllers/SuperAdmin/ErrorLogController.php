@@ -126,14 +126,22 @@ class ErrorLogController extends Controller
     }
 
     /**
-     * Hapus isi log file.
+     * Hapus semua file log.
      */
     public function clear(): RedirectResponse
     {
-        $logPath = storage_path('logs/laravel.log');
+        $logsDir = storage_path('logs');
 
-        if (File::exists($logPath)) {
-            File::put($logPath, '');
+        try {
+            // Hapus semua file log (single: laravel.log, daily: laravel-YYYY-MM-DD.log)
+            $logFiles = glob($logsDir.'/laravel*.log');
+            if ($logFiles) {
+                foreach ($logFiles as $file) {
+                    @unlink($file);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Graceful — jangan crash meskipun permission bermasalah
         }
 
         return redirect()->route('super-admin.error-logs.index')
