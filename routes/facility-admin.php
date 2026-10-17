@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified', 'tenant.active'])->prefix('facility')->na
     Route::middleware('staff.role:admin,doctor')->group(function () {
         Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
         Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
-        Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+        Route::post('/staff', [StaffController::class, 'store'])->middleware('feature.limit:staff')->name('staff.store');
         Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show');
         Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
         Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
@@ -39,7 +39,7 @@ Route::middleware(['auth', 'verified', 'tenant.active'])->prefix('facility')->na
     Route::middleware('staff.role:admin,doctor,midwife,nurse')->group(function () {
         Route::get('/patients', [PatientLinkController::class, 'index'])->name('patients.index');
         Route::get('/patients/create', [PatientLinkController::class, 'create'])->name('patients.create');
-        Route::post('/patients', [PatientLinkController::class, 'store'])->name('patients.store');
+        Route::post('/patients', [PatientLinkController::class, 'store'])->middleware('feature.limit:patients')->name('patients.store');
         Route::get('/patients/{patientLink}', [PatientLinkController::class, 'show'])->name('patients.show');
         Route::put('/patients/{patientLink}', [PatientLinkController::class, 'update'])->name('patients.update');
         Route::delete('/patients/{patientLink}', [PatientLinkController::class, 'destroy'])->name('patients.destroy');
@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified', 'tenant.active'])->prefix('facility')->na
     Route::middleware('staff.role:doctor,midwife,nurse')->group(function () {
         Route::get('/clinical-notes', [ClinicalNoteController::class, 'index'])->name('clinical-notes.index');
         Route::get('/clinical-notes/create', [ClinicalNoteController::class, 'create'])->name('clinical-notes.create');
-        Route::post('/clinical-notes', [ClinicalNoteController::class, 'store'])->name('clinical-notes.store');
+        Route::post('/clinical-notes', [ClinicalNoteController::class, 'store'])->middleware('feature.limit:clinical_notes')->name('clinical-notes.store');
         Route::get('/clinical-notes/{clinicalNote}', [ClinicalNoteController::class, 'show'])->name('clinical-notes.show');
         Route::get('/clinical-notes/{clinicalNote}/edit', [ClinicalNoteController::class, 'edit'])->name('clinical-notes.edit');
         Route::put('/clinical-notes/{clinicalNote}', [ClinicalNoteController::class, 'update'])->name('clinical-notes.update');
@@ -63,7 +63,7 @@ Route::middleware(['auth', 'verified', 'tenant.active'])->prefix('facility')->na
     Route::middleware('staff.role:admin,doctor,midwife')->group(function () {
         Route::get('/referrals', [ReferralController::class, 'index'])->name('referrals.index');
         Route::get('/referrals/create', [ReferralController::class, 'create'])->name('referrals.create');
-        Route::post('/referrals', [ReferralController::class, 'store'])->name('referrals.store');
+        Route::post('/referrals', [ReferralController::class, 'store'])->middleware('feature.limit:referrals')->name('referrals.store');
         Route::get('/referrals/{referral}', [ReferralController::class, 'show'])->name('referrals.show');
         Route::post('/referrals/{referral}/accept', [ReferralController::class, 'accept'])->name('referrals.accept');
         Route::post('/referrals/{referral}/complete', [ReferralController::class, 'complete'])->name('referrals.complete');

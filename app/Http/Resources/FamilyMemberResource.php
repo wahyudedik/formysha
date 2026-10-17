@@ -33,7 +33,7 @@ class FamilyMemberResource extends JsonResource
             'phone' => $this->phone,
             'email' => $this->email,
             'photo' => $this->photo,
-            'photo_url' => $this->photo ? asset('storage/'.$this->photo) : null,
+            'photo_url' => $this->photo ? route('files.family.photo', [$this->child_id, $this->id]) : null,
             'is_primary' => $this->is_primary,
             'permission_level' => $this->permission_level?->value ?? 'view',
             'permission_label' => $this->permission_level?->label() ?? 'Lihat Saja',

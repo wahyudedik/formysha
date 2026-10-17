@@ -1299,6 +1299,8 @@ Evolusi arsitektur ForMysha dari Digital Life Book menjadi **Digital Life Book &
 
 ### Sub-Phase 21.7 — Updated Pricing
 
+*Catatan arsip: tabel di bawah ini mewakili draft rencana Phase 21.7 saat itu. Angka kapasitas & fitur final yang berlaku kini ada di `database/seeders/PlanSeeder.php` dan telah disinkronkan ke BRIEF3.md (lihat Phase 26).*
+
 #### B2C (Family)
 
 | Paket | Harga | Fitur Utama |
@@ -1437,6 +1439,102 @@ Evolusi arsitektur ForMysha dari Digital Life Book menjadi **Digital Life Book &
 
 * Comprehensive search 249 PlainString patterns di semua Blade views — semua aman (Indonesian words, bukan nama file lang)
 * Tests: 774 tests, 1875 assertions — all passing, Pint formatting applied
+
+---
+
+## Phase 26 — Security, Subscription & Limits Hardening ✅ Selesai
+
+Enam batch hardening keamanan, kebenaran subscription, dan pembatasan fitur — semua terverifikasi: **861 tests, 2106 assertions — all passing**, Laravel Pint passed.
+
+### Sub-Phase I1 — Private Storage (UU PDP) ✅
+
+* Semua file sensitif (foto anak, foto anggota keluarga, media timeline/album/diary, dokumen akta/KK/KIA/BPJS) dipindahkan dari disk publik ke **disk `private`** — file tidak lagi bisa diakses langsung via URL publik
+* **`FileDownloadController`** — 9 method streaming: 7 route terautentikasi dalam group `child.ownership` (photo anak, photo anggota keluarga, media file, media thumbnail, document file, document download, album cover) + 2 route publik throttled (`throttle:60,1`) untuk public profile via slug + `is_public`
+* **Disk `private`** di `config/filesystems.php` — root `storage/app/private`, tanpa `serve => true`
+* **Command `php artisan storage:migrate-private {--delete-original} {--force}`** — memindahkan file lama dari disk publik ke privat, idempotent
+* Accessor `Media::file_url`/`thumbnail_url` menunjuk ke route download (bukan `asset('storage/...')`)
+* `AccountDeletionService` menghapus file di dua disk (private + legacy public)
+* Golongan darah (**blood_type**) dihapus dari public profile (data kesehatan sensitif)
+* SEMUA upload kini ke disk private (ChildController, FamilyMemberController, DocumentController, MediaService, ImageOptimizationService, termasuk API variants) — views memakai route download
+
+### Sub-Phase I2 — Subscription Correctness ✅
+
+* **Kolom baru plans**: `is_free` (boolean) & `audience` (`family`/`facility`) — migrasi `2026_10_17_000001_add_is_free_and_audience_to_plans_table`
+* **`SubscriptionService::subscribeTenant()`** — guard subscription aktif, guard audience family↔facility, free plan → aktif langsung (`ends_at = null`), harga 0 tapi bukan free → `SubscriptionException`, paid → pending payment dengan dedup pending lama
+* **`submitPaymentProof()`** — wajib kepemilikan tenant + subscription status pending + amount ≥ price_monthly
+* **`approvePayment()`** membatalkan pending subscription sisa
+* Web + API controllers refactor memakai service layer
+* **`SendSubscriptionReminders`** benar-benar mengirim email (try/catch per user)
+* **`CheckExpiredSubscriptions`** membaca `config('saas.subscription.grace_period_days', 7)`
+* Config: `trial_days` DIHAPUS (dead code), grace period = 7 hari
+* **`PlanSeeder`** set `is_free`/`audience` + sync block untuk DB existing
+* **Enterprise** (custom pricing) tombol → **"Hubungi Kami"**
+* **Plan model**: `POPULAR_SLUG = 'family-plus'`, `isPopular()`, `featureLabel(s)()`, `AUDIENCE_FAMILY`/`AUDIENCE_FACILITY`, `isCustomPricing()`/`isForFamilies()`/`isForFacilities()`
+
+### Sub-Phase I3 — Feature Limits ✅
+
+* **`MediaService::enforceUploadLimits()`** — cek `max_photos`/`max_videos`/`max_storage_mb` SEBELUM file ditulis → `ValidationException::withMessages(['media' => ...])` (web redirect-back + API 422 JSON)
+* **Tenant model**: `canUploadAdditionalPhotos/Videos/Storage` (null/-1 = tak terbatas), `media()` dihitung dari Child + Timeline + Album + Diary
+* **`EnsureFeatureLimit`** mengembalikan JSON 422 `{success: false, message}` untuk `expectsJson`
+* Middleware `feature.limit:*` dipasang di `routes/api.php` (children, family_members) + `routes/facility-admin.php` (staff, patients, clinical_notes, referrals)
+* Route web media photos limit DIHAPUS dari middleware (service-layer single gate)
+* Lang baru `lang/{id,en}/limits.php` (9+ keys)
+
+### Sub-Phase I4 — Read-only Enforcement & Suspended Tenant ✅
+
+* **Middleware `EnsureWriteAccess`** (alias `subscription.write`) — GET/HEAD lewat, super_admin lewat, tanpa tenant lewat, dikontrol flag config `saas.subscription.enforce_write_access` (env `SAAS_ENFORCE_WRITE_ACCESS`, default **true di production**, **false di phpunit.xml** agar suite existing hijau); tanpa subscription aktif → web redirect `subscription.plans` + flash `subscription_notice` (banner warmYellow) / API JSON **402**
+* **Middleware `EnsureTenantStatus`** (alias `tenant.status`) — tenant `is_active = false` → web abort 403 bahasa Indonesia / API JSON 403
+* Dipasang: children group web + dashboard + API content group
+* **Exemptions** via `withoutMiddleware`: erasure.destroyChild, consent.update, achievements.check, milestones (check/dismiss), notification read, `PUT /api/me`, logout, password, `DELETE /api/auth/account`; `/api/subscription/*` exempt dari `tenant.status` (bisa bayar saat suspended)
+* TIDAK diblokir: export, search, profile, notifications, plans/payment/subscribe, auth, super/tenant-admin, public
+* Kebijakan bisnis: **read-only** — data tetap bisa dilihat & diunduh, fitur tulis diarahkan ke halaman plans
+* Test: `SubscriptionWriteAccessTest` (30 tests)
+
+### Sub-Phase I5 — Security & UX Quick Wins ✅
+
+* **Open redirect fix**: `NotificationController::markAsRead` — helper `resolveInternalRedirect()` memblokir path relatif eksternal & protocol-relative `//evil.com`; redirect eksternal → dashboard
+* **Child delete wajib password**: `ChildController::destroy` wajib `current_password` via `Hash::check` (kecuali `users.password` null / OAuth); modal hapus anak di `children/show.blade.php` kini punya input password
+* **Middleware `verified`** ditambahkan ke group authed utama `routes/web.php` (`['auth', 'verified', 'tenant.status']`) — API tidak
+* Modal delete calendar custom → `<x-confirm-delete>`
+* Banner inline duplikat timeline/index dihapus (andalkan `x-toast` global)
+* **`x-confirm-delete` ditingkatkan global**: slot opsional untuk input tambahan + loading state standar + i18n tombol (`common.cancel`/`common.confirm_delete`)
+* Keys baru lang: `children.delete_title`/`delete_confirm_named`/`password_*`, `calendar.delete_*`
+
+### Sub-Phase I6 — Polish Plans & Family Sharing Copy ✅
+
+* **plans.blade.php rewrite** — section "Untuk Keluarga" & "Untuk Fasilitas Kesehatan" (berdasar kolom `audience`), badge **POPULER** via `Plan::isPopular()` (tanpa migrasi), komponen `plan-card.blade.php`
+* Tabel perbandingan fitur memakai `featureLabels()` (JSON features → label terjemahan; null/-1 → "Tak terbatas")
+* FAQ akurat: berbayar → pending → aktif setelah approve Super Admin; ganti paket tidak bisa saat aktif; inactive → read-only
+* i18n besar current/history (~26 hunks, semua `group.key` format)
+* **Family sharing copy**: banner info bahwa undangan = pencatatan hubungan (BUKAN akses login), hint di form create/edit — akses nyata co-parent dijadwalkan sebagai phase baru
+* ~70 lang keys subscription baru + family keys, id + en
+
+### Status Phase 26
+
+* **861 tests, 2106 assertions — all passing** (baseline sebelumnya 774/1875)
+* Laravel Pint formatting passed
+* Migrations baru (sudah dijalankan): `2026_10_17_000001_add_is_free_and_audience_to_plans_table`, `2026_10_17_190617_make_users_password_nullable_for_oauth_support`
+
+---
+
+## Phase 27 — Rencana & Backlog (BELUM Dikerjakan)
+
+> Bagian ini adalah **rencana/rekomendasi** — belum ada kode yang dikerjakan.
+
+### Rencana Utama — Akses Nyata Co-parent / Family Account
+
+Akses nyata co-parent (anggota keluarga login sendiri dan melihat/mengelola data anak) memerlukan arsitektur **multi-membership** — lihat BRIEF3 §7 (User → Membership → Family/Organization → Subscription). Saat ini family sharing bersifat **pencatatan hubungan saja** (bukan akun login co-parent), sehingga fitur ini dijadwalkan sebagai phase tersendiri karena menyentuh identitas, membership, dan model subscription.
+
+### Backlog / Rekomendasi Tersisa
+
+* **Enforce `max_export_per_day`** — kolom sudah ada di plans, belum di-enforce di ExportController
+* **Migrasi emoji icons → SVG inline** (brand guideline — ikon rounded & konsisten)
+* **Standarisasi `x-empty-state`/`x-breadcrumb`/`x-child-nav`** di semua modul yang masih memakai markup manual
+* **Hapus Tailwind CDN di public profile** — pindah ke asset build (performa & keamanan CSP)
+* **Hardening i18n** — buang sisa string literal di views/controllers
+* **Konsolidasi 3 sumber pricing** — `config/saas.php` (dead catalog), `PlanSeeder`, dan hardcode di tests → satu sumber kebenaran
+* **Arsitektur multi-membership** (BRIEF3 §7) — prasyarat akses nyata co-parent
+* **Hygiene git** — commit message deskriptif (15 commit terakhir bernama "SDFsdfs"); commit file `deploy.sh` & `update.sh` yang belum ter-commit
 
 ---
 

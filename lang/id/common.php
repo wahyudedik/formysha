@@ -60,4 +60,7 @@ return [
     'dashboard' => 'Dashboard',
     'status' => 'Status',
     'connection' => 'Koneksi',
+    'tenant_suspended' => 'Akun Anda dinonaktifkan. Hubungi tim dukungan.',
+    'cancel' => 'Batal',
+    'confirm_delete' => 'Ya, Hapus',
 ];

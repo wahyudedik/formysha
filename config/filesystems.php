@@ -38,6 +38,22 @@ return [
             'report' => false,
         ],
 
+        /*
+         * Disk privat untuk file sensitif keluarga (foto anak, foto anggota
+         * keluarga, media timeline/album/diary, dan dokumen penting).
+         *
+         * File pada disk ini TIDAK dapat diakses langsung tanpa autentikasi.
+         * Sajikan hanya melalui route download/stream terautentikasi
+         * (lihat FileDownloadController). Jangan set 'serve' => true karena
+         * akan mendaftarkan route /storage/{path} publik.
+         */
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+            'throw' => false,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

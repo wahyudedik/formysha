@@ -18,6 +18,9 @@ class EnsureFeatureLimit
      *
      * Parameterized: feature:children, feature:photos, feature:videos, feature:storage,
      * feature:staff, feature:patients, feature:clinical_notes, feature:referrals
+     *
+     * Returns a JSON 422 response for API requests (expectsJson) and a
+     * redirect-back with flash error for web requests.
      */
     public function handle(Request $request, Closure $next, string $feature): Response
     {
@@ -30,22 +33,33 @@ class EnsureFeatureLimit
         $allowed = $this->tenantService->checkFeatureLimit($tenant, $feature);
 
         if (! $allowed) {
-            $featureLabel = match ($feature) {
-                'children', 'add_child' => 'jumlah anak',
-                'photos', 'upload_photo' => 'unggah foto',
-                'videos', 'upload_video' => 'unggah video',
-                'family_members' => 'anggota keluarga',
-                'storage' => 'penyimpanan',
-                'staff' => 'jumlah staf',
-                'patients' => 'jumlah pasien',
-                'clinical_notes' => 'catatan klinis',
-                'referrals' => 'rujukan',
-                default => $feature,
-            };
+            $message = __('limits.'.$this->resolveLangKey($feature));
 
-            return back()->with('error', "Batas {$featureLabel} telah tercapai. Silakan upgrade paket Anda.");
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $message,
+                ], 422);
+            }
+
+            return back()->with('error', $message);
         }
 
         return $next($request);
+    }
+
+    /**
+     * Map the route feature parameter to its lang/{locale}/limits.php key.
+     */
+    private function resolveLangKey(string $feature): string
+    {
+        return match ($feature) {
+            'add_child' => 'children',
+            'upload_photo' => 'photos',
+            'upload_video' => 'videos',
+            'children', 'photos', 'videos', 'storage', 'family_members',
+            'staff', 'patients', 'clinical_notes', 'referrals' => $feature,
+            default => 'children',
+        };
     }
 }

@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            💎 {{ __('Langganan Saya') }}
+            💎 {{ __('subscription.current_title') }}
         </h2>
     </x-slot>
 
     <div class="py-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-breadcrumb :items="[
             ['label' => __('Dashboard'), 'url' => route('dashboard')],
-            ['label' => __('Langganan')],
+            ['label' => __('subscription.subscription_word')],
         ]" />
 
         @if ($subscription)
@@ -18,7 +18,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->name ?? '-' }}</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Paket langganan aktif Anda') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('subscription.active_plan_description') }}</p>
                         </div>
                         <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-sm font-medium self-start
                             {{ match($subscription->status) {
@@ -30,11 +30,11 @@
                                 default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                             } }}">
                             {{ match($subscription->status) {
-                                'active' => '✅ ' . __('Aktif'),
-                                'pending' => '⏳ ' . __('Menunggu Pembayaran'),
-                                'inactive' => '⏸️ ' . __('Tidak Aktif'),
-                                'cancelled' => '❌ ' . __('Dibatalkan'),
-                                'past_due' => '⚠️ ' . __('Terlambat Bayar'),
+                                'active' => '✅ ' . __('subscription.status_active'),
+                                'pending' => '⏳ ' . __('subscription.status_pending'),
+                                'inactive' => '⏸️ ' . __('subscription.status_inactive'),
+                                'cancelled' => '❌ ' . __('subscription.status_cancelled'),
+                                'past_due' => '⚠️ ' . __('subscription.status_past_due'),
                                 default => ucfirst($subscription->status),
                             } }}
                         </span>
@@ -43,20 +43,20 @@
                     {{-- Plan Details --}}
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Harga') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('subscription.price') }}</p>
                             <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $subscription->plan->getPriceMonthlyFormatted() }}</p>
-                            <p class="text-[10px] text-gray-400 dark:text-gray-500">{{ __('per bulan') }}</p>
+                            <p class="text-[10px] text-gray-400 dark:text-gray-500">{{ __('subscription.per_month') }}</p>
                         </div>
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Mulai') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('subscription.start_date') }}</p>
                             <p class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->starts_at?->locale('id')->isoFormat('D MMM YYYY') ?? '-' }}</p>
                         </div>
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Berakhir') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('subscription.end_date') }}</p>
                             <p class="text-sm font-bold text-gray-800 dark:text-gray-100">{{ $subscription->ends_at?->locale('id')->isoFormat('D MMM YYYY') ?? '-' }}</p>
                         </div>
                         <div class="bg-white/80 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Sisa Hari') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('subscription.days_remaining') }}</p>
                             <p class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $subscription->daysRemaining() }}</p>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         @endphp
                         <div class="mt-6">
                             <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                <span>{{ __('Penggunaan') }}</span>
+                                <span>{{ __('subscription.usage') }}</span>
                                 <span>{{ $percent }}%</span>
                             </div>
                             <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -88,12 +88,12 @@
                         <div class="flex items-center gap-3">
                             <span class="text-3xl">⏳</span>
                             <div>
-                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">{{ __('Menunggu Pembayaran') }}</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Silakan lakukan transfer dan upload bukti pembayaran untuk mengaktifkan langganan Anda.') }}</p>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">{{ __('subscription.status_pending') }}</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('subscription.pending_payment_hint') }}</p>
                             </div>
                         </div>
                         <a href="{{ route('subscription.payment.upload', $subscription) }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center whitespace-nowrap">
-                            💳 {{ __('Upload Bukti') }}
+                            💳 {{ __('subscription.upload_proof_short') }}
                         </a>
                     </div>
                 </div>
@@ -106,21 +106,21 @@
                 @endphp
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden mb-6">
                     <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('Ringkasan Penggunaan') }}</h3>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100">📊 {{ __('subscription.usage_summary') }}</h3>
                     </div>
                     <div class="p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                         <div class="text-center p-3 rounded-xl bg-skyBlue-50 dark:bg-skyBlue-950/30">
                             <p class="text-xl font-bold text-skyBlue-600 dark:text-skyBlue-400">{{ $childrenCount }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Anak</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('subscription.children') }}</p>
                             <p class="text-[10px] text-gray-400 dark:text-gray-500">/ {{ $subscription->plan->max_children === -1 ? '∞' : $subscription->plan->max_children }}</p>
                         </div>
                         <div class="text-center p-3 rounded-xl bg-softPink-50 dark:bg-softPink-950/30">
                             <p class="text-xl font-bold text-softPink-600 dark:text-softPink-400">{{ $tenant?->payments()->where('status', 'approved')->count() ?? 0 }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Pembayaran</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('subscription.payments') }}</p>
                         </div>
                         <div class="text-center p-3 rounded-xl bg-lavender-50 dark:bg-lavender-950/30">
                             <p class="text-xl font-bold text-lavender-600 dark:text-lavender-400">{{ $subscription->plan->getStorageFormatted() }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Storage</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('subscription.storage_label') }}</p>
                         </div>
                     </div>
                 </div>
@@ -130,14 +130,14 @@
             <div class="flex flex-col sm:flex-row flex-wrap gap-3">
                 @if ($subscription->status === 'pending')
                     <a href="{{ route('subscription.payment.upload', $subscription) }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
-                        💳 {{ __('Upload Bukti Pembayaran') }}
+                        💳 {{ __('subscription.upload_proof') }}
                     </a>
                 @endif
                 <a href="{{ route('subscription.plans') }}" class="btn-accent text-sm min-h-[44px] inline-flex items-center">
-                    🔄 {{ __('Upgrade / Ganti Paket') }}
+                    🔄 {{ __('subscription.upgrade_change_plan') }}
                 </a>
                 <a href="{{ route('subscription.history') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center">
-                    📜 {{ __('Riwayat Langganan') }}
+                    📜 {{ __('subscription.history') }}
                 </a>
             </div>
         @else
@@ -145,10 +145,10 @@
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft overflow-hidden">
                 <div class="p-6 sm:p-12 text-center">
                     <div class="text-6xl mb-4">💎</div>
-                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Belum Ada Langganan</h3>
-                    <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">Pilih paket langganan untuk mulai menggunakan fitur premium ForMysha.</p>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ __('subscription.no_subscription_title') }}</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">{{ __('subscription.no_subscription_desc') }}</p>
                     <a href="{{ route('subscription.plans') }}" class="btn-primary text-sm min-h-[44px] inline-flex items-center">
-                        💎 {{ __('Lihat Paket Langganan') }}
+                        💎 {{ __('subscription.view_plans') }}
                     </a>
                 </div>
             </div>

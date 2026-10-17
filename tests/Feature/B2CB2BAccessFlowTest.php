@@ -8,7 +8,9 @@ use App\Models\Child;
 use App\Models\ClinicalNote;
 use App\Models\FamilyMember;
 use App\Models\PatientLink;
+use App\Models\Plan;
 use App\Models\Staff;
+use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
 use Database\Seeders\FamilyAndFacilitySeeder;
@@ -16,8 +18,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 /**
- * Helper: create a B2B tenant with owner user and staff record,
- * then switch session to that tenant.
+ * Helper: create a B2B tenant with owner user, staff record, an
+ * unlimited B2B plan with an active subscription, then switch
+ * session to that tenant.
  */
 function createFacilityForFlowTest(string $staffRole = 'staff_admin'): array
 {
@@ -26,6 +29,32 @@ function createFacilityForFlowTest(string $staffRole = 'staff_admin'): array
         'slug' => 'klinik-flow-test-'.Str::slug(fake()->unique()->bothify('####')),
         'type' => TenantType::Clinic,
         'is_active' => true,
+    ]);
+
+    $plan = Plan::create([
+        'name' => 'B2B Flow Test '.fake()->unique()->bothify('####'),
+        'slug' => 'b2b-flow-test-'.Str::slug(fake()->unique()->bothify('####')),
+        'price_monthly' => 0,
+        'max_children' => -1,
+        'max_photos' => -1,
+        'max_videos' => -1,
+        'max_storage_mb' => -1,
+        'features' => [
+            'max_staff' => -1,
+            'max_patients' => -1,
+            'max_clinical_notes' => -1,
+            'referrals_enabled' => true,
+        ],
+        'is_active' => true,
+        'sort_order' => 1,
+    ]);
+
+    Subscription::create([
+        'tenant_id' => $tenant->id,
+        'plan_id' => $plan->id,
+        'status' => Subscription::STATUS_ACTIVE,
+        'starts_at' => now(),
+        'ends_at' => null,
     ]);
 
     $user = User::factory()->tenantAdmin()->create([

@@ -35,16 +35,18 @@ class CheckExpiredSubscriptions extends Command
             $this->info('✅ Tidak ada subscription yang perlu di-expire.');
         }
 
-        // Also deactivate past_due subscriptions after 7 days grace period
+        // Also deactivate past_due subscriptions after grace period (configurable)
+        $gracePeriodDays = (int) config('saas.subscription.grace_period_days', 7);
+
         $deactivatedCount = Subscription::where('status', Subscription::STATUS_PAST_DUE)
             ->whereNotNull('ends_at')
-            ->where('ends_at', '<', now()->subDays(7))
+            ->where('ends_at', '<', now()->subDays($gracePeriodDays))
             ->update([
                 'status' => Subscription::STATUS_INACTIVE,
             ]);
 
         if ($deactivatedCount > 0) {
-            $this->info("⚠️ {$deactivatedCount} subscription di-deactivate setelah 7 hari grace period.");
+            $this->info("⚠️ {$deactivatedCount} subscription di-deactivate setelah {$gracePeriodDays} hari grace period.");
         }
 
         return self::SUCCESS;

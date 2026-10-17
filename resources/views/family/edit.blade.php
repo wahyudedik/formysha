@@ -65,7 +65,7 @@
                     <!-- Permission Level -->
                     <div>
                         <x-input-label for="permission_level" :value="__('Level Akses')" />
-                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">{{ __('Tentukan seberapa banyak akses anggota keluarga ini terhadap data anak.') }}</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">{{ __('family.access_hint') }}</p>
                         <select id="permission_level" name="permission_level" class="mt-1 block w-full border-gray-300 focus:border-softPink-300 focus:ring-softPink-200 rounded-xl shadow-sm transition dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
                             @foreach ($permissions as $permission)
                                 <option value="{{ $permission->value }}" {{ old('permission_level', $familyMember->permission_level) === $permission->value ? 'selected' : '' }}>

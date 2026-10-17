@@ -968,6 +968,16 @@ public/favicon.ico   → Favicon legacy
 * **Utility Script**: `split_lang.php` untuk auto-split `app.php` → per-group files
 * **Tests**: 774 tests, 1875 assertions — all passing, Pint formatting applied
 
+#### Phase 26 — Security, Subscription & Limits Hardening ✅
+
+* **Private Storage (UU PDP)**: media pengguna pindah ke disk `private`, streaming via `FileDownloadController`, command `storage:migrate-private`
+* **Subscription Correctness**: guard `subscribeTenant`, `submitPaymentProof` ownership, `is_free`/`audience` di plans, Enterprise custom pricing
+* **Feature Limits API/Service**: validasi `max_videos` & `max_storage_mb`, response JSON 422 untuk API
+* **Read-only Enforcement**: middleware `subscription.write` + `tenant.status`, toggle `SAAS_ENFORCE_WRITE_ACCESS`
+* **Security & UX Quick Wins**: open redirect protection, hapus akun butuh `current_password`, verified middleware, upgrade `x-confirm-delete`
+* **Plans Polish**: section B2C/B2B, badge POPULER, featureLabels + family copy jujur
+* **Tests**: 861 tests, 2106 assertions — all passing
+
 ### Keunggulan Kompetitif
 
 * Fokus pada **Digital Life Book**, bukan sekadar album foto.
@@ -1184,8 +1194,10 @@ PERMISSION: [permission_level] — [connection_id]
 
 - All UI text must be in **Bahasa Indonesia** (Indonesian).
 - Use existing Blade components before creating new ones: `x-empty-state`, `x-page-header`, `x-breadcrumb`, `x-loading`, `x-child-nav`, `x-modal`, `x-dropdown`, `x-toast`, `x-confirm-delete`, `x-pages-layout`.
+- `x-confirm-delete` supports an optional slot for extra form inputs (e.g. `current_password` verification on account deletion), a built-in loading state on submit, and i18n button labels (`common.cancel`, `common.confirm_delete`, `common.loading`).
 - Authenticated pages use `x-app-layout`. Public pages (like `/public/profile`) use standalone layout with Tailwind CDN. Static pages (about, privacy, terms) use `x-pages-layout`.
 - Color system: Use Tailwind custom colors — `skyBlue`, `mintGreen`, `softPink`, `lavender`, `warmYellow`, `peach`, `softOrange`, `cream`.
+- **Open redirect ban**: never redirect to user-supplied URLs. Use the `resolveInternalRedirect()` helper — only relative internal paths are allowed as post-login/POST redirect targets.
 
 ### Responsive Design Patterns
 
@@ -1266,6 +1278,9 @@ All Blade views MUST follow these responsive patterns consistently:
 - `Plan::factory()->create()` creates a plan with `is_active: true`. Use `Plan::factory()->inactive()` for inactive plans.
 - `Subscription::factory()->create()` creates a subscription with `status: active`. Use `Subscription::factory()->pending()` for pending subscriptions.
 - `Payment::factory()->create()` creates a payment with `status: pending`. Use states like `approved()`, `rejected()` for other statuses.
+- **Private storage (UU PDP)**: user-owned files (child photos, family member photos, timeline/album/diary media, documents) MUST be stored on the `private` disk (`storage/app/private`) — never `Storage::disk('public')` for user data. Serve files through [`FileDownloadController`](app/Http/Controllers/FileDownloadController.php) (route names `files.*`), which streams via `Storage::disk('private')->response()`. Tenant branding assets (logo/favicon) remain on the `public` disk.
+- Legacy file migration: `php artisan storage:migrate-private {--delete-original}` moves old `public`-disk files to `private`; verify before running with `--delete-original`.
+- `plans` table has `is_free` (boolean) and `audience` (`family`/`facility`) columns (migration `2026_10_17_000001`). [`database/seeders/PlanSeeder.php`](database/seeders/PlanSeeder.php) is the source of truth for plan capacities & pricing and contains a sync block that backfills `is_free`/`audience` on existing rows — run `php artisan db:seed --class=PlanSeeder` after migrating.
 
 ### i18n Translation File Structure
 
@@ -1296,11 +1311,13 @@ All Blade views MUST follow these responsive patterns consistently:
 - Feature-limited routes use `feature.limit:{feature}` middleware (e.g., `feature.limit:children`, `feature.limit:photos`).
 - Subscription-protected routes use `active.subscription` middleware.
 - `EnsureActiveSubscription` middleware checks if tenant has an active subscription; redirects to plans page if not.
+- **`subscription.write`** alias (`EnsureWriteAccess`): GET/HEAD always pass; tenants with an inactive subscription get a read-only banner (web) or 402 (API `expectsJson`). Toggle via `config('saas.subscription.enforce_write_access')` / env **`SAAS_ENFORCE_WRITE_ACCESS`** — `true` in production, `false` in `phpunit.xml`.
+- **`tenant.status`** alias (`EnsureTenantStatus`): suspended tenants receive 403. Applied to the main authenticated web/api route groups (`['auth', 'verified', 'tenant.status']`); critical endpoints (erasure child delete, consent update, logout, password change, etc.) are exempted via `withoutMiddleware`.
 
 ### SaaS Model Conventions
 
 - **Tenant**: UUID primary key, `activeSubscription()` uses `latest()` (not `latestOfMany()` for UUID compatibility), `media()` is a custom method (not HasManyThrough) because media uses polymorphic relationships.
-- **Plan**: UUID primary key, `is_active` boolean, `is_free` boolean. Use `Plan::factory()->free()` for free plan.
+- **Plan**: UUID primary key, `is_active` boolean, `is_free` boolean, `audience` enum (`Plan::AUDIENCE_FAMILY`/`Plan::AUDIENCE_FACILITY`). Constants: `Plan::POPULAR_SLUG = 'family-plus'` (POPULER badge). Helpers: `isPopular()`, `isCustomPricing()` (Enterprise — "Hubungi Kami" instead of buy button), `isForFamilies()`, `isForFacilities()`, `featureLabel(s)`. Use `Plan::factory()->free()` for free plan.
 - **Subscription**: UUID primary key, `status` enum (`pending`, `active`, `inactive`, `cancelled`, `expired`). Use `Subscription::factory()->pending()` or `->active()`.
 - **Payment**: UUID primary key, `status` enum (`pending`, `approved`, `rejected`), `amount` in cents (integer). Use `Payment::factory()->approved()` etc.
 - **AuditLog**: UUID primary key, `event` string, `description` text, `properties` JSON, `auditable` polymorphic.
@@ -1396,7 +1413,7 @@ All Blade views MUST follow these responsive patterns consistently:
 
 ### Quality Assurance
 
-* **Total Tests**: 774 tests, 1875 assertions — all passing
+* **Total Tests**: 861 tests, 2106 assertions — all passing (per Phase 26, 2026-10-17; baseline sebelumnya 774 tests / 1875 assertions)
 * **Framework**: Pest PHP dengan `describe/it` blocks
 * **Formatter**: Laravel Pint (`vendor/bin/pint --dirty --format agent`)
 * **Feature Tests**: Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export, Tenant, Plan, Subscription, Payment, Tenant Admin, Analytics, Feature Limit, Achievement, Milestone, FacilityAdmin
@@ -1434,6 +1451,7 @@ All Blade views MUST follow these responsive patterns consistently:
   - 25 tests baru (16 Feature + 9 API)
 * **Phase 21 — Architecture Evolution**: Connection System, Family Tree, B2B Assisted Registration, Referral Enhancement, Activity History — 81 tests baru (18 test files), 774 tests, 1871 assertions
 * **Phase 25 — i18n Translation Split**: 52 per-group lang files per locale (104 total), Windows case-insensitive fix, utility script `split_lang.php`, 774 tests, 1875 assertions
+* **Phase 26 — Security, Subscription & Limits Hardening**: private storage (disk `private` + `FileDownloadController` streaming + `storage:migrate-private`), subscription correctness (`subscribeTenant` guards, `submitPaymentProof` ownership), feature limits diperkuat (`max_videos` & `max_storage_mb`, pre-write validation), read-only mode (`subscription.write`) & suspended tenant (`tenant.status`), open redirect protection (`resolveInternalRedirect`), hapus akun butuh `current_password`, `x-confirm-delete` slot + loading state, plans polish (badge POPULER, Enterprise custom pricing, `is_free`/`audience`) — 87 tests baru (`SubscriptionCorrectnessTest`, `FeatureLimitEnforcementTest`, `PlanPageTest`, `MediaServiceTest`, `B2CB2BAccessFlowTest`, `FacilityRegistrationTest`, `SuperAdminSeederTest`), 861 tests, 2106 assertions
 
 ---
 

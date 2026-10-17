@@ -61,7 +61,7 @@ class FamilyMemberController extends Controller
         }
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('family-photos', 'public');
+            $data['photo'] = $request->file('photo')->store('family-photos', 'private');
         }
 
         $child->familyMembers()->create($data);
@@ -94,11 +94,12 @@ class FamilyMemberController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
+            // Delete old photo if exists (private disk + legacy public copy)
             if ($familyMember->photo) {
+                Storage::disk('private')->delete($familyMember->photo);
                 Storage::disk('public')->delete($familyMember->photo);
             }
-            $data['photo'] = $request->file('photo')->store('family-photos', 'public');
+            $data['photo'] = $request->file('photo')->store('family-photos', 'private');
         }
 
         $familyMember->update($data);
@@ -114,8 +115,9 @@ class FamilyMemberController extends Controller
     {
         abort_unless($familyMember->child_id === $child->id, 403);
 
-        // Delete photo from storage if exists
+        // Delete photo from storage if exists (private disk + legacy public copy)
         if ($familyMember->photo) {
+            Storage::disk('private')->delete($familyMember->photo);
             Storage::disk('public')->delete($familyMember->photo);
         }
 

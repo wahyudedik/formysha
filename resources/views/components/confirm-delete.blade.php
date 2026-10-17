@@ -7,7 +7,7 @@
 ])
 
 <div
-    x-data="{ open: false }"
+    x-data="{ open: false, loading: false }"
     x-on:delete-confirm.window="if($event.detail === '{{ $id }}') open = true"
     x-on:keydown.escape.window="open = false"
     x-show="open"
@@ -40,24 +40,38 @@
             </div>
             <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">{{ $title }}</h3>
             <p class="text-gray-500 dark:text-gray-400 text-sm mb-6">{{ $message }}</p>
-            <div class="flex gap-3 justify-center">
-                <button
-                    x-on:click="open = false"
-                    class="px-5 py-2.5 min-h-[44px] rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                >
-                    Batal
-                </button>
-                <form method="POST" action="{{ $action }}" class="inline">
-                    @csrf
-                    @method($method)
+            <form method="POST" action="{{ $action }}" class="text-left" x-on:submit="loading = true">
+                @csrf
+                @method($method)
+
+                @if (trim((string) $slot) !== '')
+                    <div class="mb-4">{{ $slot }}</div>
+                @endif
+
+                <div class="flex gap-3 justify-center">
+                    <button
+                        type="button"
+                        x-on:click="open = false"
+                        class="px-5 py-2.5 min-h-[44px] rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    >
+                        {{ __('common.cancel') }}
+                    </button>
                     <button
                         type="submit"
-                        class="px-5 py-2.5 min-h-[44px] rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
+                        :disabled="loading"
+                        class="px-5 py-2.5 min-h-[44px] rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors disabled:opacity-60"
                     >
-                        Ya, Hapus
+                        <span x-show="!loading">{{ __('common.confirm_delete') }}</span>
+                        <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
+                            <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            {{ __('common.loading') }}
+                        </span>
                     </button>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

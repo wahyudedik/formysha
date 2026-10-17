@@ -426,21 +426,25 @@ ForMysha menyediakan:
 
 ### Pricing B2C (Family)
 
-| Paket | Harga | Fitur Utama |
-|-------|-------|-------------|
-| 🟢 **Free** | Rp0 | 1 anak, 10 foto, 500MB storage, timeline, gallery, dokumen |
-| 💗 **Family** | Rp19.000/bulan | 3 anak, 200 foto, 5GB storage, + growth tracking, health records |
-| 💙 **Family Plus** | Rp39.000/bulan | 5 anak, 500 foto, 15GB storage, + calendar, export PDF/ZIP, priority support |
-| ⭐ **Family Pro** | Rp79.000/bulan | 10 anak, unlimited foto, 50GB storage, + custom API, white label, family tree |
+| Paket | Harga | Kapasitas & Fitur Utama |
+|-------|-------|------------------------|
+| 🟢 **Free** | Rp0 | 1 anak, 10 foto, 5 video, 500MB storage, 2 anggota keluarga, 1 export/hari |
+| 💗 **Family** | Rp19.000/bulan | 3 anak, 200 foto, 50 video, 5GB storage, 5 anggota, export, public profile |
+| 💙 **Family Plus** | Rp39.000/bulan | 5 anak, 500 foto, 150 video, 15GB storage, 10 anggota, export — **badge POPULER** |
+| ⭐ **Family Pro** | Rp79.000/bulan | 10 anak, foto/video unlimited, 50GB storage, 20 anggota, export unlimited, custom API, priority support |
+
+> Kapasitas sinkron dengan [`database/seeders/PlanSeeder.php`](database/seeders/PlanSeeder.php) — sumber kebenaran kapasitas & harga.
 
 ### Pricing B2B (Organization)
 
-| Paket | Harga | Fitur Utama |
-|-------|-------|-------------|
-| 🏥 **B2B Basic** | Rp299.000/bulan | 50 profil anak, 5 staf, clinical notes, basic reporting |
-| 🏥 **B2B Growth** | Rp799.000/bulan | 200 profil anak, 20 staf, referrals, advanced analytics, custom branding |
-| 🏥 **B2B Pro** | Rp1.999.000/bulan | 1000 profil anak, unlimited staf, API integration, priority support, white label |
-| 🏢 **Enterprise** | Custom | Custom fitur, dedicated support, SLA, custom deployment |
+| Paket | Harga | Kapasitas & Fitur Utama |
+|-------|-------|------------------------|
+| 🏥 **B2B Basic** | Rp299.000/bulan | 50 profil anak, 5 staf, 500 foto, 100 video, 10GB, clinical notes, tanpa referrals |
+| 🏥 **B2B Growth** | Rp799.000/bulan | 200 profil anak, 20 staf, 2000 foto, 500 video, 50GB, + referrals, analytics |
+| 🏥 **B2B Pro** | Rp1.999.000/bulan | 1000 profil anak, staf unlimited, foto/video unlimited, 200GB, + white label, custom domain, multi-lokasi |
+| 🏢 **Enterprise** | Custom (**Hubungi Kami**) | Kapasitas unlimited, SLA, priority support, dedicated support |
+
+> Enterprise menggunakan **custom pricing** — tombol "Hubungi Kami" menggantikan tombol pembelian langsung.
 
 ### B2B sebagai Gateway B2C
 
@@ -903,7 +907,7 @@ public/favicon.ico   → Favicon legacy
 
 ### Backend
 
-* Laravel 12
+* Laravel 13
 
 ### Frontend
 
@@ -946,6 +950,55 @@ public/favicon.ico   → Favicon legacy
 * Restore
 * Rate Limiting
 * Enkripsi data sensitif
+* Penyimpanan file pengguna di disk privat (UU PDP) + streaming terotorisasi
+
+---
+
+## Catatan Deployment (Production)
+
+Langkah wajib setelah deploy update terbaru:
+
+1. **Migrasi database** — 2 migrasi baru:
+
+   ```bash
+   php artisan migrate
+   ```
+
+   * `2026_10_17_000001_add_is_free_and_audience_to_plans_table` — kolom `is_free` & `audience` pada tabel `plans`
+   * `2026_10_17_190617_make_users_password_nullable_for_oauth_support` — `users.password` menjadi nullable (OAuth)
+
+2. **Sinkronisasi plan** — [`database/seeders/PlanSeeder.php`](database/seeders/PlanSeeder.php) adalah sumber kebenaran kapasitas & harga:
+
+   ```bash
+   php artisan db:seed --class=PlanSeeder
+   ```
+
+   Seeder memakai `firstOrCreate` (tidak menimpa harga/kapasitas plan lama) dan men-backfill kolom `is_free`/`audience` pada plan yang sudah ada. Alternatif manual:
+
+   ```sql
+   UPDATE plans SET is_free = 1, audience = 'family' WHERE slug = 'free';
+   UPDATE plans SET audience = 'family' WHERE slug IN ('family','family-plus','family-pro');
+   UPDATE plans SET audience = 'facility' WHERE slug IN ('b2b-basic','b2b-growth','b2b-pro','enterprise');
+   ```
+
+3. **Migrasi file ke storage privat (UU PDP)** — pindahkan file pengguna lama dari disk `public` ke disk `private`:
+
+   ```bash
+   php artisan storage:migrate-private                 # pindahkan & verifikasi dulu
+   php artisan storage:migrate-private --delete-original   # hapus salinan legacy SETELAH verifikasi
+   ```
+
+   File baru otomatis tersimpan di `storage/app/private` dan di-stream melalui `FileDownloadController`.
+
+4. **Environment variables produksi** — pastikan di `.env` produksi:
+
+   ```dotenv
+   SAAS_ENFORCE_WRITE_ACCESS=true
+   ```
+
+   Default di kode adalah `true` (mode read-only aktif untuk tenant dengan subscription non-aktif); hanya di-set `false` untuk testing (`phpunit.xml`). Lalu `php artisan config:clear` / `php artisan config:cache`.
+
+5. **S3 / MinIO** — disk `private` (file pengguna) menggunakan local filesystem (`storage/app/private`); disk `s3` memakai keys `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, `AWS_BUCKET`, `AWS_URL`, `AWS_ENDPOINT`, `AWS_USE_PATH_STYLE_ENDPOINT` (lihat [`config/filesystems.php`](config/filesystems.php)). Saat menggunakan object storage, jaga agar bucket/prefix bersifat privat (tanpa public read) agar file keluarga tidak dapat diakses langsung tanpa otorisasi. Aset branding tenant (logo/favicon) tetap di disk `public`.
 
 ---
 
@@ -1087,6 +1140,16 @@ public/favicon.ico   → Favicon legacy
 * **Audit Trail** — WHO, WHAT, WHEN, WHERE, WHY, PERMISSION
 * **Updated Pricing** — B2C (Free, Family, Family Plus, Family Pro) + B2B (Basic, Growth, Pro, Enterprise)
 * **Subscription tied to Family/Organization**, bukan individual user
+
+### Phase 26 — Security, Subscription & Limits Hardening ✅
+
+* **Private Storage (UU PDP)** — file pengguna di disk `private`, streaming via `FileDownloadController`, command `storage:migrate-private`
+* **Subscription Correctness** — guard `subscribeTenant()`, verifikasi kepemilikan upload bukti bayar, kolom `is_free`/`audience`
+* **Feature Limits Diperkuat** — `max_videos` & `max_storage_mb` ditegakkan, validasi sebelum file ditulis
+* **Read-only & Suspended Tenant** — middleware `subscription.write` & `tenant.status`, flag `SAAS_ENFORCE_WRITE_ACCESS`
+* **Security & UX Quick Wins** — proteksi open redirect, hapus akun butuh `current_password`, `x-confirm-delete` slot + loading state
+* **Plans Polish** — badge POPULER, Enterprise custom pricing (Hubungi Kami), copy family sharing diperjelas
+* **861 tests, 2106 assertions** — all passing
 
 ---
 

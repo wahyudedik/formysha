@@ -59,4 +59,7 @@ return [
     'dashboard' => 'Dashboard',
     'status' => 'Status',
     'connection' => 'Connection',
+    'tenant_suspended' => 'Your account has been deactivated. Please contact the support team.',
+    'cancel' => 'Cancel',
+    'confirm_delete' => 'Yes, Delete',
 ];

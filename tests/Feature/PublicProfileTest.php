@@ -3,6 +3,7 @@
 use App\Models\Child;
 use App\Models\Timeline;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 it('shows public profile for a child with public enabled', function () {
     $user = User::factory()->create();
@@ -98,7 +99,7 @@ it('displays place of birth when available', function () {
         ->assertSee('Jakarta');
 });
 
-it('displays blood type when available', function () {
+it('does not display blood type on the public profile', function () {
     $user = User::factory()->create();
     $child = Child::factory()->create([
         'user_id' => $user->id,
@@ -108,7 +109,38 @@ it('displays blood type when available', function () {
 
     $this->get('/'.$child->slug)
         ->assertOk()
-        ->assertSee('O+');
+        ->assertDontSee('Gol.')
+        ->assertDontSee('O+');
+});
+
+it('streams the child photo through the restricted public route', function () {
+    Storage::fake('private');
+
+    $user = User::factory()->create();
+    $child = Child::factory()->create([
+        'user_id' => $user->id,
+        'is_public' => true,
+        'photo' => 'children/public-photo.jpg',
+    ]);
+    Storage::disk('private')->put('children/public-photo.jpg', 'image-content');
+
+    $this->get('/public/'.$child->slug.'/photo')
+        ->assertOk();
+});
+
+it('does not stream the photo of a non-public child', function () {
+    Storage::fake('private');
+
+    $user = User::factory()->create();
+    $child = Child::factory()->create([
+        'user_id' => $user->id,
+        'is_public' => false,
+        'photo' => 'children/secret-photo.jpg',
+    ]);
+    Storage::disk('private')->put('children/secret-photo.jpg', 'image-content');
+
+    $this->get('/public/'.$child->slug.'/photo')
+        ->assertNotFound();
 });
 
 it('shows recent timelines when timeline is in public_profile_data', function () {

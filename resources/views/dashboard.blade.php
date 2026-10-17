@@ -58,7 +58,7 @@
                             <!-- Child Photo -->
                             <a href="{{ route('children.show', $child) }}" class="flex-shrink-0">
                                 @if ($child->photo)
-                                    <img src="{{ asset('storage/' . $child->photo) }}" alt="{{ $child->name }}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-soft-md" />
+                                    <img src="{{ route('files.child.photo', $child) }}" alt="{{ $child->name }}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-soft-md" />
                                 @else
                                     <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl {{ $child->gender === 'female' ? 'bg-softPink-100 dark:bg-softPink-950/30' : 'bg-skyBlue-100 dark:bg-skyBlue-950/30' }} flex items-center justify-center text-4xl shadow-soft-md">
                                         {{ $child->gender === 'female' ? '👧' : '👦' }}
@@ -131,7 +131,7 @@
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                             @foreach ($recentMedia as $media)
                                 <div class="aspect-square rounded-2xl overflow-hidden bg-softPink-50 dark:bg-softPink-950/20 border border-softPink-100 dark:border-softPink-900/30">
-                                    <img src="{{ asset('storage/' . $media->file_path) }}"
+                                    <img src="{{ $media->file_url }}"
                                          alt="{{ $media->alt_text ?? $media->file_name }}"
                                          class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                                 </div>

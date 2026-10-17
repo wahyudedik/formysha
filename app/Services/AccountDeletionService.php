@@ -68,12 +68,14 @@ class AccountDeletionService
     {
         $mediaFreed = 0;
 
-        // Hapus file media dari storage
+        // Hapus file media dari storage (private disk + legacy public disk)
         $media = $child->media()->get();
         foreach ($media as $m) {
-            if ($m->file_path && Storage::disk('public')->exists($m->file_path)) {
-                $mediaFreed += Storage::disk('public')->size($m->file_path);
-                Storage::disk('public')->delete($m->file_path);
+            foreach (['private', 'public'] as $disk) {
+                if ($m->file_path && Storage::disk($disk)->exists($m->file_path)) {
+                    $mediaFreed += Storage::disk($disk)->size($m->file_path);
+                    Storage::disk($disk)->delete($m->file_path);
+                }
             }
         }
 
@@ -114,12 +116,14 @@ class AccountDeletionService
         // Hapus semua data child
         $children = $user->children()->get();
         foreach ($children as $child) {
-            // Hapus file media dari storage
+            // Hapus file media dari storage (private disk + legacy public disk)
             $media = $child->media()->get();
             foreach ($media as $m) {
-                if ($m->file_path && Storage::disk('public')->exists($m->file_path)) {
-                    $totalMediaFreed += Storage::disk('public')->size($m->file_path);
-                    Storage::disk('public')->delete($m->file_path);
+                foreach (['private', 'public'] as $disk) {
+                    if ($m->file_path && Storage::disk($disk)->exists($m->file_path)) {
+                        $totalMediaFreed += Storage::disk($disk)->size($m->file_path);
+                        Storage::disk($disk)->delete($m->file_path);
+                    }
                 }
             }
 

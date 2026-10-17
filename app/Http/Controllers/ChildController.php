@@ -9,6 +9,7 @@ use App\Services\AccountDeletionService;
 use App\Services\TenantService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -46,7 +47,7 @@ class ChildController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('children', 'public');
+            $data['photo'] = $request->file('photo')->store('children', 'private');
         }
 
         // Set tenant_id from current tenant for multi-tenant mode
@@ -92,12 +93,13 @@ class ChildController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
+            // Delete old photo if exists (private disk + legacy public copy)
             if ($child->photo) {
+                Storage::disk('private')->delete($child->photo);
                 Storage::disk('public')->delete($child->photo);
             }
 
-            $data['photo'] = $request->file('photo')->store('children', 'public');
+            $data['photo'] = $request->file('photo')->store('children', 'private');
         }
 
         $child->update($data);
@@ -108,9 +110,25 @@ class ChildController extends Controller
 
     /**
      * Remove the specified child from storage.
+     *
+     * Aksi destruktif memerlukan verifikasi ulang kata sandi (konsisten dengan
+     * ErasureController). Pengguna OAuth tanpa kata sandi (users.password null)
+     * melewati verifikasi agar tidak terkunci.
      */
     public function destroy(Request $request, Child $child, AccountDeletionService $deletionService): RedirectResponse
     {
+        $user = $request->user();
+
+        if ($user->password !== null) {
+            $password = $request->input('current_password');
+
+            if (! is_string($password) || $password === '' || ! Hash::check($password, $user->password)) {
+                return back()
+                    ->withErrors(['current_password' => __('children.password_incorrect')])
+                    ->with('error', __('children.password_incorrect'));
+            }
+        }
+
         $deletionService->deleteChildData($child);
 
         return redirect()->route('children.index')

@@ -8,7 +8,7 @@
 ])
 
 @php
-    $mediaSrc = $src ?? ($media ? asset('storage/' . $media->file_path) : '');
+    $mediaSrc = $src ?? ($media ? ($media->file_url ?? '') : '');
     $mediaType = $type ?? ($media ? $media->file_type : 'photo');
     $mediaName = $name ?? ($media ? $media->file_name : '');
     $mediaSize = $size ?? ($media ? $media->formatted_size : '');

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 
 /**
@@ -23,6 +24,8 @@ use Illuminate\Support\Str;
  * @property int $max_export_per_day
  * @property array|null $features
  * @property bool $is_active
+ * @property bool $is_free
+ * @property string $audience
  * @property int $sort_order
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -31,6 +34,21 @@ use Illuminate\Support\Str;
 class Plan extends Model
 {
     use SoftDeletes;
+
+    /** Audience untuk plan B2C (keluarga). */
+    public const AUDIENCE_FAMILY = 'family';
+
+    /** Audience untuk plan B2B (fasilitas/organisasi). */
+    public const AUDIENCE_FACILITY = 'facility';
+
+    /**
+     * Slug plan B2C yang ditandai sebagai rekomendasi utama (badge POPULER).
+     *
+     * Penandaan dilakukan tanpa migration baru — cukup bandingkan slug
+     * di view/helper isPopular(). Ubah konstanta ini jika rekomendasi
+     * utama berpindah ke paket lain.
+     */
+    public const POPULAR_SLUG = 'family-plus';
 
     protected $keyType = 'string';
 
@@ -67,6 +85,8 @@ class Plan extends Model
         'max_export_per_day',
         'features',
         'is_active',
+        'is_free',
+        'audience',
         'sort_order',
     ];
 
@@ -88,8 +108,101 @@ class Plan extends Model
             'max_export_per_day' => 'integer',
             'features' => 'array',
             'is_active' => 'boolean',
+            'is_free' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    /**
+     * Apakah plan ini bertipe custom pricing (harga Rp0 tetapi bukan plan gratis)?
+     *
+     * Plan custom pricing tidak bisa diaktifkan otomatis — harus melalui
+     * kesepakatan manual dengan tim ForMysha.
+     */
+    public function isCustomPricing(): bool
+    {
+        return $this->price_monthly === 0 && ! $this->is_free;
+    }
+
+    /**
+     * Apakah plan ini ditujukan untuk keluarga (B2C)?
+     */
+    public function isForFamilies(): bool
+    {
+        return $this->audience === self::AUDIENCE_FAMILY;
+    }
+
+    /**
+     * Apakah plan ini ditujukan untuk fasilitas/organisasi (B2B)?
+     */
+    public function isForFacilities(): bool
+    {
+        return $this->audience === self::AUDIENCE_FACILITY;
+    }
+
+    /**
+     * Apakah plan ini merupakan rekomendasi utama (badge POPULER)?
+     *
+     * Hanya plan B2C (family) dengan slug POPULAR_SLUG yang ditandai.
+     */
+    public function isPopular(): bool
+    {
+        return $this->isForFamilies() && $this->slug === self::POPULAR_SLUG;
+    }
+
+    /**
+     * Label manusiawi untuk satu key fitur (mis. "timeline" → "Timeline").
+     *
+     * Mengambil terjemahan dari limits.features.{key}; jika belum ada,
+     * jatuh ke Str::headline agar tetap terbaca.
+     */
+    public function featureLabel(string $key): string
+    {
+        $translationKey = 'limits.features.'.$key;
+
+        return Lang::has($translationKey) ? __($translationKey) : Str::headline($key);
+    }
+
+    /**
+     * Render kolom features (JSON campuran: nama fitur bernilai string
+     * pada index numerik + pasangan key-value untuk limit/flag) menjadi
+     * daftar label manusiawi siap tampil.
+     *
+     * Nilai unlimited (null atau -1) → "Tak terbatas".
+     * Boolean false → "… — Tidak termasuk".
+     * Angka → "… : 5".
+     *
+     * @return array<int, string>
+     */
+    public function featureLabels(): array
+    {
+        $labels = [];
+
+        foreach ($this->features ?? [] as $key => $value) {
+            // Item fitur bernilai string pada index numerik: ['timeline', 'diary', ...]
+            if (is_int($key)) {
+                if (is_string($value) && $value !== '') {
+                    $labels[] = $this->featureLabel($value);
+                }
+
+                continue;
+            }
+
+            // Pasangan key-value: 'max_staff' => 5, 'public_profile' => false, dll.
+            $label = $this->featureLabel($key);
+
+            if (is_bool($value)) {
+                $labels[] = $value ? $label : $label.' — '.__('limits.not_included');
+            } elseif ($value === null || $value === -1) {
+                $labels[] = $label.' — '.__('limits.unlimited');
+            } elseif (is_numeric($value)) {
+                $labels[] = $label.': '.number_format((float) $value);
+            } else {
+                $labels[] = $label.' — '.$value;
+            }
+        }
+
+        return $labels;
     }
 
     /**

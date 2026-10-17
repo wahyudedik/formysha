@@ -192,3 +192,22 @@ it('deletes a timeline entry', function () {
 
     $this->assertDatabaseMissing('timelines', ['id' => $timeline->id]);
 });
+
+it('shows flash message via global toast without duplicate inline banner', function () {
+    $user = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->post(route('timeline.store', $child), [
+            'title' => 'Hari Pertama Sekolah',
+            'description' => 'Hari yang sangat berkesan',
+            'event_date' => '2026-08-07',
+        ])
+        ->assertRedirect(route('timeline.index', $child));
+
+    $this->actingAs($user)
+        ->get(route('timeline.index', $child))
+        ->assertOk()
+        ->assertSee(__('status.timeline_created'))
+        ->assertDontSee('setTimeout(() => show = false, 3000)', false);
+});

@@ -8,6 +8,8 @@ use App\Http\Middleware\EnsureFamilyPermission;
 use App\Http\Middleware\EnsureFeatureLimit;
 use App\Http\Middleware\EnsureRole;
 use App\Http\Middleware\EnsureStaffRole;
+use App\Http\Middleware\EnsureTenantStatus;
+use App\Http\Middleware\EnsureWriteAccess;
 use App\Http\Middleware\ResolveTenant;
 use App\Http\Middleware\ResolveTenantByDomain;
 use App\Http\Middleware\SetLocale;
@@ -36,6 +38,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'facility.access' => EnsureFacilityAccess::class,
             'staff.role' => EnsureStaffRole::class,
             'connection.permission' => EnsureConnectionPermission::class,
+            'subscription.write' => EnsureWriteAccess::class,
+            'tenant.status' => EnsureTenantStatus::class,
         ]);
 
         $middleware->web(append: [

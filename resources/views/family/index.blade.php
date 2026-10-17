@@ -28,12 +28,23 @@
                 </div>
             @endif
 
+            {{-- Info: anggota keluarga adalah catatan hubungan, bukan akses login --}}
+            <div class="mb-6 rounded-2xl bg-skyBlue-50 dark:bg-skyBlue-950/30 border border-skyBlue-200 dark:border-skyBlue-900/40 p-4 sm:p-5" role="note">
+                <div class="flex items-start gap-3">
+                    <span class="text-xl leading-none">ℹ️</span>
+                    <div>
+                        <h3 class="text-sm font-bold text-skyBlue-700 dark:text-skyBlue-300 mb-1">{{ __('family.info_title') }}</h3>
+                        <p class="text-sm text-skyBlue-700/90 dark:text-skyBlue-300/90 leading-relaxed">{{ __('family.info_description') }}</p>
+                    </div>
+                </div>
+            </div>
+
             @if ($familyMembers->isEmpty())
                 <!-- Empty State -->
                 <div class="text-center py-16">
                     <div class="text-6xl mb-4">👨‍👩‍👧‍👦</div>
                     <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ __('Belum Ada Anggota Keluarga') }}</h3>
-                    <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('Tambahkan anggota keluarga untuk ') . ($child->nickname ?? $child->name) . '.' }}</p>
+                    <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('family.empty_desc', ['name' => $child->nickname ?? $child->name]) }}</p>
                     <a href="{{ route('family.create', $child) }}" class="btn-primary min-h-[44px]">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -49,7 +60,7 @@
                             <!-- Avatar -->
                             <div class="shrink-0">
                                 @if ($member->photo)
-                                    <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->name }}" class="w-14 h-14 rounded-2xl object-cover shadow-soft" />
+                                    <img src="{{ route('files.family.photo', [$child, $member]) }}" alt="{{ $member->name }}" class="w-14 h-14 rounded-2xl object-cover shadow-soft" />
                                 @else
                                     <div class="w-14 h-14 rounded-2xl bg-lavender-100 dark:bg-lavender-950/30 flex items-center justify-center text-2xl shadow-soft">
                                         {{ match($member->relationship) {

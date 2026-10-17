@@ -71,16 +71,16 @@
                             <!-- Cover Photo / Grid Preview -->
                             <div class="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-lavender-50 to-softPink-50 dark:from-lavender-950/30 dark:to-softPink-950/30 mb-4">
                                 @if ($album->cover_photo)
-                                    <img src="{{ asset('storage/' . $album->cover_photo) }}" alt="{{ $album->name }}" class="w-full h-full object-cover" loading="lazy" />
+                                    <img src="{{ route('files.album.cover', [$child, $album]) }}" alt="{{ $album->name }}" class="w-full h-full object-cover" loading="lazy" />
                                 @elseif ($album->media->isNotEmpty())
                                     {{-- Grid 2x2 photo preview --}}
                                     <div class="w-full h-full grid grid-cols-2 grid-rows-2 gap-0.5">
                                         @foreach ($album->media as $item)
                                             <div class="overflow-hidden bg-gray-100 dark:bg-gray-700">
-                                                @if ($item->thumbnail_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($item->thumbnail_path))
-                                                    <img src="{{ asset('storage/' . $item->thumbnail_path) }}" alt="" class="w-full h-full object-cover" loading="lazy" />
-                                                @elseif (\Illuminate\Support\Facades\Storage::disk('public')->exists($item->file_path))
-                                                    <img src="{{ asset('storage/' . $item->file_path) }}" alt="" class="w-full h-full object-cover" loading="lazy" />
+                                                @if ($item->thumbnail_path && \Illuminate\Support\Facades\Storage::disk('private')->exists($item->thumbnail_path))
+                                                    <img src="{{ $item->thumbnail_url }}" alt="" class="w-full h-full object-cover" loading="lazy" />
+                                                @elseif (\Illuminate\Support\Facades\Storage::disk('private')->exists($item->file_path))
+                                                    <img src="{{ $item->file_url }}" alt="" class="w-full h-full object-cover" loading="lazy" />
                                                 @else
                                                     <div class="w-full h-full flex items-center justify-center">
                                                         <span class="text-lg">📸</span>

@@ -65,6 +65,7 @@ describe('Subscription Management', function () {
             'name' => 'Gratis',
             'slug' => 'free',
             'price_monthly' => 0,
+            'is_free' => true,
             'max_children' => 1,
             'max_photos' => 50,
             'max_videos' => 10,
@@ -252,8 +253,8 @@ describe('Subscription Management', function () {
             ->assertSee('Premium')
             ->assertSee('99.000')
             ->assertSee('Pencarian')
-            ->assertSee('Harga/Bulan')
-            ->assertSee('Penyimpanan');
+            ->assertSee(__('subscription.price_per_month'))
+            ->assertSee(__('subscription.storage'));
     });
 
     it('prevents subscribing to inactive plan', function () {

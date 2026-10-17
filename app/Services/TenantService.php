@@ -209,7 +209,7 @@ class TenantService
             'photos', 'upload_photo' => $tenant->canUploadPhoto(),
             'videos', 'upload_video' => $tenant->canUploadVideo(),
             'family_members' => $tenant->canAddFamilyMember(),
-            'storage' => $tenant->getStorageUsed() < $tenant->getStorageLimit(),
+            'storage' => $tenant->canUploadStorage(),
             // B2B features
             'staff' => $tenant->canAddStaff(),
             'patients' => $tenant->canAddPatientLink(),

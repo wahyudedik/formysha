@@ -113,8 +113,8 @@ class ImageOptimizationService
             imagedestroy($sourceImage);
 
             // Get optimized file size
-            $optimizedSize = Storage::disk('public')->exists($fullPath)
-                ? Storage::disk('public')->size($fullPath)
+            $optimizedSize = Storage::disk('private')->exists($fullPath)
+                ? Storage::disk('private')->size($fullPath)
                 : $originalSize;
 
             return [
@@ -168,7 +168,7 @@ class ImageOptimizationService
      */
     private function storeOriginal(UploadedFile $file, string $directory): array
     {
-        $filePath = $file->store($directory, 'public');
+        $filePath = $file->store($directory, 'private');
         $fileSize = $file->getSize();
 
         return [
@@ -242,7 +242,7 @@ class ImageOptimizationService
         $this->saveImageToDisk($resizedImage, $sourceType, $tmpPath);
 
         $contents = file_get_contents($tmpPath);
-        Storage::disk('public')->put($fullPath, $contents);
+        Storage::disk('private')->put($fullPath, $contents);
 
         @unlink($tmpPath);
         imagedestroy($resizedImage);

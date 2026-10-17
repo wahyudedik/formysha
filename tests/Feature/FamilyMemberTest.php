@@ -300,4 +300,25 @@ describe('Family Member Management', function () {
             ->assertOk()
             ->assertSee('Admin Penuh');
     });
+
+    it('shows honest info banner about family member records on index', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->get(route('family.index', $child))
+            ->assertOk()
+            ->assertSee(__('family.info_title'))
+            ->assertSee(__('family.info_description'));
+    });
+
+    it('shows relationship-record hint on create form', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->get(route('family.create', $child))
+            ->assertOk()
+            ->assertSee(__('family.access_hint'));
+    });
 });

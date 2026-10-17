@@ -53,7 +53,7 @@
                 <div class="bg-gradient-to-br from-softPink-50 via-cream-50 to-lavender-50 dark:from-softPink-950/30 dark:via-gray-800 dark:to-lavender-950/30 p-4 sm:p-6 lg:p-8">
                     <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
                         @if ($child->photo)
-                            <img src="{{ asset('storage/' . $child->photo) }}" alt="{{ $child->name }}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-soft-md" />
+                            <img src="{{ route('files.child.photo', $child) }}" alt="{{ $child->name }}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-soft-md" />
                         @else
                             <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl {{ $child->gender === 'female' ? 'bg-softPink-100 dark:bg-softPink-950/30' : 'bg-skyBlue-100 dark:bg-skyBlue-950/30' }} flex items-center justify-center text-3xl sm:text-4xl shadow-soft-md">
                                 {{ $child->gender === 'female' ? '👧' : '👦' }}
@@ -235,10 +235,28 @@
 
                 <x-confirm-delete
                     id="delete-child-{{ $child->id }}"
-                    title="{{ __('Hapus Profil Anak') }}"
-                    message="{{ __('Apakah Anda yakin ingin menghapus profil ' . $child->name . '? Semua data akan hilang secara permanen. Tindakan ini tidak dapat dibatalkan.') }}"
+                    :title="__('children.delete_title')"
+                    :message="__('children.delete_confirm_named', ['name' => $child->name])"
                     action="{{ route('children.destroy', $child) }}"
-                />
+                >
+                    {{-- Verifikasi ulang kata sandi untuk aksi destruktif (konsisten dengan ErasureController) --}}
+                    <div>
+                        <label for="delete-child-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            {{ __('children.password_label') }}
+                        </label>
+                        <input
+                            type="password"
+                            id="delete-child-password"
+                            name="current_password"
+                            autocomplete="current-password"
+                            placeholder="{{ __('children.password_placeholder') }}"
+                            class="block w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:ring-softPink-500 focus:border-softPink-500 min-h-[44px]"
+                        >
+                        @error('current_password')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </x-confirm-delete>
             </div>
                 </div>
             </div>

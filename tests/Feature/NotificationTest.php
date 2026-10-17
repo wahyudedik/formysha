@@ -142,4 +142,58 @@ describe('Notification Module', function () {
         expect($warning->type_label)->toBe('Peringatan');
         expect($success->type_label)->toBe('Berhasil');
     });
+
+    it('redirects internal relative action_url to the internal path', function () {
+        $user = User::factory()->create();
+        $notification = Notification::factory()->unread()
+            ->withActionUrl('/children')
+            ->create(['user_id' => $user->id]);
+
+        actingAs($user)->post(route('notifications.markAsRead', $notification))
+            ->assertRedirect('/children');
+
+        expect($notification->refresh()->is_read)->toBeTrue();
+    });
+
+    it('redirects external action_url to dashboard to prevent open redirect', function () {
+        $user = User::factory()->create();
+        $notification = Notification::factory()->unread()
+            ->withActionUrl('https://evil.com')
+            ->create(['user_id' => $user->id]);
+
+        actingAs($user)->post(route('notifications.markAsRead', $notification))
+            ->assertRedirect(route('dashboard'));
+
+        expect($notification->refresh()->is_read)->toBeTrue();
+    });
+
+    it('redirects protocol-relative external action_url to dashboard', function () {
+        $user = User::factory()->create();
+        $notification = Notification::factory()->unread()
+            ->withActionUrl('//evil.com/phish')
+            ->create(['user_id' => $user->id]);
+
+        actingAs($user)->post(route('notifications.markAsRead', $notification))
+            ->assertRedirect(route('dashboard'));
+    });
+
+    it('allows absolute action_url when host matches app url', function () {
+        config(['app.url' => 'https://formysha.my.id']);
+
+        $user = User::factory()->create();
+        $notification = Notification::factory()->unread()
+            ->withActionUrl('https://formysha.my.id/children')
+            ->create(['user_id' => $user->id]);
+
+        actingAs($user)->post(route('notifications.markAsRead', $notification))
+            ->assertRedirect('https://formysha.my.id/children');
+    });
+
+    it('keeps redirect to notifications list when action_url is null', function () {
+        $user = User::factory()->create();
+        $notification = Notification::factory()->unread()->create(['user_id' => $user->id]);
+
+        actingAs($user)->post(route('notifications.markAsRead', $notification))
+            ->assertRedirect(route('notifications.index'));
+    });
 });

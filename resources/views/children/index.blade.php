@@ -43,7 +43,7 @@
                                 <!-- Avatar -->
                                 <div class="shrink-0">
                                     @if ($child->photo)
-                                        <img src="{{ asset('storage/' . $child->photo) }}" alt="{{ $child->name }}" class="w-16 h-16 rounded-2xl object-cover shadow-soft" />
+                                        <img src="{{ route('files.child.photo', $child) }}" alt="{{ $child->name }}" class="w-16 h-16 rounded-2xl object-cover shadow-soft" />
                                     @else
                                         <div class="w-16 h-16 rounded-2xl {{ $child->gender === 'female' ? 'bg-softPink-100 dark:bg-softPink-950/30' : 'bg-skyBlue-100 dark:bg-skyBlue-950/30' }} flex items-center justify-center text-2xl shadow-soft">
                                             {{ $child->gender === 'female' ? '👧' : '👦' }}

@@ -161,13 +161,23 @@ return [
     | Subscription Settings
     |--------------------------------------------------------------------------
     |
-    | Pengaturan terkait langganan seperti masa trial dan grace period.
+    | Pengaturan terkait langganan seperti grace period, reminder,
+    | dan enforcement read-only untuk subscription tidak aktif.
     |
     */
 
     'subscription' => [
-        'trial_days' => 14,
-        'grace_period_days' => 3,
+        'grace_period_days' => 7,
+        'reminder_days' => 7,
+
+        /*
+         * Ketika true, fitur TULIS (tambah/edit/hapus) pada modul konten
+         * diblokir jika subscription tenant tidak aktif — pengguna tetap
+         * bisa membaca & mengunduh data, serta mengelola langganan/pembayaran.
+         * Default true untuk production; di-set false di phpunit.xml untuk
+         * testing agar suite existing tidak terblokir.
+         */
+        'enforce_write_access' => env('SAAS_ENFORCE_WRITE_ACCESS', true),
     ],
 
     /*

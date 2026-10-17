@@ -66,6 +66,46 @@ class Media extends Model
     }
 
     /**
+     * Resolve the child that owns this media through its mediable chain.
+     */
+    public function resolveChild(): ?Child
+    {
+        if ($this->mediable_type === Child::class) {
+            return $this->mediable;
+        }
+
+        return $this->mediable?->child;
+    }
+
+    /**
+     * Authenticated download URL served from the private disk.
+     */
+    public function getFileUrlAttribute(): ?string
+    {
+        if (! $this->file_path) {
+            return null;
+        }
+
+        $child = $this->resolveChild();
+
+        return $child ? route('files.media.file', [$child, $this]) : null;
+    }
+
+    /**
+     * Authenticated thumbnail URL served from the private disk (falls back to the full file).
+     */
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if (! $this->thumbnail_path) {
+            return $this->file_url;
+        }
+
+        $child = $this->resolveChild();
+
+        return $child ? route('files.media.thumbnail', [$child, $this]) : null;
+    }
+
+    /**
      * Get the file type label in Indonesian.
      */
     public function getFileTypeLabelAttribute(): string

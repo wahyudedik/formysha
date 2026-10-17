@@ -12,7 +12,7 @@
     <meta property="og:description" content="Profil publik {{ $child->nickname ?? $child->name }} di ForMysha — Digital Life Book">
     <meta property="og:url" content="{{ url()->current() }}">
     @if($child->photo)
-        <meta property="og:image" content="{{ asset('storage/'.$child->photo) }}">
+        <meta property="og:image" content="{{ route('files.public.photo', $child->slug) }}">
     @endif
 
     <!-- Twitter Card -->
@@ -20,7 +20,7 @@
     <meta name="twitter:title" content="{{ $child->nickname ?? $child->name }} — ForMysha">
     <meta name="twitter:description" content="Profil publik {{ $child->nickname ?? $child->name }} di ForMysha — Digital Life Book">
     @if($child->photo)
-        <meta name="twitter:image" content="{{ asset('storage/'.$child->photo) }}">
+        <meta name="twitter:image" content="{{ route('files.public.photo', $child->slug) }}">
     @endif
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -63,7 +63,7 @@
             {{-- Photo --}}
             <div class="mb-6">
                 @if($child->photo)
-                    <img src="{{ asset('storage/'.$child->photo) }}"
+                    <img src="{{ route('files.public.photo', $child->slug) }}"
                          alt="{{ $child->nickname ?? $child->name }}"
                          class="w-32 h-32 rounded-full object-cover mx-auto border-4 border-white dark:border-gray-700 shadow-soft">
                 @else
@@ -105,11 +105,6 @@
                 @if($child->gender)
                     <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-softPink-100 dark:bg-softPink-950/30 text-softPink-500 dark:text-softPink-400 text-sm font-medium">
                         {{ $child->gender === 'female' ? '👧 Perempuan' : '👦 Laki-laki' }}
-                    </span>
-                @endif
-                @if($child->blood_type)
-                    <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-softPink-100 dark:bg-softPink-950/30 text-red-500 dark:text-red-400 text-sm font-medium">
-                        🩸 Gol. {{ $child->blood_type }}
                     </span>
                 @endif
             </div>
@@ -155,7 +150,7 @@
                     @forelse($child->albums->take(6) as $album)
                         <div class="aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-peach-100 to-warmYellow-100 dark:from-peach-950/30 dark:to-warmYellow-950/30 flex items-center justify-center">
                             @if($album->cover_photo)
-                                <img src="{{ asset('storage/'.$album->cover_photo) }}"
+                                <img src="{{ route('files.public.album-cover', [$child->slug, $album->id]) }}"
                                      alt="{{ $album->name }}"
                                      class="w-full h-full object-cover">
                             @else

@@ -155,14 +155,35 @@ class Tenant extends Model
     }
 
     /**
-     * Get all media files through children (polymorphic relationship).
+     * Get all media files owned by this tenant's children (polymorphic).
+     *
+     * Covers media attached directly to a child as well as media attached
+     * to the child's timelines, albums, and diaries, so feature-limit
+     * counting cannot be bypassed through nested uploads.
      */
     public function media()
     {
         $childIds = $this->children()->pluck('children.id');
 
-        return Media::where('mediable_type', (new Child)->getMorphClass())
-            ->whereIn('mediable_id', $childIds);
+        $timelineIds = Timeline::whereIn('child_id', $childIds)->pluck('id');
+        $albumIds = Album::whereIn('child_id', $childIds)->pluck('id');
+        $diaryIds = Diary::whereIn('child_id', $childIds)->pluck('id');
+
+        return Media::where(function ($query) use ($childIds, $timelineIds, $albumIds, $diaryIds) {
+            $query->where(function ($q) use ($childIds) {
+                $q->where('mediable_type', (new Child)->getMorphClass())
+                    ->whereIn('mediable_id', $childIds);
+            })->orWhere(function ($q) use ($timelineIds) {
+                $q->where('mediable_type', (new Timeline)->getMorphClass())
+                    ->whereIn('mediable_id', $timelineIds);
+            })->orWhere(function ($q) use ($albumIds) {
+                $q->where('mediable_type', (new Album)->getMorphClass())
+                    ->whereIn('mediable_id', $albumIds);
+            })->orWhere(function ($q) use ($diaryIds) {
+                $q->where('mediable_type', (new Diary)->getMorphClass())
+                    ->whereIn('mediable_id', $diaryIds);
+            });
+        });
     }
 
     /**
@@ -355,17 +376,29 @@ class Tenant extends Model
      */
     public function canUploadPhoto(): bool
     {
+        return $this->canUploadAdditionalPhotos(1);
+    }
+
+    /**
+     * Check if the tenant can upload N more photos.
+     *
+     * A limit of -1 or null means unlimited.
+     */
+    public function canUploadAdditionalPhotos(int $count = 1): bool
+    {
         $plan = $this->activeSubscription?->plan;
 
         if (! $plan) {
             return false;
         }
 
-        if ($plan->max_photos === -1) {
+        $maxPhotos = $plan->max_photos;
+
+        if ($maxPhotos === null || $maxPhotos === -1) {
             return true;
         }
 
-        return $this->getPhotoCount() < $plan->max_photos;
+        return $this->getPhotoCount() + $count <= (int) $maxPhotos;
     }
 
     /**
@@ -391,23 +424,61 @@ class Tenant extends Model
      */
     public function canUploadVideo(): bool
     {
+        return $this->canUploadAdditionalVideos(1);
+    }
+
+    /**
+     * Check if the tenant can upload N more videos.
+     *
+     * A limit of -1 or null means unlimited.
+     */
+    public function canUploadAdditionalVideos(int $count = 1): bool
+    {
         $plan = $this->activeSubscription?->plan;
 
         if (! $plan) {
             return false;
         }
 
-        if ($plan->max_videos === -1) {
+        $maxVideos = $plan->max_videos;
+
+        if ($maxVideos === null || $maxVideos === -1) {
             return true;
         }
 
-        return $this->getVideoCount() < $plan->max_videos;
+        return $this->getVideoCount() + $count <= (int) $maxVideos;
+    }
+
+    /**
+     * Check if the tenant can store N more bytes of media.
+     *
+     * A limit of -1 or null means unlimited.
+     */
+    public function canUploadStorage(int $additionalBytes = 0): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+
+        if (! $plan) {
+            return false;
+        }
+
+        $maxStorageMb = $plan->max_storage_mb;
+
+        if ($maxStorageMb === null || $maxStorageMb === -1) {
+            return true;
+        }
+
+        $limitBytes = (int) $maxStorageMb * 1024 * 1024;
+
+        return $this->getStorageUsed() + $additionalBytes <= $limitBytes;
     }
 
     // ─── B2B Feature Limits ─────────────────────────────────────
 
     /**
      * Check if the tenant can add another staff member.
+     *
+     * A missing or -1 limit in the plan features means unlimited.
      */
     public function canAddStaff(): bool
     {
@@ -417,18 +488,19 @@ class Tenant extends Model
             return false;
         }
 
-        /** @var int $maxStaff */
         $maxStaff = $plan->getFeatureLimit('max_staff');
 
-        if ($maxStaff === -1) {
+        if ($maxStaff === null || $maxStaff === -1) {
             return true;
         }
 
-        return $this->staff()->count() < $maxStaff;
+        return $this->staff()->count() < (int) $maxStaff;
     }
 
     /**
      * Check if the tenant can add another patient link.
+     *
+     * A missing or -1 limit in the plan features means unlimited.
      */
     public function canAddPatientLink(): bool
     {
@@ -438,18 +510,19 @@ class Tenant extends Model
             return false;
         }
 
-        /** @var int $maxPatients */
         $maxPatients = $plan->getFeatureLimit('max_patients');
 
-        if ($maxPatients === -1) {
+        if ($maxPatients === null || $maxPatients === -1) {
             return true;
         }
 
-        return $this->patientLinks()->count() < $maxPatients;
+        return $this->patientLinks()->count() < (int) $maxPatients;
     }
 
     /**
      * Check if the tenant can create a clinical note.
+     *
+     * A missing or -1 limit in the plan features means unlimited.
      */
     public function canCreateClinicalNote(): bool
     {
@@ -459,14 +532,13 @@ class Tenant extends Model
             return false;
         }
 
-        /** @var int $maxNotes */
         $maxNotes = $plan->getFeatureLimit('max_clinical_notes');
 
-        if ($maxNotes === -1) {
+        if ($maxNotes === null || $maxNotes === -1) {
             return true;
         }
 
-        return $this->clinicalNotes()->count() < $maxNotes;
+        return $this->clinicalNotes()->count() < (int) $maxNotes;
     }
 
     /**

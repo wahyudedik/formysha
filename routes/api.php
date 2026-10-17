@@ -86,20 +86,26 @@ Route::prefix('v1')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::middleware('throttle:api')->group(function () {
+    // tenant.status blocks access entirely when the tenant is suspended (403);
+    // subscription/billing routes are exempt so users can always manage payments
+    Route::middleware(['auth:sanctum', 'tenant.status'])->group(function () {
+        // subscription.write blocks write operations (POST/PUT/DELETE) on
+        // content modules while the tenant's subscription is inactive;
+        // GET (read/download) always passes. Profile, auth, notifications,
+        // search and dashboard routes are exempt via withoutMiddleware.
+        Route::middleware(['throttle:api', 'subscription.write'])->group(function () {
             // Profile
             Route::get('/me', [AuthController::class, 'me'])->name('api.me');
-            Route::put('/me', [AuthController::class, 'updateProfile'])->name('api.me.update');
+            Route::put('/me', [AuthController::class, 'updateProfile'])->name('api.me.update')->withoutMiddleware('subscription.write');
 
             // Auth
-            Route::post('/auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout');
-            Route::put('/auth/password', [AuthController::class, 'updatePassword'])->name('api.auth.password');
-            Route::delete('/auth/account', [AuthController::class, 'destroy'])->name('api.auth.destroy');
+            Route::post('/auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout')->withoutMiddleware('subscription.write');
+            Route::put('/auth/password', [AuthController::class, 'updatePassword'])->name('api.auth.password')->withoutMiddleware('subscription.write');
+            Route::delete('/auth/account', [AuthController::class, 'destroy'])->name('api.auth.destroy')->withoutMiddleware('subscription.write');
 
             // Children
             Route::get('/children', [ChildController::class, 'index'])->name('api.children.index');
-            Route::post('/children', [ChildController::class, 'store'])->name('api.children.store');
+            Route::post('/children', [ChildController::class, 'store'])->middleware('feature.limit:children')->name('api.children.store');
             Route::get('/children/{child}', [ChildController::class, 'show'])->name('api.children.show');
             Route::put('/children/{child}', [ChildController::class, 'update'])->name('api.children.update');
             Route::delete('/children/{child}', [ChildController::class, 'destroy'])->name('api.children.destroy');
@@ -161,7 +167,7 @@ Route::prefix('v1')->group(function () {
 
             // Family Members
             Route::get('/children/{child}/family-members', [FamilyMemberController::class, 'index'])->name('api.family-members.index');
-            Route::post('/children/{child}/family-members', [FamilyMemberController::class, 'store'])->name('api.family-members.store');
+            Route::post('/children/{child}/family-members', [FamilyMemberController::class, 'store'])->middleware('feature.limit:family_members')->name('api.family-members.store');
             Route::get('/children/{child}/family-members/{familyMember}', [FamilyMemberController::class, 'show'])->name('api.family-members.show');
             Route::put('/children/{child}/family-members/{familyMember}', [FamilyMemberController::class, 'update'])->name('api.family-members.update');
             Route::delete('/children/{child}/family-members/{familyMember}', [FamilyMemberController::class, 'destroy'])->name('api.family-members.destroy');
@@ -177,11 +183,11 @@ Route::prefix('v1')->group(function () {
             Route::post('/children/{child}/connections/{connection}/revoke', [ConnectionApiController::class, 'revoke'])->name('api.connections.revoke');
             Route::get('/children/{child}/connections/{connection}/activities', [ConnectionApiController::class, 'activities'])->name('api.connections.activities');
 
-            // Notifications
+            // Notifications — not a content module; marking as read is never blocked
             Route::get('/notifications', [NotificationApiController::class, 'index'])->name('api.notifications.index');
             Route::get('/notifications/unread-count', [NotificationApiController::class, 'unreadCount'])->name('api.notifications.unread-count');
-            Route::post('/notifications/{notification}/read', [NotificationApiController::class, 'markAsRead'])->name('api.notifications.read');
-            Route::post('/notifications/read-all', [NotificationApiController::class, 'markAllAsRead'])->name('api.notifications.read-all');
+            Route::post('/notifications/{notification}/read', [NotificationApiController::class, 'markAsRead'])->name('api.notifications.read')->withoutMiddleware('subscription.write');
+            Route::post('/notifications/read-all', [NotificationApiController::class, 'markAllAsRead'])->name('api.notifications.read-all')->withoutMiddleware('subscription.write');
 
             // Search
             Route::get('/search', [SearchController::class, 'index'])->name('api.search');
@@ -236,7 +242,7 @@ Route::prefix('v1')->group(function () {
         |--------------------------------------------------------------------------
         */
 
-        Route::prefix('subscription')->group(function () {
+        Route::prefix('subscription')->withoutMiddleware('tenant.status')->group(function () {
             Route::get('/current', [SubscriptionApiController::class, 'current'])->name('api.subscription.current');
             Route::get('/history', [SubscriptionApiController::class, 'history'])->name('api.subscription.history');
             Route::post('/subscribe/{plan}', [SubscriptionApiController::class, 'subscribe'])->name('api.subscription.subscribe');

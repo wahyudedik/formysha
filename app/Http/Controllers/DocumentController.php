@@ -9,6 +9,7 @@ use App\Models\Child;
 use App\Models\Document;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class DocumentController extends Controller
@@ -72,7 +73,7 @@ class DocumentController extends Controller
         // Handle file upload
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $validated['file_path'] = $file->store('documents', 'public');
+            $validated['file_path'] = $file->store('documents', 'private');
             $validated['file_name'] = $file->getClientOriginalName();
             $validated['file_size'] = $file->getSize();
         }
@@ -121,7 +122,14 @@ class DocumentController extends Controller
         // Handle file upload
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $validated['file_path'] = $file->store('documents', 'public');
+
+            // Delete old file if exists (private disk + legacy public copy)
+            if ($document->file_path) {
+                Storage::disk('private')->delete($document->file_path);
+                Storage::disk('public')->delete($document->file_path);
+            }
+
+            $validated['file_path'] = $file->store('documents', 'private');
             $validated['file_name'] = $file->getClientOriginalName();
             $validated['file_size'] = $file->getSize();
         }

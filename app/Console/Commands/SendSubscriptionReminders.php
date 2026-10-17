@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\SubscriptionReminder;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -24,7 +25,7 @@ class SendSubscriptionReminders extends Command
 
     public function handle(): int
     {
-        $reminderDays = 7;
+        $reminderDays = (int) config('saas.subscription.reminder_days', 7);
         $cutoffDate = now()->addDays($reminderDays);
 
         $subscriptions = Subscription::where('status', Subscription::STATUS_ACTIVE)
@@ -40,6 +41,7 @@ class SendSubscriptionReminders extends Command
         }
 
         $sentCount = 0;
+        $failedCount = 0;
 
         foreach ($subscriptions as $subscription) {
             $tenant = $subscription->tenant;
@@ -53,21 +55,31 @@ class SendSubscriptionReminders extends Command
                 ->where('role', 'tenant_admin')
                 ->first();
 
-            if (! $admin) {
+            // Hanya kirim ke user dengan email valid
+            if (! $admin || ! filter_var($admin->email, FILTER_VALIDATE_EMAIL)) {
                 continue;
             }
 
             $daysRemaining = (int) now()->diffInDays($subscription->ends_at, false);
 
-            $this->info("📧 Mengirim pengingat ke {$admin->email} untuk tenant \"{$tenant->name}\" ({$daysRemaining} hari lagi).");
+            try {
+                Mail::to($admin->email)->send(new SubscriptionReminder($subscription, $daysRemaining));
 
-            // In production, send actual email here:
-            // Mail::to($admin->email)->send(new SubscriptionReminder($subscription, $daysRemaining));
+                $this->info("📧 Mengirim pengingat ke {$admin->email} untuk tenant \"{$tenant->name}\" ({$daysRemaining} hari lagi).");
 
-            $sentCount++;
+                $sentCount++;
+            } catch (\Throwable $e) {
+                // Satu kegagalan tidak boleh menghentikan batch.
+                $failedCount++;
+                $this->error("❌ Gagal mengirim pengingat ke {$admin->email}: {$e->getMessage()}");
+            }
         }
 
         $this->info("✅ {$sentCount} pengingat berhasil dikirim.");
+
+        if ($failedCount > 0) {
+            $this->warn("⚠️ {$failedCount} pengingat gagal dikirim.");
+        }
 
         return self::SUCCESS;
     }

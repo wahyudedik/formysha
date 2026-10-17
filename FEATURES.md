@@ -590,11 +590,11 @@ public/favicon.ico   → Favicon legacy
 
 ## Family Sharing ✅
 
-* Ayah
-* Ibu
-* Wali
-* Kakek
-* Nenek
+* Pencatatan hubungan keluarga per anak: Ayah, Ibu, Wali, Kakek, Nenek
+* Level akses per anggota keluarga: View, Comment, Edit, Manage (enum `FamilyMemberPermission`)
+* Foto anggota keluarga di-upload dan disimpan di disk `private`
+* Penambahan/hapus anggota tunduk pada feature limit `max_family_members` per paket
+* Catatan: akses login bersama (co-parent account) yang sesungguhnya **belum tersedia** — hubungan dicatat sebagai data, bukan akun bersama. Rencananya ada di Phase 27 (lihat [ROADMAP.md](ROADMAP.md))
 
 ---
 
@@ -678,8 +678,9 @@ public/favicon.ico   → Favicon legacy
 * Upload foto profil saat membuat/edit profil anak
 * Preview langsung menggunakan Alpine.js
 * Validasi: image, max 2MB
-* Penyimpanan di disk `public` (directory `children/`)
-* Auto-delete foto lama saat update/destroy
+* Penyimpanan di disk `private` (kepatuhan UU PDP, sejak Phase 26) — tidak lagi disk `public`
+* Foto di-stream melalui [`FileDownloadController`](app/Http/Controllers/FileDownloadController.php) (route `files.child.photo` dengan otorisasi kepemilikan), bukan URL statis publik
+* Auto-delete foto lama saat update/destroy (termasuk pembersihan file legacy di disk `public`)
 
 ---
 
@@ -729,8 +730,10 @@ public/favicon.ico   → Favicon legacy
 ## Confirm Delete Modal
 
 * Komponen `x-confirm-delete` untuk konfirmasi hapus data
-* Menggunakan Alpine.js custom event
+* Menggunakan Alpine.js custom event (`delete-confirm`)
 * Props: `id`, `title`, `message`, `action`, `method`
+* Slot opsional untuk input tambahan di dalam form (misalnya verifikasi `current_password` saat hapus akun)
+* Loading state bawaan (spinner saat form disubmit) dan label tombol i18n (`common.cancel`, `common.confirm_delete`, `common.loading`)
 
 ---
 
@@ -830,7 +833,7 @@ Semua form submit di aplikasi memiliki loading state untuk mencegah double-submi
 
 ## Quality Assurance ✅
 
-* 504 tests, 1153 assertions — all passing
+* 861 tests, 2106 assertions — all passing (angka terkini per Phase 26, 2026-10-17; sebelumnya 504 tests / 1153 assertions pada Phase 4.5)
 * Pest PHP dengan `describe/it` blocks
 * Laravel Pint formatting applied
 * Feature tests untuk semua modul (Auth, Children, Timeline, Album, Diary, Growth, Health, Document, Calendar, Family, Notification, Search, Profile, Public Profile, Export)
@@ -1492,21 +1495,23 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 
 #### B2C (Family)
 
-| Paket | Harga | Fitur Utama |
-|-------|-------|-------------|
-| 🟢 Free | Rp0 | 1 anak, 10 foto, 500MB, timeline, gallery, dokumen |
-| 💗 Family | Rp19.000/bulan | 3 anak, 200 foto, 5GB, + growth, health |
-| 💙 Family Plus | Rp39.000/bulan | 5 anak, 500 foto, 15GB, + calendar, export, priority |
-| ⭐ Family Pro | Rp79.000/bulan | 10 anak, unlimited foto, 50GB, + custom API, white label, family tree |
+| Paket | Harga | Kapasitas & Fitur Utama |
+|-------|-------|------------------------|
+| 🟢 Free | Rp0 | 1 anak, 10 foto, 5 video, 500MB, 2 anggota keluarga, 1 export/hari |
+| 💗 Family | Rp19.000/bulan | 3 anak, 200 foto, 50 video, 5GB, 5 anggota, export, public profile |
+| 💙 Family Plus | Rp39.000/bulan | 5 anak, 500 foto, 150 video, 15GB, 10 anggota, export — **badge POPULER** |
+| ⭐ Family Pro | Rp79.000/bulan | 10 anak, foto/video unlimited, 50GB, 20 anggota, export unlimited, custom API, priority support |
 
 #### B2B (Organization)
 
-| Paket | Harga | Fitur Utama |
-|-------|-------|-------------|
-| 🏥 B2B Basic | Rp299.000/bulan | 50 profil anak, 5 staf, clinical notes |
-| 🏥 B2B Growth | Rp799.000/bulan | 200 profil anak, 20 staf, referrals, analytics |
-| 🏥 B2B Pro | Rp1.999.000/bulan | 1000 profil anak, unlimited staf, API, white label |
-| 🏢 Enterprise | Custom | Custom fitur, dedicated support, SLA |
+| Paket | Harga | Kapasitas & Fitur Utama |
+|-------|-------|------------------------|
+| 🏥 B2B Basic | Rp299.000/bulan | 50 profil anak, 5 staf, 500 foto, 100 video, 10GB, clinical notes, tanpa referrals |
+| 🏥 B2B Growth | Rp799.000/bulan | 200 profil anak, 20 staf, 2000 foto, 500 video, 50GB, + referrals, analytics |
+| 🏥 B2B Pro | Rp1.999.000/bulan | 1000 profil anak, staf unlimited, foto/video unlimited, 200GB, + white label, custom domain, multi-lokasi |
+| 🏢 Enterprise | Custom (Hubungi Kami) | Kapasitas unlimited, SLA, priority support, dedicated support |
+
+> Kapasitas tabel di atas sinkron dengan [`database/seeders/PlanSeeder.php`](database/seeders/PlanSeeder.php) — sumber kebenaran kapasitas & harga. Enterprise menggunakan **custom pricing**: tombol "Hubungi Kami" menggantikan tombol pembelian langsung.
 
 ## Comprehensive Audit & Code Quality ✅ (Phase 22)
 
@@ -1597,3 +1602,57 @@ Semua API routes menggunakan prefix `/api/v1/` via `Route::prefix('v1')->group()
 * Laravel Pint formatting applied
 * Total translation files: 52 per locale (104 total) — split dari monolithic `app.php`
 * Total translation keys: ~970+ keys di kedua lang files
+
+---
+
+## Security, Subscription & Limits Hardening ✅ (Phase 26)
+
+Batch perbaikan keamanan, konsistensi subscription, dan penguatan feature limit. Rencana & backlog lanjutan terdokumentasi di [ROADMAP.md](ROADMAP.md) (Phase 26 & 27).
+
+### Private Storage (UU PDP)
+
+* Semua file milik pengguna — foto anak, foto anggota keluarga, media timeline/album/diary, dokumen — kini disimpan di **disk `private`** (`storage/app/private`), tidak lagi disk `public`
+* File di-stream melalui [`FileDownloadController`](app/Http/Controllers/FileDownloadController.php): 7 route terautentikasi (dalam grup `child.ownership`) + 2 route publik foto profil (throttle `60,1/menit`, difilter `slug` + `is_public`)
+* Perintah migrasi: `php artisan storage:migrate-private {--delete-original}` — pindahkan file lama ke disk privat, verifikasi, lalu hapus salinan legacy
+* Saat update/hapus, controller membersihkan file di disk `private` sekaligus sisa legacy di disk `public`
+* Aset branding tenant (logo/favicon) tetap di disk `public` — hanya aset publik, bukan data keluarga
+
+### Subscription Correctness
+
+* [`SubscriptionService::subscribeTenant()`](app/Services/SubscriptionService.php) dengan guard: paket aktif saja, audience cocok (family ↔ facility), paket gratis langsung `active` tanpa `end_at`, harga Rp0 pada paket non-gratis ditolak, paket berbayar → `pending` + dedup
+* `submitPaymentProof()` memverifikasi kepemilikan tenant, status pending, dan nominal transfer
+* Kolom baru pada tabel `plans`: `is_free` (boolean) dan `audience` (family/facility) — migrasi `2026_10_17_000001`
+* Badge **POPULER** pada Family Plus (`Plan::POPULAR_SLUG = 'family-plus'`) dan label **Custom (Hubungi Kami)** untuk Enterprise (`isCustomPricing()`)
+
+### Feature Limits Diperkuat
+
+* [`MediaService::enforceUploadLimits()`](app/Services/MediaService.php) — validasi sebelum file ditulis ke disk; pelanggaran menghasilkan `ValidationException` (field `media`)
+* Batas `max_videos` dan `max_storage_mb` kini benar-benar ditegakkan (sebelumnya `max_photos` saja) — penting untuk paket B2B
+* `null` / `-1` pada kolom limit berarti unlimited (`Tenant::canUploadAdditionalPhotos/Videos/Storage()`)
+* Middleware `feature.limit:*` mengembalikan JSON 422 untuk request `expectsJson`
+
+### Read-only Mode & Suspended Tenant
+
+* Middleware baru **`subscription.write`** (`EnsureWriteAccess`): request GET/HEAD selalu lolos; tenant dengan subscription non-aktif menerima banner read-only di web atau respons 402 di API
+* Middleware baru **`tenant.status`** (`EnsureTenantStatus`): tenant suspended menerima respons 403
+* Flag konfigurasi `saas.subscription.enforce_write_access` / env **`SAAS_ENFORCE_WRITE_ACCESS`** — default `true` di production, `false` di `phpunit.xml`
+* Grup route web terautentikasi kini `['auth', 'verified', 'tenant.status']`; endpoint kritis dikecualikan via `withoutMiddleware` (erasure hapus anak, consent, logout, ubah password, dsb.)
+
+### Security & UX Quick Wins
+
+* Proteksi open redirect: helper `resolveInternalRedirect()` — hanya path relatif internal yang diizinkan sebagai tujuan redirect setelah login
+* Hapus akun kini membutuhkan verifikasi `current_password` (`Hash::check`); akun OAuth dengan password null dikecualikan
+* [`x-confirm-delete`](resources/views/components/confirm-delete.blade.php) mendukung slot opsional (input tambahan dalam form), loading state bawaan, dan label tombol i18n
+
+### Plans & Family Sharing Polish
+
+* Halaman paket terpisah jelas untuk B2C (Free, Family, Family Plus, Family Pro) dan B2B (B2B Basic, B2B Growth, B2B Pro, Enterprise)
+* Kapasitas & harga di-sinkronkan dengan [`database/seeders/PlanSeeder.php`](database/seeders/PlanSeeder.php) sebagai sumber kebenaran
+* Copy Family Sharing diperjelas: mencatat hubungan keluarga dengan level akses (View/Comment/Edit/Manage) — bukan akun login bersama
+
+### Tests
+
+* **861 tests, 2106 assertions** — all passing (baseline sebelumnya: 774 tests / 1875 assertions)
+* Test baru: `SubscriptionCorrectnessTest`, `FeatureLimitEnforcementTest`, `PlanPageTest`, `MediaServiceTest`, `B2CB2BAccessFlowTest`, `FacilityRegistrationTest`, `SuperAdminSeederTest`
+* Laravel Pint formatting applied
+* 2 migrasi baru: `2026_10_17_000001_add_is_free_and_audience_to_plans_table`, `2026_10_17_190617_make_users_password_nullable_for_oauth_support`

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Payment;
+use App\Exceptions\SubscriptionException;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Services\SubscriptionService;
@@ -25,16 +25,16 @@ class SubscriptionApiController extends ApiController
         $tenant = $request->user()->tenant;
 
         if (! $tenant) {
-            return $this->errorResponse('Anda belum memiliki organisasi', 404);
+            return $this->errorResponse(__('status.no_organization'), 404);
         }
 
         $subscription = $tenant->activeSubscription()->with('plan')->first();
 
         if (! $subscription) {
-            return $this->errorResponse('Tidak ada langganan aktif', 404);
+            return $this->errorResponse(__('subscription.no_subscription'), 404);
         }
 
-        return $this->successResponse($subscription, 'Langganan aktif berhasil diambil');
+        return $this->successResponse($subscription, __('subscription.current_plan'));
     }
 
     /**
@@ -45,7 +45,7 @@ class SubscriptionApiController extends ApiController
         $tenant = $request->user()->tenant;
 
         if (! $tenant) {
-            return $this->errorResponse('Anda belum memiliki organisasi', 404);
+            return $this->errorResponse(__('status.no_organization'), 404);
         }
 
         $subscriptions = Subscription::where('tenant_id', $tenant->id)
@@ -53,35 +53,52 @@ class SubscriptionApiController extends ApiController
             ->latest()
             ->paginate($request->input('per_page', 15));
 
-        return $this->paginatedResponse($subscriptions, 'Riwayat langganan berhasil diambil');
+        return $this->paginatedResponse($subscriptions, __('subscription.history'));
     }
 
     /**
      * Subscribe to a plan.
+     *
+     * Logika subscribe disatukan di SubscriptionService::subscribeTenant():
+     * free plan aktif langsung, plan berbayar membuat pending subscription,
+     * plan custom pricing ditolak dengan pesan jelas.
      */
     public function subscribe(Request $request, Plan $plan): JsonResponse
     {
         $tenant = $request->user()->tenant;
 
         if (! $tenant) {
-            return $this->errorResponse('Anda belum memiliki organisasi', 404);
+            return $this->errorResponse(__('status.no_organization'), 404);
         }
 
-        if (! $plan->is_active) {
-            return $this->errorResponse('Paket ini tidak tersedia', 422);
+        try {
+            $subscription = $this->subscriptionService->subscribeTenant($tenant, $plan);
+        } catch (SubscriptionException $e) {
+            return $this->errorResponse($e->getMessage(), 422);
         }
 
-        $subscription = $this->subscriptionService->createSubscription($tenant, $plan);
+        // Free plan: aktif langsung tanpa pembayaran
+        if ($subscription->status === Subscription::STATUS_ACTIVE) {
+            return $this->successResponse(
+                $subscription->load('plan'),
+                __('status.free_plan_activated'),
+            );
+        }
 
+        // Paid plan: pending → arahkan melakukan pembayaran
         return $this->successResponse(
             $subscription->load('plan'),
-            'Langganan berhasil dibuat. Silakan lakukan pembayaran.',
+            __('status.subscription_created'),
             201
         );
     }
 
     /**
      * Upload payment proof.
+     *
+     * Validasi kepemilikan (subscription milik tenant), status pending,
+     * dan amount minimal harga plan ditangani oleh
+     * SubscriptionService::submitPaymentProof().
      */
     public function uploadPayment(Request $request): JsonResponse
     {
@@ -96,28 +113,22 @@ class SubscriptionApiController extends ApiController
         $tenant = $request->user()->tenant;
 
         if (! $tenant) {
-            return $this->errorResponse('Anda belum memiliki organisasi', 404);
+            return $this->errorResponse(__('status.no_organization'), 404);
         }
 
-        $proofPath = $request->file('proof')->store('payments/proofs', 'public');
+        $subscription = Subscription::findOrFail($validated['subscription_id']);
 
-        $bankConfig = config("saas.banks.{$validated['bank_name']}", []);
+        try {
+            $payment = $this->subscriptionService->submitPaymentProof(
+                $tenant,
+                $subscription,
+                $validated,
+                $request->file('proof'),
+            );
+        } catch (SubscriptionException $e) {
+            return $this->errorResponse($e->getMessage(), 422);
+        }
 
-        $payment = Payment::create([
-            'subscription_id' => $validated['subscription_id'],
-            'tenant_id' => $tenant->id,
-            'amount' => $validated['amount'],
-            'currency' => 'IDR',
-            'payment_method' => Payment::METHOD_BANK_TRANSFER,
-            'bank_name' => $validated['bank_name'],
-            'bank_account' => $bankConfig['account'] ?? null,
-            'account_holder' => $bankConfig['holder'] ?? null,
-            'proof_path' => $proofPath,
-            'status' => Payment::STATUS_PENDING,
-            'notes' => $validated['notes'] ?? null,
-            'paid_at' => now(),
-        ]);
-
-        return $this->successResponse($payment, 'Bukti pembayaran berhasil dikirim. Menunggu verifikasi admin.', 201);
+        return $this->successResponse($payment, __('status.payment_proof_sent'), 201);
     }
 }

@@ -18,7 +18,7 @@ set -euo pipefail
 #-------------------------------------------------------------------------------
 DOMAIN="formysha.my.id"
 APP_DIR="/www/wwwroot/${DOMAIN}"
-REPO_URL="https://github.com/wahyudedik/formysha.git"
+REPO_URL="https://github.com/wahyudedik/formysha.git" 
 BRANCH="main"
 APP_USER="www"
 PHP_VERSION="8.4"

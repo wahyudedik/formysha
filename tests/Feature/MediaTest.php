@@ -22,7 +22,7 @@ it('requires authentication to upload media for timeline', function () {
 });
 
 it('uploads media for timeline', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $child = Child::factory()->create(['user_id' => $user->id]);
@@ -45,7 +45,7 @@ it('uploads media for timeline', function () {
 });
 
 it('prevents other users from uploading media to timeline', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
@@ -72,7 +72,7 @@ it('validates media is required when uploading to timeline', function () {
 });
 
 it('uploads media for album', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $child = Child::factory()->create(['user_id' => $user->id]);
@@ -95,7 +95,7 @@ it('uploads media for album', function () {
 });
 
 it('prevents other users from uploading media to album', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
@@ -112,7 +112,7 @@ it('prevents other users from uploading media to album', function () {
 });
 
 it('uploads media for diary', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $child = Child::factory()->create(['user_id' => $user->id]);
@@ -135,7 +135,7 @@ it('uploads media for diary', function () {
 });
 
 it('prevents other users from uploading media to diary', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
@@ -152,7 +152,7 @@ it('prevents other users from uploading media to diary', function () {
 });
 
 it('deletes media record', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $child = Child::factory()->create(['user_id' => $user->id]);
@@ -169,7 +169,7 @@ it('deletes media record', function () {
 });
 
 it('prevents other users from deleting media', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
@@ -181,5 +181,61 @@ it('prevents other users from deleting media', function () {
 
     actingAs($otherUser)
         ->delete(route('media.destroy', [$child, $media]))
+        ->assertForbidden();
+});
+
+it('stores uploaded media on the private disk and not on the public disk', function () {
+    Storage::fake('private');
+    Storage::fake('public');
+
+    $user = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+
+    $file = UploadedFile::fake()->image('private-check.jpg', 800, 600)->size(1024);
+
+    actingAs($user)
+        ->post(route('media.store.timeline', [$child, Timeline::factory()->create(['child_id' => $child->id, 'user_id' => $user->id])]), [
+            'media' => [$file],
+        ])
+        ->assertRedirect();
+
+    $media = Media::where('file_name', 'private-check.jpg')->firstOrFail();
+
+    Storage::disk('private')->assertExists($media->file_path);
+    Storage::disk('public')->assertMissing($media->file_path);
+});
+
+it('allows the owner to stream a media file from the private disk', function () {
+    Storage::fake('private');
+
+    $user = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+    $media = Media::factory()->photo()->create([
+        'mediable_type' => Child::class,
+        'mediable_id' => $child->id,
+        'file_path' => 'media/owner-stream.jpg',
+    ]);
+    Storage::disk('private')->put('media/owner-stream.jpg', 'owner-file-content');
+
+    actingAs($user)
+        ->get(route('files.media.file', [$child, $media]))
+        ->assertOk();
+});
+
+it('prevents other users from streaming a media file', function () {
+    Storage::fake('private');
+
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+    $media = Media::factory()->photo()->create([
+        'mediable_type' => Child::class,
+        'mediable_id' => $child->id,
+        'file_path' => 'media/forbidden-stream.jpg',
+    ]);
+    Storage::disk('private')->put('media/forbidden-stream.jpg', 'secret');
+
+    actingAs($otherUser)
+        ->get(route('files.media.file', [$child, $media]))
         ->assertForbidden();
 });

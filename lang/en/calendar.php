@@ -13,4 +13,6 @@ return [
     'reminder' => 'Reminder',
     'immunization_schedule' => 'Immunization Schedule',
     'birthday' => 'Birthday',
+    'delete_title' => 'Delete Event?',
+    'delete_message' => 'This action cannot be undone.',
 ];

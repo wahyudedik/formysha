@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 describe('ImageOptimizationService', function () {
     beforeEach(function () {
-        Storage::fake('public');
+        Storage::fake('private');
         $this->service = new ImageOptimizationService;
     });
 

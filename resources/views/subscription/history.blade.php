@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-                📜 {{ __('Riwayat Langganan') }}
+                📜 {{ __('subscription.history') }}
             </h2>
             <a href="{{ route('subscription.current') }}" class="btn-secondary text-sm min-h-[44px] inline-flex items-center self-start">
                 ← {{ __('Kembali') }}
@@ -12,8 +12,8 @@
 
     <div class="py-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-breadcrumb :items="[
-            ['label' => __('Langganan'), 'url' => route('subscription.current')],
-            ['label' => __('Riwayat')],
+            ['label' => __('subscription.subscription_word'), 'url' => route('subscription.current')],
+            ['label' => __('subscription.history_short')],
         ]" />
 
         {{-- Desktop Table --}}
@@ -22,10 +22,10 @@
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="border-b border-gray-100 dark:border-gray-700">
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Tanggal') }}</th>
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Paket') }}</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('subscription.date') }}</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('subscription.plan_word') }}</th>
                             <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('common.status') }}</th>
-                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Periode') }}</th>
+                            <th class="text-left px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('subscription.period') }}</th>
                             <th class="text-right px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">{{ __('Aksi') }}</th>
                         </tr>
                     </thead>
@@ -52,11 +52,11 @@
                                             default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                                         } }}">
                                         {{ match($sub->status) {
-                                            'active' => '✅ ' . __('Aktif'),
-                                            'pending' => '⏳ ' . __('Pending'),
-                                            'inactive' => '⏸️ ' . __('Tidak Aktif'),
-                                            'cancelled' => '❌ ' . __('Dibatalkan'),
-                                            'past_due' => '⚠️ ' . __('Terlambat'),
+                                            'active' => '✅ ' . __('subscription.status_active'),
+                                            'pending' => '⏳ ' . __('subscription.status_pending_short'),
+                                            'inactive' => '⏸️ ' . __('subscription.status_inactive'),
+                                            'cancelled' => '❌ ' . __('subscription.status_cancelled'),
+                                            'past_due' => '⚠️ ' . __('subscription.status_past_due_short'),
                                             default => ucfirst($sub->status),
                                         } }}
                                     </span>
@@ -73,7 +73,7 @@
                                 <td class="px-6 py-4 text-right">
                                     @if ($sub->status === 'pending')
                                         <a href="{{ route('subscription.payment.upload', $sub) }}" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-warmYellow-50 text-warmYellow-600 hover:bg-warmYellow-100 dark:bg-warmYellow-950/30 dark:text-warmYellow-400 dark:hover:bg-warmYellow-950/50 transition">
-                                            💳 {{ __('Bayar') }}
+                                            💳 {{ __('subscription.pay_now') }}
                                         </a>
                                     @endif
                                 </td>
@@ -81,7 +81,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-12">
-                                    <x-empty-state icon="📜" title="{{ __('Belum Ada Riwayat') }}" description="{{ __('Riwayat langganan Anda akan muncul di sini.') }}" />
+                                    <x-empty-state icon="📜" title="{{ __('subscription.no_history') }}" description="{{ __('subscription.history_desc') }}" />
                                 </td>
                             </tr>
                         @endforelse
@@ -105,10 +105,10 @@
                                 default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                             } }}">
                             {{ match($sub->status) {
-                                'active' => '✅ Aktif',
-                                'pending' => '⏳ Pending',
-                                'inactive' => '⏸️ Tidak Aktif',
-                                'cancelled' => '❌ Dibatalkan',
+                                'active' => '✅ ' . __('subscription.status_active'),
+                                'pending' => '⏳ ' . __('subscription.status_pending_short'),
+                                'inactive' => '⏸️ ' . __('subscription.status_inactive'),
+                                'cancelled' => '❌ ' . __('subscription.status_cancelled'),
                                 default => ucfirst($sub->status),
                             } }}
                         </span>
@@ -119,13 +119,13 @@
                     @endif
                     @if ($sub->status === 'pending')
                         <a href="{{ route('subscription.payment.upload', $sub) }}" class="mt-3 block text-center py-2 rounded-xl bg-warmYellow-50 text-warmYellow-600 text-xs font-medium hover:bg-warmYellow-100 dark:bg-warmYellow-950/30 dark:text-warmYellow-400 dark:hover:bg-warmYellow-950/50 transition min-h-[44px] flex items-center justify-center">
-                            💳 Bayar Sekarang
+                            💳 {{ __('subscription.pay_now_full') }}
                         </a>
                     @endif
                 </div>
             @empty
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6">
-                    <x-empty-state icon="📜" title="Belum Ada Riwayat" description="Riwayat langganan Anda akan muncul di sini." />
+                    <x-empty-state icon="📜" title="{{ __('subscription.no_history') }}" description="{{ __('subscription.history_desc') }}" />
                 </div>
             @endforelse
         </div>

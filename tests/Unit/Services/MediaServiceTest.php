@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 describe('MediaService', function () {
     it('uploads a single file and creates media record', function () {
+        Storage::fake('private');
         Storage::fake('public');
 
         $child = Child::factory()->create();
@@ -26,11 +27,12 @@ describe('MediaService', function () {
             ->and($media->file_type)->toBe('photo')
             ->and($media->file_size)->toBeGreaterThan(0);
 
-        Storage::disk('public')->assertExists($media->file_path);
+        Storage::disk('private')->assertExists($media->file_path);
+        Storage::disk('public')->assertMissing($media->file_path);
     });
 
     it('uploads multiple files and creates media records', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $service = new MediaService;
@@ -51,7 +53,7 @@ describe('MediaService', function () {
     });
 
     it('determines video file type correctly', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $service = new MediaService;
@@ -63,7 +65,7 @@ describe('MediaService', function () {
     });
 
     it('determines audio file type correctly', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $service = new MediaService;
@@ -75,7 +77,7 @@ describe('MediaService', function () {
     });
 
     it('stores media for timeline', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $timeline = Timeline::factory()->create(['child_id' => $child->id]);
@@ -89,7 +91,7 @@ describe('MediaService', function () {
     });
 
     it('stores media for album', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $album = Album::factory()->create(['child_id' => $child->id]);
@@ -103,7 +105,7 @@ describe('MediaService', function () {
     });
 
     it('stores media for diary', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $diary = Diary::factory()->create(['child_id' => $child->id, 'user_id' => $child->user_id]);
@@ -117,6 +119,7 @@ describe('MediaService', function () {
     });
 
     it('deletes media record and file from storage', function () {
+        Storage::fake('private');
         Storage::fake('public');
 
         $child = Child::factory()->create();
@@ -130,11 +133,12 @@ describe('MediaService', function () {
 
         expect($result)->toBeTrue();
         expect(Media::find($media->id))->toBeNull();
+        Storage::disk('private')->assertMissing($filePath);
         Storage::disk('public')->assertMissing($filePath);
     });
 
     it('saves alt text when provided', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $service = new MediaService;
@@ -146,7 +150,7 @@ describe('MediaService', function () {
     });
 
     it('skips non-uploaded-file items in uploadMultiple', function () {
-        Storage::fake('public');
+        Storage::fake('private');
 
         $child = Child::factory()->create();
         $service = new MediaService;

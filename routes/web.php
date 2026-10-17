@@ -13,6 +13,7 @@ use App\Http\Controllers\ErasureController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\FamilyTreeController;
+use App\Http\Controllers\FileDownloadController;
 use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LanguageController;
@@ -39,22 +40,27 @@ Route::get('/syarat-ketentuan', [PageController::class, 'terms'])->name('pages.t
 Route::post('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'tenant.status'])
     ->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+// verified: konsistensi dengan dashboard — semua halaman modul (children,
+// timeline, dsb.) hanya bisa diakses akun yang sudah verifikasi email.
+Route::middleware(['auth', 'verified', 'tenant.status'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Children routes (CRUD without {child} parameter)
     // Store route has feature.limit:children middleware to enforce plan limits
+    // and subscription.write to block creation while subscription is inactive
     Route::get('children', [ChildController::class, 'index'])->name('children.index');
     Route::get('children/create', [ChildController::class, 'create'])->name('children.create');
-    Route::post('children', [ChildController::class, 'store'])->name('children.store')->middleware('feature.limit:children');
+    Route::post('children', [ChildController::class, 'store'])->name('children.store')->middleware(['subscription.write', 'feature.limit:children']);
 
-    // All routes with {child} parameter — protected by child.ownership middleware
-    Route::middleware('child.ownership')->group(function () {
+    // All routes with {child} parameter — protected by child.ownership middleware.
+    // subscription.write blocks write operations (POST/PUT/DELETE) while the
+    // tenant's subscription is inactive; GET/HEAD (read & download) always pass.
+    Route::middleware(['child.ownership', 'subscription.write'])->group(function () {
 
         // Child show/edit/update/destroy (explicit routes for proper URL generation)
         Route::get('/children/{child}', [ChildController::class, 'show'])->name('children.show');
@@ -135,16 +141,17 @@ Route::middleware('auth')->group(function () {
 
         // Achievement routes (nested under children)
         Route::get('/children/{child}/achievements', [AchievementController::class, 'index'])->name('achievements.index');
-        Route::post('/children/{child}/achievements/check', [AchievementController::class, 'check'])->name('achievements.check');
+        Route::post('/children/{child}/achievements/check', [AchievementController::class, 'check'])->name('achievements.check')->withoutMiddleware('subscription.write');
 
         // Milestone routes (nested under children)
         Route::get('/children/{child}/milestones', [MilestoneController::class, 'index'])->name('milestones.index');
-        Route::post('/children/{child}/milestones/check', [MilestoneController::class, 'check'])->name('milestones.check');
-        Route::post('/children/{child}/milestones/{milestoneAlert}/dismiss', [MilestoneController::class, 'dismiss'])->name('milestones.dismiss');
+        Route::post('/children/{child}/milestones/check', [MilestoneController::class, 'check'])->name('milestones.check')->withoutMiddleware('subscription.write');
+        Route::post('/children/{child}/milestones/{milestoneAlert}/dismiss', [MilestoneController::class, 'dismiss'])->name('milestones.dismiss')->withoutMiddleware('subscription.write');
 
-        // Consent routes (nested under children)
+        // Consent routes (nested under children) — consent is a compliance
+        // feature (UU PDP), not content, so writes are never blocked
         Route::get('/children/{child}/consent', [ConsentController::class, 'index'])->name('consent.index');
-        Route::post('/children/{child}/consent', [ConsentController::class, 'update'])->name('consent.update');
+        Route::post('/children/{child}/consent', [ConsentController::class, 'update'])->name('consent.update')->withoutMiddleware('subscription.write');
 
         // Export routes (nested under children) — throttled to prevent abuse
         Route::get('/children/{child}/export/profile', [ExportController::class, 'childProfile'])->name('export.profile')->middleware('throttle:5,1');
@@ -153,11 +160,22 @@ Route::middleware('auth')->group(function () {
         Route::get('/children/{child}/export/zip', [ExportController::class, 'childZip'])->name('export.zip')->middleware('throttle:3,1');
 
         // Media routes (nested under children)
-        // Photo/video upload routes have feature.limit middleware to enforce plan limits
-        Route::post('/children/{child}/timeline/{timeline}/media', [MediaController::class, 'storeForTimeline'])->name('media.store.timeline')->middleware('feature.limit:photos');
-        Route::post('/children/{child}/albums/{album}/media', [MediaController::class, 'storeForAlbum'])->name('media.store.album')->middleware('feature.limit:photos');
-        Route::post('/children/{child}/diaries/{diary}/media', [MediaController::class, 'storeForDiary'])->name('media.store.diary')->middleware('feature.limit:photos');
+        // Photo/video/storage plan limits are enforced at the MediaService layer
+        // (photos, videos, and storage bytes) — covering web and API uploads.
+        Route::post('/children/{child}/timeline/{timeline}/media', [MediaController::class, 'storeForTimeline'])->name('media.store.timeline');
+        Route::post('/children/{child}/albums/{album}/media', [MediaController::class, 'storeForAlbum'])->name('media.store.album');
+        Route::post('/children/{child}/diaries/{diary}/media', [MediaController::class, 'storeForDiary'])->name('media.store.diary');
         Route::delete('/children/{child}/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
+
+        // Authenticated file download/stream routes — files stored on the private disk,
+        // served only to the child's owner (child.ownership middleware)
+        Route::get('/children/{child}/photo', [FileDownloadController::class, 'childPhoto'])->name('files.child.photo');
+        Route::get('/children/{child}/family/{familyMember}/photo', [FileDownloadController::class, 'familyMemberPhoto'])->name('files.family.photo');
+        Route::get('/children/{child}/media/{media}', [FileDownloadController::class, 'mediaFile'])->name('files.media.file');
+        Route::get('/children/{child}/media/{media}/thumbnail', [FileDownloadController::class, 'mediaThumbnail'])->name('files.media.thumbnail');
+        Route::get('/children/{child}/documents/{document}/file', [FileDownloadController::class, 'documentFile'])->name('files.document.file');
+        Route::get('/children/{child}/documents/{document}/download', [FileDownloadController::class, 'documentDownload'])->name('files.document.download');
+        Route::get('/children/{child}/albums/{album}/cover', [FileDownloadController::class, 'albumCover'])->name('files.album.cover');
 
         // Connection routes (nested under children)
         Route::get('/children/{child}/connections', [ConnectionController::class, 'index'])->name('connections.index');
@@ -174,8 +192,9 @@ Route::middleware('auth')->group(function () {
         // Family Tree routes (nested under children)
         Route::get('/children/{child}/family-tree', [FamilyTreeController::class, 'index'])->name('children.family-tree');
 
-        // Erasure routes (nested under children) — child deletion
-        Route::delete('/children/{child}/erasure', [ErasureController::class, 'destroyChild'])->name('erasure.destroyChild');
+        // Erasure routes (nested under children) — child deletion.
+        // Deletion is a compliance right (UU PDP), never blocked by subscription state
+        Route::delete('/children/{child}/erasure', [ErasureController::class, 'destroyChild'])->name('erasure.destroyChild')->withoutMiddleware('subscription.write');
 
     });
 
@@ -205,6 +224,15 @@ require __DIR__.'/facility-admin.php';
 
 // Auth routes must be registered before the catch-all public profile route
 require __DIR__.'/auth.php';
+
+// Public file streaming — only serves children with is_public = true.
+// Storage paths are never exposed; access is restricted to explicitly public profiles.
+Route::get('/public/{slug}/photo', [FileDownloadController::class, 'publicPhoto'])
+    ->middleware('throttle:60,1')
+    ->name('files.public.photo');
+Route::get('/public/{slug}/albums/{album}/cover', [FileDownloadController::class, 'publicAlbumCover'])
+    ->middleware('throttle:60,1')
+    ->name('files.public.album-cover');
 
 // Public profile route — must be after all other routes to avoid conflicts
 // Throttled to 60 requests per minute per IP to prevent scraping

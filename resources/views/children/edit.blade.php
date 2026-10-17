@@ -87,7 +87,7 @@
                     <div>
                         <x-input-label for="photo" :value="__('Foto Profil')" />
                         <div class="mt-1 flex items-center gap-4">
-                            <div x-data="{ preview: '{{ $child->photo ? Storage::url($child->photo) : '' }}' }" class="flex items-center gap-4">
+                            <div x-data="{ preview: '{{ $child->photo ? route('files.child.photo', $child) : '' }}' }" class="flex items-center gap-4">
                                 <div class="w-20 h-20 rounded-full bg-softPink-100 dark:bg-softPink-950/30 flex items-center justify-center overflow-hidden">
                                     <img x-show="preview" :src="preview" class="w-20 h-20 object-cover" alt="Preview" />
                                     <svg x-show="!preview" class="w-8 h-8 text-softPink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

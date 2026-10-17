@@ -39,7 +39,7 @@ class ChildController extends ApiController
         $data['user_id'] = $request->user()->id;
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('children', 'public');
+            $data['photo'] = $request->file('photo')->store('children', 'private');
         }
 
         $child = Child::create($data);
@@ -74,11 +74,12 @@ class ChildController extends ApiController
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
-            if ($child->photo && Storage::disk('public')->exists($child->photo)) {
+            // Delete old photo if exists (private disk + legacy public disk)
+            if ($child->photo) {
+                Storage::disk('private')->delete($child->photo);
                 Storage::disk('public')->delete($child->photo);
             }
-            $data['photo'] = $request->file('photo')->store('children', 'public');
+            $data['photo'] = $request->file('photo')->store('children', 'private');
         }
 
         $child->update($data);
@@ -96,8 +97,9 @@ class ChildController extends ApiController
     {
         abort_if($child->user_id !== $request->user()->id, 403);
 
-        // Delete photo if exists
-        if ($child->photo && Storage::disk('public')->exists($child->photo)) {
+        // Delete photo if exists (private disk + legacy public disk)
+        if ($child->photo) {
+            Storage::disk('private')->delete($child->photo);
             Storage::disk('public')->delete($child->photo);
         }
 

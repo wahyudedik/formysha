@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Subscription;
 
-use App\Models\Payment;
+use App\Exceptions\SubscriptionException;
 use App\Models\Subscription;
+use App\Services\SubscriptionService;
 use App\Services\TenantService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ class PaymentController extends Controller
 {
     public function __construct(
         private TenantService $tenantService,
+        private SubscriptionService $subscriptionService,
     ) {}
 
     /**
@@ -27,6 +29,10 @@ class PaymentController extends Controller
 
     /**
      * Store payment proof.
+     *
+     * Validasi kepemilikan (subscription milik tenant), status pending,
+     * dan amount minimal harga plan ditangani oleh
+     * SubscriptionService::submitPaymentProof().
      */
     public function store(Request $request): RedirectResponse
     {
@@ -45,28 +51,19 @@ class PaymentController extends Controller
                 ->with('error', __('status.no_organization'));
         }
 
-        // Verify the subscription belongs to this tenant to prevent unauthorized payment submissions.
         $subscription = Subscription::findOrFail($validated['subscription_id']);
-        abort_unless($subscription->tenant_id === $tenant->id, 403);
 
-        $proofPath = $request->file('proof')->store('payments/proofs', 'public');
-
-        $bankConfig = config("saas.banks.{$validated['bank_name']}", []);
-
-        Payment::create([
-            'subscription_id' => $validated['subscription_id'],
-            'tenant_id' => $tenant->id,
-            'amount' => $validated['amount'],
-            'currency' => 'IDR',
-            'payment_method' => Payment::METHOD_BANK_TRANSFER,
-            'bank_name' => $validated['bank_name'],
-            'bank_account' => $bankConfig['account'] ?? null,
-            'account_holder' => $bankConfig['holder'] ?? null,
-            'proof_path' => $proofPath,
-            'status' => Payment::STATUS_PENDING,
-            'notes' => $validated['notes'] ?? null,
-            'paid_at' => now(),
-        ]);
+        try {
+            $this->subscriptionService->submitPaymentProof(
+                $tenant,
+                $subscription,
+                $validated,
+                $request->file('proof'),
+            );
+        } catch (SubscriptionException $e) {
+            return redirect()->back()
+                ->with('error', $e->getMessage());
+        }
 
         return redirect()->route('subscription.current')
             ->with('status', __('status.payment_proof_sent'));

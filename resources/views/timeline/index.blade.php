@@ -22,12 +22,6 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            @if (session('status'))
-                <div class="mb-6 p-4 bg-mintGreen-50 dark:bg-mintGreen-950/30 border border-mintGreen-200 dark:border-mintGreen-800 text-mintGreen-700 dark:text-mintGreen-400 rounded-xl" x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)">
-                    {{ session('status') }}
-                </div>
-            @endif
-
             @if ($timelines->isEmpty() && !$request->hasAny(['date_from', 'date_to', 'tag']))
                 <!-- Empty State -->
                 <div class="text-center py-16">

@@ -44,7 +44,7 @@
                         @foreach ($familyMembers as $member)
                             <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl flex items-center gap-3">
                                 @if ($member->photo)
-                                    <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->name }}" class="w-10 h-10 rounded-xl object-cover" />
+                                    <img src="{{ route('files.family.photo', [$child, $member]) }}" alt="{{ $member->name }}" class="w-10 h-10 rounded-xl object-cover" />
                                 @else
                                     <div class="w-10 h-10 rounded-xl bg-lavender-100 dark:bg-lavender-950/30 flex items-center justify-center text-lg">
                                         {{ match($member->relationship) {

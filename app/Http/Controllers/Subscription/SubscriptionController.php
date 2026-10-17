@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Subscription;
 
+use App\Exceptions\SubscriptionException;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Services\SubscriptionService;
@@ -31,8 +32,9 @@ class SubscriptionController extends Controller
     /**
      * Subscribe to a plan.
      *
-     * Free plans are activated immediately. Paid plans create a pending
-     * subscription and redirect to the payment upload page.
+     * Logika subscribe disatukan di SubscriptionService::subscribeTenant():
+     * free plan aktif langsung, plan berbayar membuat pending subscription
+     * lalu redirect ke halaman upload pembayaran, plan custom pricing ditolak.
      */
     public function subscribe(Plan $plan): RedirectResponse
     {
@@ -43,22 +45,20 @@ class SubscriptionController extends Controller
                 ->with('error', __('status.no_organization'));
         }
 
-        if (! $plan->is_active) {
+        try {
+            $subscription = $this->subscriptionService->subscribeTenant($tenant, $plan);
+        } catch (SubscriptionException $e) {
             return redirect()->route('subscription.plans')
-                ->with('error', __('status.plan_not_available'));
+                ->with('error', $e->getMessage());
         }
 
-        // Free plan: activate immediately, no payment needed
-        if ($plan->price_monthly === 0) {
-            $this->subscriptionService->activateFreePlan($tenant);
-
+        // Free plan: sudah aktif langsung tanpa pembayaran
+        if ($subscription->status === Subscription::STATUS_ACTIVE) {
             return redirect()->route('subscription.current')
                 ->with('success', __('status.free_plan_activated'));
         }
 
-        // Paid plan: create pending subscription, then redirect to payment upload
-        $subscription = $this->subscriptionService->createSubscription($tenant, $plan);
-
+        // Paid plan: pending → redirect ke payment upload
         return redirect()->route('subscription.payment.upload', $subscription)
             ->with('success', __('status.subscription_created'));
     }

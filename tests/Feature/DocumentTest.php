@@ -63,6 +63,7 @@ it('shows create document form', function () {
 });
 
 it('stores a new document with file upload', function () {
+    Storage::fake('private');
     Storage::fake('public');
 
     $user = User::factory()->create();
@@ -87,6 +88,11 @@ it('stores a new document with file upload', function () {
         'type' => 'birth_certificate',
         'is_private' => true,
     ]);
+
+    $document = Document::where('child_id', $child->id)->firstOrFail();
+
+    Storage::disk('private')->assertExists($document->file_path);
+    Storage::disk('public')->assertMissing($document->file_path);
 });
 
 it('validates required fields when storing document', function () {
@@ -182,7 +188,7 @@ it('updates a document without new file', function () {
 });
 
 it('updates a document with new file', function () {
-    Storage::fake('public');
+    Storage::fake('private');
 
     $user = User::factory()->create();
     $child = Child::factory()->create(['user_id' => $user->id]);
@@ -223,4 +229,42 @@ it('deletes a document', function () {
         ->assertRedirect(route('documents.index', $child));
 
     assertDatabaseMissing('documents', ['id' => $document->id]);
+});
+
+it('allows the owner to download a document with attachment disposition', function () {
+    Storage::fake('private');
+
+    $user = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+    $document = Document::factory()->create([
+        'child_id' => $child->id,
+        'user_id' => $user->id,
+        'file_path' => 'documents/akta-lahir.pdf',
+        'file_name' => 'akta-lahir.pdf',
+    ]);
+    Storage::disk('private')->put('documents/akta-lahir.pdf', 'pdf-content');
+
+    actingAs($user)
+        ->get(route('files.document.download', [$child, $document]))
+        ->assertOk()
+        ->assertHeader('content-disposition');
+});
+
+it('prevents other users from downloading a document', function () {
+    Storage::fake('private');
+
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+    $document = Document::factory()->create([
+        'child_id' => $child->id,
+        'user_id' => $user->id,
+        'file_path' => 'documents/secret.pdf',
+        'file_name' => 'secret.pdf',
+    ]);
+    Storage::disk('private')->put('documents/secret.pdf', 'secret');
+
+    actingAs($otherUser)
+        ->get(route('files.document.download', [$child, $document]))
+        ->assertForbidden();
 });

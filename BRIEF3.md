@@ -120,17 +120,18 @@ Ada beberapa contoh layanan keluarga/parenting di Indonesia yang menggunakan har
 
 Aku akan mulai dengan:
 
+> **Catatan kapasitas (sinkron dengan kode):** angka kapasitas di bawah ini mengikuti `database/seeders/PlanSeeder.php` sebagai sumber kebenaran — kapasitas seeder dipertahankan karena lebih hemat COGS (foto/video/storage dikelola ketat sejak awal). Di schema plans sudah tersedia kolom `is_free` (boolean) dan `audience` (`family`/`facility`) sehingga grouping paket B2C/B2B tidak perlu lagi hardcode.
+
 ### 🟢 Free — Rp0
 
 Untuk membuat orang mencoba.
 
-* 1 keluarga
 * 1 anak
-* 500 MB
-* Timeline
-* Album dasar
-* Diary
-* Family member terbatas
+* 10 foto, 5 video
+* 500 MB storage
+* 2 anggota keluarga
+* 1 export/hari
+* Timeline, diary, growth, health (public profile nonaktif)
 
 Tujuannya bukan menghasilkan uang.
 
@@ -143,15 +144,11 @@ Tujuannya bukan menghasilkan uang.
 Untuk keluarga biasa.
 
 * 3 anak
-* 10 GB
-* Unlimited family member
-* Timeline
-* Album
-* Diary
-* Pertumbuhan
-* Kalender
-* Backup
-* Export
+* 200 foto, 50 video
+* 5 GB storage
+* 5 anggota keluarga
+* 5 export/hari
+* Timeline, diary, dokumen, growth, health, album, kalender, public profile
 
 **Ini yang aku jadikan paket utama.**
 
@@ -160,13 +157,11 @@ Untuk keluarga biasa.
 ### 💙 Family Plus — Rp39.000/bulan
 
 * 5 anak
-* 50 GB
-* Semua Family
-* Dokumen
-* Kesehatan
-* Advanced Family Tree
-* Export lebih lengkap
-* Prioritas support
+* 500 foto, 150 video
+* 15 GB storage
+* 10 anggota keluarga
+* 15 export/hari
+* Semua fitur Family + export PDF/ZIP
 
 ---
 
@@ -175,12 +170,11 @@ Untuk keluarga biasa.
 Untuk keluarga besar/power user.
 
 * 10 anak
-* 200 GB
-* Semua fitur
-* Advanced sharing
-* Advanced backup
-* API integration
-* Priority support
+* Foto & video **tak terbatas**
+* 50 GB storage
+* 20 anggota keluarga
+* Export **tak terbatas**
+* Semua fitur + custom API, priority support
 
 Harga seperti ini juga masih berada di rentang yang relatif familiar untuk subscription digital keluarga di Indonesia; misalnya aplikasi family/parental-control di App Store Indonesia saat ini menunjukkan berbagai paket bulanan dari puluhan ribu hingga lebih tinggi. ([App Store][2])
 
@@ -188,55 +182,53 @@ Harga seperti ini juga masih berada di rentang yang relatif familiar untuk subsc
 
 # 5. B2B dibuat lebih mahal, tetapi masuk akal
 
-Misalnya:
+Misalnya (angka mengikuti PlanSeeder):
 
 ### 🏥 B2B Basic — Rp299.000/bulan
 
-**100 anak**
+**50 profil anak**
 
-* 100 profil anak
+* 50 profil anak/pasien
 * 5 staff
-* 50 GB
-* Family invitation
+* 500 foto, 100 video
+* 10 GB storage
+* 30 export/hari
+* Clinical notes, patient links, staff management
 * Dashboard organisasi
-* Basic reports
-* Basic collaboration
 
 ---
 
 ### 🏥 B2B Growth — Rp799.000/bulan
 
-**500 anak**
+**200 profil anak**
 
-* 500 profil anak
+* 200 profil anak/pasien
 * 20 staff
-* 250 GB
-* Reports
-* Analytics
-* Custom branding
-* API
-* Priority support
+* 2.000 foto, 500 video
+* 50 GB storage
+* 100 export/hari
+* Semua fitur Basic + referrals, analytics
 
 ---
 
 ### 🏥 B2B Pro — Rp1.999.000/bulan
 
-**2.000 anak**
+**1.000 profil anak**
 
-* 2.000 profil
-* 50 staff
-* 1 TB
-* Custom domain
-* Advanced API
-* Webhook
-* Advanced analytics
-* White-label ringan
+* 1.000 profil anak/pasien
+* Staff **tak terbatas**
+* Foto & video **tak terbatas**
+* 200 GB storage
+* Export **tak terbatas**
+* Semua fitur Growth + custom domain, custom API, white label, multi-location
 
 ---
 
 ### 🏢 Enterprise
 
-**Custom pricing**
+**Custom pricing** (harga 0 di plan — diatur manual oleh Super Admin; tombol "Hubungi Kami")
+
+Kapasitas **tak terbatas** untuk semua batas.
 
 Untuk:
 

@@ -190,3 +190,36 @@ it('deletes an event', function () {
 
     assertDatabaseMissing('events', ['id' => $event->id]);
 });
+
+it('renders confirm delete modal on event detail page', function () {
+    $user = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+    $event = Event::factory()->create([
+        'child_id' => $child->id,
+        'user_id' => $user->id,
+        'title' => 'Modal Check',
+    ]);
+
+    actingAs($user)
+        ->get(route('calendar.show', [$child, $event]))
+        ->assertOk()
+        ->assertSee('confirm-event-deletion')
+        ->assertSee("\$dispatch('delete-confirm', 'confirm-event-deletion')", false)
+        ->assertDontSee('open-modal', false);
+});
+
+it('prevents other users from deleting events', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+    $child = Child::factory()->create(['user_id' => $user->id]);
+    $event = Event::factory()->create([
+        'child_id' => $child->id,
+        'user_id' => $user->id,
+    ]);
+
+    actingAs($otherUser)
+        ->delete(route('calendar.destroy', [$child, $event]))
+        ->assertForbidden();
+
+    assertDatabaseHas('events', ['id' => $event->id]);
+});

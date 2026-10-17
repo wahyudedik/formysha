@@ -150,7 +150,37 @@ describe('Child Management', function () {
         ]);
     });
 
-    it('deletes child successfully', function () {
+    it('deletes child successfully with correct password', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->actingAs($user)
+            ->delete(route('children.destroy', $child), ['current_password' => 'password'])
+            ->assertRedirect(route('children.index'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseMissing('children', ['id' => $child->id]);
+    });
+
+    it('rejects child deletion when password is incorrect', function () {
+        $user = User::factory()->create();
+        $child = Child::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->actingAs($user)
+            ->from(route('children.show', $child))
+            ->delete(route('children.destroy', $child), ['current_password' => 'wrong-password'])
+            ->assertRedirect(route('children.show', $child))
+            ->assertSessionHasErrors('current_password')
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('children', ['id' => $child->id]);
+    });
+
+    it('requires current_password to delete child', function () {
         $user = User::factory()->create();
         $child = Child::factory()->create([
             'user_id' => $user->id,
@@ -158,9 +188,31 @@ describe('Child Management', function () {
 
         $this->actingAs($user)
             ->delete(route('children.destroy', $child))
-            ->assertRedirect(route('children.index'));
+            ->assertSessionHasErrors('current_password');
+
+        $this->assertDatabaseHas('children', ['id' => $child->id]);
+    });
+
+    it('allows oauth user without password to delete child', function () {
+        $user = User::factory()->create(['password' => null]);
+        $child = Child::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->actingAs($user)
+            ->delete(route('children.destroy', $child))
+            ->assertRedirect(route('children.index'))
+            ->assertSessionHasNoErrors();
 
         $this->assertDatabaseMissing('children', ['id' => $child->id]);
+    });
+
+    it('requires verified email to access children pages', function () {
+        $user = User::factory()->unverified()->create();
+
+        $this->actingAs($user)
+            ->get(route('children.index'))
+            ->assertRedirect(route('verification.notice'));
     });
 
     it('generates slug automatically from name', function () {
@@ -266,7 +318,7 @@ describe('Child Management', function () {
         Document::factory()->create(['child_id' => $child->id]);
 
         $this->actingAs($user)
-            ->delete(route('children.destroy', $child))
+            ->delete(route('children.destroy', $child), ['current_password' => 'password'])
             ->assertRedirect(route('children.index'));
 
         $this->assertDatabaseMissing('children', ['id' => $child->id]);

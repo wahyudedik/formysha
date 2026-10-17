@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\Child;
 use App\Models\Media;
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class MediaService
 {
@@ -32,6 +35,9 @@ class MediaService
 
     /**
      * Upload a file and create a Media record.
+     *
+     * Plan limits (max_photos, max_videos, max_storage_mb) are enforced
+     * BEFORE the file is written to storage.
      */
     public function upload(
         UploadedFile $file,
@@ -39,6 +45,71 @@ class MediaService
         ?string $altText = null,
     ): Media {
         $fileType = $this->determineFileType($file);
+
+        $this->enforceUploadLimits($mediable, [$file]);
+
+        return $this->storeFile($file, $mediable, $fileType, $altText);
+    }
+
+    /**
+     * Upload multiple files and create Media records.
+     *
+     * The whole batch is validated against plan limits before any file
+     * is written to storage, so a rejected batch stores nothing.
+     *
+     * @return Collection<int, Media>
+     */
+    public function uploadMultiple(
+        array $files,
+        Model $mediable,
+    ): Collection {
+        $validFiles = array_values(array_filter(
+            $files,
+            fn ($file) => $file instanceof UploadedFile
+        ));
+
+        if ($validFiles !== []) {
+            $this->enforceUploadLimits($mediable, $validFiles);
+        }
+
+        $media = collect();
+
+        foreach ($validFiles as $file) {
+            $media->push($this->storeFile($file, $mediable, $this->determineFileType($file)));
+        }
+
+        return $media;
+    }
+
+    /**
+     * Delete a media record and its file from storage.
+     */
+    public function delete(Media $media): bool
+    {
+        // Delete from private disk + any legacy public copy from before the
+        // private storage migration.
+        if ($media->file_path) {
+            Storage::disk('private')->delete($media->file_path);
+            Storage::disk('public')->delete($media->file_path);
+        }
+
+        if ($media->thumbnail_path) {
+            Storage::disk('private')->delete($media->thumbnail_path);
+            Storage::disk('public')->delete($media->thumbnail_path);
+        }
+
+        return $media->delete();
+    }
+
+    /**
+     * Store the uploaded file (optimize when possible) and create the record.
+     */
+    private function storeFile(
+        UploadedFile $file,
+        Model $mediable,
+        string $fileType,
+        ?string $altText = null,
+    ): Media {
         $originalSize = $file->getSize();
         $filePath = null;
         $thumbnailPath = null;
@@ -51,7 +122,7 @@ class MediaService
             $thumbnailPath = $result['thumbnail'];
             $optimizedSize = $result['optimized_size'];
         } else {
-            $filePath = $file->store('media', 'public');
+            $filePath = $file->store('media', 'private');
         }
 
         return Media::create([
@@ -68,35 +139,80 @@ class MediaService
     }
 
     /**
-     * Upload multiple files and create Media records.
+     * Enforce the owning tenant's plan limits for the given incoming files.
      *
-     * @return Collection<int, Media>
+     * Runs BEFORE any storage write. Throws a ValidationException (which
+     * becomes a redirect-back with errors on web and JSON 422 on API)
+     * when a limit would be exceeded.
+     *
+     * @param  array<int, UploadedFile>  $files
      */
-    public function uploadMultiple(
-        array $files,
-        Model $mediable,
-    ): Collection {
-        $media = collect();
+    private function enforceUploadLimits(Model $mediable, array $files): void
+    {
+        $tenant = $this->resolveTenant($mediable);
 
-        foreach ($files as $file) {
-            if ($file instanceof UploadedFile) {
-                $media->push($this->upload($file, $mediable));
-            }
+        if (! $tenant) {
+            return;
         }
 
-        return $media;
+        $plan = $tenant->activeSubscription?->plan;
+
+        // Without an active plan there are no configured limits to enforce.
+        if (! $plan) {
+            return;
+        }
+
+        $newPhotos = 0;
+        $newVideos = 0;
+        $newBytes = 0;
+
+        foreach ($files as $file) {
+            $fileType = $this->determineFileType($file);
+
+            if ($fileType === 'photo') {
+                $newPhotos++;
+            } elseif ($fileType === 'video') {
+                $newVideos++;
+            }
+
+            $newBytes += (int) $file->getSize();
+        }
+
+        if ($newPhotos > 0 && ! $tenant->canUploadAdditionalPhotos($newPhotos)) {
+            throw ValidationException::withMessages([
+                'media' => __('limits.photos'),
+            ]);
+        }
+
+        if ($newVideos > 0 && ! $tenant->canUploadAdditionalVideos($newVideos)) {
+            throw ValidationException::withMessages([
+                'media' => __('limits.videos'),
+            ]);
+        }
+
+        if ($newBytes > 0 && ! $tenant->canUploadStorage($newBytes)) {
+            throw ValidationException::withMessages([
+                'media' => __('limits.storage'),
+            ]);
+        }
     }
 
     /**
-     * Delete a media record and its file from storage.
+     * Resolve the tenant that owns the media target (child or its parent
+     * timeline / album / diary).
      */
-    public function delete(Media $media): bool
+    private function resolveTenant(Model $mediable): ?Tenant
     {
-        if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
-            Storage::disk('public')->delete($media->file_path);
+        /** @var Child|Model $child */
+        $child = $mediable instanceof Child
+            ? $mediable
+            : ($mediable->child ?? null);
+
+        if (! $child instanceof Child) {
+            return null;
         }
 
-        return $media->delete();
+        return $child->tenant;
     }
 
     /**

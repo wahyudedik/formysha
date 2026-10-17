@@ -5,8 +5,10 @@ use App\Enums\TenantType;
 use App\Models\Child;
 use App\Models\ClinicalNote;
 use App\Models\PatientLink;
+use App\Models\Plan;
 use App\Models\Referral;
 use App\Models\Staff;
+use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\TenantService;
@@ -15,7 +17,8 @@ use Illuminate\Support\Str;
 
 /**
  * Helper: create a B2B tenant with owner user and staff record,
- * then switch session to that tenant.
+ * an unlimited B2B plan with an active subscription, then switch
+ * session to that tenant.
  *
  * @return array{tenant: Tenant, user: User, staff: Staff}
  */
@@ -26,6 +29,32 @@ function createFacilityWithStaff(string $staffRole = 'staff_admin'): array
         'slug' => 'klinik-test-'.Str::slug(fake()->unique()->bothify('####')),
         'type' => TenantType::Clinic,
         'is_active' => true,
+    ]);
+
+    $plan = Plan::create([
+        'name' => 'B2B Test '.fake()->unique()->bothify('####'),
+        'slug' => 'b2b-test-'.Str::slug(fake()->unique()->bothify('####')),
+        'price_monthly' => 0,
+        'max_children' => -1,
+        'max_photos' => -1,
+        'max_videos' => -1,
+        'max_storage_mb' => -1,
+        'features' => [
+            'max_staff' => -1,
+            'max_patients' => -1,
+            'max_clinical_notes' => -1,
+            'referrals_enabled' => true,
+        ],
+        'is_active' => true,
+        'sort_order' => 1,
+    ]);
+
+    Subscription::create([
+        'tenant_id' => $tenant->id,
+        'plan_id' => $plan->id,
+        'status' => Subscription::STATUS_ACTIVE,
+        'starts_at' => now(),
+        'ends_at' => null,
     ]);
 
     $user = User::factory()->tenantAdmin()->create([

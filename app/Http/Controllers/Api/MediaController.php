@@ -6,12 +6,17 @@ use App\Http\Resources\MediaResource;
 use App\Models\Album;
 use App\Models\Child;
 use App\Models\Media;
+use App\Services\MediaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MediaController extends ApiController
 {
+    public function __construct(
+        private MediaService $mediaService,
+    ) {}
+
     /**
      * List media for a child.
      */
@@ -47,30 +52,18 @@ class MediaController extends ApiController
         ]);
 
         $file = $request->file('file');
-        $filePath = $file->store('media', 'public');
-        $fileType = str_starts_with($file->getMimeType(), 'image') ? 'photo' : 'video';
+        $altText = $request->input('alt_text');
 
-        // Determine the mediable type and ID
+        // Plan limits (max_photos / max_videos / max_storage_mb) are
+        // enforced inside MediaService before the file is stored.
         if ($request->filled('album_id')) {
             $album = Album::findOrFail($request->input('album_id'));
             abort_unless($album->child_id === $child->id, 403);
 
-            $mediableType = Album::class;
-            $mediableId = $album->id;
+            $media = $this->mediaService->upload($file, $album, $altText);
         } else {
-            $mediableType = Child::class;
-            $mediableId = $child->id;
+            $media = $this->mediaService->upload($file, $child, $altText);
         }
-
-        $media = Media::create([
-            'mediable_type' => $mediableType,
-            'mediable_id' => $mediableId,
-            'file_path' => $filePath,
-            'file_name' => $file->getClientOriginalName(),
-            'file_type' => $fileType,
-            'file_size' => $file->getSize(),
-            'alt_text' => $request->input('alt_text'),
-        ]);
 
         return $this->successResponse(
             new MediaResource($media),
@@ -98,8 +91,9 @@ class MediaController extends ApiController
             }
         }
 
-        // Delete the file from storage
-        if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
+        // Delete the file from storage (private disk + legacy public disk)
+        if ($media->file_path) {
+            Storage::disk('private')->delete($media->file_path);
             Storage::disk('public')->delete($media->file_path);
         }
 

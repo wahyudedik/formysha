@@ -40,6 +40,8 @@ class PlanSeeder extends Seeder
                     'public_profile' => false,
                 ],
                 'is_active' => true,
+                'is_free' => true,
+                'audience' => Plan::AUDIENCE_FAMILY,
                 'sort_order' => 1,
             ]
         );
@@ -64,6 +66,7 @@ class PlanSeeder extends Seeder
                     'albums', 'calendar', 'public_profile',
                 ],
                 'is_active' => true,
+                'audience' => Plan::AUDIENCE_FAMILY,
                 'sort_order' => 2,
             ]
         );
@@ -88,6 +91,7 @@ class PlanSeeder extends Seeder
                     'albums', 'calendar', 'export', 'public_profile',
                 ],
                 'is_active' => true,
+                'audience' => Plan::AUDIENCE_FAMILY,
                 'sort_order' => 3,
             ]
         );
@@ -113,6 +117,7 @@ class PlanSeeder extends Seeder
                     'custom_api', 'priority_support',
                 ],
                 'is_active' => true,
+                'audience' => Plan::AUDIENCE_FAMILY,
                 'sort_order' => 4,
             ]
         );
@@ -147,6 +152,7 @@ class PlanSeeder extends Seeder
                     'white_label' => false,
                 ],
                 'is_active' => true,
+                'audience' => Plan::AUDIENCE_FACILITY,
                 'sort_order' => 5,
             ]
         );
@@ -178,6 +184,7 @@ class PlanSeeder extends Seeder
                     'white_label' => false,
                 ],
                 'is_active' => true,
+                'audience' => Plan::AUDIENCE_FACILITY,
                 'sort_order' => 6,
             ]
         );
@@ -209,6 +216,7 @@ class PlanSeeder extends Seeder
                     'white_label' => true,
                 ],
                 'is_active' => true,
+                'audience' => Plan::AUDIENCE_FACILITY,
                 'sort_order' => 7,
             ]
         );
@@ -241,8 +249,32 @@ class PlanSeeder extends Seeder
                     'white_label' => true,
                 ],
                 'is_active' => true,
+                'audience' => Plan::AUDIENCE_FACILITY,
                 'sort_order' => 8,
             ]
         );
+
+        // ============================================================
+        // Sinkronisasi kolom baru (is_free & audience) untuk plan yang
+        // sudah ada sebelum migrasi 2026_10_17_000001. Hanya menyentuh
+        // kolom baru — harga & kapasitas TIDAK diubah.
+        // ============================================================
+
+        Plan::where('slug', 'free')->update([
+            'is_free' => true,
+            'audience' => Plan::AUDIENCE_FAMILY,
+        ]);
+
+        foreach (['family', 'family-plus', 'family-pro'] as $slug) {
+            Plan::where('slug', $slug)->update([
+                'audience' => Plan::AUDIENCE_FAMILY,
+            ]);
+        }
+
+        foreach (['b2b-basic', 'b2b-growth', 'b2b-pro', 'enterprise'] as $slug) {
+            Plan::where('slug', $slug)->update([
+                'audience' => Plan::AUDIENCE_FACILITY,
+            ]);
+        }
     }
 }

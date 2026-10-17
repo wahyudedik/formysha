@@ -45,7 +45,7 @@ class DocumentController extends ApiController
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $data['file_path'] = $file->store('documents', 'public');
+            $data['file_path'] = $file->store('documents', 'private');
             $data['file_name'] = $file->getClientOriginalName();
             $data['file_size'] = $file->getSize();
         }
@@ -86,13 +86,14 @@ class DocumentController extends ApiController
         $data = $request->validated();
 
         if ($request->hasFile('file')) {
-            // Delete old file if exists
-            if ($document->file_path && Storage::disk('public')->exists($document->file_path)) {
+            // Delete old file if exists (private disk + legacy public disk)
+            if ($document->file_path) {
+                Storage::disk('private')->delete($document->file_path);
                 Storage::disk('public')->delete($document->file_path);
             }
 
             $file = $request->file('file');
-            $data['file_path'] = $file->store('documents', 'public');
+            $data['file_path'] = $file->store('documents', 'private');
             $data['file_name'] = $file->getClientOriginalName();
             $data['file_size'] = $file->getSize();
         }
@@ -115,8 +116,9 @@ class DocumentController extends ApiController
         abort_if($child->user_id !== $request->user()->id, 403);
         abort_unless($document->child_id === $child->id, 404);
 
-        // Delete file if exists
-        if ($document->file_path && Storage::disk('public')->exists($document->file_path)) {
+        // Delete file if exists (private disk + legacy public disk)
+        if ($document->file_path) {
+            Storage::disk('private')->delete($document->file_path);
             Storage::disk('public')->delete($document->file_path);
         }
 

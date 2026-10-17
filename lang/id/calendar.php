@@ -13,4 +13,6 @@ return [
     'reminder' => 'Pengingat',
     'immunization_schedule' => 'Jadwal Imunisasi',
     'birthday' => 'Ulang Tahun',
+    'delete_title' => 'Hapus Acara?',
+    'delete_message' => 'Tindakan ini tidak dapat dibatalkan.',
 ];
