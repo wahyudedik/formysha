@@ -18,7 +18,7 @@ set -euo pipefail
 #-------------------------------------------------------------------------------
 DOMAIN="formysha.my.id"
 APP_DIR="/www/wwwroot/${DOMAIN}"
-REPO_URL="https://github.com/wahyudedik/formysha.git" 
+REPO_URL="https://github.com/wahyudedik/formysha.git"
 BRANCH="main"
 APP_USER="www"
 PHP_VERSION="8.4"
@@ -101,6 +101,39 @@ safe_chown() {
 }
 
 #-------------------------------------------------------------------------------
+# PHP CLI Resolver — wajib PHP >= 8.4.1 (Laravel 13 / Symfony v8 platform check)
+#-------------------------------------------------------------------------------
+# Diagnosis: PHP CLI default VPS aaPanel = 8.3.x, sedangkan
+# vendor/composer/platform_check.php mematikan SEMUA `php artisan` dengan fatal
+# error. Nginx FPM tetap jalan (socket /tmp/php-cgi-8.4.sock), tetapi CLI
+# (artisan/composer) harus diarahkan ke binary PHP 8.4 secara eksplisit.
+PHP_BIN=""
+AAPANEL_PHP_DIR="/www/server/php/${PHP_VERSION//.}"   # struktur aaPanel: 8.4 -> 84
+if [[ -x "${AAPANEL_PHP_DIR}/bin/php" ]] \
+    && "${AAPANEL_PHP_DIR}/bin/php" -r 'exit(version_compare(PHP_VERSION, "8.4.1", ">=") ? 0 : 1);' 2>/dev/null; then
+    PHP_BIN="${AAPANEL_PHP_DIR}/bin/php"
+fi
+
+# Fallback: binary `php` di PATH sistem, asalkan versinya >= 8.4.1
+if [[ -z "${PHP_BIN}" ]]; then
+    SYS_PHP="$(command -v php 2>/dev/null || true)"
+    if [[ -n "${SYS_PHP}" ]] \
+        && "${SYS_PHP}" -r 'exit(version_compare(PHP_VERSION, "8.4.1", ">=") ? 0 : 1);' 2>/dev/null; then
+        PHP_BIN="${SYS_PHP}"
+    fi
+fi
+
+if [[ -z "${PHP_BIN}" ]]; then
+    log_error "PHP 8.4 CLI tidak ditemukan (butuh >= 8.4.1). Di aaPanel: App Store -> PHP 8.4 -> Install, atau export PATH=/www/server/php/84/bin:\$PATH lalu jalankan ulang."
+fi
+
+# Keputusan: cukup PREPEND direktori PHP_BIN ke PATH — semua pemanggilan `php`
+# polos (artisan) dan `composer` (shebang #!/usr/bin/env php) otomatis memakai
+# PHP 8.4 tanpa mengubah ratusan panggilan eksplisit (pendekatan minim-diff & konsisten).
+export PATH="$(dirname "${PHP_BIN}"):${PATH}"
+log_info "PHP CLI: $("${PHP_BIN}" -r 'echo PHP_VERSION;') (${PHP_BIN})"
+
+#-------------------------------------------------------------------------------
 # Header
 #-------------------------------------------------------------------------------
 echo ""
@@ -137,10 +170,12 @@ if ! is_step_done 0; then
         log_warn "aaPanel tidak terdeteksi di VPS ini."
     fi
 
-    # Cek PHP
+    # Cek PHP — resolver PHP_BIN di atas sudah menjadi sumber kebenaran (wajib >= 8.4).
+    # Check `php${PHP_VERSION}` dipertahankan sebagai validasi tambahan penamaan binary.
     if ! command -v "php${PHP_VERSION}" &>/dev/null && ! command -v php &>/dev/null; then
         log_error "PHP ${PHP_VERSION} tidak ditemukan. Install via aaPanel > App Store > PHP ${PHP_VERSION}"
     fi
+    log_info "PHP CLI dipakai: $("${PHP_BIN}" --version | head -n1) (${PHP_BIN})"
 
     # Cek Composer
     if ! command -v composer &>/dev/null; then
@@ -312,10 +347,13 @@ if ! is_step_done 8; then
 
     SUPERVISOR_CONF="/etc/supervisor/conf.d/formysha.conf"
 
+    # Catatan: gunakan path PHP absolut hasil resolver (bukan `php` polos) karena
+    # supervisor tidak mewarisi PATH yang kita export — mencegah queue worker
+    # crash kena platform check PHP 8.3.
     cat > "${SUPERVISOR_CONF}" << EOF
 [program:formysha]
 process_name=%(program_name)s_%(process_num)02d
-command=php ${APP_DIR}/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+command=${PHP_BIN} ${APP_DIR}/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
 autostart=true
 autorestart=true
 stopasgroup=true
@@ -529,6 +567,9 @@ if ! is_step_done 13; then
     log_info "Step 13: Verifikasi deployment..."
 
     cd "${APP_DIR}"
+
+    # Log versi PHP CLI yang dipakai (hasil resolver) — memudahkan debugging
+    log_info "PHP CLI: $("${PHP_BIN}" --version | head -n1) (${PHP_BIN})"
 
     if php artisan --version &>/dev/null; then
         log_success "Laravel $(php artisan --version) OK"

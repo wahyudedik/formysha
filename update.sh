@@ -19,7 +19,7 @@ LOG_DIR="${APP_DIR}/storage/logs"
 # Warna untuk output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m' 
+YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
@@ -85,6 +85,56 @@ restart_queue_workers() {
     supervisorctl start "formysha:*" 2>/dev/null || true
     log_success "Queue worker direstart."
 }
+
+migrate_private_storage() {
+    # Phase 26 (UU PDP): pindahkan media lama dari disk public ke disk private.
+    # Dijalankan SETIAP update (daily/bugfix/full) karena IDEMPOTEN (hanya menyalin
+    # file yang belum ada di disk private) — lebih tangguh daripada deteksi diff,
+    # yang bisa melewatkan kasus file lama menumpuk tanpa commit code baru.
+    # Tanpa --delete-original agar AMAN: file asli tetap dipertahankan; admin
+    # menghapusnya manual dengan --delete-original setelah verifikasi.
+    cd "${APP_DIR}"
+    if php artisan storage:migrate-private --help &>/dev/null; then
+        log_info "Menjalankan storage:migrate-private (media lama -> disk private)..."
+        php artisan storage:migrate-private || log_warn "storage:migrate-private gagal. Cek log; jalankan manual setelah update."
+        log_success "storage:migrate-private selesai. File asli MASIH dipertahankan di public disk — hapus manual dengan --delete-original setelah verifikasi."
+    else
+        log_warn "Command storage:migrate-private belum tersedia (kode Phase 26 belum ke-pull). Melewati."
+    fi
+}
+
+#-------------------------------------------------------------------------------
+# PHP CLI Resolver — wajib PHP >= 8.4.1 (Laravel 13 / Symfony v8 platform check)
+#-------------------------------------------------------------------------------
+# Diagnosis: PHP CLI default VPS aaPanel = 8.3.x, sedangkan
+# vendor/composer/platform_check.php mematikan SEMUA `php artisan` dengan fatal
+# error. Nginx FPM tetap jalan (socket /tmp/php-cgi-8.4.sock), tetapi CLI
+# (artisan/composer) harus diarahkan ke binary PHP 8.4 secara eksplisit.
+PHP_BIN=""
+AAPANEL_PHP_DIR="/www/server/php/${PHP_VERSION//.}"   # struktur aaPanel: 8.4 -> 84
+if [[ -x "${AAPANEL_PHP_DIR}/bin/php" ]] \
+    && "${AAPANEL_PHP_DIR}/bin/php" -r 'exit(version_compare(PHP_VERSION, "8.4.1", ">=") ? 0 : 1);' 2>/dev/null; then
+    PHP_BIN="${AAPANEL_PHP_DIR}/bin/php"
+fi
+
+# Fallback: binary `php` di PATH sistem, asalkan versinya >= 8.4.1
+if [[ -z "${PHP_BIN}" ]]; then
+    SYS_PHP="$(command -v php 2>/dev/null || true)"
+    if [[ -n "${SYS_PHP}" ]] \
+        && "${SYS_PHP}" -r 'exit(version_compare(PHP_VERSION, "8.4.1", ">=") ? 0 : 1);' 2>/dev/null; then
+        PHP_BIN="${SYS_PHP}"
+    fi
+fi
+
+if [[ -z "${PHP_BIN}" ]]; then
+    log_error "PHP 8.4 CLI tidak ditemukan (butuh >= 8.4.1). Di aaPanel: App Store -> PHP 8.4 -> Install, atau export PATH=/www/server/php/84/bin:\$PATH lalu jalankan ulang."
+fi
+
+# Keputusan: cukup PREPEND direktori PHP_BIN ke PATH — semua pemanggilan `php`
+# polos (artisan) dan `composer` (shebang #!/usr/bin/env php) otomatis memakai
+# PHP 8.4 tanpa mengubah ratusan panggilan eksplisit (pendekatan minim-diff & konsisten).
+export PATH="$(dirname "${PHP_BIN}"):${PATH}"
+log_info "PHP CLI: $("${PHP_BIN}" -r 'echo PHP_VERSION;') (${PHP_BIN})"
 
 #-------------------------------------------------------------------------------
 # Parse Arguments
@@ -293,8 +343,19 @@ if [[ "${MODE}" == "daily" ]]; then
         php artisan migrate --force
     fi
 
+    # PlanSeeder (idempoten): sync plan pricing + backfill is_free/audience.
+    # Kondisi SAMA dengan langkah migrate — hanya saat diff menyentuh database/migrations.
+    if git diff "${LOCAL}" "${REMOTE}" --name-only | grep -q "database/migrations"; then
+        log_info "Migration berubah. Menjalankan PlanSeeder (sync plan pricing, sumber kebenaran)..."
+        php artisan db:seed --class=PlanSeeder --force
+        log_success "PlanSeeder selesai."
+    fi
+
     # Clear dan rebuild cache
     clear_all_caches
+
+    # Media lama -> disk private (idempoten, aman; lihat fungsi migrate_private_storage)
+    migrate_private_storage
 
     # Restart queue workers
     restart_queue_workers
@@ -347,6 +408,10 @@ if [[ "${MODE}" == "bugfix" ]]; then
     # Build & optimize
     npm run build 2>/dev/null || true
     clear_all_caches
+
+    # Media lama -> disk private (idempoten, aman; lihat fungsi migrate_private_storage)
+    migrate_private_storage
+
     restart_queue_workers
 
     disable_maintenance
@@ -404,12 +469,21 @@ if [[ "${MODE}" == "full" ]]; then
         php artisan db:seed --force
     fi
 
+    # PlanSeeder SELALU dijalankan di full update (idempoten): sync plan pricing
+    # + backfill is_free/audience sebagai langkah AKHIR seeding (sumber kebenaran).
+    log_info "Menjalankan PlanSeeder (sync plan pricing, sumber kebenaran)..."
+    php artisan db:seed --class=PlanSeeder --force
+    log_success "PlanSeeder selesai."
+
     # Permissions (skip .user.ini yang dikunci aaPanel)
     find "${APP_DIR}/storage" -not -name ".user.ini" -exec chown -R "${APP_USER}:${APP_USER}" {} + 2>/dev/null || true
     find "${APP_DIR}/bootstrap/cache" -not -name ".user.ini" -exec chown -R "${APP_USER}:${APP_USER}" {} + 2>/dev/null || true
 
     # Cache
     clear_all_caches
+
+    # Media lama -> disk private (idempoten, aman; lihat fungsi migrate_private_storage)
+    migrate_private_storage
 
     # Restart queue
     restart_queue_workers
